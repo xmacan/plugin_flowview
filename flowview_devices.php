@@ -92,6 +92,8 @@ switch (get_request_var('action')) {
 
 function actions_devices () {
 	global $flow_actions, $config;
+	flowview_determine_config();
+	flowview_connect();
 
 	if (isset_request_var('selected_items')) {
 		$selected_items = sanitize_unserialize_selected_items(get_nfilter_request_var('selected_items'));
@@ -99,7 +101,7 @@ function actions_devices () {
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
 				for ($i=0; $i<count($selected_items); $i++) {
-					db_execute_prepared('DELETE FROM plugin_flowview_devices WHERE id = ?', array($selected_items[$i]));
+				flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices WHERE id = ?', array($selected_items[$i]));
 				}
 			}
 		}
@@ -120,7 +122,7 @@ function actions_devices () {
 			input_validate_input_number($matches[1]);
 			/* ==================================================== */
 
-			$device_list .= '<li>' . db_fetch_cell('SELECT name FROM plugin_flowview_devices WHERE id=' . $matches[1]) . '</li>';
+			$device_list .= '<li>' . flowview_db_fetch_cell('SELECT name FROM plugin_flowview_devices WHERE id=' . $matches[1]) . '</li>';
 			$device_array[$i] = $matches[1];
 		}
 		$i++;
@@ -136,7 +138,6 @@ function actions_devices () {
 		print "<tr>
 			<td colspan='2' class='textArea'>
 				<p>" . __('Click \'Continue\' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service.', 'flowview') . "</p>
-				<p>" . __('Also, remember to remove any leftover files from your Net-Flow Capture location.', 'flowview') . "</p>
 				<p><ul>$device_list</ul></p>
 			</td>
 		</tr>\n";
@@ -167,6 +168,9 @@ function actions_devices () {
 }
 
 function save_devices () {
+	flowview_determine_config();
+	flowview_connect();
+
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	/* ==================================================== */
@@ -182,7 +186,7 @@ function save_devices () {
 	$save['allowfrom']   = get_nfilter_request_var('allowfrom');
 	$save['port']        = get_nfilter_request_var('port');
 
-	$id = sql_save($save, 'plugin_flowview_devices', 'id', true);
+	$id = flowview_sql_save($save, 'plugin_flowview_devices', 'id', true);
 
 	if (is_error_message()) {
 		raise_message(2);
@@ -199,6 +203,8 @@ function save_devices () {
 
 function edit_devices () {
 	global $device_edit;
+	flowview_determine_config();
+	flowview_connect();
 
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
@@ -206,7 +212,7 @@ function edit_devices () {
 
 	$device = array();
 	if (!isempty_request_var('id')) {
-		$device = db_fetch_row('SELECT * FROM plugin_flowview_devices WHERE id=' . get_request_var('id'), false);
+		$device = flowview_db_fetch_row('SELECT * FROM plugin_flowview_devices WHERE id=' . get_request_var('id'), false);
 		$header_label = __esc('Device [edit: %s]', $device['name'], 'flowview');
 	} else {
 		$header_label = __('Device [new]', 'flowview');
@@ -230,6 +236,9 @@ function edit_devices () {
 function show_devices () {
 	global $action, $expire_arr, $rotation_arr, $version_arr, $nesting_arr;
 	global $config, $flow_actions;
+
+	flowview_determine_config();
+	flowview_connect();
 
     /* ================= input validation and session storage ================= */
     $filters = array(
@@ -269,9 +278,9 @@ function show_devices () {
 		$sql_order
 		$sql_limit";
 
-	$result = db_fetch_assoc($sql);
+	$result = flowview_db_fetch_assoc($sql);
 
-	$total_rows = db_fetch_cell("SELECT COUNT(*) FROM plugin_flowview_devices $sql_where");
+	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*) FROM plugin_flowview_devices $sql_where");
 
 	html_start_box(__('FlowView Listeners', 'flowview'), '100%', '', '4', 'center', 'flowview_devices.php?action=edit');
 

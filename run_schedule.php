@@ -35,6 +35,9 @@ $debug = false;
 $maint = false;
 $force = false;
 
+flowview_determine_config();
+flowview_connect();
+
 $shortopts = 'VvHh';
 $longopts = array(
 	'schedule::',
@@ -89,13 +92,13 @@ $t = time();
 $r = intval($t / 60) * 60;
 $start = microtime(true);
 
-$schedule = db_fetch_row_prepared('SELECT *
+$schedule = flowview_db_fetch_row_prepared('SELECT *
 	FROM plugin_flowview_schedules
 	WHERE id = ?',
 	array($id));
 
 if (cacti_sizeof($schedule)) {
-	db_execute_prepared('UPDATE plugin_flowview_schedules
+	flowview_db_execute_prepared('UPDATE plugin_flowview_schedules
 		SET lastsent = ?
 		WHERE id = ?',
 		array($r, $id));

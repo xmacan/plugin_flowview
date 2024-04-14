@@ -81,6 +81,9 @@ switch(get_request_var('action')) {
 exit;
 
 function load_session_for_filter() {
+	flowview_determine_config();
+	flowview_connect();
+
 	if ((isset_request_var('query') && get_filter_request_var('query') > 0)) {
 		// Handle Report Column
 		if (isset_request_var('report')) {
@@ -95,7 +98,7 @@ function load_session_for_filter() {
 			}
 		}
 
-		$query = db_fetch_row_prepared('SELECT *
+		$query = flowview_db_fetch_row_prepared('SELECT *
 			FROM plugin_flowview_queries
 			WHERE id = ?',
 			array(get_request_var('query')));

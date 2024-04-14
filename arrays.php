@@ -352,7 +352,7 @@ $print_columns_array = array(
 );
 
 $devices = array_rekey(
-	db_fetch_assoc('SELECT id, name
+	flowview_db_fetch_assoc('SELECT id, name
 		FROM plugin_flowview_devices
 		ORDER BY name'),
 	'id', 'name'

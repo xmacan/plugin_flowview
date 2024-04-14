@@ -34,11 +34,25 @@ function plugin_flowview_install() {
 	api_plugin_register_realm('flowview', 'flowview.php', __('Plugin -> Flow Viewer', 'flowview'), 1);
 	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php', __('Plugin -> Flow Admin', 'flowview'), 1);
 
-	flowview_setup_table();
+	flowview_determine_config();
+
+	if (defined('FLOWVIEW_CONFIG')) {
+		include(FLOWVIEW_CONFIG);
+	} else {
+		raise_message('flowview_info', __('Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing.', 'flowview'), MESSAGE_LEVEL_ERROR);
+		header('Location:' . $config['url_path'] . 'plugins.php?header=false');
+		exit;
+	}
+
 }
 
 function plugin_flowview_uninstall() {
 	// Do any extra Uninstall stuff here
+	flowview_drop_table(
+	'plugin_flowview_devices',
+	'plugin_flowview_dnscache',
+	'plugin_flowview_ports',
+	'plugin_flowview_queries' );
 }
 
 function plugin_flowview_check_config() {
@@ -59,6 +73,9 @@ function plugin_flowview_check_upgrade() {
 		return;
 	}
 
+	flowview_determine_config();
+	flowview_connect();
+
 	$info    = plugin_flowview_version();
 	$current = $info['version'];
 
@@ -67,18 +84,18 @@ function plugin_flowview_check_upgrade() {
 		WHERE directory="flowview"');
 
 	if ($current != $old) {
-		$bad_titles = db_fetch_cell('SELECT COUNT(*)
+		$bad_titles = flowview_db_fetch_cell('SELECT COUNT(*)
 			FROM plugin_flowview_schedules
 			WHERE title=""');
 
-		if (!db_column_exists('plugin_flowview_devices', 'cmethod')) {
-			db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN cmethod int unsigned default "0" AFTER name');
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'cmethod')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN cmethod int unsigned default "0" AFTER name');
 
-			db_execute('UPDATE plugin_flowview_devices SET cmethod=1');
+			flowview_db_execute('UPDATE plugin_flowview_devices SET cmethod=1');
 		}
 
-		if (db_column_exists('plugin_flowview_devices', 'nesting')) {
-			db_execute('ALTER TABLE plugin_flowview_devices
+		if (flowview_db_column_exists('plugin_flowview_devices', 'nesting')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices
 				DROP COLUMN nesting,
 				DROP COLUMN version,
 				DROP COLUMN rotation,
@@ -88,31 +105,31 @@ function plugin_flowview_check_upgrade() {
 
 		}
 
-		if (db_column_exists('plugin_flowview_schedules', 'savedquery')) {
-			db_execute('ALTER TABLE plugin_flowview_schedules CHANGE COLUMN savedquery query_id INT unsigned NOT NULL default "0"');
+		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_schedules CHANGE COLUMN savedquery query_id INT unsigned NOT NULL default "0"');
 		}
 
-		if (!db_column_exists('plugin_flowview_schedules', 'format_file')) {
-			db_execute('ALTER TABLE plugin_flowview_schedules ADD COLUMN format_file VARCHAR(128) DEFAULT "" AFTER email');
+		if (!flowview_db_column_exists('plugin_flowview_schedules', 'format_file')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_schedules ADD COLUMN format_file VARCHAR(128) DEFAULT "" AFTER email');
 		}
 
-		db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache');
-		db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_flow_stats');
-		db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_details');
+		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache');
+		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_flow_stats');
+		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_details');
 
-		db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN protocols varchar(32) default ""');
+		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN protocols varchar(32) default ""');
 
-		if (!db_column_exists('plugin_flowview_queries', 'device_id')) {
-			db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
 		}
 
-		$raw_tables = db_fetch_assoc('SELECT TABLE_NAME
+		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME
 			FROM information_schema.TABLES
 			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"');
 
 		if (cacti_sizeof($raw_tables)) {
 			foreach($raw_tables as $t) {
-				$good = db_fetch_row("SHOW INDEXES
+				$good = flowview_db_fetch_row("SHOW INDEXES
 					FROM `" . $t['TABLE_NAME'] . "`
 					WHERE Key_name='keycol'
 					AND Column_name='src_if';");
@@ -120,12 +137,12 @@ function plugin_flowview_check_upgrade() {
 				if (!cacti_sizeof($good)) {
 					cacti_log('NOTE: Updating unique key for ' . $t['TABLE_NAME'], false, 'FLOWVIEW');
 
-					if (db_index_exists($t['TABLE_NAME'], 'keycol')) {
-						db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
+					if (flowview_db_index_exists($t['TABLE_NAME'], 'keycol')) {
+						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
 							DROP INDEX `keycol`,
 							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`, `dst_addr`, `dst_port`, `dst_if`, `start_time`, `end_time`)');
 					} else {
-						db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
+						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
 							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`,`dst_addr`,`dst_port`, `dst_if`, `start_time`, `end_time`)');
 					}
 				}
@@ -134,12 +151,12 @@ function plugin_flowview_check_upgrade() {
 
 		if ($bad_titles) {
 			/* update titles for those that don't have them */
-			db_execute("UPDATE plugin_flowview_schedules SET title='Ugraded Schedule' WHERE title=''");
+			flowview_db_execute("UPDATE plugin_flowview_schedules SET title='Ugraded Schedule' WHERE title=''");
 
 			/* Set the new version */
 			db_execute_prepared("REPLACE INTO settings (name, value) VALUES ('plugin_flowview_version', ?)", array($current));
 
-			db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
 		}
 
 		db_execute("UPDATE plugin_realms
@@ -415,9 +432,12 @@ function flowview_poller_bottom() {
 
 	include_once($config['base_path'] . '/lib/poller.php');
 
+	flowview_determine_config();
+	flowview_connect();
+
 	$time = time() - 86400;
 
-	db_execute("DELETE FROM plugin_flowview_dnscache
+	flowview_db_execute("DELETE FROM plugin_flowview_dnscache
 		WHERE time > 0
 		AND time < $time");
 
@@ -433,96 +453,201 @@ function flowview_poller_bottom() {
 	exec_background($command_string, $extra_args);
 }
 
-function flowview_setup_table() {
+function flowview_determine_config() {
 	global $config;
 
-	$data = array();
-	$data['columns'][]  = array('name' => 'ip', 'type' => 'varchar(45)', 'NULL' => false, 'default' => '');
-	$data['columns'][]  = array('name' => 'host', 'type' => 'varchar(255)', 'NULL' => false, 'default' => '');
-	$data['columns'][]  = array('name' => 'time', 'type' => 'bigint(20)', 'unsigned' => true, 'NULL' => false, 'default' => '0');
-	$data['keys'][]     = array('name' => 'ip', 'columns' => 'ip');
-	$data['type']       = 'MEMORY';
-	$data['comment']    = 'Plugin Flowview - DNS Cache to help speed things up';
-	api_plugin_db_table_create('flowview', 'plugin_flowview_dnscache', $data);
-
-	$data = array();
-	$data['columns'][]  = array('name' => 'id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'auto_increment' => true);
-	$data['columns'][]  = array('name' => 'name', 'type' => 'varchar(64)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'cmethod', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'default' => '0');
-	$data['columns'][]  = array('name' => 'allowfrom', 'type' => 'varchar(32)', 'NULL' => false, 'default' => '0');
-	$data['columns'][]  = array('name' => 'port', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
-	$data['primary']    = 'id';
-	$data['type']       = 'InnoDB';
-	$data['row_format'] = 'Dynamic';
-	$data['comment']    = 'Plugin Flowview - List of Devices to collect flows from';
-	api_plugin_db_table_create('flowview', 'plugin_flowview_devices', $data);
-
-	$data = array();
-	$data['columns'][]  = array('name' => 'id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'auto_increment' => true);
-	$data['columns'][]  = array('name' => 'name', 'type' => 'varchar(255)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'device_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'timespan', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'default' => 0);
-	$data['columns'][]  = array('name' => 'startdate', 'type' => 'varchar(32)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'enddate', 'type' => 'varchar(32)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'tosfields', 'type' => 'varchar(32)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'tcpflags', 'type' => 'varchar(32)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'protocols', 'type' => 'varchar(32)', 'NULL' => true);
-	$data['columns'][]  = array('name' => 'sourceip', 'type' => 'varchar(255)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'sourceport', 'type' => 'varchar(255)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'sourceinterface', 'type' => 'varchar(64)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'sourceas', 'type' => 'varchar(64)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'destip', 'type' => 'varchar(255)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'destport', 'type' => 'varchar(255)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'destinterface', 'type' => 'varchar(64)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'destas', 'type' => 'varchar(64)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'statistics', 'type' => 'int(3)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'printed', 'type' => 'int(3)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'includeif', 'type' => 'int(2)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'sortfield', 'type' => 'int(2)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'cutofflines', 'type' => 'varchar(8)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'cutoffoctets', 'type' => 'varchar(8)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'resolve', 'type' => 'varchar(2)', 'NULL' => false);
-	$data['primary']    = 'id';
-	$data['type']       = 'InnoDB';
-	$data['row_format'] = 'Dynamic';
-	$data['comment']    = 'Plugin Flowview - List of Saved Flow Queries';
-	api_plugin_db_table_create('flowview', 'plugin_flowview_queries', $data);
-
-	$data = array();
-	$data['columns'][]  = array('name' => 'id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'auto_increment' => true);
-	$data['columns'][]  = array('name' => 'title', 'type' => 'varchar(128)', 'NULL' => false, 'default' => '');
-	$data['columns'][]  = array('name' => 'enabled', 'type' => 'varchar(3)', 'NULL' => false, 'default' => 'on');
-	$data['columns'][]  = array('name' => 'sendinterval', 'type' => 'bigint(20)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'lastsent', 'type' => 'bigint(20)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'start', 'type' => 'datetime', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'email', 'type' => 'text', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'format_file', 'type' => 'varchar(128)', 'NULL' => true, 'default' => '');
-	$data['columns'][]  = array('name' => 'query_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
-	$data['primary']    = 'id';
-	$data['keys'][]     = array('name' => 'query_id', 'columns' => 'query_id');
-	$data['type']       = 'InnoDB';
-	$data['row_format'] = 'Dynamic';
-	$data['comment']    = 'Plugin Flowview - Scheduling for running and emails of saved queries';
-	api_plugin_db_table_create('flowview', 'plugin_flowview_schedules', $data);
-
-	$data = array();
-	$data['columns'][]  = array('name' => 'id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'auto_increment' => true);
-	$data['columns'][]  = array('name' => 'service', 'type' => 'varchar(20)', 'NULL' => false, 'default' => '');
-	$data['columns'][]  = array('name' => 'port', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
-	$data['columns'][]  = array('name' => 'proto', 'type' => 'char(4)', 'NULL' => false);
-	$data['columns'][]  = array('name' => 'description','type' => 'varchar(255)', 'NULL' => false, 'default' => '');
-	$data['primary']    = 'id';
-	$data['type']       = 'InnoDB';
-	$data['row_format'] = 'Dynamic';
-	$data['comment']    = 'Plugin Flowview - Database of well known Ports';
-	api_plugin_db_table_create('flowview', 'plugin_flowview_ports', $data);
-
-	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
-	if (cacti_sizeof($inserts)) {
-		db_execute('TRUNCATE plugin_flowview_ports');
-		foreach($inserts as $i) {
-			db_execute($i);
+	// Setup the flowview database settings path
+	if (!defined('FLOWVIEW_CONFIG')) {
+		if (file_exists(dirname(__FILE__) . '/config_local.php')) {
+			define('FLOWVIEW_CONFIG', dirname(__FILE__) . '/config_local.php');
+			$config['flowview_remote_db'] = true;
+		} elseif (file_exists(dirname(__FILE__) . '/config.php')) {
+			define('FLOWVIEW_CONFIG', dirname(__FILE__) . '/config.php');
+			$config['flowview_remote_db'] = false;
 		}
 	}
 }
 
+function flowview_connect() {
+	global $config, $flowview_cnn, $flowviewdb_default, $local_db_cnn_id, $remote_db_cnn_id;
+
+	flowview_determine_config();
+
+	// Handle remote flowview processing
+	include(FLOWVIEW_CONFIG);
+
+	include_once(dirname(__FILE__) . '/functions.php');
+	include_once(dirname(__FILE__) . '/database.php');
+
+	$connect_remote = false;
+	$connected      = true;
+
+	/* Connect to the Flowview Database */
+	if (empty($flowview_cnn)) {
+		if ($config['poller_id'] == 1) {
+			if ($use_cacti_db == true) {
+				$flowview_cnn = $local_db_cnn_id;
+				$connected = true;
+			} else {
+				$connect_remote = true;
+			}
+		} elseif (isset($config['flowview_remote_db'])) {
+			if ($use_cacti_db == true) {
+				$flowview_cnn = $local_db_cnn_id;
+				$connected = true;
+			} else {
+				$connect_remote = true;
+			}
+		} else {
+			if ($use_cacti_db == true) {
+				$flowview_cnn = $remote_db_cnn_id;
+				$connected = true;
+			} else {
+				$connect_remote = true;
+			}
+		}
+
+		if ($connect_remote) {
+			if (!isset($flowviewdb_port)) {
+				$flowviewdb_port = '3306';
+			}
+
+			if (!isset($flowviewdb_retries)) {
+				$flowviewdb_retries = '5';
+			}
+
+			if (!isset($flowviewdb_ssl)) {
+			    $flowviewdb_ssl = false;
+			}
+
+			if (!isset($flowviewdb_ssl_key)) {
+			    $flowviewdb_ssl_key = '';
+			}
+
+			if (!isset($flowviewdb_ssl_cert)) {
+			    $flowviewdb_ssl_cert = '';
+			}
+
+			if (!isset($flowviewdb_ssl_ca)) {
+			    $flowviewdb_ssl_ca = '';
+			}
+
+			$flowview_cnn = flowview_db_connect_real($flowviewdb_hostname, $flowviewdb_username, $flowviewdb_password, $flowviewdb_default, $flowviewdb_type, $flowviewdb_port, $flowviewdb_retries, $flowviewdb_ssl, $flowviewdb_ssl_key, $flowviewdb_ssl_cert, $flowviewdb_ssl_ca);
+
+			if ($flowview_cnn == false) {
+				print "FATAL Can not connect\n";
+				$connected = false;
+			}
+		}
+
+		if ($connected && !flowview_db_table_exists('%flowview%') && api_plugin_is_enabled('flowview')) {
+			cacti_log('Setting Up Database Tables Since they do not exist', false, 'FLOWVIEW');
+
+			flowview_setup_table();
+		}
+	}
+
+	return $connected;
+}
+
+function flowview_setup_table() {
+	global $config, $settings, $flowviewdb_default;
+
+	flowview_determine_config();
+	flowview_connect();
+	
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
+	ip varchar(45) NOT NULL default '',
+	host varchar(255) NOT NULL default '',
+	time bigint(20) unsigned NOT NULL default '0',
+	PRIMARY KEY (ip))
+	ENGINE MEMORY,
+	COMMENT 'Plugin Flowview - DNS Cache to help speed things up'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
+	id int(11) unsigned NOT NULL AUTO_INCREMENT,
+	name varchar(64) NOT NULL,
+	cmethod int(11) unsigned NOT NULL default '0',
+	allowfrom varchar(32) NOT NULL default '0',
+	port int(11) unsigned NOT NULL,
+	PRIMARY KEY (id))
+	ENGINE InnoDB,
+	ROW_FORMAT DYNAMIC,
+	COMMENT 'Plugin Flowview - List of Devices to collect flows from'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_queries` (
+	id int(11) unsigned NOT NULL AUTO_INCREMENT,
+	name varchar(255) NOT NULL,
+	device_id int(11) unsigned NOT NULL,
+	timespan int(11) unsigned NOT NULL DEFAULT '0',
+	startdate varchar(32) NOT NULL,
+	enddate varchar(32) NOT NULL,
+	tosfields varchar(32) NOT NULL,
+	tcpflags varchar(32) NOT NULL,
+	protocols varchar(32) DEFAULT NULL,
+	sourceip varchar(255) NOT NULL,
+	sourceport varchar(255) NOT NULL,
+	sourceinterface varchar(64) NOT NULL,
+	sourceas varchar(64) NOT NULL,
+	destip varchar(255) NOT NULL,
+	destport varchar(255) NOT NULL,
+	destinterface varchar(64) NOT NULL,
+	destas varchar(64) NOT NULL,
+	statistics int(3) unsigned NOT NULL,
+	printed int(3) unsigned NOT NULL,
+	includeif int(2) unsigned NOT NULL,
+	sortfield int(2) unsigned NOT NULL,
+	cutofflines varchar(8) NOT NULL,
+	cutoffoctets varchar(8) NOT NULL,
+	resolve varchar(2) NOT NULL,
+	PRIMARY KEY (`id`))
+	ENGINE=InnoDB,
+	ROW_FORMAT DYNAMIC,
+	COMMENT='Plugin Flowview - List of Saved Flow Queries'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_schedules` (
+	id int(11) unsigned NOT NULL AUTO_INCREMENT,
+	title varchar(128) NOT NULL default '',
+	enabled varchar(3) NOT NULL default 'on',
+	sendinterval bigint(20) unsigned NOT NULL,
+	lastsent bigint(20) unsigned NOT NULL,
+	start datetime NOT NULL,
+	email text NOT NULL,
+	format_file varchar(128) default '',
+	query_id int(11) unsigned NOT NULL,
+	PRIMARY KEY (`id`),
+	INDEX query_id (query_id) )
+	ENGINE InnoDB,
+	ROW_FORMAT DYNAMIC,
+	COMMENT 'Plugin Flowview - Scheduling for running and emails of saved queries'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_ports` (
+	id int(11) unsigned NOT NULL AUTO_INCREMENT,
+	service varchar(20) NOT NULL default '',
+	port int(11) unsigned NOT NULL,
+	proto char(4) NOT NULL,
+	description varchar(255) NOT NULL default '',
+	PRIMARY KEY (`id`) )
+	ENGINE InnoDB,
+	ROW_FORMAT DYNAMIC,
+	COMMENT 'Plugin Flowview - Database of well known Ports'");
+
+	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
+	if (cacti_sizeof($inserts)) {
+		flowview_db_execute('TRUNCATE plugin_flowview_ports');
+		foreach($inserts as $i) {
+			flowview_db_execute($i);
+		}
+	}
+}
+
+function flowview_drop_table( ...$tables){
+	global $config, $flowviewdb_default;
+
+	flowview_determine_config();
+	flowview_connect();
+
+	foreach( $tables as $table ){
+		flowview_db_execute('DROP TABLE IF EXISTS `' . $flowviewdb_default . '`.$table');
+	}
+}

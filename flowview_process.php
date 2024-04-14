@@ -34,6 +34,9 @@ ini_set('memory_limit', '-1');
 $debug = false;
 $maint = false;
 
+flowview_determine_config();
+flowview_connect();
+
 $shortopts = 'VvHh';
 $longopts = array(
 	'maint',
@@ -91,7 +94,7 @@ if (date('z', $last) != date('z', time())) {
 	$maint = true;
 }
 
-$schedules = db_fetch_assoc("SELECT *
+$schedules = flowview_db_fetch_assoc("SELECT *
 	FROM plugin_flowview_schedules
 	WHERE enabled = 'on'
 	AND ($t - sendinterval > lastsent)");
@@ -105,7 +108,7 @@ if (count($schedules)) {
 	}
 }
 
-$total = db_fetch_cell('SELECT COUNT(*)
+$total = flowview_db_fetch_cell('SELECT COUNT(*)
 	FROM plugin_flowview_devices');
 
 /* determine how many records were inserted */
@@ -119,21 +122,21 @@ $nlast_table = '';
 
 foreach($tables as $table) {
 	if (empty($last_sequence)) {
-		$data = db_fetch_row_prepared("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
+		$data = flowview_db_fetch_row_prepared("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
 			FROM $table
 			WHERE end_time >= ?",
 			array(date('Y-m-d H:i:s', $last)));
 
 		$nlast_table = $table;
 	} elseif ($last_table == $table) {
-		$data = db_fetch_row_prepared("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
+		$data = flowview_db_fetch_row_prepared("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
 			FROM $table
 			WHERE sequence > ?",
 			array($last_sequence));
 
 		$nlast_table = $table;
 	} else {
-		$data = db_fetch_row("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
+		$data = flowview_db_fetch_row("SELECT COUNT(*) AS totals, MAX(sequence) AS sequence
 			FROM $table");
 
 		$nlast_table = $table;
@@ -186,7 +189,7 @@ if ($maint) {
 
 	flowview_debug('Removing partitioned tables with suffix less than ' . $remove_lessthan);
 
-	$tables = db_fetch_assoc("SELECT TABLE_NAME
+	$tables = flowview_db_fetch_assoc("SELECT TABLE_NAME
 		FROM INFORMATION_SCHEMA.TABLES
 		WHERE TABLE_NAME LIKE 'plugin_flowview_raw_%'
 		ORDER BY TABLE_NAME");
@@ -200,7 +203,7 @@ if ($maint) {
 			if ($date_part <  $remove_lessthan) {
 				$dropped++;
 				flowview_debug("Removing partitioned table 'plugin_flowview_raw_" . $date_part . "'");
-				db_execute('DROP TABLE plugin_flowview_raw_' . $date_part);
+				flowview_db_execute('DROP TABLE plugin_flowview_raw_' . $date_part);
 			}
 		}
 	}

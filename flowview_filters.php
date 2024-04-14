@@ -70,6 +70,9 @@ switch (get_request_var('action')) {
 function actions_filters() {
 	global $sched_actions, $config;
 
+	flowview_determine_config();
+	flowview_connect();
+
 	/* ================= input validation ================= */
 	get_filter_request_var('drp_action');
 	/* ==================================================== */
@@ -80,15 +83,15 @@ function actions_filters() {
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
 				for ($i=0; $i<count($selected_items); $i++) {
-					db_execute('DELETE FROM plugin_flowview_queries WHERE id = ' . $selected_items[$i]);
+					flowview_db_execute('DELETE FROM plugin_flowview_queries WHERE id = ' . $selected_items[$i]);
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '3') {
 				for ($i=0; $i<count($selected_items); $i++) {
-					db_execute("UPDATE plugin_flowview_queries SET enabled='' WHERE id = " . $selected_items[$i]);
+					flowview_db_execute("UPDATE plugin_flowview_queries SET enabled='' WHERE id = " . $selected_items[$i]);
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '4') {
 				for ($i=0; $i<count($selected_items); $i++) {
-					db_execute("UPDATE plugin_flowview_queries SET enabled='on' WHERE id = " . $selected_items[$i]);
+					flowview_db_execute("UPDATE plugin_flowview_queries SET enabled='on' WHERE id = " . $selected_items[$i]);
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '2') {
 				for ($i=0; $i<count($selected_items); $i++) {
@@ -111,7 +114,7 @@ function actions_filters() {
 			input_validate_input_number($matches[1]);
 			/* ==================================================== */
 
-			$filter_list .= '<li>' . db_fetch_cell_prepared('SELECT name FROM plugin_flowview_queries
+			$filter_list .= '<li>' . flowview_db_fetch_cell_prepared('SELECT name FROM plugin_flowview_queries
 				WHERE id = ?', array($matches[1])) . '</li>';
 			$filter_array[] = $matches[1];
 		}
@@ -173,6 +176,9 @@ function actions_filters() {
 function show_filters() {
 	global $config, $sched_actions, $graph_timespans, $item_rows;
 
+	flowview_determine_config();
+	flowview_connect();
+
 	include('./plugins/flowview/arrays.php');
 
     /* ================= input validation and session storage ================= */
@@ -212,7 +218,7 @@ function show_filters() {
 		$rows = get_request_var('rows');
 	}
 
-	$listeners = db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
+	$listeners = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
 
 	if ($listeners) {
 		html_start_box(__('FlowView Filters', 'flowview'), '100%', '', '3', 'center', 'flowview_filters.php?action=edit');
@@ -306,9 +312,9 @@ function show_filters() {
 		$sql_order
 		$sql_limit";
 
-	$filters = db_fetch_assoc($sql);
+	$filters = flowview_db_fetch_assoc($sql);
 
-	$total_rows = db_fetch_cell("SELECT COUNT(*)
+	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
 		FROM plugin_flowview_queries AS fq
 		LEFT JOIN plugin_flowview_devices AS fd
 		ON fq.device_id = fd.id

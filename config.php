@@ -22,27 +22,36 @@
  +-------------------------------------------------------------------------+
 */
 
-include_once('../../include/cli_check.php');
+global $config, $database_type, $database_default, $database_hostname;
+global $database_username, $database_password, $database_port, $database_retries;
+global $database_ssl, $database_ssl_key, $database_ssl_cert, $database_ssl_ca;
 
-flowview_determine_config();
-flowview_connect();
+/* revert if you dont use the Cacti database */
+$use_cacti_db = false;
 
-$tables = flowview_db_fetch_assoc('SHOW TABLES');
-
-if (cacti_sizeof($tables)) {
-	foreach($tables as $t) {
-		if (strpos($t['Tables_in_cacti'], 'plugin_flowview_raw') !== false) {
-			print "Altering Table " . $t['Tables_in_cacti'] . PHP_EOL;
-			flowview_db_execute("ALTER TABLE " . $t['Tables_in_cacti'] . "
-				MODIFY COLUMN src_domain VARCHAR(256) NOT NULL DEFAULT '',
-				MODIFY COLUMN src_rdomain VARCHAR(40) NOT NULL DEFAULT '',
-				MODIFY COLUMN src_rport VARCHAR(20) NOT NULL DEFAULT '',
-				MODIFY COLUMN dst_domain VARCHAR(256) NOT NULL DEFAULT '',
-				MODIFY COLUMN dst_rdomain VARCHAR(40) NOT NULL DEFAULT '',
-				MODIFY COLUMN dst_rport VARCHAR(20) NOT NULL DEFAULT '',
-				MODIFY COLUMN nexthop VARCHAR(48) NOT NULL DEFAULT '',
-				COLLATE=utf8mb4_unicode_ci, CHARSET=utf8mb4");
-		}
-	}
+if (!$use_cacti_db) {
+	$flowviewdb_type     = 'mysql';
+	$flowviewdb_default  = 'flowview';
+	$flowviewdb_hostname = 'localhost';
+	$flowviewdb_username = 'cactiuser';
+	$flowviewdb_password = 'cactiuser';
+	$flowviewdb_port     = 3306;
+	$flowviewdb_retries  = 5;
+	$flowviewdb_ssl      = false;
+	$flowviewdb_ssl_key  = '';
+	$flowviewdb_ssl_cert = '';
+	$flowviewdb_ssl_ca   = '';
+} else {
+	$flowviewdb_type     = $database_type;
+	$flowviewdb_default  = $database_default;
+	$flowviewdb_hostname = $database_hostname;
+	$flowviewdb_username = $database_username;
+	$flowviewdb_password = $database_password;
+	$flowviewdb_port     = $database_port;
+	$flowviewdb_retries  = $database_retries;
+	$flowviewdb_ssl      = $database_ssl;
+	$flowviewdb_ssl_key  = $database_ssl_key;
+	$flowviewdb_ssl_cert = $database_ssl_cert;
+	$flowviewdb_ssl_ca   = $database_ssl_ca;
 }
 

@@ -30,6 +30,9 @@ include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
 set_default_action();
 
+flowview_determine_config();
+flowview_connect();
+
 $sched_actions = array(
 	2 => __('Send Now', 'flowview'),
 	1 => __('Delete', 'flowview'),
@@ -51,6 +54,12 @@ $sendinterval_arr = array(
 
 $formats = reports_get_format_files();
 
+$query_array = array_rekey( 
+	flowview_db_fetch_assoc('SELECT id, name 
+	FROM plugin_flowview_queries
+	ORDER BY name'),
+	'id', 'name' );
+
 $schedule_edit = array(
 	'title' => array(
 		'friendly_name' => __('Title', 'flowview'),
@@ -69,11 +78,11 @@ $schedule_edit = array(
 		'value' => '|arg1:enabled|',
 	),
 	'query_id' => array(
-		'method' => 'drop_sql',
+		'method' => 'drop_array',
 		'friendly_name' => __('Filter Name', 'flowview'),
 		'description' => __('Name of the query to run.', 'flowview'),
 		'value' => '|arg1:query_id|',
-		'sql' => 'SELECT id, name FROM plugin_flowview_queries'
+		'array' => $query_array
 	),
 	'sendinterval' => array(
 		'friendly_name' => __('Send Interval', 'flowview'),
@@ -137,6 +146,9 @@ switch (get_request_var('action')) {
 function actions_schedules () {
 	global $colors, $sched_actions, $config;
 
+	flowview_determine_config();
+	flowview_connect();
+
 	/* ================= input validation ================= */
 	get_filter_request_var('drp_action');
 	/* ==================================================== */
@@ -147,19 +159,19 @@ function actions_schedules () {
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
 				foreach($selected_items as $item) {
-					db_execute_prepared('DELETE FROM plugin_flowview_schedules
+					flowview_db_execute_prepared('DELETE FROM plugin_flowview_schedules
 						WHERE id = ?', array($item));
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '3') {
 				foreach($selected_items as $item) {
-					db_execute_prepared('UPDATE plugin_flowview_schedules
+					flowview_db_execute_prepared('UPDATE plugin_flowview_schedules
 						SET enabled = ""
 						WHERE id = ?',
 						array($item));
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '4') {
 				foreach($selected_items as $item) {
-					db_execute_prepared('UPDATE plugin_flowview_schedules
+					flowview_db_execute_prepared('UPDATE plugin_flowview_schedules
 						SET enabled = "on"
 						WHERE id = ?',
 						array($item));
@@ -167,7 +179,7 @@ function actions_schedules () {
 			} elseif (get_nfilter_request_var('drp_action') == '2') {
 				$php = read_config_option('path_php_binary');
 				foreach($selected_items as $item) {
-					$title = db_fetch_cell_prepared('SELECT title
+					$title = flowview_db_fetch_cell_prepared('SELECT title
 						FROM plugin_flowview_schedules
 						WHERE id = ?',
 						array($item));
@@ -195,7 +207,7 @@ function actions_schedules () {
 			input_validate_input_number($matches[1]);
 			/* ==================================================== */
 
-			$schedule_list .= '<li>' . db_fetch_cell_prepared('SELECT name FROM plugin_flowview_queries AS pfq
+			$schedule_list .= '<li>' . flowview_db_fetch_cell_prepared('SELECT name FROM plugin_flowview_queries AS pfq
 				INNER JOIN plugin_flowview_schedules AS pfs
 				ON pfq.id=pfs.query_id
 				WHERE pfs.id = ?', array($matches[1])) . '</li>';
@@ -270,6 +282,9 @@ function save_schedules() {
 	get_filter_request_var('sendinterval');
 	/* ==================================================== */
 
+	flowview_determine_config();
+	flowview_connect();
+
 	$save['title']        = get_nfilter_request_var('title');
 	$save['query_id']     = get_nfilter_request_var('query_id');
 	$save['sendinterval'] = get_nfilter_request_var('sendinterval');
@@ -283,7 +298,7 @@ function save_schedules() {
 	if (isset_request_var('id')) {
 		$save['id'] = get_request_var('id');
 
-		$q = db_fetch_row('SELECT * FROM plugin_flowview_schedules WHERE id = ' . $save['id']);
+		$q = flowview_db_fetch_row('SELECT * FROM plugin_flowview_schedules WHERE id = ' . $save['id']);
 		if (!isset($q['lastsent']) || $save['start'] != $q['start'] || $save['sendinterval'] != $q['sendinterval']) {
 			while ($d < $t) {
 				$d += $i;
@@ -303,7 +318,7 @@ function save_schedules() {
 	else
 		$save['enabled'] = 'off';
 
-	$id = sql_save($save, 'plugin_flowview_schedules', 'id', true);
+	$id = flowview_sql_save($save, 'plugin_flowview_schedules', 'id', true);
 
 	if (is_error_message()) {
 		raise_message(2);
@@ -325,9 +340,12 @@ function edit_schedule() {
 	get_filter_request_var('id');
 	/* ==================================================== */
 
+	flowview_determine_config();
+	flowview_connect();
+
 	$report = array();
 	if (!isempty_request_var('id')) {
-		$report = db_fetch_row_prepared('SELECT pfs.*, pfq.name
+		$report = flowview_db_fetch_row_prepared('SELECT pfs.*, pfq.name
 			FROM plugin_flowview_schedules AS pfs
 			LEFT JOIN plugin_flowview_queries AS pfq
 			ON (pfs.query_id=pfq.id)
@@ -418,13 +436,16 @@ function show_schedules () {
 	validate_store_request_vars($filters, 'sess_fvschd');
 	/* ================= input validation ================= */
 
+	flowview_determine_config();
+	flowview_connect();
+
 	if (get_request_var('rows') == '-1') {
 		$rows = read_config_option('num_rows_table');
 	} else {
 		$rows = get_request_var('rows');
 	}
 
-	$listeners = db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
+	$listeners = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
 
 	if ($listeners) {
 		html_start_box(__('FlowView Schedules', 'flowview'), '100%', '', '3', 'center', 'flowview_schedules.php?action=edit');
@@ -518,9 +539,9 @@ function show_schedules () {
 		$sql_order
 		$sql_limit";
 
-	$result = db_fetch_assoc($sql);
+	$result = flowview_db_fetch_assoc($sql);
 
-	$total_rows = db_fetch_cell("SELECT COUNT(*)
+	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
 		FROM plugin_flowview_schedules AS pfs
 		LEFT JOIN plugin_flowview_queries AS pfq
 		ON (pfs.query_id=pfq.id)

@@ -29,6 +29,9 @@ include_once('./functions.php');
 
 ini_set('max_execution_time', '-1');
 
+flowview_determine_config();
+flowview_connect();
+
 $debug     = false;
 $lversion  = array();
 
@@ -298,7 +301,7 @@ $lens = array(
 
 $partition = read_config_option('flowview_partition');
 
-$listener  = db_fetch_row_prepared('SELECT *
+$listener  = flowview_db_fetch_row_prepared('SELECT *
 	FROM plugin_flowview_devices
 	WHERE id = ?',
 	array($listener_id));
@@ -333,12 +336,12 @@ if (cacti_sizeof($listener)) {
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
 
 				// Ensure the database connection is still good
-				if (cacti_version_compare(CACTI_VERSION, '1.2.23', '<')) {
+//				if (cacti_version_compare(CACTI_VERSION, '1.2.23', '<')) {
 					database_check_connect();
-				} else {
+/*				} else {
 					db_check_reconnect();
 				}
-
+*/
 				if ($version[1] == 5) {
 					process_fv5($p, $peer);
 				} elseif ($version[1] == 9) {
@@ -363,28 +366,18 @@ exit(0);
 
 function database_check_connect() {
 	global $config;
-
-	$database_type     = 'mysql';
-	$database_default  = 'cacti';
-	$database_hostname = 'localhost';
-	$database_username = 'cactiuser';
-	$database_password = 'cactiuser';
-	$database_port     = '3306';
-	$database_retries  = 5;
-	$database_ssl      = false;
-	$database_ssl_key  = '';
-	$database_ssl_cert = '';
-	$database_ssl_ca   = '';
+	
+	flowview_determine_config();
 
 	include($config['include_path'] . '/config.php');
 
-	$version = db_fetch_cell('SELECT version FROM cacti', '', false);
+	$table = flowview_db_fetch_cell('SHOW TABLES LIKE \'plugin_flowview_dnscache\'' );
 
-	if (empty($version)) {
-		db_close();
+	if (empty($table)) {
+		flowview_db_close();
 
 		while(true) {
-			$db_conn = db_connect_real($database_hostname, $database_username, $database_password, $database_default, $database_type, $database_port, $database_retries, $database_ssl, $database_ssl_key, $database_ssl_cert, $database_ssl_ca);
+			$db_conn = flowview_db_connect_real($database_hostname, $database_username, $database_password, $database_default, $database_type, $database_port, $database_retries, $database_ssl, $database_ssl_key, $database_ssl_cert, $database_ssl_ca);
 
 			if (!is_object($db_conn)) {
 				sleep(1);
@@ -397,6 +390,9 @@ function database_check_connect() {
 
 function process_fv5($p, $peer) {
 	global $listener_id;
+
+	flowview_determine_config();
+	flowview_connect();
 
 	$header_len  = 24;
 	$flowrec_len = 48;
@@ -486,7 +482,7 @@ function process_fv5($p, $peer) {
 
 	if (cacti_sizeof($sql)) {
 		debug('Flow: Writing Records: ' . cacti_sizeof($sql));
-		db_execute($sql_prefix . implode(' ,', $sql));
+		flowview_db_execute($sql_prefix . implode(' ,', $sql));
 	}
 }
 
@@ -500,6 +496,9 @@ function debug($string) {
 
 function process_fv9($p, $peer) {
 	global $templates, $allfields, $lens;
+
+	flowview_determine_config();
+	flowview_connect();
 
 	if (!isset($templates[$peer])) {
 		$templates[$peer] = array();
@@ -714,13 +713,16 @@ function process_fv9($p, $peer) {
 
 	if (cacti_sizeof($sql)) {
 		debug('Flow: Writing Records: ' . cacti_sizeof($sql));
-		db_execute($sql_prefix . implode(', ', $sql));
+		flowview_db_execute($sql_prefix . implode(', ', $sql));
 	}
 }
 
 function get_sql_prefix($flowtime) {
 	global $partition;
 	static $last_table = '';
+
+	flowview_determine_config();
+	flowview_connect();
 
 	if ($partition == 0) {
 		$suffix = date('Y', $flowtime) . substr('000' . date('z', $flowtime), -3);
@@ -731,7 +733,7 @@ function get_sql_prefix($flowtime) {
 	$table  = 'plugin_flowview_raw_' . $suffix;
 
 	if ($table != $last_table) {
-		if (!db_table_exists($table)) {
+		if (!flowview_db_table_exists($table)) {
 			create_raw_partition($table);
 		}
 	}
@@ -743,6 +745,9 @@ function get_sql_prefix($flowtime) {
 
 function process_fv10($p, $peer) {
 	global $templates, $allfields, $lens;
+
+	flowview_determine_config();
+	flowview_connect();
 
 	if (!isset($templates[$peer])) {
 		$templates[$peer] = array();
@@ -910,7 +915,7 @@ function process_fv10($p, $peer) {
 
 	if (cacti_sizeof($sql)) {
 		debug('Flow: Writing Records: ' . cacti_sizeof($sql));
-		db_execute($sql_prefix . implode(', ', $sql));
+		flowview_db_execute($sql_prefix . implode(', ', $sql));
 	}
 }
 

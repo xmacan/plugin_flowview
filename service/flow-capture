@@ -32,6 +32,7 @@ $cacti_base = '/var/www/html/cacti';
 
 include_once($cacti_base . '/include/cli_check.php');
 include_once($cacti_base . '/lib/poller.php');
+include_once($cacti_base . '/plugins/flowview/functions.php');
 
 $shortopts = 'VvHh';
 $longopts = array(
@@ -64,12 +65,15 @@ if (isset($options['systemd'])) {
 }
 
 function start() {
-	global $cacti_base, $systemd;
+	global $global, $cacti_base, $systemd;
 
 	print 'NOTE: Starting Flow Collection' . PHP_EOL;
 
-	$devices = db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
-	$legacy  = db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices WHERE cmethod = 1');
+	flowview_determine_config();
+	flowview_connect();
+
+	$devices = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
+	$legacy  = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices WHERE cmethod = 1');
 
 	if (!empty($devices)) {
 		foreach ($devices as $device) {
@@ -92,7 +96,10 @@ function stop() {
 
 	print 'NOTE: Stopping Flow Collection' . PHP_EOL;
 
-	$devices    = db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
+	flowview_determine_config();
+	flowview_connect();
+
+	$devices    = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
 	$php_binary = read_config_option('path_php_binary');
 
 	if (cacti_sizeof($devices)) {
