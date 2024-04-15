@@ -49,10 +49,11 @@ function plugin_flowview_install() {
 function plugin_flowview_uninstall() {
 	// Do any extra Uninstall stuff here
 	flowview_drop_table(
-	'plugin_flowview_devices',
-	'plugin_flowview_dnscache',
-	'plugin_flowview_ports',
-	'plugin_flowview_queries' );
+		'plugin_flowview_devices',
+		'plugin_flowview_dnscache',
+		'plugin_flowview_ports',
+		'plugin_flowview_queries'
+	);
 }
 
 function plugin_flowview_check_config() {
@@ -641,13 +642,13 @@ function flowview_setup_table() {
 	}
 }
 
-function flowview_drop_table( ...$tables){
+function flowview_drop_table($tables){
 	global $config, $flowviewdb_default;
 
 	flowview_determine_config();
 	flowview_connect();
 
 	foreach( $tables as $table ){
-		flowview_db_execute('DROP TABLE IF EXISTS `' . $flowviewdb_default . '`.$table');
+		flowview_db_execute("DROP TABLE IF EXISTS `" . $flowviewdb_default . "`.$table");
 	}
 }
