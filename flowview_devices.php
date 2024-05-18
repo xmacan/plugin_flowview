@@ -100,8 +100,9 @@ function actions_devices () {
 
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
-				for ($i=0; $i<count($selected_items); $i++) {
-				flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices WHERE id = ?', array($selected_items[$i]));
+				foreach ($selected_items as $item) {
+					flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices 
+						WHERE id = ?', array($item));
 				}
 			}
 		}
