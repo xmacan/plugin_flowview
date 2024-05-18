@@ -104,7 +104,7 @@ function actions_filters() {
 	}
 
 	/* setup some variables */
-	$schedule_list = '';
+	$filter_list = '';
 
 	/* loop through each of the devices selected on the previous page and get more info about them */
 	foreach($_POST as $var => $val) {
