@@ -30,7 +30,6 @@ include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
 set_default_action();
 
-flowview_determine_config();
 flowview_connect();
 
 $sched_actions = array(
@@ -54,8 +53,8 @@ $sendinterval_arr = array(
 
 $formats = reports_get_format_files();
 
-$query_array = array_rekey( 
-	flowview_db_fetch_assoc('SELECT id, name 
+$query_array = array_rekey(
+	flowview_db_fetch_assoc('SELECT id, name
 	FROM plugin_flowview_queries
 	ORDER BY name'),
 	'id', 'name' );
@@ -146,7 +145,6 @@ switch (get_request_var('action')) {
 function actions_schedules () {
 	global $colors, $sched_actions, $config;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	/* ================= input validation ================= */
@@ -282,7 +280,6 @@ function save_schedules() {
 	get_filter_request_var('sendinterval');
 	/* ==================================================== */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$save['title']        = get_nfilter_request_var('title');
@@ -340,7 +337,6 @@ function edit_schedule() {
 	get_filter_request_var('id');
 	/* ==================================================== */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$report = array();
@@ -436,7 +432,6 @@ function show_schedules () {
 	validate_store_request_vars($filters, 'sess_fvschd');
 	/* ================= input validation ================= */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	if (get_request_var('rows') == '-1') {

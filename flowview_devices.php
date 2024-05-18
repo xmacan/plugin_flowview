@@ -92,7 +92,7 @@ switch (get_request_var('action')) {
 
 function actions_devices () {
 	global $flow_actions, $config;
-	flowview_determine_config();
+
 	flowview_connect();
 
 	if (isset_request_var('selected_items')) {
@@ -168,7 +168,6 @@ function actions_devices () {
 }
 
 function save_devices () {
-	flowview_determine_config();
 	flowview_connect();
 
 	/* ================= input validation ================= */
@@ -203,7 +202,7 @@ function save_devices () {
 
 function edit_devices () {
 	global $device_edit;
-	flowview_determine_config();
+
 	flowview_connect();
 
 	/* ================= input validation ================= */
@@ -237,7 +236,6 @@ function show_devices () {
 	global $action, $expire_arr, $rotation_arr, $version_arr, $nesting_arr;
 	global $config, $flow_actions;
 
-	flowview_determine_config();
 	flowview_connect();
 
     /* ================= input validation and session storage ================= */

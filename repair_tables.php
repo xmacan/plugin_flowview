@@ -24,7 +24,6 @@
 
 include_once('../../include/cli_check.php');
 
-flowview_determine_config();
 flowview_connect();
 
 $tables = flowview_db_fetch_assoc('SHOW TABLES');

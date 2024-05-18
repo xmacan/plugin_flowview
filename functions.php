@@ -47,7 +47,6 @@ function edit_filter() {
 	get_filter_request_var('id');
 	/* ==================================================== */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
@@ -251,7 +250,7 @@ function edit_filter() {
 
 function save_filter_form() {
 	global $config;
-	
+
 	/* ================= input validation ================= */
 	get_filter_request_var('timespan');
 	get_filter_request_var('sortfield');
@@ -260,7 +259,6 @@ function save_filter_form() {
 	get_filter_request_var('query');
 	/* ==================================================== */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	flowview_db_execute_prepared('UPDATE plugin_flowview_queries
@@ -292,7 +290,6 @@ function save_filter() {
 	get_filter_request_var('sortfield');
 	/* ==================================================== */
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$save['id']              = get_nfilter_request_var('id');
@@ -356,7 +353,6 @@ function save_filter() {
 function flowview_delete_filter() {
 	global $config;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	flowview_db_execute_prepared('DELETE FROM plugin_flowview_queries
@@ -401,7 +397,6 @@ function flowview_show_summary(&$data) {
 function flowview_display_filter($data) {
 	global $config, $graph_timeshifts, $graph_timespans;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
@@ -1189,7 +1184,6 @@ function flowview_display_filter($data) {
 function get_port_name($port_num, $port_proto) {
 	global $config, $graph_timespans;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
@@ -1222,7 +1216,6 @@ function get_port_name($port_num, $port_proto) {
 function plugin_flowview_run_schedule($id) {
 	global $config;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$schedule = flowview_db_fetch_row_prepared('SELECT *
@@ -1503,7 +1496,6 @@ function get_date_filter($sql_where, $start, $end, $range_type = 1) {
 function get_tables_for_query($start, $end = null) {
 	global $config, $graph_timespans;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
@@ -1707,7 +1699,6 @@ function get_category_columns($statistics, $domain) {
 function run_flow_query($session, $query_id, $start, $end) {
 	global $config, $graph_timespans;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	if (empty($query_id)) {
@@ -2853,8 +2844,7 @@ function flowview_get_rdomain_from_domain($domain) {
 
 function flowview_translate_port($port, $is_hex, $detail = true) {
 	global $config;
-	
-	flowview_determine_config();
+
 	flowview_connect();
 
 	static $services = array();
@@ -3168,8 +3158,7 @@ function flowview_draw_chart($type, $title) {
 */
 function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	global $config;
-	
-	flowview_determine_config();
+
 	flowview_connect();
 
 	// First check to see if its in the cache
@@ -3667,8 +3656,7 @@ function flowview_autoscale($value) {
 
 function create_raw_partition($table) {
 	global $config;
-	
-	flowview_determine_config();
+
 	flowview_connect();
 
 	$data = array();
@@ -3745,8 +3733,7 @@ function create_raw_partition($table) {
 
 function flowview_fix_collate_issues() {
 	global $config;
-	
-	flowview_determine_config();
+
 	flowview_connect();
 
 	$tables = array_rekey(
@@ -3767,7 +3754,6 @@ function flowview_fix_collate_issues() {
 function import_flows() {
 	global $config;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$flow_directory = read_config_option('path_flows_dir');

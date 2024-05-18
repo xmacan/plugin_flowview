@@ -35,7 +35,6 @@ $debug = false;
 $maint = false;
 $force = false;
 
-flowview_determine_config();
 flowview_connect();
 
 $shortopts = 'VvHh';

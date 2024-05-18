@@ -28,10 +28,12 @@ This will start the service.
 
 ## SystemD Based Systems
 
-* First, copy the file flow-capture.service into /lib/systemd/system
+* First, copy the file flow-capture.service into /etc/systemd/system
 
 * Then, edit the file and ensure that the path to the flow-capture script is
   accurate
+
+* Then, run 'systemctl daemon-reload'
 
 * Then, run 'systemctl enable flow-capture'
 

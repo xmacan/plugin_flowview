@@ -27,9 +27,9 @@ global $database_username, $database_password, $database_port, $database_retries
 global $database_ssl, $database_ssl_key, $database_ssl_cert, $database_ssl_ca;
 
 /* revert if you dont use the Cacti database */
-$use_cacti_db = false;
+$flowview_use_cacti_db = true;
 
-if (!$use_cacti_db) {
+if (!$flowview_use_cacti_db) {
 	$flowviewdb_type     = 'mysql';
 	$flowviewdb_default  = 'flowview';
 	$flowviewdb_hostname = 'localhost';

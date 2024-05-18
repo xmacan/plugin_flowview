@@ -228,8 +228,7 @@ function flowview_db_table_exists($table, $log = true) {
 	return false;
 }
 
-
-function flowview_db_table_create( $table, $data) {
+function flowview_db_table_create($table, $data) {
         global $flowview_cnn;
 
         $result = flowview_db_fetch_assoc('SHOW TABLES');

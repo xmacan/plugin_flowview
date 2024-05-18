@@ -34,7 +34,6 @@ ini_set('memory_limit', '-1');
 $debug = false;
 $maint = false;
 
-flowview_determine_config();
 flowview_connect();
 
 $shortopts = 'VvHh';
@@ -99,7 +98,7 @@ $schedules = flowview_db_fetch_assoc("SELECT *
 	WHERE enabled = 'on'
 	AND ($t - sendinterval > lastsent)");
 
-if (count($schedules)) {
+if (cacti_sizeof($schedules)) {
 	$php = read_config_option('path_php_binary');
 
 	foreach ($schedules as $s) {
@@ -108,8 +107,7 @@ if (count($schedules)) {
 	}
 }
 
-$total = flowview_db_fetch_cell('SELECT COUNT(*)
-	FROM plugin_flowview_devices');
+$total = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
 
 /* determine how many records were inserted */
 $last_sequence = read_config_option('flowview_last_sequence');

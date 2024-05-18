@@ -81,7 +81,6 @@ switch(get_request_var('action')) {
 exit;
 
 function load_session_for_filter() {
-	flowview_determine_config();
 	flowview_connect();
 
 	if ((isset_request_var('query') && get_filter_request_var('query') > 0)) {

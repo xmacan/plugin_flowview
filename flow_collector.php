@@ -29,7 +29,6 @@ include_once('./functions.php');
 
 ini_set('max_execution_time', '-1');
 
-flowview_determine_config();
 flowview_connect();
 
 $debug     = false;
@@ -366,7 +365,7 @@ exit(0);
 
 function database_check_connect() {
 	global $config;
-	
+
 	flowview_determine_config();
 
 	include($config['include_path'] . '/config.php');
@@ -391,7 +390,6 @@ function database_check_connect() {
 function process_fv5($p, $peer) {
 	global $listener_id;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$header_len  = 24;
@@ -497,7 +495,6 @@ function debug($string) {
 function process_fv9($p, $peer) {
 	global $templates, $allfields, $lens;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	if (!isset($templates[$peer])) {
@@ -721,7 +718,6 @@ function get_sql_prefix($flowtime) {
 	global $partition;
 	static $last_table = '';
 
-	flowview_determine_config();
 	flowview_connect();
 
 	if ($partition == 0) {
@@ -746,7 +742,6 @@ function get_sql_prefix($flowtime) {
 function process_fv10($p, $peer) {
 	global $templates, $allfields, $lens;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	if (!isset($templates[$peer])) {

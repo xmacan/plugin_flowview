@@ -70,7 +70,6 @@ switch (get_request_var('action')) {
 function actions_filters() {
 	global $sched_actions, $config;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	/* ================= input validation ================= */
@@ -176,7 +175,6 @@ function actions_filters() {
 function show_filters() {
 	global $config, $sched_actions, $graph_timespans, $item_rows;
 
-	flowview_determine_config();
 	flowview_connect();
 
 	include('./plugins/flowview/arrays.php');

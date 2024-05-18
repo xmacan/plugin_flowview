@@ -74,7 +74,6 @@ function plugin_flowview_check_upgrade() {
 		return;
 	}
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$info    = plugin_flowview_version();
@@ -433,7 +432,6 @@ function flowview_poller_bottom() {
 
 	include_once($config['base_path'] . '/lib/poller.php');
 
-	flowview_determine_config();
 	flowview_connect();
 
 	$time = time() - 86400;
@@ -455,7 +453,7 @@ function flowview_poller_bottom() {
 }
 
 function flowview_determine_config() {
-	global $config;
+	global $config, $flowview_use_cacti_db;
 
 	// Setup the flowview database settings path
 	if (!defined('FLOWVIEW_CONFIG')) {
@@ -480,160 +478,160 @@ function flowview_connect() {
 	include_once(dirname(__FILE__) . '/functions.php');
 	include_once(dirname(__FILE__) . '/database.php');
 
+	/**
+	 * Boolean that denotes connecting to a database other
+	 * than the Cacti database.
+	 */
 	$connect_remote = false;
-	$connected      = true;
 
 	/* Connect to the Flowview Database */
-	if (empty($flowview_cnn)) {
-		if ($config['poller_id'] == 1) {
-			if ($use_cacti_db == true) {
-				$flowview_cnn = $local_db_cnn_id;
-				$connected = true;
-			} else {
-				$connect_remote = true;
-			}
-		} elseif (isset($config['flowview_remote_db'])) {
-			if ($use_cacti_db == true) {
-				$flowview_cnn = $local_db_cnn_id;
-				$connected = true;
-			} else {
-				$connect_remote = true;
-			}
+	if ($config['poller_id'] == 1) {
+		if ($flowview_use_cacti_db === true) {
+			$flowview_cnn = $local_db_cnn_id;
 		} else {
-			if ($use_cacti_db == true) {
-				$flowview_cnn = $remote_db_cnn_id;
-				$connected = true;
-			} else {
-				$connect_remote = true;
-			}
+			$connect_remote = true;
+		}
+	} elseif ($flowview_use_cacti_db === true) {
+		$flowview_cnn = $remote_db_cnn_id;
+	} else {
+		$connect_remote = true;
+	}
+
+	if ($connect_remote && !is_object($flowview_cnn)) {
+		if (!isset($flowviewdb_port)) {
+			$flowviewdb_port = '3306';
 		}
 
-		if ($connect_remote) {
-			if (!isset($flowviewdb_port)) {
-				$flowviewdb_port = '3306';
-			}
-
-			if (!isset($flowviewdb_retries)) {
-				$flowviewdb_retries = '5';
-			}
-
-			if (!isset($flowviewdb_ssl)) {
-			    $flowviewdb_ssl = false;
-			}
-
-			if (!isset($flowviewdb_ssl_key)) {
-			    $flowviewdb_ssl_key = '';
-			}
-
-			if (!isset($flowviewdb_ssl_cert)) {
-			    $flowviewdb_ssl_cert = '';
-			}
-
-			if (!isset($flowviewdb_ssl_ca)) {
-			    $flowviewdb_ssl_ca = '';
-			}
-
-			$flowview_cnn = flowview_db_connect_real($flowviewdb_hostname, $flowviewdb_username, $flowviewdb_password, $flowviewdb_default, $flowviewdb_type, $flowviewdb_port, $flowviewdb_retries, $flowviewdb_ssl, $flowviewdb_ssl_key, $flowviewdb_ssl_cert, $flowviewdb_ssl_ca);
-
-			if ($flowview_cnn == false) {
-				print "FATAL Can not connect\n";
-				$connected = false;
-			}
+		if (!isset($flowviewdb_retries)) {
+			$flowviewdb_retries = '5';
 		}
 
-		if ($connected && !flowview_db_table_exists('%flowview%') && api_plugin_is_enabled('flowview')) {
-			cacti_log('Setting Up Database Tables Since they do not exist', false, 'FLOWVIEW');
+		if (!isset($flowviewdb_ssl)) {
+		    $flowviewdb_ssl = false;
+		}
 
-			flowview_setup_table();
+		if (!isset($flowviewdb_ssl_key)) {
+		    $flowviewdb_ssl_key = '';
+		}
+
+		if (!isset($flowviewdb_ssl_cert)) {
+		    $flowviewdb_ssl_cert = '';
+		}
+
+		if (!isset($flowviewdb_ssl_ca)) {
+		    $flowviewdb_ssl_ca = '';
+		}
+
+		$flowview_cnn = flowview_db_connect_real(
+			$flowviewdb_hostname,
+			$flowviewdb_username,
+			$flowviewdb_password,
+			$flowviewdb_default,
+			$flowviewdb_type,
+			$flowviewdb_port,
+			$flowviewdb_retries,
+			$flowviewdb_ssl,
+			$flowviewdb_ssl_key,
+			$flowviewdb_ssl_cert,
+			$flowviewdb_ssl_ca
+		);
+
+		if ($flowview_cnn == false) {
+			cacti_log("FATAL Can not connect to the flowview database", false, 'FLOWVIEW');
+			exit;
 		}
 	}
 
-	return $connected;
+	if (!flowview_db_table_exists('plugin_flowview_devices')) {
+		cacti_log('Setting Up Database Tables Since they do not exist', false, 'FLOWVIEW');
+
+		flowview_setup_table();
+	}
+
+	return $flowview_cnn !== false;
 }
 
 function flowview_setup_table() {
 	global $config, $settings, $flowviewdb_default;
 
-	flowview_determine_config();
-	flowview_connect();
-	
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
-	ip varchar(45) NOT NULL default '',
-	host varchar(255) NOT NULL default '',
-	time bigint(20) unsigned NOT NULL default '0',
-	PRIMARY KEY (ip))
-	ENGINE MEMORY,
-	COMMENT 'Plugin Flowview - DNS Cache to help speed things up'");
+		ip varchar(45) NOT NULL default '',
+		host varchar(255) NOT NULL default '',
+		time bigint(20) unsigned NOT NULL default '0',
+		PRIMARY KEY (ip))
+		ENGINE MEMORY,
+		COMMENT 'Plugin Flowview - DNS Cache to help speed things up'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
-	id int(11) unsigned NOT NULL AUTO_INCREMENT,
-	name varchar(64) NOT NULL,
-	cmethod int(11) unsigned NOT NULL default '0',
-	allowfrom varchar(32) NOT NULL default '0',
-	port int(11) unsigned NOT NULL,
-	PRIMARY KEY (id))
-	ENGINE InnoDB,
-	ROW_FORMAT DYNAMIC,
-	COMMENT 'Plugin Flowview - List of Devices to collect flows from'");
+		id int(11) unsigned NOT NULL AUTO_INCREMENT,
+		name varchar(64) NOT NULL,
+		cmethod int(11) unsigned NOT NULL default '0',
+		allowfrom varchar(32) NOT NULL default '0',
+		port int(11) unsigned NOT NULL,
+		PRIMARY KEY (id))
+		ENGINE InnoDB,
+		ROW_FORMAT DYNAMIC,
+		COMMENT 'Plugin Flowview - List of Devices to collect flows from'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_queries` (
-	id int(11) unsigned NOT NULL AUTO_INCREMENT,
-	name varchar(255) NOT NULL,
-	device_id int(11) unsigned NOT NULL,
-	timespan int(11) unsigned NOT NULL DEFAULT '0',
-	startdate varchar(32) NOT NULL,
-	enddate varchar(32) NOT NULL,
-	tosfields varchar(32) NOT NULL,
-	tcpflags varchar(32) NOT NULL,
-	protocols varchar(32) DEFAULT NULL,
-	sourceip varchar(255) NOT NULL,
-	sourceport varchar(255) NOT NULL,
-	sourceinterface varchar(64) NOT NULL,
-	sourceas varchar(64) NOT NULL,
-	destip varchar(255) NOT NULL,
-	destport varchar(255) NOT NULL,
-	destinterface varchar(64) NOT NULL,
-	destas varchar(64) NOT NULL,
-	statistics int(3) unsigned NOT NULL,
-	printed int(3) unsigned NOT NULL,
-	includeif int(2) unsigned NOT NULL,
-	sortfield int(2) unsigned NOT NULL,
-	cutofflines varchar(8) NOT NULL,
-	cutoffoctets varchar(8) NOT NULL,
-	resolve varchar(2) NOT NULL,
-	PRIMARY KEY (`id`))
-	ENGINE=InnoDB,
-	ROW_FORMAT DYNAMIC,
-	COMMENT='Plugin Flowview - List of Saved Flow Queries'");
+		id int(11) unsigned NOT NULL AUTO_INCREMENT,
+		name varchar(255) NOT NULL,
+		device_id int(11) unsigned NOT NULL,
+		timespan int(11) unsigned NOT NULL DEFAULT '0',
+		startdate varchar(32) NOT NULL,
+		enddate varchar(32) NOT NULL,
+		tosfields varchar(32) NOT NULL,
+		tcpflags varchar(32) NOT NULL,
+		protocols varchar(32) DEFAULT NULL,
+		sourceip varchar(255) NOT NULL,
+		sourceport varchar(255) NOT NULL,
+		sourceinterface varchar(64) NOT NULL,
+		sourceas varchar(64) NOT NULL,
+		destip varchar(255) NOT NULL,
+		destport varchar(255) NOT NULL,
+		destinterface varchar(64) NOT NULL,
+		destas varchar(64) NOT NULL,
+		statistics int(3) unsigned NOT NULL,
+		printed int(3) unsigned NOT NULL,
+		includeif int(2) unsigned NOT NULL,
+		sortfield int(2) unsigned NOT NULL,
+		cutofflines varchar(8) NOT NULL,
+		cutoffoctets varchar(8) NOT NULL,
+		resolve varchar(2) NOT NULL,
+		PRIMARY KEY (`id`))
+		ENGINE=InnoDB,
+		ROW_FORMAT DYNAMIC,
+		COMMENT='Plugin Flowview - List of Saved Flow Queries'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_schedules` (
-	id int(11) unsigned NOT NULL AUTO_INCREMENT,
-	title varchar(128) NOT NULL default '',
-	enabled varchar(3) NOT NULL default 'on',
-	sendinterval bigint(20) unsigned NOT NULL,
-	lastsent bigint(20) unsigned NOT NULL,
-	start datetime NOT NULL,
-	email text NOT NULL,
-	format_file varchar(128) default '',
-	query_id int(11) unsigned NOT NULL,
-	PRIMARY KEY (`id`),
-	INDEX query_id (query_id) )
-	ENGINE InnoDB,
-	ROW_FORMAT DYNAMIC,
-	COMMENT 'Plugin Flowview - Scheduling for running and emails of saved queries'");
+		id int(11) unsigned NOT NULL AUTO_INCREMENT,
+		title varchar(128) NOT NULL default '',
+		enabled varchar(3) NOT NULL default 'on',
+		sendinterval bigint(20) unsigned NOT NULL,
+		lastsent bigint(20) unsigned NOT NULL,
+		start datetime NOT NULL,
+		email text NOT NULL,
+		format_file varchar(128) default '',
+		query_id int(11) unsigned NOT NULL,
+		PRIMARY KEY (`id`),
+		INDEX query_id (query_id) )
+		ENGINE InnoDB,
+		ROW_FORMAT DYNAMIC,
+		COMMENT 'Plugin Flowview - Scheduling for running and emails of saved queries'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_ports` (
-	id int(11) unsigned NOT NULL AUTO_INCREMENT,
-	service varchar(20) NOT NULL default '',
-	port int(11) unsigned NOT NULL,
-	proto char(4) NOT NULL,
-	description varchar(255) NOT NULL default '',
-	PRIMARY KEY (`id`) )
-	ENGINE InnoDB,
-	ROW_FORMAT DYNAMIC,
-	COMMENT 'Plugin Flowview - Database of well known Ports'");
+		id int(11) unsigned NOT NULL AUTO_INCREMENT,
+		service varchar(20) NOT NULL default '',
+		port int(11) unsigned NOT NULL,
+		proto char(4) NOT NULL,
+		description varchar(255) NOT NULL default '',
+		PRIMARY KEY (`id`) )
+		ENGINE InnoDB,
+		ROW_FORMAT DYNAMIC,
+		COMMENT 'Plugin Flowview - Database of well known Ports'");
 
 	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
+
 	if (cacti_sizeof($inserts)) {
 		flowview_db_execute('TRUNCATE plugin_flowview_ports');
 		foreach($inserts as $i) {
@@ -642,13 +640,14 @@ function flowview_setup_table() {
 	}
 }
 
-function flowview_drop_table($tables){
+function flowview_drop_table($tables) {
 	global $config, $flowviewdb_default;
 
-	flowview_determine_config();
 	flowview_connect();
 
-	foreach( $tables as $table ){
-		flowview_db_execute("DROP TABLE IF EXISTS `" . $flowviewdb_default . "`.$table");
+	if (cacti_sizeof($tables)) {
+		foreach($tables as $table) {
+			flowview_db_execute("DROP TABLE IF EXISTS `" . $flowviewdb_default . "`.$table");
+		}
 	}
 }

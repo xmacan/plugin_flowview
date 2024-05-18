@@ -27,7 +27,6 @@ include_once('./include/cli_check.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 include_once($config['base_path'] . '/lib/time.php');
 
-flowview_determine_config();
 flowview_connect();
 
 $tables = flowview_db_fetch_assoc('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME LIKE "plugin_flowview_raw%"');
