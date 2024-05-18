@@ -104,7 +104,7 @@ function actions_filters() {
 	}
 
 	/* setup some variables */
-	$schedule_list = '';
+	$filter_list = '';
 
 	/* loop through each of the devices selected on the previous page and get more info about them */
 	foreach($_POST as $var => $val) {
@@ -177,7 +177,8 @@ function show_filters() {
 
 	flowview_connect();
 
-	include('./plugins/flowview/arrays.php');
+	include($config['base_path'] . '/plugins/flowview/arrays.php');
+
 
     /* ================= input validation and session storage ================= */
     $filters = array(

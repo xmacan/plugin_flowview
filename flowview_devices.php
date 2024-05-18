@@ -100,8 +100,9 @@ function actions_devices () {
 
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
-				for ($i=0; $i<count($selected_items); $i++) {
-				flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices WHERE id = ?', array($selected_items[$i]));
+				foreach ($selected_items as $item) {
+					flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices 
+						WHERE id = ?', array($item));
 				}
 			}
 		}
@@ -354,7 +355,10 @@ function show_devices () {
 	if (count($result)) {
 		foreach ($result as $row) {
 			$status = shell_exec("netstat -anp | grep ':" . $row['port'] . " '");
-			$parts = preg_split('/[\s]+/', trim($status));
+
+			if(!isnull($status)) {
+				$parts = preg_split('/[\s]+/', trim($status));
+			}
 
 			form_alternate_row('line' . $row['id'], true);
 			form_selectable_cell('<a class="linkEditMain" href="flowview_devices.php?action=edit&id=' . $row['id'] . '">' . $row['name'] . '</a>', $row['id']);
