@@ -1,7 +1,9 @@
 # Cacti Flow Service
 
-The two files in this directory are for init.d and systemd service control files
-for the flowview plugin services
+This folder contains files for control plugin flowview services:
+- flow-capture is for Linux OS with init.d
+- flow-capture.sevice is for Linux OS with systemd
+- flow-capture-freebsd and cacti-flow-capture are for FreeBSD system
 
 # Features
 
@@ -48,6 +50,29 @@ This will start the service.
   ```
 
 To verify that the service is actually running as expected.
+
+
+## FreeBSD
+
+* First, copy the cacti-flow-capture file into /usr/local/etc/rc.d
+
+* Then, edit /etc/rc.conf and add these lines:
+    cacti_flow_collector_enable="YES"
+    cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd"
+
+* Lastly, run:
+  ```
+  /usr/local/etc/rc.d/cacti-flow-capture start
+  ```
+
+  followed by:
+  ```
+  /usr/local/etc/rc.d/cacti-flow-capture status
+  ```
+
+To verify that the service is actually running as expected.
+
+
 
 -----------------------------------------------
 Copyright (c) 2004-2024 - The Cacti Group, Inc.

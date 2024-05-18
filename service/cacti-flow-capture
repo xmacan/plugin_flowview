@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# PROVIDE: cacti_flow_collecotr
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+# Description:
+#    This script runs Cacti flow collector
+
+# How to use:
+#    Place this file in /usr/local/etc/rc.d/
+#    Add cacti_flow_collector_enable="YES" to /etc/rc.conf
+#    Add cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd" to /etc/rc.conf
+
+
+# Freebsd rc library
+. /etc/rc.subr
+
+# General Info
+name="cacti_flow_collector"            # Safe name of program
+program_name="cacti_flow_collector"    # Name of exec
+title="Cacti-flow_collector"           # Title to display in top/htop
+
+stop_precmd="${name}_prestop"
+
+cacti_flow_collector_prestop()
+{
+	echo killing listeners
+	pkill -f "flow_collector.php --listener-id"
+}
+
+
+# RC.config vars
+load_rc_config $name      # Loading rc config vars
+: ${cacti_flow_collector_enable="NO"}  # Default: Do not enable Cacti flow collector
+
+rcvar=cacti_flow_collector_enable                   # Enables the rc.conf YES/NO flag
+pidfile="/var/run/${program_name}.pid" # File that allows the system to keep track of cacti_flow_collector status
+
+# Command Setup
+exec_path="/usr/local/bin/php" # Path to the php exec
+output_file="/var/log/${program_name}.log" # Path to cacti_flow_collector output file
+
+# Command
+command="/usr/sbin/daemon"
+command_args="-r -t ${title} -o ${output_file} -P ${pidfile} ${exec_path} ${cacti_flow_collector_args}"
+
+# Loading Config
+load_rc_config ${name}
+run_rc_command "$1"

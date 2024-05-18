@@ -1,0 +1,59 @@
+#!/usr/bin/php
+<?php
+/*
+ +-------------------------------------------------------------------------+
+ | Copyright (C) 2004-2023 The Cacti Group                                 |
+ |                                                                         |
+ | This program is free software; you can redistribute it and/or           |
+ | modify it under the terms of the GNU General Public License             |
+ | as published by the Free Software Foundation; either version 2          |
+ | of the License, or (at your option) any later version.                  |
+ |                                                                         |
+ | This program is distributed in the hope that it will be useful,         |
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           |
+ | GNU General Public License for more details.                            |
+ +-------------------------------------------------------------------------+
+ | Cacti: The Complete RRDtool-based Graphing Solution                     |
+ +-------------------------------------------------------------------------+
+ | This code is designed, written, and maintained by the Cacti Group. See  |
+ | about.php and/or the AUTHORS file for specific developer information.   |
+ +-------------------------------------------------------------------------+
+ | http://www.cacti.net/                                                   |
+ +-------------------------------------------------------------------------+
+*/
+
+
+$cacti_base = '/usr/local/share/cacti';
+
+include_once($cacti_base . '/include/cli_check.php');
+include_once($cacti_base . '/lib/poller.php');
+include_once($cacti_base . '/plugins/flowview/functions.php');
+
+
+global $global, $cacti_base;
+
+print 'NOTE: Starting Flow Collection' . PHP_EOL;
+
+flowview_connect();
+
+$devices = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
+$legacy  = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices WHERE cmethod = 1');
+
+if (!empty($devices)) {
+	foreach ($devices as $device) {
+		$php_binary = read_config_option('path_php_binary');
+		print "NOTE: Launching cacti-flow-capture as '" . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id'] . "'" . PHP_EOL;
+
+		exec_background($php_binary, ' -q ' . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id']);
+
+	}
+} else {
+	print 'NOTE: No Flow Capture Listeners configured' . PHP_EOL;
+}
+
+// do not stop this process. Without this, service control will fail
+do {
+	sleep (10);
+}
+while (true);
