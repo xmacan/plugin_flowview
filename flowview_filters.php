@@ -177,7 +177,8 @@ function show_filters() {
 
 	flowview_connect();
 
-	include('./plugins/flowview/arrays.php');
+	include($config['base_path'] . '/plugins/flowview/arrays.php');
+
 
     /* ================= input validation and session storage ================= */
     $filters = array(
