@@ -1065,16 +1065,16 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 
 		if (isset($data[$fieldname['start_time']])) {
 			$rstime = ($data[$fieldname['start_time']] - $sysuptime) / 1000;
-			$rsmsec = substr($data[$fieldname['start_time']] - $sysuptime, -3);
+			$rsmsec = substr('000' . ($data[$fieldname['start_time']] - $sysuptime), -3);
 		}
 
 		if (isset($data[$fieldname['end_time']])) {
-			$retime = ($data[$fieldname['end_time']] - $sysuptime) / 1000;
-			$remsec = substr($data[$fieldname['end_time']] - $sysuptime, -3);
+			$retime = ($data[$fieldname['end_time'] - $sysuptime]) / 1000;
+			$remsec = substr('000' . ($data[$fieldname['end_time']] - $sysuptime), -3);
 		}
 
-		$start_time = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_time   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_time = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
+		$end_time   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
 	} else {
 		$start_time = date('Y-m-d H:i:s.v', $flowtime);
 		$end_time   = date('Y-m-d H:i:s.v', $flowtime);
