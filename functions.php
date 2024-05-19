@@ -25,6 +25,8 @@
 function sort_filter() {
 	global $config, $filter_edit, $graph_timespans;
 
+	flowview_connect();
+
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
 	if (isset_request_var('printed') && get_filter_request_var('printed') > 0) {
