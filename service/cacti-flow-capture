@@ -12,7 +12,6 @@
 #    Add cacti_flow_collector_enable="YES" to /etc/rc.conf
 #    Add cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd" to /etc/rc.conf
 
-
 # Freebsd rc library
 . /etc/rc.subr
 
@@ -23,12 +22,10 @@ title="Cacti-flow_collector"           # Title to display in top/htop
 
 stop_precmd="${name}_prestop"
 
-cacti_flow_collector_prestop()
-{
+cacti_flow_collector_prestop() {
 	echo killing listeners
 	pkill -f "flow_collector.php --listener-id"
 }
-
 
 # RC.config vars
 load_rc_config $name      # Loading rc config vars

@@ -10,6 +10,10 @@ This folder contains files for control plugin flowview services:
 There are two types of collectors for flowview, one requires only Cacti and the
 second requires flow-tools binary package.
 
+Before you start any of the flow-capture services, ensure you have added at 
+least on listener otherwise the flow capture service will not start.  Also
+any time you add or remove a listener, you will need to restart the service.
+
 # Installation
 
 ## Init.d Based Systems
@@ -51,7 +55,6 @@ This will start the service.
 
 To verify that the service is actually running as expected.
 
-
 ## FreeBSD
 
 * First, copy the cacti-flow-capture file into /usr/local/etc/rc.d
@@ -71,8 +74,6 @@ To verify that the service is actually running as expected.
   ```
 
 To verify that the service is actually running as expected.
-
-
 
 -----------------------------------------------
 Copyright (c) 2004-2024 - The Cacti Group, Inc.
