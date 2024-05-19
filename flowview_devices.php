@@ -239,8 +239,14 @@ function show_devices () {
 
 	flowview_connect();
 
-    /* ================= input validation and session storage ================= */
-    $filters = array(
+	if (substr_count(strtolower(PHP_OS), 'freebsd')) {
+		$os = 'freebsd';
+	} else {
+		$os = 'linux';
+	}
+
+	/* ================= input validation and session storage ================= */
+	$filters = array(
 		'page' => array(
 			'filter' => FILTER_VALIDATE_INT,
 			'default' => '1'
@@ -354,11 +360,13 @@ function show_devices () {
 
 	if (count($result)) {
 		foreach ($result as $row) {
-			$status = shell_exec("netstat -anp | grep ':" . $row['port'] . " '");
-
-			if(!isnull($status)) {
-				$parts = preg_split('/[\s]+/', trim($status));
+			if ($os == 'freebsd') {
+				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
+			} else {
+				$status = shell_exec("netstat -anp | grep ':" . $row['port'] . " '");
 			}
+
+			$parts = preg_split('/[\s]+/', trim($status));
 
 			form_alternate_row('line' . $row['id'], true);
 			form_selectable_cell('<a class="linkEditMain" href="flowview_devices.php?action=edit&id=' . $row['id'] . '">' . $row['name'] . '</a>', $row['id']);

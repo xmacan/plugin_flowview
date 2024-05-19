@@ -13,6 +13,8 @@
 
 * feature: Make it optional to query Arin to track Big Tech
 
+* feature#97: Add FreeBSD service control
+
 
 --- 3.3 ---
 
