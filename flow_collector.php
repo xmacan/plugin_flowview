@@ -306,6 +306,8 @@ $listener  = flowview_db_fetch_row_prepared('SELECT *
 	array($listener_id));
 
 if (cacti_sizeof($listener)) {
+	$previous_version = -1;
+
 	while (true) {
 		$socket = stream_socket_server('udp://0.0.0.0:' . $listener['port'], $errno, $errstr, STREAM_SERVER_BIND);
 
@@ -337,11 +339,32 @@ if (cacti_sizeof($listener)) {
 				database_check_connect();
 
 				if ($version[1] == 5) {
+					if ($previous_version != 5) {
+						debug('Flow: Detecting Version Change to v5');
+						$templates = array();
+					}
+
 					process_fv5($p, $peer);
+
+					$previous_version = 5;
 				} elseif ($version[1] == 9) {
+					if ($previous_version != 9) {
+						debug('Flow: Detecting Version Change to v9');
+						$templates = array();
+					}
+
 					process_fv9($p, $peer);
+
+					$previous_version = 9;
 				} elseif ($version[1] == 10) {
+					if ($previous_version != 10) {
+						debug('Flow: Detecting Version Change to v10');
+						$templates = array();
+					}
+
 					process_fv10($p, $peer);
+
+					$previous_version = 10;
 				}
 
 				$end = microtime(true);
@@ -392,14 +415,14 @@ function process_fv5($p, $peer) {
 	$header = unpack('nversion/ncount/Nsysuptime/Nunix_secs/Nunix_nsecs/Nflow_sequence/Cengine_type/Cengine_id/nsample_int', substr($p, 0, 24));
 
 	/* prepare to process records */
-	$count       = $header['count'];
+	$records     = $header['count'];
 	$flows       = 1;
 	$flowrec_len = 48;
 	$sql         = array();
 
-	debug('Flow: Processing v5 Data, Len: ' . $count);
+	debug('Flow: Processing v5 Data, Records: ' . $records);
 
-	for ($i = 0; $i < $count; $i++) {
+	for ($i = 0; $i < $records; $i++) {
 		$flowrec = substr($p, $header_len + ($i * $flowrec_len), $flowrec_len);
 
 		$data = unpack('C4src_addr/C4dst_addr/C4nexthop/nsrc_if/ndst_if/NdPkts/NdOctets/NFirst/NLast/nsrc_port/ndst_port/Cblank/Cflags/Cprotocol/Ctos/nsrc_as/ndst_as/Csrc_prefix/Cdst_prefix', $flowrec);
@@ -508,25 +531,30 @@ function process_fv9($p, $peer) {
 	$header     = unpack('nversion/ncount/Nsysuptime/Nunix_seconds/Nseq_num/Nsource_id', substr($p, 0, $header_len));
 
 	/* prepare to process records */
-	$count      = $header['count'];
+	$records    = $header['count'];
 	$i          = $header_len;
+	$j          = 0;
 	$flowtime   = $header['unix_seconds'];
 	$sysuptime  = $header['sysuptime'];
 	$flow_data  = false;
 	$sql        = array();
 	$sql_prefix = get_sql_prefix($flowtime);
 
-	debug('Flow: Processing v9 Data, Records: ' . $count);
+	debug('Flow: Processing v9 Data, Records: ' . $records);
 
-	while ($i < $count) {
+	while ($j < $records) {
 		$header = substr($p, $i, 4);
 		$header = unpack('nflowset_id/nflowset_length', $header);
 		$h      = $i + 4;
 		$fslen  = $header['flowset_length'];
 		$fsid   = $header['flowset_id'];
 
+		debug("Flow: Processing v9 Data, Record: $j, FSId:$fsid, FSLen:$fslen");
+
 		// Template Set
 		if ($fsid == 0) {
+			debug('Flow: Template Sets Found');
+
 			$k = 4;
 
 			if ($fslen > 0) {
@@ -594,27 +622,24 @@ function process_fv9($p, $peer) {
 						$templates[$peer][$tid][] = $tf;
 						$h += 4;
 						$k += 4;
+						$j++;
 					}
 				}
 
 				debug('Flow: Templates Captured');
-				//print_r($templates);
-
-				$i += $fslen;
 			} else {
-				$i += $fslen;
+				debug('Flow: Bad Template Records');
 			}
-		}
 
-		// Option Set
-		if ($fsid == 1) {
+			$i += $fslen;
+		} elseif ($fsid == 1) {
+			// Option Set
 			debug('Flow: Options Found');
 
 			$i += $fslen;
-		}
-
-		// Flow Data Set
-		if ($fsid > 255) {
+			$j++;
+		} elseif ($fsid > 255) {
+			// Flow Data Set
 			if (cacti_sizeof($templates[$peer])) {
 				debug('Flow: Data Found, Processing');
 			} else {
@@ -667,6 +692,7 @@ function process_fv9($p, $peer) {
 								$c += $field[$b] * $d;
 								$d = $d * 256;
 							}
+
 							$field = $c;
 						} else {
 							$field = $field[1];
@@ -679,7 +705,7 @@ function process_fv9($p, $peer) {
 
 					$remaining = $fslen - $k;
 
-					debug('Flow: Processed, Remaining: ' . $remaining);
+					debug('Flow: Processing Record, Remaining: ' . $remaining);
 
 					$result = false;
 
@@ -690,13 +716,22 @@ function process_fv9($p, $peer) {
 					if ($result !== false) {
 						$sql[] = $result;
 					} else {
-						debug('Bad Record');
-						print_r($data);
+						debug("Flow: ERROR: Bad Record with FSId:$fsid");
+						//print_r($data);
 					}
+
+					$j++;
 				}
+			} else {
+				$j = $records;
 			}
 
 			$i += $fslen;
+		} else {
+			debug("Flow: ERROR: Bad Record with FSId:$fsid");
+
+			$i += $fslen;
+			$j++;
 		}
 	}
 
@@ -753,92 +788,91 @@ function process_fv10($p, $peer) {
 	$sql        = array();
 	$sql_prefix = get_sql_prefix($flowtime);
 
-	debug('Flow: Processing v10/IPFIX Data, Len: ' . $count);
+	debug('Flow: Processing v10/IPFIX Data, Bytes: ' . $count);
 
 	while ($i < $count) {
 		$header = substr($p, $i, 4);
-
-		// Header issues beyond end of length
-		if (strlen($header) != 4) {
-			cacti_log("Flow: Unnatural end of packet at position $i. Bad header length", false, 'FLOWVIEW');
-			break;
-		}
-
 		$header = unpack('nflowset_id/nflowset_length', $header);
+
 		$h      = $i + 4;
 		$fsid   = $header['flowset_id'];
 		$fslen  = $header['flowset_length'];
 
 		// Template Set
 		if ($fsid == 2) {
-			debug('Flow: Template Found');
+			debug('Flow: Template Sets Found');
 
-			$theader = substr($p, $h, 4);
-			$theader = unpack('ntemplate_id/nfieldcount', $theader);
-			$tid = $theader['template_id'];
-			$fcount = $theader['fieldcount'];
-			$h += 4;
 			$k  = 4;
 
-			if (!isset($templates[$peer][$tid])) {
-				$templates[$peer][$tid] = array();
-
-				for ($a = 0; $a < $fcount; $a++) {
-					$field = substr($p, $h, 4);
-					$field = unpack('nfield_id/nfield_len', $field);
-					$tf = array();
-					$tf['field_id'] = $field['field_id'];
-					$tf['length'] = $field['field_len'];
-
-					if (($field['field_id'] & 32768)) {
-						$tf['field_id'] = $field['field_id'] & ~32768;
-						$tf['enterprise'] = 1;
-						$entnum = substr($p, $h, 4);
-						$entnum = unpack('Nentnum', $entnum);
-						$tf['enterprise_number'] = $entnum['entnum'];
-						$h += 4;
-						$k += 4;
-					} else {
-						$tf['enterprise'] = 0;
-					}
-
-					if (isset($allfields[$tf['field_id']])) {
-						$tf['name'] = $allfields[$tf['field_id']]['name'];
-						if ($allfields[$tf['field_id']]['pack'] != '') {
-							$tf['unpack'] = $allfields[$tf['field_id']]['pack'];
-						} else {
-							$tf['unpack'] = $lens[$tf['length']];
-						}
-					} else {
-						$tf['name'] = 'Unknown';
-						$tf['unpack'] = $lens[$tf['length']];
-					}
-
-					$templates[$peer][$tid][] = $tf;
+			if ($fslen > 0) {
+				while ($k < $fslen) {
+					$theader = substr($p, $h, 4);
+					$theader = unpack('ntemplate_id/nfieldcount', $theader);
+					$tid     = $theader['template_id'];
+					$fcount  = $theader['fieldcount'];
 					$h += 4;
 					$k += 4;
-				}
 
-				debug('Flow: Template Captured');
-				//print_r($templates);
+					debug('Flow: Template Id: ' . $tid . ' with ' . $fcount . ' fields');
+
+					$templates[$peer][$tid] = array();
+
+					for ($a = 0; $a < $fcount; $a++) {
+						$field = substr($p, $h, 4);
+						$field = unpack('nfield_id/nfield_len', $field);
+						$tf = array();
+						$tf['field_id'] = $field['field_id'];
+						$tf['length'] = $field['field_len'];
+
+						if (($field['field_id'] & 32768)) {
+							$tf['field_id'] = $field['field_id'] & ~32768;
+							$tf['enterprise'] = 1;
+							$entnum = substr($p, $h, 4);
+							$entnum = unpack('Nentnum', $entnum);
+							$tf['enterprise_number'] = $entnum['entnum'];
+							$h += 4;
+							$k += 4;
+						} else {
+							$tf['enterprise'] = 0;
+						}
+
+						if (isset($allfields[$tf['field_id']])) {
+							$tf['name'] = $allfields[$tf['field_id']]['name'];
+							if ($allfields[$tf['field_id']]['pack'] != '') {
+								$tf['unpack'] = $allfields[$tf['field_id']]['pack'];
+							} else {
+								$tf['unpack'] = $lens[$tf['length']];
+							}
+						} else {
+							$tf['name'] = 'Unknown';
+							$tf['unpack'] = $lens[$tf['length']];
+						}
+
+						$templates[$peer][$tid][] = $tf;
+						$h += 4;
+						$k += 4;
+					}
+
+					debug('Flow: Template Captured');
+				}
+			} else {
+				debug('Flow: Bad Template Records');
 			}
+
+			//print_r($templates);
 
 			$i += $fslen;
 
-			debug('Flow: Flowset 2: Total bytes:' . $count . ', Current bytes:' . $i);
-		}
-
-		// Option Set
-		if ($fsid == 3) {
+			debug('Flow: Flowset 2: Total Bytes:' . $count . ', Current bytes:' . $i);
+		} elseif ($fsid == 3) {
+			// Option Set
 			debug('Flow: Options Found');
 
 			$i += $fslen;
 
-			debug('Flow: Flowset 3: Total bytes:' . $count . ', Current bytes:' . $i);
-		}
-
-		// Data Set
-		if ($fsid > 255) {
+			debug('Flow: Flowset 3: Total Bytes:' . $count . ', Current bytes:' . $i);
+		} elseif ($fsid > 255) {
+			// Data Set
 			if (cacti_sizeof($templates[$peer])) {
 				debug('Flow: Data Found, Processing');
 			} else {
@@ -854,7 +888,7 @@ function process_fv10($p, $peer) {
 
 					foreach ($templates[$peer][$tid] as $t) {
 						$id    = $t['field_id'];
-						$field = substr($p, $k, $t['length']);
+						$field = substr($p, $h, $t['length']);
 						$field = unpack($t['unpack'], $field);
 
 						if ($t['unpack'] == 'C4') {
@@ -895,7 +929,7 @@ function process_fv10($p, $peer) {
 
 					$remaining = $fslen - $k;
 
-					debug('Flow: Processed, Remaining: ' . $remaining);
+					debug('Flow: Processing Record, Remaining: ' . $remaining);
 
 					$result = false;
 
@@ -906,11 +940,15 @@ function process_fv10($p, $peer) {
 					if ($result !== false) {
 						$sql[] = $result;
 					} else {
-						debug('Bad Record');
-						print_r($data);
+						debug("Flow: ERROR: Bad Record with FSId:$fsid");
+						//print_r($data);
 					}
 				}
 			}
+
+			$i += $fslen;
+		} else {
+			debug("Flow: ERROR: Bad Record with FSId:$fsid");
 
 			$i += $fslen;
 		}
