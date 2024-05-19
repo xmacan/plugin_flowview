@@ -334,13 +334,8 @@ if (cacti_sizeof($listener)) {
 
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
 
-				// Ensure the database connection is still good
-//				if (cacti_version_compare(CACTI_VERSION, '1.2.23', '<')) {
-					database_check_connect();
-/*				} else {
-					db_check_reconnect();
-				}
-*/
+				database_check_connect();
+
 				if ($version[1] == 5) {
 					process_fv5($p, $peer);
 				} elseif ($version[1] == 9) {
@@ -370,7 +365,7 @@ function database_check_connect() {
 
 	include($config['include_path'] . '/config.php');
 
-	$table = flowview_db_fetch_cell('SHOW TABLES LIKE \'plugin_flowview_dnscache\'' );
+	$table = flowview_db_fetch_cell('SHOW TABLES LIKE \'plugin_flowview_dnscache\'');
 
 	if (empty($table)) {
 		flowview_db_close();
@@ -440,42 +435,47 @@ function process_fv5($p, $peer) {
 		}
 
 		$sql[] = '(' .
-			$listener_id           . ', ' .
-			$header['engine_type'] . ', ' .
-			$header['engine_id']   . ', ' .
-			$header['sample_int']  . ', ' .
-			db_qstr($ex_addr)      . ', ' .
-			$header['sysuptime']   . ', ' .
+			$listener_id                    . ', ' .
+			db_qstr($header['engine_type']) . ', ' .
+			db_qstr($header['engine_id'])   . ', ' .
+			db_qstr($header['sample_int'])  . ', ' .
+			db_qstr($ex_addr)               . ', ' .
+			db_qstr($header['sysuptime'])   . ', ' .
 
-			'INET6_ATON("' . $src_addr . '")' . ', ' .
-			db_qstr($src_domain)   . ', ' .
-			db_qstr($src_rdomain)  . ', ' .
-			$data['src_as']        . ', ' .
-			$data['src_if']        . ', ' .
-			$data['src_prefix']    . ', ' .
-			$data['src_port']      . ', ' .
-			db_qstr($src_rport)    . ', ' .
+			'INET6_ATON("' . db_qstr($src_addr) . '")' . ', ' .
 
-			'INET6_ATON("' . $dst_addr . '")' . ', ' .
-			db_qstr($dst_domain)   . ', ' .
-			db_qstr($dst_rdomain)  . ', ' .
-			$data['dst_as']        . ', ' .
-			$data['dst_if']        . ', ' .
-			$data['dst_prefix']    . ', ' .
-			$data['dst_port']      . ', ' .
-			db_qstr($dst_rport)    . ', ' .
+			db_qstr($src_domain)            . ', ' .
+			db_qstr($src_rdomain)           . ', ' .
+			db_qstr($data['src_as'])        . ', ' .
+			db_qstr($data['src_if'])        . ', ' .
+			db_qstr($data['src_prefix'])    . ', ' .
+			db_qstr($data['src_port'])      . ', ' .
+			db_qstr($src_rport)             . ', ' .
 
-			db_qstr($nexthop)      . ', ' .
-			$data['protocol']      . ', ' .
-			db_qstr($start_time)   . ', ' .
-			db_qstr($end_time)     . ', ' .
+			'INET6_ATON("' . db_qstr($dst_addr) . '")' . ', ' .
 
-			$flows                 . ', ' .
-			$data['dPkts']         . ', ' .
-			$data['dOctets']       . ', ' .
-			$pps                   . ', ' .
-			$data['tos']           . ', ' .
-			$data['flags']         . ')';
+			db_qstr($dst_domain)            . ', ' .
+			db_qstr($dst_rdomain)           . ', ' .
+			db_qstr($data['dst_as'])        . ', ' .
+			db_qstr($data['dst_if'])        . ', ' .
+			db_qstr($data['dst_prefix'])    . ', ' .
+			db_qstr($data['dst_port'])      . ', ' .
+			db_qstr($dst_rport)             . ', ' .
+
+			db_qstr($nexthop)               . ', ' .
+			db_qstr($data['protocol'])      . ', ' .
+			db_qstr($start_time)            . ', ' .
+			db_qstr($end_time)              . ', ' .
+
+			$flows                          . ', ' .
+
+			db_qstr($data['dPkts'])         . ', ' .
+			db_qstr($data['dOctets'])       . ', ' .
+
+			$pps                            . ', ' .
+
+			db_qstr($data['tos'])           . ', ' .
+			db_qstr($data['flags'])         . ')';
 	}
 
 	if (cacti_sizeof($sql)) {
