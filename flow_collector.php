@@ -1069,7 +1069,7 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 		}
 
 		if (isset($data[$fieldname['end_time']])) {
-			$retime = ($data[$fieldname['end_time'] - $sysuptime]) / 1000;
+			$retime = ($data[$fieldname['end_time']] - $sysuptime) / 1000;
 			$remsec = substr('000' . ($data[$fieldname['end_time']] - $sysuptime), -3);
 		}
 
