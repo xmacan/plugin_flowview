@@ -94,6 +94,20 @@ $pacmap = array(
 	'subTemplateMultiList' => '',
 );
 
+/**
+ * The specification for allfields can be found here:
+ * - https://www.iana.org/assignments/ipfix/ipfix.xhtml
+ *
+ * Slight alterations for V9 can be extracted from the Cisco specification here:
+ * - https://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9.html
+ *
+ * Important Note:
+ * --------------------------------------------------------------------------------------------------
+ * Though the specification says fields like octetDeltaCount are 64bit, it can actually be
+ * either 64bit or 32bit depending on the hardware vendors choice with V9.
+ * So, as a corrective action, for all numeric types besides float64, we will so a custom mapping
+ * when using V9.  See the function get_unpack_syntax() for more details.
+ */
 $allfields = array(
 	1   => array('name' => 'octetDeltaCount',                       'pack' => 'unsigned64'),
 	2   => array('name' => 'packetDeltaCount',                      'pack' => 'unsigned64'),
