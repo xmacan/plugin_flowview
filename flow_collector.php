@@ -991,7 +991,7 @@ function process_fv9($p, $peer) {
 					foreach ($templates[$peer][$tid] as $t) {
 						$id = $t['field_id'];
 
-						debug("Field: $id, Unpack: {$t['unpack']}");
+						//debug("Field: $id, Unpack: {$t['unpack']}");
 
 						$field = substr($p, $h, $t['length']);
 						$field = unpack($t['unpack'], $field);
@@ -1221,7 +1221,7 @@ function process_fv10($p, $peer) {
 					foreach ($templates[$peer][$tid] as $t) {
 						$id    = $t['field_id'];
 
-						debug("Field: $id, Unpack: {$t['unpack']}");
+						//debug("Field: $id, Unpack: {$t['unpack']}");
 
 						$field = substr($p, $h, $t['length']);
 						$field = unpack($t['unpack'], $field);
