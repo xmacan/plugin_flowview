@@ -12,7 +12,7 @@
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
 * feature: Make it optional to query Arin to track Big Tech
-* feature: Formalize support for IPFIX in Flowview
+* feature: Redesign flow_collectors.php for formalize support for IPFIX in Flowview
 * feature#97: Add FreeBSD service control
 
 --- 3.3 ---
