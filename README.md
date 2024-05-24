@@ -7,6 +7,11 @@ This plugin allows you to see reports based off the data in your Netflow flows.
 Fully customizable reports
 
 # Installation
+To install the plugin, simply copy the plugin_flowview directory to Cacti's plugins
+directory and rename it to simply 'flowview'.
+Copy config.php.dist to config.php and set correct db connection.
+Once this is complete, go to Cacti's Plugin Management section, and Install 
+and Enable the plugin.
 
 ## Required:
 

@@ -58,6 +58,15 @@ function plugin_flowview_uninstall() {
 
 function plugin_flowview_check_config() {
 	// Here we will check to ensure everything is configured
+
+
+	if (!file_exists(dirname(__FILE__) . '/config_local.php') && !file_exists(dirname(__FILE__) . '/config.php')) {
+		raise_message('flowview_info', __('Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing.', 'flowview'), MESSAGE_LEVEL_ERROR);
+
+		return false;
+
+	}
+
 	plugin_flowview_check_upgrade();
 	return true;
 }
