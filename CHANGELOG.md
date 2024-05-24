@@ -13,6 +13,7 @@
 * issue: When changing the partition type, it does not take from the GUI right away
 * feature: Make it optional to query Arin to track Big Tech
 * feature: Redesign flow_collectors.php for formalize support for IPFIX in Flowview
+* feature: Store peers that connect to listeners for review and tagging
 * feature#97: Add FreeBSD service control
 
 --- 3.3 ---

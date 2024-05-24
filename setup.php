@@ -558,9 +558,9 @@ function flowview_setup_table() {
 		ip varchar(45) NOT NULL default '',
 		host varchar(255) NOT NULL default '',
 		time bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY (ip))
-		ENGINE MEMORY,
-		COMMENT 'Plugin Flowview - DNS Cache to help speed things up'");
+		PRIMARY=KEY (ip))
+		ENGINE=MEMORY,
+		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -569,9 +569,19 @@ function flowview_setup_table() {
 		allowfrom varchar(32) NOT NULL default '0',
 		port int(11) unsigned NOT NULL,
 		PRIMARY KEY (id))
-		ENGINE InnoDB,
-		ROW_FORMAT DYNAMIC,
-		COMMENT 'Plugin Flowview - List of Devices to collect flows from'");
+		ENGINE=InnoDB,
+		ROW_FORMAT=DYNAMIC,
+		COMMENT='Plugin Flowview - List of Devices to collect flows from'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+		device_id int(11) unsigned NOT NULL default '0',
+		ext_addr varchar(32) NOT NULL default '',
+		name varchar(64) NOT NULL,
+		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		PRIMARY KEY (device_id, ext_addr))
+		ENGINE=InnoDB,
+		ROW_FORMAT=DYNAMIC,
+		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_queries` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -600,7 +610,7 @@ function flowview_setup_table() {
 		resolve varchar(2) NOT NULL,
 		PRIMARY KEY (`id`))
 		ENGINE=InnoDB,
-		ROW_FORMAT DYNAMIC,
+		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Saved Flow Queries'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_schedules` (
@@ -614,10 +624,10 @@ function flowview_setup_table() {
 		format_file varchar(128) default '',
 		query_id int(11) unsigned NOT NULL,
 		PRIMARY KEY (`id`),
-		INDEX query_id (query_id) )
-		ENGINE InnoDB,
-		ROW_FORMAT DYNAMIC,
-		COMMENT 'Plugin Flowview - Scheduling for running and emails of saved queries'");
+		INDEX query_id (query_id))
+		ENGINE=InnoDB,
+		ROW_FORMAT=DYNAMIC,
+		COMMENT='Plugin Flowview - Scheduling for running and emails of saved queries'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_ports` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -625,10 +635,10 @@ function flowview_setup_table() {
 		port int(11) unsigned NOT NULL,
 		proto char(4) NOT NULL,
 		description varchar(255) NOT NULL default '',
-		PRIMARY KEY (`id`) )
-		ENGINE InnoDB,
-		ROW_FORMAT DYNAMIC,
-		COMMENT 'Plugin Flowview - Database of well known Ports'");
+		PRIMARY KEY (`id`))
+		ENGINE=InnoDB,
+		ROW_FORMAT=DYNAMIC,
+		COMMENT='Plugin Flowview - Database of well known Ports'");
 
 	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
 

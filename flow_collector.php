@@ -86,7 +86,7 @@ $pacmap = array(
 	'string'               => '',
 	'macAddress'           => 'C6',
 	'dateTimeSeconds'      => '',
-	'dateTimeMilliseconds' => '',
+	'dateTimeMilliseconds' => 'N2',
 	'dateTimeMicroseconds' => '',
 	'dateTimeNanoseconds'  => '',
 	'basicList'            => '',
@@ -602,8 +602,21 @@ $listener  = flowview_db_fetch_row_prepared('SELECT *
 	WHERE id = ?',
 	array($listener_id));
 
+flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+	device_id int(11) unsigned NOT NULL default '0',
+	ext_addr varchar(32) NOT NULL default '',
+	name varchar(64) NOT NULL,
+	last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (device_id, ext_addr))
+	ENGINE=InnoDB,
+	ROW_FORMAT=DYNAMIC,
+	COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
+
+
 if (cacti_sizeof($listener)) {
 	$previous_version = -1;
+	$streams          = array();
+	$sstart           = time();
 
 	while (true) {
 		$socket = stream_socket_server('udp://0.0.0.0:' . $listener['port'], $errno, $errstr, STREAM_SERVER_BIND);
@@ -618,6 +631,15 @@ if (cacti_sizeof($listener)) {
 				$end = microtime(true);
 				debug('-----------------------------------------------');
 				debug(sprintf('Flow: Sleep Time: %0.2f', $end - $start));
+			}
+
+			if (!isset($streams[$peer])) {
+				flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+					(device_id, ext_addr) VALUES (?, ?)
+					ON DUPLICATE KEY UPDATE last_updated=NOW()",
+					array($listener['id'], $peer));
+
+				$streams[$peer] = $peer;
 			}
 
 			$start = microtime(true);
@@ -672,6 +694,13 @@ if (cacti_sizeof($listener)) {
 			} else {
 				break;
 			}
+		}
+
+		$send = time();
+
+		if ($send - $sstart > 300) {
+			$streams = array();
+			$sstart  = time();
 		}
 	}
 }
@@ -814,53 +843,68 @@ function debug($string) {
 	}
 }
 
-function get_unpack_syntax($field, $version) {
+function get_unpack_syntax(&$field, $version) {
 	global $pacmap, $allfields;
 
-	$prepac = $allfields[$field['field_id']]['pack'];
-	$length = $field['length'];
+	$prepac        = $allfields[$field['field_id']]['pack'];
+	$field['pack'] = $prepac;
+	$length        = $field['length'];
+
+	$set = false;
 
 	/**
-	 * We have to do this hack as V9 does 32 bit traffic numbers
-	 * And IP Fix does 64 bit traffic numbers and the specification
-	 * in the $allfields array assumes IPFIX.
+	 * Some numeric data varies in width using the same specification
+	 * so, for numeric data, check the width and adjust.
 	 */
-	if ($version == 9) {
-		switch($prepac) {
-			case 'unsigned16':
-				if ($length == 2) {
-					return array('n', $prepac);
-				} elseif ($length == 1) {
-					return array('C', $prepac);
-				}
+	switch($prepac) {
+		case 'unsigned16':
+			if ($length == 2) {
+				$set = true;
 
-				break;
-			case 'unsigned32':
-				if ($length == 4) {
-					return array('N', $prepac);
-				} elseif ($length == 2) {
-					return array('n', $prepac);
-				}
+				$field['unpack'] = 'n';
+			} elseif ($length == 1) {
+				$set = true;
 
-				break;
-			case 'unsigned64':
-				if ($length == 8) {
-					return array('J', $prepac);
-				} elseif ($length == 4) {
-					return array('N', $prepac);
-				}
+				$field['unpack'] = 'C';
+			}
 
-				break;
-		}
+			break;
+		case 'unsigned32':
+			if ($length == 4) {
+				$set = true;
+
+				$field['unpack'] = 'N';
+			} elseif ($length == 2) {
+				$set = true;
+
+				$field['unpack'] = 'n';
+			}
+
+			break;
+		case 'unsigned64':
+			if ($length == 8) {
+				$set = true;
+
+				$field['unpack'] = 'J';
+			} elseif ($length == 4) {
+				$set = true;
+
+				$field['unpack'] = 'N';
+			}
+
+			break;
+	}
+
+	if ($set) {
+		return true;
 	}
 
 	$pack = $pacmap[$prepac];
 
 	if (isset($pacmap[$prepac]) && $pacmap[$prepac] != '') {
-		return array($pacmap[$prepac], $prepac);
+		$field['unpack'] = $pacmap[$prepac];
 	} else {
-		// Assume a string for unknown pack type
-		return array('C' . $field['length'], $prepac);
+		$field['unpack'] = 'C' . $field['length'];
 	}
 }
 
@@ -942,7 +986,7 @@ function process_fv9($p, $peer) {
 
 						if (isset($allfields[$tf['field_id']])) {
 							$tf['name']   = $allfields[$tf['field_id']]['name'];
-							list($tf['unpack'], $tf['pack']) = get_unpack_syntax($tf, 9);
+							get_unpack_syntax($tf, 9);
 						} else {
 							cacti_log('ERROR: Unknown field id ' . $tf['field_id'] . ' has length ' . $tf['length'], false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 
@@ -1172,7 +1216,7 @@ function process_fv10($p, $peer) {
 
 						if (isset($allfields[$tf['field_id']])) {
 							$tf['name'] = $allfields[$tf['field_id']]['name'];
-							list($tf['unpack'], $tf['pack']) = get_unpack_syntax($tf, 10);
+							get_unpack_syntax($tf, 10);
 						} else {
 							cacti_log('ERROR: Unknown field id ' . $tf['field_id'] . ' has length ' . $tf['length'], false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 
