@@ -233,7 +233,7 @@ function edit_filter() {
 			}
 		}
 
-		$('#statistics, #printed').change(function() {
+		$('#statistics, #printed, #device_id').change(function() {
 			applyFilter();
 		});
 
@@ -259,18 +259,37 @@ function save_filter_form() {
 	get_filter_request_var('cutofflines');
 	get_filter_request_var('cutoffoctets');
 	get_filter_request_var('query');
+	get_filter_request_var('device_id');
 	/* ==================================================== */
+
+	$report = get_nfilter_request_var('report');
 
 	flowview_connect();
 
+	if (substr($report, 0, 1) == 's') {
+		$report      = intval(trim($report, 's'));
+		$printed     = 0;
+		$statistical = $report;
+	} elseif (substr($report, 0, 1) == 'p') {
+		$report      = intval(trim($report, 'p'));
+		$printed     = $report;
+		$statistical = 0;
+	}
+
 	flowview_db_execute_prepared('UPDATE plugin_flowview_queries
 		SET timespan = ?,
+		device_id = ?,
+		statistics = ?,
+		printed = ?,
 		sortfield = ?,
 		cutofflines = ?,
 		cutoffoctets = ?
 		WHERE id = ?',
 		array(
 			get_request_var('timespan'),
+			get_request_var('device_id'),
+			$statistical,
+			$printed,
 			get_request_var('sortfield'),
 			get_request_var('cutofflines'),
 			get_request_var('cutoffoctets'),
@@ -448,6 +467,25 @@ function flowview_display_filter($data) {
 						</select>
 					</td>
 					<td>
+						<?php print __('Listener', 'flowview');?>
+					</td>
+					<td>
+						<select id='device_id'>
+							<option value='-1'><?php print __('Select a Listener', 'flowview');?></option>
+							<?php
+							$listeners = flowview_db_fetch_assoc('SELECT id, name
+								FROM plugin_flowview_devices
+								ORDER BY name');
+
+							if (cacti_sizeof($listeners)) {
+								foreach($listeners as $l) {
+									print "<option value='" . $l['id'] . "'" . (get_request_var('device_id') == $l['id'] ? ' selected':'') . '>' . html_escape($l['name']) . '</option>';
+								}
+							}
+							?>
+						</select>
+					</td>
+					<td>
 						<?php print __('Exclude', 'flowview');?>
 					</td>
 					<td>
@@ -519,11 +557,17 @@ function flowview_display_filter($data) {
 
 							if (trim(get_request_var('report'), 'sp') != '0') {
 								if (substr(get_request_var('report'), 0, 1) == 's') {
-									if (isset($stat_columns_array[trim(get_request_var('report'), 'sp')])) {
-										$columns = $stat_columns_array[trim(get_request_var('report'), 'sp')];
+									$report = trim(get_request_var('report'), 's');
+
+									if (isset($stat_columns_array[$report])) {
+										$columns = $stat_columns_array[$report];
 									}
-								} elseif (isset($print_columns_array[trim(get_request_var('report'), 'sp')])) {
-									$columns = $print_columns_array[trim(get_request_var('report'), 'sp')];
+								} else {
+									$report = trim(get_request_var('report'), 'p');
+
+									if (isset($print_columns_array[$report])) {
+										$columns = $print_columns_array[$report];
+									}
 								}
 							} elseif (get_request_var('query') > 0) {
 								$report = flowview_db_fetch_row_prepared('SELECT printed, statistics, sortfield
@@ -542,7 +586,7 @@ function flowview_display_filter($data) {
 
 							if (cacti_sizeof($columns)) {
 								foreach($columns as $key => $value) {
-									print "<option value='" . $key . "'" . (get_request_var('sortvalue') == $value || get_request_var('sortfield') == $value ? ' selected':'') . '>' . html_escape($value) . '</option>';
+									print "<option value='" . $key . "'" . (get_request_var('sortfield') == $key ? ' selected':'') . '>' . html_escape($value) . '</option>';
 								}
 							}
 							?>
@@ -883,6 +927,7 @@ function flowview_display_filter($data) {
 						'&domains='      + $('#domains').is(':checked') +
 						'&query='        + $('#query').val()  +
 						'&report='       + $('#report').val() +
+						'&device_id='    + $('#device_id').val() +
 						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 						'&cutofflines='  + $('#cutofflines').val() +
@@ -939,6 +984,7 @@ function flowview_display_filter($data) {
 						'&domains='      + $('#domains').is(':checked') +
 						'&query='        + $('#query').val()  +
 						'&report='       + $('#report').val() +
+						'&device_id='    + $('#device_id').val() +
 						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 						'&cutofflines='  + $('#cutofflines').val()  +
@@ -995,6 +1041,7 @@ function flowview_display_filter($data) {
 						'&domains='      + $('#domains').is(':checked') +
 						'&query='        + $('#query').val()  +
 						'&report='       + $('#report').val() +
+						'&device_id='    + $('#device_id').val() +
 						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 						'&cutofflines='  + $('#cutofflines').val()  +
@@ -1086,7 +1133,8 @@ function flowview_display_filter($data) {
 			'&query='        + $('#query').val() +
 			'&domains='      + $('#domains').is(':checked') +
 			'&timespan='     + $('#predefined_timespan').val() +
-			'&report='       + report +
+			'&report='       + $('#report').val() +
+			'&device_id='    + $('#device_id').val() +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
@@ -1146,8 +1194,10 @@ function flowview_display_filter($data) {
 	function applyFilter(reset) {
 		if (reset) {
 			var report = 0;
+			var device_id = 0;
 		} else {
 			var report = $('#report').val();
+			var device_id = $('#device_id').val();
 		}
 
 		loadPageNoHeader(urlPath+'plugins/flowview/flowview.php' +
@@ -1156,6 +1206,7 @@ function flowview_display_filter($data) {
 			'&query='               + $('#query').val() +
 			'&predefined_timespan=' + $('#predefined_timespan').val() +
 			'&report='              + report +
+			'&device_id='           + device_id +
 			'&sortfield='           + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='           + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='         + $('#cutofflines').val() +
@@ -1310,6 +1361,8 @@ function get_flowview_session_key($id, $start, $end) {
 	if (isset_request_var('sortfield')) {
 		$key = $id . '_' . $start . '_' . $end . '_' .
 			get_request_var('report')        . '_' .
+			get_request_var('timespan')      . '_' .
+			get_request_var('device_id')     . '_' .
 			get_request_var('sortfield')     . '_' .
 			get_request_var('cutofflines')   . '_' .
 			get_request_var('cutoffoctets')  . '_' .

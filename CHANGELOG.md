@@ -11,7 +11,10 @@
 * issue#95: Multiple Deprecation errors associated with PHP8.x
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
+* issue: Sort field was being lost between selections
 * feature: Make it optional to query Arin to track Big Tech
+* feature: Allow Flowview to remember your last filter when re-entering the FlowView page
+* feature: Allow selection of the listener on the FlowView filter
 * feature: Redesign flow_collectors.php for formalize support for IPFIX in Flowview
 * feature: Store peers that connect to listeners for review and tagging
 * feature: Inform the user of how many listener streams are present and their status

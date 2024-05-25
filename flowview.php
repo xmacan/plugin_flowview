@@ -62,7 +62,7 @@ switch(get_request_var('action')) {
 
 		$title = load_session_for_filter();
 
-		$data  = load_data_for_filter();
+		$data = load_data_for_filter();
 
 		flowview_display_filter($data);
 
@@ -82,6 +82,12 @@ exit;
 
 function load_session_for_filter() {
 	flowview_connect();
+
+	if (!isset_request_var('query')) {
+		if (isset($_SESSION['sess_last_flowview_filter'])) {
+			$_REQUEST = $_SESSION['sess_last_flowview_filter'];
+		}
+	}
 
 	if ((isset_request_var('query') && get_filter_request_var('query') > 0)) {
 		// Handle Report Column
@@ -163,6 +169,10 @@ function load_session_for_filter() {
 						}
 
 						break;
+					case 'device_id':
+						set_request_var('device_id', $value);
+
+						break;
 					default:
 						// cacti_log('The column is : ' . $column . ', Value is: ' . $value);
 						if (!isset_request_var($column)) {
@@ -179,6 +189,8 @@ function load_session_for_filter() {
 				}
 			}
 		}
+
+		$_SESSION['sess_last_flowview_filter'] = $_REQUEST;
 	} elseif (isset_request_var('report')) {
 		set_request_var('printed', 0);
 		set_request_var('statistics', 0);
