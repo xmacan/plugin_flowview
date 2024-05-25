@@ -101,7 +101,7 @@ function actions_devices () {
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') {
 				foreach ($selected_items as $item) {
-					flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices 
+					flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices
 						WHERE id = ?', array($item));
 				}
 			}
@@ -358,7 +358,7 @@ function show_devices () {
 
 	html_header_sort_checkbox($display_array, get_request_var('sort_column'), get_request_var('sort_direction'), false);
 
-	if (count($result)) {
+	if (cacti_sizeof($result)) {
 		foreach ($result as $row) {
 			if ($os == 'freebsd') {
 				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
@@ -386,7 +386,7 @@ function show_devices () {
 
 	html_end_box(false);
 
-	if (count($result)) {
+	if (cacti_sizeof($result)) {
 		print $nav;
 	}
 

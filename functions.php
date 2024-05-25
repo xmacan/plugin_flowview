@@ -3199,7 +3199,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		$octets = explode('.', $ip);
 
 		/* perform a quick error check */
-		if (count($octets) != 4) {
+		if (cacti_count($octets) != 4) {
 			return 'ERROR';
 		}
 
