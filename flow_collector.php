@@ -173,6 +173,12 @@ $allfields = array(
 	62  => array('name' => 'ipNextHopIPv6Address',                  'pack' => 'ipv6Address'),
 	63  => array('name' => 'bgpNexthopIPv6Address',                 'pack' => 'ipv6Address'),
 	64  => array('name' => 'ipv6ExtensionHeaders',                  'pack' => 'unsigned32'),
+	64  => array('name' => 'vendorReserved',                        'pack' => ''),
+	65  => array('name' => 'vendorReserved',                        'pack' => ''),
+	66  => array('name' => 'vendorReserved',                        'pack' => ''),
+	67  => array('name' => 'vendorReserved',                        'pack' => ''),
+	68  => array('name' => 'vendorReserved',                        'pack' => ''),
+	69  => array('name' => 'vendorReserved',                        'pack' => ''),
 
 	70  => array('name' => 'mplsTopLabelStackSection',              'pack' => 'octetArray'),
 	71  => array('name' => 'mplsLabelStackSection2',                'pack' => 'octetArray'),
