@@ -86,7 +86,7 @@ $pacmap = array(
 	'string'               => '',
 	'macAddress'           => 'C6',
 	'dateTimeSeconds'      => '',
-	'dateTimeMilliseconds' => 'N2',
+	'dateTimeMilliseconds' => 'J',
 	'dateTimeMicroseconds' => '',
 	'dateTimeNanoseconds'  => '',
 	'basicList'            => '',
@@ -750,6 +750,7 @@ function process_fv5($p, $peer) {
 	$records     = $header['count'];
 	$flows       = 1;
 	$flowrec_len = 48;
+	$flowtime    = $header['unix_secs'];
 	$sql         = array();
 
 	debug('Flow: Processing v5 Data, Records: ' . $records);
@@ -771,8 +772,10 @@ function process_fv5($p, $peer) {
 		$retime = ($data['Last'] - $header['sysuptime']) / 1000;
 		$remsec = substr($data['Last'] - $header['sysuptime'], -3);
 
-		$start_time = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_time   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
+
+		//debug("Flow: Case 0 SysUptime:{$header['sysuptime']}, StartTime:{$data['First']}, StartDate:{$start_date}, EndTime:{$data['Last']}, EndDate:{$end_date}");
 
 		$sql_prefix = get_sql_prefix($flowtime);
 
@@ -821,8 +824,8 @@ function process_fv5($p, $peer) {
 
 			db_qstr($nexthop)               . ', ' .
 			db_qstr($data['protocol'])      . ', ' .
-			db_qstr($start_time)            . ', ' .
-			db_qstr($end_time)              . ', ' .
+			db_qstr($start_date)            . ', ' .
+			db_qstr($end_date)              . ', ' .
 
 			$flows                          . ', ' .
 
@@ -852,9 +855,16 @@ function debug($string) {
 function get_unpack_syntax(&$field, $version) {
 	global $pacmap, $allfields;
 
-	$prepac        = $allfields[$field['field_id']]['pack'];
+	if (isset($allfields[$field['field_id']])) {
+		$prepac = $allfields[$field['field_id']]['pack'];
+	} else {
+		$prepac = 'string';
+	}
+
 	$field['pack'] = $prepac;
 	$length        = $field['length'];
+	$id            = $field['field_id'];
+	$name          = $field['name'];
 
 	$set = false;
 
@@ -901,17 +911,17 @@ function get_unpack_syntax(&$field, $version) {
 			break;
 	}
 
-	if ($set) {
-		return true;
+	if (!$set) {
+		if (isset($pacmap[$prepac]) && $pacmap[$prepac] != '') {
+			$field['pack']   = $prepac;
+			$field['unpack'] = $pacmap[$prepac];
+		} else {
+			$field['pack']   = $prepac;
+			$field['unpack'] = 'C' . $field['length'];
+		}
 	}
 
-	$pack = $pacmap[$prepac];
-
-	if (isset($pacmap[$prepac]) && $pacmap[$prepac] != '') {
-		$field['unpack'] = $pacmap[$prepac];
-	} else {
-		$field['unpack'] = 'C' . $field['length'];
-	}
+	debug("Flow: $name, $id, $length, $prepac, {$field['unpack']}");
 }
 
 function process_fv9($p, $peer) {
@@ -991,7 +1001,7 @@ function process_fv9($p, $peer) {
 						}
 
 						if (isset($allfields[$tf['field_id']])) {
-							$tf['name']   = $allfields[$tf['field_id']]['name'];
+							$tf['name'] = $allfields[$tf['field_id']]['name'];
 							get_unpack_syntax($tf, 9);
 						} else {
 							cacti_log('ERROR: Unknown field id ' . $tf['field_id'] . ' has length ' . $tf['length'], false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
@@ -1320,6 +1330,7 @@ function process_fv10($p, $peer) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
+						//print_r($data);
 						$result = process_v9_v10($data, $peer, $flowtime);
 					}
 
@@ -1409,7 +1420,7 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 	}
 
 	if (isset($data[$fieldname['dst_addr_ipv6']])) {
-		$dst_addr   = $data[$fieldname['dst_addr_ipv6']];
+		$dst_addr = $data[$fieldname['dst_addr_ipv6']];
 
 		if (isset($data[$fieldname['dst_prefix_ipv6']])) {
 			$dst_prefix = $data[$fieldname['dst_prefix_ipv6']];
@@ -1417,7 +1428,7 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 			$dst_prefix = 0;
 		}
 	} elseif (isset($data[$fieldname['dst_addr']])) {
-		$dst_addr   = $data[$fieldname['dst_addr']];
+		$dst_addr = $data[$fieldname['dst_addr']];
 
 		if (isset($data[$fieldname['dst_prefix']])) {
 			$dst_prefix = $data[$fieldname['dst_prefix']];
@@ -1437,7 +1448,7 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 		$nexthop = '';
 	}
 
-	if (isset($data[$fieldname['sysuptime']])) {
+	if (isset($data[$fieldname['sysuptime']]) && abs($data[$fieldname['end_time']] - $data[$fieldname['sysuptime']]) < 3) {
 		$rstime = ($data[$fieldname['start_time']] - $data[$fieldname['sysuptime']]) / 1000;
 		$rsmsec = substr($data[$fieldname['start_time']] - $data[$fieldname['sysuptime']], -3);
 		$retime = ($data[$fieldname['end_time']] - $data[$fieldname['sysuptime']]) / 1000;
@@ -1446,6 +1457,8 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 		$start_time = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . $rsmsec;
 		$end_time   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . $remsec;
 		$sysuptime = $data[$fieldname['sysuptime']];
+
+		//debug("Flow: Case 3 SysUptime:{$sysuptime}, StartTime:{$data[$fieldname['start_time']]}, StartDate:{$start_date}, EndTime:{$data[$fieldname['end_time']]}, EndDate:{$end_date}");
 	} elseif ($sysuptime > 0) {
 		$rsmsec = $rstime = $remsec = $retime = 0;
 
@@ -1459,11 +1472,22 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 			$remsec = substr('000' . ($data[$fieldname['end_time']] - $sysuptime), -3);
 		}
 
-		$start_time = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_time   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
+
+		//debug("Flow: Case 2 SysUptime:{$sysuptime}, StartTime:{$data[$fieldname['start_time']]}, StartDate:{$start_date}, EndTime:{$data[$fieldname['end_time']]}, EndDate:{$end_date}");
 	} else {
-		$start_time = date('Y-m-d H:i:s.v', $flowtime);
-		$end_time   = date('Y-m-d H:i:s.v', $flowtime);
+		if (isset($data[$fieldname['start_time']]) && isset($data[$fieldname['end_time']])) {
+			$delta_milli = intval(($data[$fieldname['end_time']] - $data[$fieldname['start_time']]) / 1000);
+			$delta_sec   = floor($data[$fieldname['end_time']] - $data[$fieldname['start_time']]);
+		} else {
+			$delta_milli = $delta_sec = 0;
+		}
+
+		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . $delta_milli;
+		$end_date   = date('Y-m-d H:i:s.v', intval($flowtime));
+
+		//debug("Flow: Case 1 SysUptime:{$sysuptime}, StartTime:{$flowtime}, StartDate:{$start_date}, EndTime:{$flowtime}, EndDate:{$end_date}");
 	}
 
 	$src_domain  = flowview_get_dns_from_ip($src_addr, 100);
@@ -1518,8 +1542,8 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 
 		db_qstr($nexthop)                                 . ', ' .
 		check_set($data, $fieldname['protocol'])          . ', ' .
-		db_qstr($start_time)                              . ', ' .
-		db_qstr($end_time)                                . ', ' .
+		db_qstr($start_date)                              . ', ' .
+		db_qstr($end_date)                                . ', ' .
 
 		$flows                                            . ', ' .
 		check_set($data, $fieldname['dPkts'])             . ', ' .
