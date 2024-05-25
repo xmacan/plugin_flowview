@@ -14,6 +14,7 @@
 * feature: Make it optional to query Arin to track Big Tech
 * feature: Redesign flow_collectors.php for formalize support for IPFIX in Flowview
 * feature: Store peers that connect to listeners for review and tagging
+* feature: Inform the user of how many listener streams are present and their status
 * feature#97: Add FreeBSD service control
 
 --- 3.3 ---

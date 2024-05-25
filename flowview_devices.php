@@ -231,6 +231,54 @@ function edit_devices () {
 	html_end_box();
 
 	form_save_button('flowview_devices.php');
+
+	if (cacti_sizeof($device)) {
+		$streams = db_fetch_assoc_prepared('SELECT * FROM plugin_flowview_device_streams WHERE device_id = ?', array($device['id']));
+
+		html_start_box('Inbound Streams and Status', '100%', '', '4', 'center', '');
+
+		$display_array = array(
+			array(
+				'display' => __('Address', 'flowview'),
+				'align'   => 'left'
+			),
+			array(
+				'display' => __('Status', 'flowview'),
+				'align'   => 'left'
+			),
+			array(
+				'display' => __('Last Updated', 'flowview'),
+				'align'   => 'right',
+				'tip'     => __('Active Streams update every 5 minutes', 'flowview')
+			)
+		);
+
+		html_header($display_array, false);
+
+		if (cacti_sizeof($streams)) {
+			$i = 0;
+
+			foreach ($streams as $row) {
+				if (time()-strtotime($row['last_updated']) < 600) {
+					$status = 3;
+				} else {
+					$status = 1;
+				}
+
+				form_alternate_row('line' . $i, true);
+				form_selectable_cell($row['ext_addr'], $i);
+				form_selectable_cell(get_colored_device_status('', $status), $i);
+				form_selectable_cell($row['last_updated'], $i, '', 'right');
+				form_end_row();
+
+				$i++;
+			}
+		} else {
+			print "<tr class='even'><td colspan=2><center>" . __('No Inbound Streams Detected', 'flowview') . '</center></td></tr>';
+		}
+
+		html_end_box(false);
+	}
 }
 
 function show_devices () {
@@ -250,22 +298,22 @@ function show_devices () {
 		'page' => array(
 			'filter' => FILTER_VALIDATE_INT,
 			'default' => '1'
-			),
+		),
 		'filter' => array(
 			'filter' => FILTER_DEFAULT,
 			'pageset' => true,
 			'default' => ''
-			),
+		),
 		'sort_column' => array(
 			'filter' => FILTER_CALLBACK,
 			'default' => 'name',
 			'options' => array('options' => 'sanitize_search_string')
-			),
+		),
 		'sort_direction' => array(
 			'filter' => FILTER_CALLBACK,
 			'default' => 'ASC',
 			'options' => array('options' => 'sanitize_search_string')
-			)
+		)
 	);
 
 	validate_store_request_vars($filters, 'sess_fvd');
@@ -277,9 +325,12 @@ function show_devices () {
 	$sql_order = get_order_string();
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$sql = "SELECT *
-		FROM plugin_flowview_devices
+	$sql = "SELECT fd.*, COUNT(*) AS streams, MAX(fs.last_updated) AS last_updated
+		FROM plugin_flowview_devices AS fd
+		LEFT JOIN plugin_flowview_device_streams AS fs
+		ON fd.id = fs.device_id
 		$sql_where
+		GROUP BY fd.id
 		$sql_order
 		$sql_limit";
 
@@ -348,12 +399,47 @@ function show_devices () {
 	html_start_box('', '100%', '', '4', 'center', '');
 
 	$display_array = array(
-		'name'        => array(__('Name', 'flowview'), 'ASC'),
-		'cmethod'     => array(__('Method', 'flowview'), 'ASC'),
-		'allowfrom'   => array(__('Allowed From', 'flowview'), 'ASC'),
-		'port'        => array(__('Port', 'flowview'), 'ASC'),
-		'nosort0'     => array(__('Status', 'flowview'), 'ASC'),
-		'nosort1'     => array(__('Observed Listen', 'flowview'), 'ASC'),
+		'name' => array(
+			'display' => __('Name', 'flowview'),
+			'sort' => 'ASC'
+		),
+		'cmethod' => array(
+			'display' => __('Method', 'flowview'),
+			'sort' => 'ASC'
+		),
+		'allowfrom' => array(
+			'display' => __('Allowed From', 'flowview'),
+			'sort' => 'ASC',
+			'align' => 'right'
+		),
+		'port' => array(
+			'display' => __('Port', 'flowview'),
+			'sort' => 'ASC',
+			'align' => 'right'
+		),
+		'nosort0' => array(
+			'display' => __('Status', 'flowview'),
+			'sort' => 'ASC',
+			'align' => 'right'
+		),
+		'nosort1' => array(
+			'display' => __('Observed Listen', 'flowview'),
+			'sort' => 'ASC',
+			'tip'   => __('The port security actually observed on the listeners port.', 'flowview'),
+			'align' => 'right'
+		),
+		'streams' => array(
+			'display' => __('Streams', 'flowview'),
+			'sort' => 'ASC',
+			'tip'   => __('The number of inbound connections from various sources.', 'flowview'),
+			'align' => 'right'
+		),
+		'last_updated' => array(
+			'display' => __('Last Updated', 'flowview'),
+			'sort' => 'ASC',
+			'tip'   => __('The maximum update time from all streams being collected.  This value is updated every 5 minutes.', 'flowview'),
+			'align' => 'right'
+		),
 	);
 
 	html_header_sort_checkbox($display_array, get_request_var('sort_column'), get_request_var('sort_direction'), false);
@@ -370,13 +456,21 @@ function show_devices () {
 				$parts = preg_split('/[\s]+/', trim($status));
 			}
 
+			if ($status != '') {
+				$status = 3;
+			} else {
+				$status = 1;
+			}
+
 			form_alternate_row('line' . $row['id'], true);
 			form_selectable_cell('<a class="linkEditMain" href="flowview_devices.php?action=edit&id=' . $row['id'] . '">' . $row['name'] . '</a>', $row['id']);
 			form_selectable_cell(__('Cacti', 'flowview'), $row['id']);
-			form_selectable_cell($row['allowfrom'], $row['id']);
-			form_selectable_cell($row['port'], $row['id']);
-			form_selectable_cell($status != '' ? __('Up'):__('Down'), $row['id']);
-			form_selectable_cell(isset($parts[3]) ? $parts[3]:'-', $row['id']);
+			form_selectable_cell($row['allowfrom'], $row['id'], '', 'right');
+			form_selectable_cell($row['port'], $row['id'], '', 'right');
+			form_selectable_cell(get_colored_device_status('', $status), $row['id'], '', 'right');
+			form_selectable_cell(isset($parts[3]) ? $parts[3]:'-', $row['id'], '', 'right');
+			form_selectable_cell($row['streams'], $row['id'], '', 'right');
+			form_selectable_cell($row['last_updated'], $row['id'], '', 'right');
 			form_checkbox_cell($row['name'], $row['id']);
 			form_end_row();
 		}
