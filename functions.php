@@ -3591,7 +3591,7 @@ function flowview_get_owner_from_arin($host) {
 	}
 
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'http://whois.arin.net/rest/ip/' . $host);
+	curl_setopt($ch, CURLOPT_URL, 'https://whois.arin.net/rest/ip/' . $host);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -3608,9 +3608,16 @@ function flowview_get_owner_from_arin($host) {
 	if ($curl_errno > 0) {
 		$curlgood = false;
 		return $host;
-	} else {
+	} elseif ($response != '') {
 		$json = json_decode($response, true);
-		return 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+
+		if (isset($json['net']['name']['$'])) {
+			return 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+		} else {
+			return 'ip-' . str_replace('.', '-', $host);
+		}
+	} else {
+		return 'ip-' . str_replace('.', '-', $host);
 	}
 }
 
