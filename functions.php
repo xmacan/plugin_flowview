@@ -2170,7 +2170,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 			}
 
 			if (!isset($sortname) || ($sortname != get_request_var('sortname'))) {
-				$data['sortfield'] = array_search('Bytes', $print_columns_array[$data['statistics']]);
+				$data['sortfield'] = array_search('Bytes', $print_columns_array[$data['printed']]);
 			}
 
 			switch($data['printed']) {
