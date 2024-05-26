@@ -10,6 +10,7 @@
 * issue#83: Cacti 1.2.23 and Flowview dev 3.3
 * issue#84: Support more than one router per FlowView listener
 * issue#85: Report Filter Listener Print All Rows Not Working
+* issue#88: Create new Custom Flow Viewer Report
 * issue#95: Multiple Deprecation errors associated with PHP8.x
 * issue#100: Change the name of config.php to something like config.php.template
 * issue: Flowview DNS Setting removed by accident

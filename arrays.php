@@ -59,9 +59,10 @@ $stat_report_array = array(
 $print_report_array = array(
 	0  => __('Select a Report', 'flowview'),
 	1  => __('Flow Times', 'flowview'),
+	7  => __('Source/Destination IPs and Ports', 'flowview'),
 	4  => __('AS Numbers', 'flowview'),
 	5  => __('132 Columns', 'flowview'),
-	6  => __('Show IP Accounting Emulation', 'flowview')
+	6  => __('Show IP Accounting Emulation', 'flowview'),
 );
 
 $flow_select_array = array(
@@ -346,6 +347,15 @@ $print_columns_array = array(
 	6  => array(
 		__('Source', 'flowview'),
 		__('Destination', 'flowview'),
+		__('Packets', 'flowview'),
+		__('Bytes', 'flowview')
+	),
+	7  => array(
+		__('Source', 'flowview'),
+		__('Destination', 'flowview'),
+		__('Source Port', 'flowview'),
+		__('Destination Port', 'flowview'),
+		__('Flows', 'flowview'),
 		__('Packets', 'flowview'),
 		__('Bytes', 'flowview')
 	)

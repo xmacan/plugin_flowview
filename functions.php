@@ -2234,6 +2234,20 @@ function run_flow_query($session, $query_id, $start, $end) {
 					}
 
 					break;
+				case '7':
+					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_port, INET6_NTOA(dst_addr) AS dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
+					$sql_inner = 'SELECT src_addr, src_port, dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
+
+					$sql_groupby       = 'GROUP BY INET6_NTOA(src_addr), src_port, INET6_NTOA(dst_addr), dst_port';
+					$sql_inner_groupby = 'GROUP BY src_addr, src_port, dst_addr, dst_port';
+
+					if ($data['sortfield'] < 2) {
+						$sql_order = 'ORDER BY INET6_NTOA(' . ($data['sortfield'] + 1) . ') ' . ($data['sortfield'] > 1 ? ' DESC':' ASC');
+					} else {
+						$sql_order = 'ORDER BY ' . ($data['sortfield'] + 1) . ($data['sortfield'] > 1 ? ' DESC':' ASC');
+					}
+
+					break;
 			}
 		}
 
