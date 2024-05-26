@@ -5,6 +5,7 @@
 * issue#66: Cacti flowview collector errors
 * issue#71: Flowview no data were displayed
 * issue#73: Timespan never saved when editing a filter
+* issue#75: Cacti PHP Errors when select report filter Source AS
 * issue#80: Error messages when generating a report with the flowview plugin
 * issue#83: Cacti 1.2.23 and Flowview dev 3.3
 * issue#84: Support more than one router per FlowView listener
