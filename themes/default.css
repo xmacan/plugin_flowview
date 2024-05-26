@@ -24,3 +24,7 @@
 .bb-chart {
 	background-color: green;
 }
+
+.tablesorter-resizable-container {
+	display: none;
+}
