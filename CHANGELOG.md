@@ -8,6 +8,7 @@
 * issue#80: Error messages when generating a report with the flowview plugin
 * issue#83: Cacti 1.2.23 and Flowview dev 3.3
 * issue#84: Support more than one router per FlowView listener
+* issue#85: Report Filter Listener Print All Rows Not Working
 * issue#95: Multiple Deprecation errors associated with PHP8.x
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away

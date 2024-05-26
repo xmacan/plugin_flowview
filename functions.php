@@ -1794,8 +1794,12 @@ function run_flow_query($session, $query_id, $start, $end) {
 	// Handle Limit Override
 	if (isset_request_var('cutofflines') && get_request_var('cutofflines') != 999999) {
 		$lines = get_request_var('cutofflines');
+	} elseif (isset_request_var('cutofflines') && get_request_var('cutofflines') == 999999) {
+		$lines = '9999999999';
 	} elseif ($data['cutofflines'] != 999999) {
 		$lines = $data['cutofflines'];
+	} elseif ($data['cutofflines'] == 999999) {
+		$lines = '9999999999';
 	} else {
 		$lines = 20;
 	}
