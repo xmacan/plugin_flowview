@@ -411,7 +411,7 @@ function flowview_gettimespan() {
 }
 
 function flowview_show_summary(&$data) {
-	print $data['table'];
+	print isset($data['table']) ? $data['table'] : '';
 }
 
 
@@ -950,7 +950,7 @@ function flowview_display_filter($data) {
 							data: {
 								json: data,
 								mimeType: 'json',
-								type: 'bar',
+								type: 'pie',
 								keys: {
 									x: 'name',
 									value: ['value']
@@ -1820,57 +1820,57 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	/* source ip filter */
-	if ($data['sourceip'] != '') {
+	if (isset($data['sourceip']) && $data['sourceip'] != '') {
 		$sql_where = get_ip_filter($sql_where, $data['sourceip'], 'src_addr');
 	}
 
 	/* source interface filter */
-	if ($data['sourceinterface'] != '') {
+	if (isset($data['sourceinterface']) && $data['sourceinterface'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['sourceinterface'], 'src_if');
 	}
 
 	/* source port filter */
-	if ($data['sourceport'] != '') {
+	if (isset($data['sourceport']) && $data['sourceport'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['sourceport'], 'src_port');
 	}
 
 	/* source as filter */
-	if ($data['sourceas'] != '') {
+	if (isset($data['sourceas']) && $data['sourceas'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['sourceas'], 'src_as');
 	}
 
 	/* destination ip filter */
-	if ($data['destip'] != '') {
+	if (isset($data['destip']) && $data['destip'] != '') {
 		$sql_where = get_ip_filter($sql_where, $data['destip'], 'dst_addr');
 	}
 
 	/* destination interface filter */
-	if ($data['destinterface'] != '') {
+	if (isset($data['destinterface']) && $data['destinterface'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['destinterface'], 'dst_if');
 	}
 
 	/* destination port filter */
-	if ($data['destport'] != '') {
+	if (isset($data['destport']) && $data['destport'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['destport'], 'dst_port');
 	}
 
 	/* destination as filter */
-	if ($data['destas'] != '') {
+	if (isset($data['destas']) && $data['destas'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['destas'], 'dst_as');
 	}
 
 	/* protocols filter */
-	if ($data['protocols'] != '' && $data['protocols'] != '0') {
+	if (isset($data['protocols']) && $data['protocols'] != '' && $data['protocols'] != '0') {
 		$sql_where = get_numeric_filter($sql_where, $data['protocols'], 'protocol');
 	}
 
 	/* tcp flags filter */
-	if ($data['tcpflags'] != '') {
+	if (isset($data['tcpflags']) && $data['tcpflags'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['tcpflags'], 'flags');
 	}
 
 	/* tos filter */
-	if ($data['tosfields'] != '') {
+	if (isset($data['tosfields']) && $data['tosfields'] != '') {
 		$sql_where = get_numeric_filter($sql_where, $data['tosfields'], 'tos');
 	}
 
