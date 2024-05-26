@@ -411,7 +411,7 @@ function flowview_gettimespan() {
 }
 
 function flowview_show_summary(&$data) {
-	print $data['table'];
+	print isset($data['table']) ? $data['table'] : '';
 }
 
 
@@ -950,7 +950,7 @@ function flowview_display_filter($data) {
 							data: {
 								json: data,
 								mimeType: 'json',
-								type: 'bar',
+								type: 'pie',
 								keys: {
 									x: 'name',
 									value: ['value']
