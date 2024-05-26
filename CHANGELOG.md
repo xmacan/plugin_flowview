@@ -11,6 +11,7 @@
 * issue#84: Support more than one router per FlowView listener
 * issue#85: Report Filter Listener Print All Rows Not Working
 * issue#95: Multiple Deprecation errors associated with PHP8.x
+* issue#100: Change the name of config.php to something like config.php.template
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
 * issue: Sort field was being lost between selections
