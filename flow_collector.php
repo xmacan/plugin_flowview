@@ -208,7 +208,7 @@ $allfields = array(
 	95  => array('name' => 'applicationId',                         'pack' => 'octetArray'),
 	96  => array('name' => 'applicationName',                       'pack' => 'unsigned8'),
 	97  => array('name' => 'Assigned For V9 Compatibility',         'pack' => ''),
-	98  => array('name' => 'postIpDiffServCodePoint',               'pack' => 'unsigned32'),
+	98  => array('name' => 'postIpDiffServCodePoint',               'pack' => 'unsigned8'),
 	99  => array('name' => 'multicastReplicationFactor',            'pack' => 'unsigned32'),
 	100 => array('name' => 'className',                             'pack' => 'string'),
 	101 => array('name' => 'classificationEngineId',                'pack' => 'unsigned8'),
@@ -1052,8 +1052,9 @@ function process_fv9($p, $peer) {
 						$id = $t['field_id'];
 
 						//debug("Field: $id, Unpack: {$t['unpack']}");
-
+						//debug("Field: $id, Unpack: " . $t['unpack'] . ", Length: " . $t['length'] . ", Pack: " . $t['pack']);
 						$field = substr($p, $h, $t['length']);
+
 						$field = unpack($t['unpack'], $field);
 
 						if ($t['pack'] == 'ipv4Address') {
