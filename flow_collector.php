@@ -1053,7 +1053,7 @@ function process_fv9($p, $peer) {
 					foreach ($templates[$peer][$tid] as $t) {
 						$id = $t['field_id'];
 
-						debug("Field: $id, Unpack: " . $t['unpack'] . ", Length: " . $t['length'] . ", Pack: " . $t['pack']);
+						//debug("Field: $id, Unpack: " . $t['unpack'] . ", Length: " . $t['length'] . ", Pack: " . $t['pack']);
 						$field = substr($p, $h, $t['length']);
 
 						$field = unpack($t['unpack'], $field);
