@@ -198,8 +198,8 @@ $allfields = array(
 	85  => array('name' => 'octetTotalCount',                       'pack' => 'unsigned64'),
 	86  => array('name' => 'packetTotalCount',                      'pack' => 'unsigned64'),
 	87  => array('name' => 'flagsAndSamplerId',                     'pack' => 'unsigned32'),
-	88  => array('name' => 'fragmentOffset',                        'pack' => 'unsigned32'),
-	89  => array('name' => 'forwardingStatus',                      'pack' => 'unsigned16'),
+	88  => array('name' => 'fragmentOffset',                        'pack' => 'unsigned16'),
+	89  => array('name' => 'forwardingStatus',                      'pack' => 'unsigned8'),
 	90  => array('name' => 'mplsVpnRouteDistinguisher',             'pack' => 'octetArray'),
 	91  => array('name' => 'mplsTopLabelPrefixLength',              'pack' => 'unsigned8'),
 	92  => array('name' => 'srcTrafficIndex',                       'pack' => 'unsigned32'),
@@ -522,7 +522,7 @@ $allfields = array(
 	431 => array('name' => 'layer2FrameTotalCount',                 'pack' => 'unsigned64'),
 	432 => array('name' => 'pseudoWireDestinationIPv4Address',      'pack' => 'ipv4Address'),
 	433 => array('name' => 'ignoredLayer2FrameTotalCount',          'pack' => 'unsigned64'),
-	434 => array('name' => 'mibObjectValueInteger',                 'pack' => 'I'),
+	434 => array('name' => 'mibObjectValueInteger',                 'pack' => 'signed32'), 
 	435 => array('name' => 'mibObjectValueOctetString',             'pack' => 'octetArray'),
 	436 => array('name' => 'mibObjectValueOID',                     'pack' => 'octetArray'),
 	437 => array('name' => 'mibObjectValueBits',                    'pack' => 'octetArray'),
@@ -599,6 +599,8 @@ $allfields = array(
 	508 => array('name' => 'gtpuSequenceNum',                       'pack' => 'unsigned16'),
 	509 => array('name' => 'gtpuQFI',                               'pack' => 'unsigned8'),
 	510 => array('name' => 'gtpuPduType',                           'pack' => 'unsigned8'),
+	511 => array('name' => 'bgpSourceAsPathList',                   'pack' => 'basicList'),
+	512 => array('name' => 'bgpDestinationAsPathList',              'pack' => 'basicList'),
 );
 
 $partition = read_config_option('flowview_partition');
@@ -1051,7 +1053,6 @@ function process_fv9($p, $peer) {
 					foreach ($templates[$peer][$tid] as $t) {
 						$id = $t['field_id'];
 
-						//debug("Field: $id, Unpack: {$t['unpack']}");
 						//debug("Field: $id, Unpack: " . $t['unpack'] . ", Length: " . $t['length'] . ", Pack: " . $t['pack']);
 						$field = substr($p, $h, $t['length']);
 
