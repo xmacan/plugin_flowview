@@ -35,7 +35,7 @@ set_default_action();
 $device_edit = array(
 	'name' => array(
 		'method' => 'textbox',
-		'friendly_name' => __('Device Name', 'flowview'),
+		'friendly_name' => __('Listener Name', 'flowview'),
 		'description' => __('Name of the device to be displayed.', 'flowview'),
 		'value' => '|arg1:name|',
 		'max_length' => '64',
@@ -201,7 +201,7 @@ function save_devices () {
 	exit;
 }
 
-function edit_devices () {
+function edit_devices() {
 	global $device_edit;
 
 	flowview_connect();
@@ -211,31 +211,160 @@ function edit_devices () {
 	/* ==================================================== */
 
 	$device = array();
+
 	if (!isempty_request_var('id')) {
-		$device = flowview_db_fetch_row('SELECT * FROM plugin_flowview_devices WHERE id=' . get_request_var('id'), false);
-		$header_label = __esc('Device [edit: %s]', $device['name'], 'flowview');
+		$device       = flowview_db_fetch_row('SELECT * FROM plugin_flowview_devices WHERE id=' . get_request_var('id'), false);
+		$header_label = __esc('Listener [edit: %s]', $device['name'], 'flowview');
+
+		display_tabs(get_request_var('id'));
 	} else {
-		$header_label = __('Device [new]', 'flowview');
+		$header_label = __('Listener [new]', 'flowview');
 	}
 
-	form_start('flowview_devices.php', 'flowview');
+	if (!isset_request_var('tab') || get_request_var('tab') == 'general') {
+		form_start('flowview_devices.php', 'flowview');
 
-	html_start_box($header_label, '100%', '', '3', 'center', '');
+		html_start_box($header_label, '100%', '', '3', 'center', '');
 
-	draw_edit_form(array(
-		'config' => array('no_form_tag' => true),
-		'fields' => inject_form_variables($device_edit, $device)
-		)
-	);
+		draw_edit_form(
+			array(
+				'config' => array('no_form_tag' => true),
+				'fields' => inject_form_variables($device_edit, $device)
+			)
+		);
 
-	html_end_box();
+		html_end_box();
 
-	form_save_button('flowview_devices.php');
+		form_save_button('flowview_devices.php');
 
-	if (cacti_sizeof($device)) {
-		$streams = db_fetch_assoc_prepared('SELECT * FROM plugin_flowview_device_streams WHERE device_id = ?', array($device['id']));
+		if (cacti_sizeof($device)) {
+			$streams = db_fetch_assoc_prepared('SELECT ds.*, COUNT(*) AS templates
+				FROM plugin_flowview_device_streams AS ds
+				LEFT JOIN plugin_flowview_device_templates AS dt
+				USING (device_id, ext_addr)
+				WHERE ds.device_id = ?
+				GROUP BY ds.device_id',
+				array($device['id']));
 
-		html_start_box('Inbound Streams and Status', '100%', '', '4', 'center', '');
+			html_start_box('Inbound Streams and Status', '100%', '', '4', 'center', '');
+
+			$display_array = array(
+				array(
+					'display' => __('Address', 'flowview'),
+					'align'   => 'left'
+				),
+				array(
+					'display' => __('Status', 'flowview'),
+					'align'   => 'left'
+				),
+				array(
+					'display' => __('Templates', 'flowview'),
+					'align'   => 'right'
+				),
+				array(
+					'display' => __('Last Updated', 'flowview'),
+					'align'   => 'right',
+					'tip'     => __('Active Streams update every 5 minutes', 'flowview')
+				)
+			);
+
+			html_header($display_array, false);
+
+			if (cacti_sizeof($streams)) {
+				$i = 0;
+
+				foreach ($streams as $row) {
+					if (time()-strtotime($row['last_updated']) < 600) {
+						$status = 3;
+					} else {
+						$status = 1;
+					}
+
+					form_alternate_row('line' . $i, true);
+					form_selectable_cell($row['ext_addr'], $i);
+					form_selectable_cell(get_colored_device_status('', $status), $i);
+					form_selectable_cell($row['templates'], $i, '', 'right');
+					form_selectable_cell($row['last_updated'], $i, '', 'right');
+					form_end_row();
+
+					$i++;
+				}
+			} else {
+				print "<tr class='even'><td colspan='" . cacti_sizeof($display_array) . "'><center>" . __('No Inbound Streams Detected', 'flowview') . '</center></td></tr>';
+			}
+
+			html_end_box(false);
+		}
+	} else {
+		$templates = db_fetch_assoc_prepared('SELECT *
+			FROM plugin_flowview_device_templates AS dt
+			WHERE dt.device_id = ?',
+			array($device['id']));
+
+		html_start_box(__('Listener Detected Templates', 'flowview'), '100%', '', '4', 'center', '');
+
+		?>
+		<tr class='even'>
+			<td>
+			<form id='listeners' action='flowview_devices.php'>
+				<table class='filterTable'>
+					<tr>
+						<td>
+							<?php print __('Template', 'flowview');?>
+						</td>
+						<td>
+							<select id='template'>
+								<?php
+								print "<option value='0' " . (get_request_var('template') == '0' ? 'selected':'') . '>' . __('All', 'flowview') . '</option>';
+
+								foreach($templates as $t) {
+									print "<option value='{$t['template_id']}' " . (get_request_var('template') == $t['template_id'] ? 'selected':'') . '>' . $t['template_id'] . '</option>';
+								}
+								?>
+							</select>
+						</td>
+						<td>
+							<span>
+								<input id='go' type='button' value='<?php print __('Go', 'flowview');?>'>
+							</span>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<script type='text/javascript'>
+			function applyFilter() {
+				strURL  = 'flowview_devices.php?action=edit&id=<?php print get_request_var('id');?>&tab=templates&header=false';
+				strURL += '&template=' + $('#template').val();
+				loadPageNoHeader(strURL);
+			}
+
+			$(function() {
+				$('#template').change(function() {
+					applyFilter();
+				});
+
+				$('#go').click(function() {
+					applyFilter();
+				});
+
+				$('#sorttable').tablesorter({
+					widgets: ['zebra', 'resizable'],
+					widgetZebra: { css: ['even', 'odd'] },
+					headerTemplate: '<div class="textSubHeaderDark">{content} {icon}</div>',
+					cssIconAsc: 'fa-sort-up',
+					cssIconDesc: 'fa-sort-down',
+					cssIconNone: 'fa-sort',
+					cssIcon: 'fa'
+				});
+			});
+			</script>
+			</td>
+		</tr>
+		<?php
+
+		html_end_box();
+
+		html_start_box('', '100%', '', '4', 'center', '');
 
 		$display_array = array(
 			array(
@@ -243,42 +372,73 @@ function edit_devices () {
 				'align'   => 'left'
 			),
 			array(
-				'display' => __('Status', 'flowview'),
+				'display' => __('Template ID', 'flowview'),
 				'align'   => 'left'
 			),
 			array(
-				'display' => __('Last Updated', 'flowview'),
-				'align'   => 'right',
-				'tip'     => __('Active Streams update every 5 minutes', 'flowview')
+				'display' => __('Field Name', 'flowview'),
+				'align'   => 'left'
+			),
+			array(
+				'display' => __('Field ID', 'flowview'),
+				'align'   => 'right'
+			),
+			array(
+				'display' => __('Field Type', 'flowview'),
+				'align'   => 'right'
+			),
+			array(
+				'display' => __('Length', 'flowview'),
+				'align'   => 'right'
+			),
+			array(
+				'display' => __('Unpack', 'flowview'),
+				'align'   => 'right'
 			)
 		);
 
-		html_header($display_array, false);
+		$table  = '<tr><table id="sorttable" class="cactiTable"><thead>';
+		$table .= '<tr class="tableHeader">';
+		foreach($display_array as $item) {
+			$table .= '<th class="' . $item['align'] . '">' . $item['display'] . '</th>';
+		}
+		$table .= '</tr></thead>';
+		$table .= '<tbody>';
 
-		if (cacti_sizeof($streams)) {
+		print $table;
+
+		if (cacti_sizeof($templates)) {
 			$i = 0;
 
-			foreach ($streams as $row) {
-				if (time()-strtotime($row['last_updated']) < 600) {
-					$status = 3;
-				} else {
-					$status = 1;
+			foreach ($templates as $row) {
+				$items = json_decode($row['column_spec'], true);
+
+				if (get_request_var('template') == 0 || get_request_var('template') == $row['template_id']) {
+					if (cacti_sizeof($items)) {
+						foreach($items as $ti) {
+							print '<tr>';
+							form_selectable_cell($row['ext_addr'], $i);
+							form_selectable_cell($row['template_id'], $i);
+							form_selectable_cell($ti['name'], $i);
+							form_selectable_cell($ti['field_id'], $i, '', 'right');
+							form_selectable_cell($ti['pack'], $i, '', 'right');
+							form_selectable_cell($ti['length'], $i, '', 'right');
+							form_selectable_cell($ti['unpack'], $i, '', 'right');
+							print '</tr>';
+
+							$i++;
+						}
+					}
 				}
-
-				form_alternate_row('line' . $i, true);
-				form_selectable_cell($row['ext_addr'], $i);
-				form_selectable_cell(get_colored_device_status('', $status), $i);
-				form_selectable_cell($row['last_updated'], $i, '', 'right');
-				form_end_row();
-
-				$i++;
 			}
 		} else {
-			print "<tr class='even'><td colspan=2><center>" . __('No Inbound Streams Detected', 'flowview') . '</center></td></tr>';
+			print "<tr class='even'><td colspan='" . cacti_sizeof($display_array) . "'><center>" . __('No Inbound Stream Templates Detected', 'flowview') . '</center></td></tr>';
 		}
 
-		html_end_box(false);
+		print '</tr></tbody></table></tr>';
 	}
+
+	html_end_box();
 }
 
 function show_devices () {

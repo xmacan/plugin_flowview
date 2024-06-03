@@ -71,6 +71,7 @@ foreach($options as $arg => $value) {
 }
 
 $templates = array();
+$tlenghs   = array();
 $start     = 0;
 
 $pacmap = array(
@@ -173,12 +174,12 @@ $allfields = array(
 	62  => array('name' => 'ipNextHopIPv6Address',                  'pack' => 'ipv6Address'),
 	63  => array('name' => 'bgpNexthopIPv6Address',                 'pack' => 'ipv6Address'),
 	64  => array('name' => 'ipv6ExtensionHeaders',                  'pack' => 'unsigned32'),
-	64  => array('name' => 'vendorReserved',                        'pack' => ''),
-	65  => array('name' => 'vendorReserved',                        'pack' => ''),
-	66  => array('name' => 'vendorReserved',                        'pack' => ''),
-	67  => array('name' => 'vendorReserved',                        'pack' => ''),
-	68  => array('name' => 'vendorReserved',                        'pack' => ''),
-	69  => array('name' => 'vendorReserved',                        'pack' => ''),
+
+	65  => array('name' => 'vendorReserved',                        'pack' => 'string'),
+	66  => array('name' => 'vendorReserved',                        'pack' => 'string'),
+	67  => array('name' => 'vendorReserved',                        'pack' => 'string'),
+	68  => array('name' => 'vendorReserved',                        'pack' => 'string'),
+	69  => array('name' => 'vendorReserved',                        'pack' => 'string'),
 
 	70  => array('name' => 'mplsTopLabelStackSection',              'pack' => 'octetArray'),
 	71  => array('name' => 'mplsLabelStackSection2',                'pack' => 'octetArray'),
@@ -522,7 +523,7 @@ $allfields = array(
 	431 => array('name' => 'layer2FrameTotalCount',                 'pack' => 'unsigned64'),
 	432 => array('name' => 'pseudoWireDestinationIPv4Address',      'pack' => 'ipv4Address'),
 	433 => array('name' => 'ignoredLayer2FrameTotalCount',          'pack' => 'unsigned64'),
-	434 => array('name' => 'mibObjectValueInteger',                 'pack' => 'signed32'), 
+	434 => array('name' => 'mibObjectValueInteger',                 'pack' => 'signed32'),
 	435 => array('name' => 'mibObjectValueOctetString',             'pack' => 'octetArray'),
 	436 => array('name' => 'mibObjectValueOID',                     'pack' => 'octetArray'),
 	437 => array('name' => 'mibObjectValueBits',                    'pack' => 'octetArray'),
@@ -620,9 +621,20 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`p
 	ROW_FORMAT=DYNAMIC,
 	COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
+flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
+	device_id int(11) unsigned NOT NULL default '0',
+	ext_addr varchar(32) NOT NULL default '',
+	template_id int(11) unsigned NOT NULL default '0',
+	column_spec blob default '',
+	last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (device_id, ext_addr, template_id))
+	ENGINE=InnoDB,
+	ROW_FORMAT=DYNAMIC,
+	COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
 if (cacti_sizeof($listener)) {
 	$previous_version = -1;
+	$templates_set    = false;
 	$streams          = array();
 	$sstart           = time();
 
@@ -635,6 +647,7 @@ if (cacti_sizeof($listener)) {
 
 		while (true) {
 			$p = stream_socket_recvfrom($socket, 1500, 0, $peer);
+
 			if ($start > 0) {
 				$end = microtime(true);
 				debug('-----------------------------------------------');
@@ -656,9 +669,15 @@ if (cacti_sizeof($listener)) {
 				$version = unpack('n', substr($p, 0, 2));
 
 				if (isset($lversion[$peer]) && $version[1] != $lversion[$peer]) {
-					$templates = array();
+					debug('Flow: Detecting version change to v' . $version[1]);
+
+					$templates       = array();
+					$templates_set   = false;
 					$lversion[$peer] = $version[1];
-					debug('Flow: Detecting version change');
+
+					flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+						WHERE device_id = ? AND ext_addr = ?",
+						array($listener['id'], $peer));
 				}
 
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
@@ -666,29 +685,14 @@ if (cacti_sizeof($listener)) {
 				database_check_connect();
 
 				if ($version[1] == 5) {
-					if ($previous_version != 5) {
-						debug('Flow: Detecting Version Change to v5');
-						$templates = array();
-					}
-
 					process_fv5($p, $peer);
 
 					$previous_version = 5;
 				} elseif ($version[1] == 9) {
-					if ($previous_version != 9) {
-						debug('Flow: Detecting Version Change to v9');
-						$templates = array();
-					}
-
 					process_fv9($p, $peer);
 
 					$previous_version = 9;
 				} elseif ($version[1] == 10) {
-					if ($previous_version != 10) {
-						debug('Flow: Detecting Version Change to v10');
-						$templates = array();
-					}
-
 					process_fv10($p, $peer);
 
 					$previous_version = 10;
@@ -702,13 +706,25 @@ if (cacti_sizeof($listener)) {
 			} else {
 				break;
 			}
-		}
 
-		$send = time();
+			if (!$templates_set && cacti_sizeof($templates[$peer])) {
+				foreach($templates[$peer] AS $template_id => $t) {
+					flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_templates`
+						(device_id, ext_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
+						ON DUPLICATE KEY UPDATE column_spec=VALUES(column_spec), last_updated=NOW()",
+						array($listener['id'], $peer, $template_id, json_encode($t)));
+				}
 
-		if ($send - $sstart > 300) {
-			$streams = array();
-			$sstart  = time();
+				$templates_set = true;
+			}
+
+			$send = time();
+
+			if ($send - $sstart > 300) {
+				$streams       = array();
+				$sstart        = time();
+				$templates_set = false;
+			}
 		}
 	}
 }
@@ -923,11 +939,11 @@ function get_unpack_syntax(&$field, $version) {
 		}
 	}
 
-	debug("Flow: $name, $id, $length, $prepac, {$field['unpack']}");
+	debug("Flow: Name: $name, Id: $id, Length: $length, Type: $prepac, Unpack: {$field['unpack']}");
 }
 
 function process_fv9($p, $peer) {
-	global $templates, $allfields, $pacmap;
+	global $templates, $tlengths, $allfields, $pacmap;
 
 	flowview_connect();
 
@@ -958,17 +974,15 @@ function process_fv9($p, $peer) {
 		$fslen  = $header['flowset_length'];
 		$fsid   = $header['flowset_id'];
 
-		debug("Flow: Processing v9 Data, Record: $j, FSId:$fsid, FSLen:$fslen");
-
 		// Template Set
 		if ($fsid == 0) {
+			debug('===============================================');
 			debug('Flow: Template Sets Found');
 
 			$k = 4;
 
 			if ($fslen > 0) {
-				debug('Flow: Template Found');
-				debug('Flow: Template Len: ' . $fslen);
+				debug('Flow: Template Set Length: ' . $fslen);
 
 				while ($k < $fslen) {
 					$theader = substr($p, $h, 4);
@@ -977,8 +991,10 @@ function process_fv9($p, $peer) {
 					$fcount  = $theader['fieldcount'];
 					$h += 4;
 					$k += 4;
+					$tlength = 0;
 
-					debug('Flow: Template Id: ' . $tid . ' with ' . $fcount . ' fields');
+					debug('===============================================');
+					debug("Flow: Template Id: $tid with $fcount fields");
 
 					$templates[$peer][$tid] = array();
 
@@ -986,8 +1002,10 @@ function process_fv9($p, $peer) {
 						$field = substr($p, $h, 4);
 						$field = unpack('nfield_id/nfield_len', $field);
 						$tf    = array();
+
 						$tf['field_id'] = $field['field_id'];
 						$tf['length']   = $field['field_len'];
+						$tlength       += $tf['length'];
 
 						if (($field['field_id'] & 32768)) {
 							$tf['field_id']   = $field['field_id'] & ~32768;
@@ -997,7 +1015,9 @@ function process_fv9($p, $peer) {
 							$entnum = unpack('Nentnum', $entnum);
 
 							$tf['enterprise_number'] = $entnum['entnum'];
+
 							$h += 4;
+							$k += 4;
 						} else {
 							$tf['enterprise'] = 0;
 						}
@@ -1017,6 +1037,10 @@ function process_fv9($p, $peer) {
 						$k += 4;
 						$j++;
 					}
+
+					debug("Flow: Template Captured, Template:$tid Size: $tlength");
+
+					$tlengths[$peer][$tid] = $tlength;
 				}
 
 				debug('Flow: Templates Captured');
@@ -1044,16 +1068,13 @@ function process_fv9($p, $peer) {
 
 			if (isset($templates[$peer][$tid])) {
 				debug('Flow: Template Found: ' . $tid);
-			}
 
-			if (isset($templates[$peer][$tid])) {
 				while ($k < $fslen) {
 					$data = array();
 
 					foreach ($templates[$peer][$tid] as $t) {
 						$id = $t['field_id'];
 
-						//debug("Field: $id, Unpack: " . $t['unpack'] . ", Length: " . $t['length'] . ", Pack: " . $t['pack']);
 						$field = substr($p, $h, $t['length']);
 
 						$field = unpack($t['unpack'], $field);
@@ -1090,7 +1111,7 @@ function process_fv9($p, $peer) {
 							}
 
 							$field = $c;
-						} else {
+						} elseif (isset($field[1])) {
 							$field = $field[1];
 						}
 
@@ -1101,7 +1122,7 @@ function process_fv9($p, $peer) {
 
 					$remaining = $fslen - $k;
 
-					debug('Flow: Processing Record, Remaining: ' . $remaining);
+					debug(sprintf("Flow: Processing Record: %s, Remaining: %s", $j+1, $remaining));
 
 					$result = false;
 
@@ -1113,13 +1134,21 @@ function process_fv9($p, $peer) {
 						$sql[] = $result;
 					} else {
 						debug("Flow: ERROR: Bad Record with FSId:$fsid");
-						//print_r($data);
 					}
 
 					$j++;
+
+					/**
+					 * version 9 flows can include padding check for a length
+					 * less than a total template and if found finish up.
+					 */
+					if ($remaining < $tlengths[$peer][$tid]) {
+						$k = $fslen;
+					}
 				}
 			} else {
 				$j = $records;
+				debug('Flow: Template Not Found, Skipping');
 			}
 
 			$i += $fslen;
@@ -1165,7 +1194,7 @@ function get_sql_prefix($flowtime) {
 }
 
 function process_fv10($p, $peer) {
-	global $templates, $allfields, $pacmap;
+	global $templates, $tlengths, $allfields, $pacmap;
 
 	flowview_connect();
 
@@ -1196,11 +1225,14 @@ function process_fv10($p, $peer) {
 
 		// Template Set
 		if ($fsid == 2) {
+			debug('===============================================');
 			debug('Flow: Template Sets Found');
 
-			$k  = 4;
+			$k = 4;
 
 			if ($fslen > 0) {
+				debug('Flow: Template Set Length: ' . $fslen);
+
 				while ($k < $fslen) {
 					$theader = substr($p, $h, 4);
 					$theader = unpack('ntemplate_id/nfieldcount', $theader);
@@ -1208,24 +1240,31 @@ function process_fv10($p, $peer) {
 					$fcount  = $theader['fieldcount'];
 					$h += 4;
 					$k += 4;
+					$tlength = 0;
 
-					debug('Flow: Template Id: ' . $tid . ' with ' . $fcount . ' fields');
+					debug('===============================================');
+					debug("Flow: Template Id: $tid with $fcount fields");
 
 					$templates[$peer][$tid] = array();
 
 					for ($a = 0; $a < $fcount; $a++) {
 						$field = substr($p, $h, 4);
 						$field = unpack('nfield_id/nfield_len', $field);
-						$tf = array();
+						$tf    = array();
+
 						$tf['field_id'] = $field['field_id'];
 						$tf['length']   = $field['field_len'];
+						$tlength       += $tf['length'];
 
 						if (($field['field_id'] & 32768)) {
-							$tf['field_id'] = $field['field_id'] & ~32768;
+							$tf['field_id']   = $field['field_id'] & ~32768;
 							$tf['enterprise'] = 1;
+
 							$entnum = substr($p, $h, 4);
 							$entnum = unpack('Nentnum', $entnum);
+
 							$tf['enterprise_number'] = $entnum['entnum'];
+
 							$h += 4;
 							$k += 4;
 						} else {
@@ -1247,7 +1286,9 @@ function process_fv10($p, $peer) {
 						$k += 4;
 					}
 
-					debug('Flow: Template Captured');
+					debug("Flow: Template Captured, Template:$tid Size: $tlength");
+
+					$tlengths[$peer][$tid] = $tlength;
 				}
 			} else {
 				debug('Flow: Bad Template Records');
@@ -1256,15 +1297,11 @@ function process_fv10($p, $peer) {
 			//print_r($templates);
 
 			$i += $fslen;
-
-			debug('Flow: Flowset 2: Total Bytes:' . $count . ', Current bytes:' . $i);
 		} elseif ($fsid == 3) {
 			// Option Set
 			debug('Flow: Options Found');
 
 			$i += $fslen;
-
-			debug('Flow: Flowset 3: Total Bytes:' . $count . ', Current bytes:' . $i);
 		} elseif ($fsid > 255) {
 			// Data Set
 			if (cacti_sizeof($templates[$peer])) {
@@ -1275,15 +1312,16 @@ function process_fv10($p, $peer) {
 
 			$tid = $fsid;
 			$k   = 4;
+			$j   = 0;
 
 			if (isset($templates[$peer][$tid])) {
+				debug('Flow: Template Found: ' . $tid);
+
 				while ($k < $fslen) {
 					$data = array();
 
 					foreach ($templates[$peer][$tid] as $t) {
 						$id    = $t['field_id'];
-
-						//debug("Field: $id, Unpack: {$t['unpack']}");
 
 						$field = substr($p, $h, $t['length']);
 						$field = unpack($t['unpack'], $field);
@@ -1327,12 +1365,11 @@ function process_fv10($p, $peer) {
 
 					$remaining = $fslen - $k;
 
-					debug('Flow: Processing Record, Remaining: ' . $remaining);
+					debug(sprintf("Flow: Processing Record: %s, Remaining: %s", $j+1, $remaining));
 
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						//print_r($data);
 						$result = process_v9_v10($data, $peer, $flowtime);
 					}
 
@@ -1340,9 +1377,21 @@ function process_fv10($p, $peer) {
 						$sql[] = $result;
 					} else {
 						debug("Flow: ERROR: Bad Record with FSId:$fsid");
-						//print_r($data);
+					}
+
+					$j++;
+
+					/**
+					 * version 9 flows can include padding check for a length
+					 * less than a total template and if found finish up.
+					 */
+					if ($remaining < $tlengths[$peer][$tid]) {
+						$k = $fslen;
 					}
 				}
+			} else {
+				$i = $count;
+				debug('Flow: Template Not Found, Skipping');
 			}
 
 			$i += $fslen;

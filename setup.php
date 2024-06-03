@@ -58,16 +58,14 @@ function plugin_flowview_uninstall() {
 
 function plugin_flowview_check_config() {
 	// Here we will check to ensure everything is configured
-
-
 	if (!file_exists(dirname(__FILE__) . '/config_local.php') && !file_exists(dirname(__FILE__) . '/config.php')) {
 		raise_message('flowview_info', __('Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing.', 'flowview'), MESSAGE_LEVEL_ERROR);
 
 		return false;
-
 	}
 
 	plugin_flowview_check_upgrade();
+
 	return true;
 }
 
@@ -111,7 +109,6 @@ function plugin_flowview_check_upgrade() {
 				DROP COLUMN expire,
 				DROP COLUMN compression'
 			);
-
 		}
 
 		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
@@ -177,12 +174,17 @@ function plugin_flowview_check_upgrade() {
 			SET version='$current'
 			WHERE directory='flowview'");
 
-		db_execute("UPDATE plugin_config SET
-			version='" . $info['version']  . "',
-			name='"    . $info['longname'] . "',
-			author='"  . $info['author']   . "',
-			webpage='" . $info['homepage'] . "'
-			WHERE directory='" . $info['name'] . "' ");
+		db_execute_prepared("UPDATE plugin_config SET
+			version = ?, name = ?, author = ?, webpage = ?
+			WHERE directory = ?",
+			array(
+				$info['version'],
+				$info['longname'],
+				$info['author'],
+				$info['homepage'],
+				$info['name']
+			)
+		);
 
 		flowview_setup_table();
 	}
@@ -551,12 +553,6 @@ function flowview_connect() {
 		}
 	}
 
-	if (!flowview_db_table_exists('plugin_flowview_devices')) {
-		cacti_log('Setting Up Database Tables Since they do not exist', false, 'FLOWVIEW');
-
-		flowview_setup_table();
-	}
-
 	return $flowview_cnn !== false;
 }
 
@@ -591,6 +587,17 @@ function flowview_setup_table() {
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $floeviewdb_default . "`.`plugin_flowview_device_templates` (
+		device_id int(11) unsigned NOT NULL default '0',
+		ext_addr varchar(32) NOT NULL default '',
+		template_id int(11) unsigned NOT NULL default '0',
+		column_spec blob default ''
+		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		PRIMARY KEY (device_id, ext_addr, template_id))
+		ENGINE=InnoDB,
+		ROW_FORMAT=DYNAMIC,
+		COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_queries` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,

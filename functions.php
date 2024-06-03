@@ -22,6 +22,38 @@
  +-------------------------------------------------------------------------+
 */
 
+function display_tabs($id) {
+	global $config;
+
+	/* present a tabbed interface */
+	$tabs['general']   = array('url' => 'flowview_devices.php', 'name' => __('General', 'flowview'));
+	$tabs['templates'] = array('url' => 'flowview_devices.php', 'name' => __('Templates', 'flowview'));
+
+	/* if they were redirected to the page, let's set that up */
+	if (!isset_request_var('tab')) {
+		$current_tab = 'general';
+	} else {
+		$current_tab = get_request_var('tab');
+	}
+
+	/* draw the tabs */
+	print "<div class='tabs'><nav><ul>";
+
+	if (cacti_sizeof($tabs)) {
+		foreach ($tabs as $shortname => $tab) {
+			print '<li><a class="tab ' . (($shortname == $current_tab) ? 'selected"':'"') . " href='" . html_escape($config['url_path'] .
+				'plugins/flowview/' . $tab['url'] .
+				'?action=edit' .
+				'&id=' . $id .
+				'&template=0' .
+				'&tab=' . $shortname) .
+				"'>" . $tab['name'] . "</a></li>";
+		}
+	}
+
+	print "</ul></nav></div>";
+}
+
 function sort_filter() {
 	global $config, $filter_edit, $graph_timespans;
 
