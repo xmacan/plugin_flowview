@@ -563,7 +563,7 @@ function flowview_setup_table() {
 		ip varchar(45) NOT NULL default '',
 		host varchar(255) NOT NULL default '',
 		time bigint(20) unsigned NOT NULL default '0',
-		PRIMARY=KEY (ip))
+		PRIMARY KEY (ip))
 		ENGINE=MEMORY,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
@@ -588,11 +588,11 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $floeviewdb_default . "`.`plugin_flowview_device_templates` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ext_addr varchar(32) NOT NULL default '',
 		template_id int(11) unsigned NOT NULL default '0',
-		column_spec blob default ''
+		column_spec blob default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		PRIMARY KEY (device_id, ext_addr, template_id))
 		ENGINE=InnoDB,
