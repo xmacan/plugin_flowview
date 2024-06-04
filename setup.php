@@ -143,7 +143,7 @@ function plugin_flowview_check_upgrade() {
 				if (!cacti_sizeof($good)) {
 					cacti_log('NOTE: Updating unique key for ' . $t['TABLE_NAME'], false, 'FLOWVIEW');
 
-					if (flowview_db_index_exists($t['TABLE_NAME'], 'keycol')) {
+					if (db_index_exists($t['TABLE_NAME'], 'keycol')) {
 						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
 							DROP INDEX `keycol`,
 							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`, `dst_addr`, `dst_port`, `dst_if`, `start_time`, `end_time`)');
