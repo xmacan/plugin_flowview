@@ -23,10 +23,11 @@
  +-------------------------------------------------------------------------+
 */
 
-chdir(dirname(__FILE__) . '/../../');
+chdir('../../');
 include('./include/cli_check.php');
-include_once('./lib/poller.php');
-include_once('./plugins/flowview/functions.php');
+include_once($config['base_path'] . '/lib/poller.php');
+include_once($config['base_path'] . '/plugins/flowview/setup.php');
+include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '-1');
@@ -244,4 +245,5 @@ function display_help() {
 	print '    --maint Force table maintenance immediately.' . PHP_EOL . PHP_EOL;
 	print '    --debug Provide some debug output during collection.' . PHP_EOL . PHP_EOL;
 }
+
 

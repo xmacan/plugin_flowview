@@ -23,7 +23,8 @@
 */
 
 chdir('../../');
-include_once('./include/auth.php');
+include('./include/auth.php');
+include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 include_once($config['base_path'] . '/lib/time.php');
 

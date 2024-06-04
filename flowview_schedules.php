@@ -23,9 +23,9 @@
 */
 
 chdir('../../');
-
 include('./include/auth.php');
-include_once('./lib/time.php');
+include_once($config['base_path'] . '/lib/time.php');
+include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
 set_default_action();

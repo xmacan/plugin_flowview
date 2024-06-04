@@ -22,9 +22,10 @@
  +-------------------------------------------------------------------------+
 */
 
-include_once('../../include/cli_check.php');
-include_once('./setup.php');
-include_once('./functions.php');
+chdir('../../');
+include('./include/cli_check.php');
+include_once($config['base_path'] . '/plugins/flowview/setup.php');
+include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
 import_flows();
 
