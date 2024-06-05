@@ -982,7 +982,7 @@ function flowview_display_filter($data) {
 							data: {
 								json: data,
 								mimeType: 'json',
-								type: 'pie',
+								type: 'bar',
 								keys: {
 									x: 'name',
 									value: ['value']
