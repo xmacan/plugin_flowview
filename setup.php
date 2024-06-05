@@ -143,7 +143,7 @@ function plugin_flowview_check_upgrade() {
 				if (!cacti_sizeof($good)) {
 					cacti_log('NOTE: Updating unique key for ' . $t['TABLE_NAME'], false, 'FLOWVIEW');
 
-					if (flowview_db_index_exists($t['TABLE_NAME'], 'keycol')) {
+					if (db_index_exists($t['TABLE_NAME'], 'keycol')) {
 						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
 							DROP INDEX `keycol`,
 							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`, `dst_addr`, `dst_port`, `dst_if`, `start_time`, `end_time`)');
@@ -563,7 +563,7 @@ function flowview_setup_table() {
 		ip varchar(45) NOT NULL default '',
 		host varchar(255) NOT NULL default '',
 		time bigint(20) unsigned NOT NULL default '0',
-		PRIMARY=KEY (ip))
+		PRIMARY KEY (ip))
 		ENGINE=MEMORY,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
@@ -588,11 +588,11 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $floeviewdb_default . "`.`plugin_flowview_device_templates` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ext_addr varchar(32) NOT NULL default '',
 		template_id int(11) unsigned NOT NULL default '0',
-		column_spec blob default ''
+		column_spec blob default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		PRIMARY KEY (device_id, ext_addr, template_id))
 		ENGINE=InnoDB,
