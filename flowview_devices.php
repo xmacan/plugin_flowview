@@ -357,6 +357,8 @@ function edit_devices() {
 					cssIconNone: 'fa-sort',
 					cssIcon: 'fa'
 				});
+
+				$('.tablesorter-resizable-container').hide();
 			});
 			</script>
 			</td>
