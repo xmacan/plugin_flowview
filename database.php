@@ -51,7 +51,7 @@ function flowview_db_connect_real($host, $user, $pass, $db_name, $db_type, $port
  *
  * @return the result of the close command
  */
-function flowview_db_close($flowview_cnn) {
+function flowview_db_close($flowview_cnn = false) {
 	return db_close($flowview_cnn);
 }
 

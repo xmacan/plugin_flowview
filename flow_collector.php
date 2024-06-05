@@ -739,9 +739,9 @@ function database_check_connect() {
 
 	include($config['include_path'] . '/config.php');
 
-	$table = flowview_db_fetch_cell('SHOW TABLES LIKE \'plugin_flowview_dnscache\'');
+	$connection_good = flowview_db_fetch_cell('SELECT 1');
 
-	if (empty($table)) {
+	if (empty($connection_good)) {
 		flowview_db_close();
 
 		while(true) {
