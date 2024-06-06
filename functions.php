@@ -1651,10 +1651,23 @@ function flowview_get_chartdata() {
 				$catstring = '';
 				foreach($category as $c) {
 					if ($domains != 'false' && strpos($c, 'domain')) {
-						$p = explode('.', $row[$c]);
-						$p = array_reverse($p);
-						$string = (isset($p[1]) ? $p[1]:'') . '.' . $p[0];
-						$catstring .= ($catstring != '' ? ' / ':'') . $string;
+						$p = array();
+
+						if (isset($row[$c])) {
+							$p = explode('.', $row[$c]);
+						} elseif (($c == 'src_domain' || $c == 'dst_domain') && isset($row['domain'])) {
+							$p = explode('.', $row['domain']);
+						} elseif (($c == 'src_domain' || $c == 'dst_domain') && isset($row['rdomain'])) {
+							$p = explode('.', $row['rdomain']);
+						}
+
+						if (cacti_sizeof($p)) {
+							$p = array_reverse($p);
+							$string = (isset($p[1]) ? $p[1]:'') . '.' . $p[0];
+							$catstring .= ($catstring != '' ? ' / ':'') . $string;
+						} else {
+							cacti_log('ERROR: Unable to process domain information.  Please open a ticket on GitHub', false, 'FLOWVIEW');
+						}
 					} else {
 						$catstring .= ($catstring != '' ? ' / ':'') . $row[$c];
 					}
