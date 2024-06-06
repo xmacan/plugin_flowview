@@ -267,6 +267,11 @@ function flowview_request_vars() {
 			'filter' => FILTER_VALIDATE_REGEXP,
 			'options' => array('options' => array('regexp' => '(true|false)')),
 			'default' => 'false'
+		),
+		'graph_type' => array(
+			'filter' => FILTER_VALIDATE_REGEXP,
+			'options' => array('options' => array('regexp' => '(bar|pie|treemap)')),
+			'default' => 'treemap'
 		)
 	);
 

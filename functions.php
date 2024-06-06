@@ -716,6 +716,14 @@ function flowview_display_filter($data) {
 			<table class='filterTable'>
 				<tr>
 					<td>
+						<label for='flows'><?php print __('Graph type', 'flowview');?></label>
+						<select name='graph_type' id='graph_type'>
+						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? 'selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
+						<?php print '<option value="pie"' . (get_request_var('graph_type') == 'pie' ? 'selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
+						<?php print '<option value="treemap"' . (get_request_var('graph_type') == 'treemap' ? 'selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
+						</select>
+					</td>
+					<td>
 						<?php print __('Show/Hide', 'flowview');?>
 					</td>
 					<td class='nowrap'>
@@ -724,15 +732,15 @@ function flowview_display_filter($data) {
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='bytes' <?php print (get_request_var('bytes') == 'true' ? 'checked':'');?>>
-						<label for='bytes'><?php print __('Bytes Bar', 'flowview');?></label>
+						<label for='bytes'><?php print __('Bytes graph', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='packets' <?php print (get_request_var('packets') == 'true' ? 'checked':'');?>>
-						<label for='packets'><?php print __('Packets Bar', 'flowview');?></label>
+						<label for='packets'><?php print __('Packets graph', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='flows' <?php print (get_request_var('flows') == 'true' ? 'checked':'');?>>
-						<label for='flows'><?php print __('Flows Bar', 'flowview');?></label>
+						<label for='flows'><?php print __('Flows graph', 'flowview');?></label>
 					</td>
 				</tr>
 			</table>
@@ -744,6 +752,7 @@ function flowview_display_filter($data) {
 	var height = $(window).height() - 200;
 	var date1Open = false;
 	var date2Open = false;
+	var graph_type = '<?php print get_request_var('graph_type');?>';
 
 	if (height < 300 || height > 400) {
 		height = 400;
@@ -784,7 +793,7 @@ function flowview_display_filter($data) {
 			changeQuery(true);
 		});
 
-		$('#domains, #exclude').off('change').on('change', function() {
+		$('#domains, #exclude, #graph_type').off('change').on('change', function() {
 			applyFilter(false);
 		});
 
@@ -965,6 +974,7 @@ function flowview_display_filter($data) {
 						'&cutofflines='  + $('#cutofflines').val() +
 						'&cutoffoctets=' + $('#cutoffoctets').val() +
 						'&exclude='      + $('#exclude').val() +
+						'&graph_type='   + $('#graph_type').val() +
 						'&date1='        + $('#date1').val()  +
 						'&date2='        + $('#date2').val(), function(data) {
 
@@ -980,9 +990,9 @@ function flowview_display_filter($data) {
 								chartBytes.resize({width:width});
 							},
 							data: {
+								type: graph_type,
 								json: data,
 								mimeType: 'json',
-								type: 'bar',
 								keys: {
 									x: 'name',
 									value: ['value']
@@ -1022,6 +1032,7 @@ function flowview_display_filter($data) {
 						'&cutofflines='  + $('#cutofflines').val()  +
 						'&cutoffoctets=' + $('#cutoffoctets').val() +
 						'&exclude='      + $('#exclude').val() +
+						'&graph_type='   + $('#graph_type').val() +
 						'&date1='        + $('#date1').val()   +
 						'&date2='        + $('#date2').val(), function(data) {
 
@@ -1039,7 +1050,7 @@ function flowview_display_filter($data) {
 							data: {
 								json: data,
 								mimeType: 'json',
-								type: 'bar',
+								type: graph_type,
 								keys: {
 									x: 'name',
 									value: ['value']
@@ -1079,6 +1090,7 @@ function flowview_display_filter($data) {
 						'&cutofflines='  + $('#cutofflines').val()  +
 						'&cutoffoctets=' + $('#cutoffoctets').val() +
 						'&exclude='      + $('#exclude').val() +
+						'&graph_type='   + $('#graph_type').val() +
 						'&date1='        + $('#date1').val()   +
 						'&date2='        + $('#date2').val(), function(data) {
 
@@ -1096,7 +1108,7 @@ function flowview_display_filter($data) {
 							data: {
 								json: data,
 								mimeType: 'json',
-								type: 'bar',
+								type: graph_type,
 								keys: {
 									x: 'name',
 									value: ['value']
@@ -1171,7 +1183,8 @@ function flowview_display_filter($data) {
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
-			'&exclude='      + $('#exclude').val(), function() {
+			'&exclude='      + $('#exclude').val(), + 
+			'&graph_type='   + $('#graph_type').val(), function() {
 			Pace.stop();
 		});
 	}
@@ -1244,6 +1257,7 @@ function flowview_display_filter($data) {
 			'&cutofflines='         + $('#cutofflines').val() +
 			'&cutoffoctets='        + $('#cutoffoctets').val() +
 			'&exclude='             + $('#exclude').val() +
+			'&graph_type='          + $('#graph_type').val() +
 			'&date1='               + $('#date1').val() +
 			'&date2='               + $('#date2').val() +
 			'&header=false');
@@ -1631,6 +1645,8 @@ function get_tables_for_query($start, $end = null) {
  *
  */
 function flowview_get_chartdata() {
+	global $graph_type;
+
 	$query_id = get_filter_request_var('query');
 	$type     = get_nfilter_request_var('type');
 	$domains  = get_nfilter_request_var('domains');
@@ -1648,8 +1664,10 @@ function flowview_get_chartdata() {
 			$category = get_category_columns($report, $domains);
 
 			foreach($output['data'] as $row) {
+
 				$catstring = '';
 				foreach($category as $c) {
+
 					if ($domains != 'false' && strpos($c, 'domain')) {
 						$p = array();
 
