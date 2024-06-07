@@ -232,7 +232,7 @@ function flowview_draw_navigation_text($nav) {
 	);
 
 	$nav['flowview.php:view'] = array(
-		'title' => __('(view)', 'flowview'),
+		'title' => __('Dashboard', 'flowview'),
 		'mapping' => 'flowview.php:',
 		'url' => 'flowview.php',
 		'level' => '1'
