@@ -447,7 +447,7 @@ function flowview_show_summary(&$data) {
 }
 
 
-function flowview_display_filter($data) {
+function flowview_display_filter() {
 	global $config, $graph_timeshifts, $graph_timespans;
 
 	flowview_connect();
@@ -719,10 +719,10 @@ function flowview_display_filter($data) {
 						<?php print __('Graph', 'flowview');?>
 					</td>
 					<td>
-						<select name='graph_type' id='graph_type'>
-						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? 'selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
-						<?php print '<option disabled value="pie"' . (get_request_var('graph_type') == 'pie' ? 'selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
-						<?php print '<option disabled value="treemap"' . (get_request_var('graph_type') == 'treemap' ? 'selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
+						<select id='graph_type'>
+						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? ' selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
+						<?php print '<option disabled value="pie"' . (get_request_var('graph_type') == 'pie' ? ' selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
+						<?php print '<option disabled value="treemap"' . (get_request_var('graph_type') == 'treemap' ? ' selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
 						</select>
 					</td>
 					<td>
@@ -754,7 +754,7 @@ function flowview_display_filter($data) {
 	var height = $(window).height() - 200;
 	var date1Open = false;
 	var date2Open = false;
-	var graph_type = '<?php print get_request_var('graph_type');?>';
+	var graphType = '<?php print get_request_var('graph_type');?>';
 	var pattern = [
 		'#1f77b4',
 		'#aec7e8',
@@ -777,7 +777,6 @@ function flowview_display_filter($data) {
 		'#17becf',
 		'#9edae5'
 	];
-
 
 	if (height < 300 || height > 400) {
 		height = 400;
@@ -1038,7 +1037,7 @@ function flowview_display_filter($data) {
 					this.resize({width:width});
 				},
 				data: {
-					type: graph_type,
+					type: graphType,
 					json: data,
 					mimeType: 'json',
 					keys: {
@@ -1116,7 +1115,7 @@ function flowview_display_filter($data) {
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
-			'&exclude='      + $('#exclude').val(), +
+			'&exclude='      + $('#exclude').val() +
 			'&graph_type='   + $('#graph_type').val(), function() {
 			Pace.stop();
 		});
@@ -1584,8 +1583,6 @@ function get_tables_for_query($start, $end = null) {
  *
  */
 function flowview_get_chartdata() {
-	global $graph_type;
-
 	$query_id = get_filter_request_var('query');
 	$type     = get_nfilter_request_var('type');
 	$domains  = get_nfilter_request_var('domains');
