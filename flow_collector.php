@@ -708,7 +708,7 @@ if (cacti_sizeof($listener)) {
 				break;
 			}
 
-			if (!$templates_set && cacti_sizeof($templates[$peer])) {
+			if (!$templates_set && isset($templates[$peer]) && cacti_sizeof($templates[$peer])) {
 				foreach($templates[$peer] AS $template_id => $t) {
 					flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_templates`
 						(device_id, ext_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
