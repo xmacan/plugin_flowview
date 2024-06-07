@@ -741,7 +741,7 @@ function flowview_display_filter() {
 					<td>
 						<select id='graph_type'>
 						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? ' selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
-						<?php print '<option disabled value="pie"' . (get_request_var('graph_type') == 'pie' ? ' selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
+						<?php print '<option value="pie"' . (get_request_var('graph_type') == 'pie' ? ' selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
 						<?php print '<option value="treemap"' . (get_request_var('graph_type') == 'treemap' ? ' selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
 						</select>
 					</td>
@@ -790,14 +790,17 @@ function flowview_display_filter() {
 
 	var byteLabel      = '<?php print __('Bytes', 'flowview');?>';
 	var byteBarTitle   = '<?php print __('Top %s Distribution Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
+	var bytePieTitle   = '<?php print __('Top %s Pie Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
 	var byteTreeTitle   = '<?php print __('Top %s Treemap Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
 
 	var packetLabel    = '<?php print __('Packets', 'flowview');?>';
 	var packetBarTitle = '<?php print __('Top %s Distribution Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
+	var packetPieTitle = '<?php print __('Top %s Pie Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
 	var packetTreeTitle = '<?php print __('Top %s Treemap Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
 
 	var flowLabel      = '<?php print __('Flows', 'flowview');?>';
 	var flowBarTitle   = '<?php print __('Top %s Distribution Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
+	var flowPieTitle   = '<?php print __('Top %s Pie Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
 	var flowTreeTitle   = '<?php print __('Top %s Treemap Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
 
 	var pattern = [
@@ -1045,6 +1048,7 @@ function flowview_display_filter() {
 					if ($('#graph_type').val() == 'bar') {
 						renderBarChart('bytes', 'chartbytes', byteBarTitle, byteLabel, $('#graph_height').val(), width);
 					} else if ($('#graph_type').val() == 'pie') {
+						renderPieChart('bytes', 'chartbytes', bytePieTitle, byteLabel, $('#graph_height').val(), width);
 					} else {
 						renderTreemapChart('bytes', 'chartbytes', byteTreeTitle, byteLabel, $('#graph_height').val(), width);
 					}
@@ -1054,6 +1058,7 @@ function flowview_display_filter() {
 					if ($('#graph_type').val() == 'bar') {
 						renderBarChart('flows', 'chartflows', flowBarTitle, flowLabel, $('#graph_height').val(), width);
 					} else if ($('#graph_type').val() == 'pie') {
+						renderPieChart('flows', 'chartflows', flowPieTitle, flowLabel, $('#graph_height').val(), width);
 					} else {
 						renderTreemapChart('flows', 'chartflows', flowTreeTitle, flowLabel, $('#graph_height').val(), width);
 					}
@@ -1063,6 +1068,7 @@ function flowview_display_filter() {
 					if ($('#graph_type').val() == 'bar') {
 						renderBarChart('packets', 'chartpackets', packetBarTitle, packetLabel, $('#graph_height').val(), width);
 					} else if ($('#graph_type').val() == 'pie') {
+						renderPieChart('packets', 'chartpackets', packetPieTitle, packetLabel, $('#graph_height').val(), width);
 					} else {
 						renderTreemapChart('packets', 'chartpackets', packetTreeTitle, packetLabel, $('#graph_height').val(), width);
 					}
@@ -1190,6 +1196,69 @@ function flowview_display_filter() {
 				},
 				data: {
 					type: 'treemap',
+					columns: columns,
+					labels: {
+						colors: '#fff'
+					}
+				},
+			});
+
+			Pace.stop();
+		});
+	}
+
+	function renderPieChart(type, bindto, title, label, height, width) {
+		$.getJSON('flowview.php?action=chartdata&type=' + type +
+			'&domains='      + $('#domains').is(':checked') +
+			'&query='        + $('#query').val()  +
+			'&report='       + $('#report').val() +
+			'&device_id='    + $('#device_id').val() +
+			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
+			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
+			'&cutofflines='  + $('#cutofflines').val()  +
+			'&cutoffoctets=' + $('#cutoffoctets').val() +
+			'&exclude='      + $('#exclude').val() +
+			'&graph_type='   + $('#graph_type').val() +
+			'&graph_height=' + $('#graph_height').val() +
+			'&date1='        + $('#date1').val()   +
+			'&date2='        + $('#date2').val(), function(data) {
+
+			var columns = [];
+
+			$.each(data, function(index, value) {
+				columns[index] = [value.name, value.value];
+			});
+
+			var chartPie = bb.generate({
+				title: { text: title },
+				bindto: '#'+bindto,
+				padding: {
+					top: 40,
+					right: 100,
+					bottom: 40,
+					left: 100
+				},
+				size: {
+					height: height,
+					width: width
+				},
+				onresize: function() {
+					width = $(window).width() - 50;
+					this.resize({width:width});
+				},
+				pie: {
+					label: {
+						format: function(value, ratio, id) {
+							var ratio = ratio * 100;
+							var dvalue = value;
+							var dratio = ratio.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' %';
+
+							return numFormatter(dvalue).toLocaleString(undefined) + "\n" + dratio;
+						}
+					}
+				},
+				data: {
+					type: 'pie',
 					columns: columns,
 					labels: {
 						colors: '#fff'

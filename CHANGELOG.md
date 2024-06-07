@@ -31,6 +31,7 @@
 * feature: Add color to Bar Charts
 * feature: Disable Charts when viewing printed reports
 * feature: Show visual indicator that the filter has been saved
+* feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#117: Allow guest account access
 * feature#120: Save Charting Options when you Save a Filter
