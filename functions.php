@@ -1625,7 +1625,7 @@ function flowview_get_chartdata() {
 								$p[] = __('unresolved', 'flowview');
 							}
 						} else {
-#							$p[] = __('unresolved', 'flowview');
+							$p[] = __('unresolved', 'flowview');
 						}
 
 						if (cacti_sizeof($p)) {
@@ -2038,8 +2038,8 @@ function run_flow_query($session, $query_id, $start, $end) {
 					$sql_order         = 'ORDER BY ' . ($data['sortfield'] + 2) . ($data['sortfield'] > 1 ? ' DESC':' ASC');
 					break;
 				case 8:
-					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain';
-					$sql_inner = 'SELECT dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain';
+					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain, src_addr';
+					$sql_inner = 'SELECT dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain, src_addr';
 
 					$sql_groupby       = 'GROUP BY INET6_NTOA(dst_addr)';
 					$sql_inner_groupby = 'GROUP BY dst_addr';
