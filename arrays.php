@@ -362,6 +362,16 @@ $print_columns_array = array(
 	)
 );
 
+$graph_heights = array(
+	300 => __('%d Pixels', 300),
+	350 => __('%d Pixels', 350),
+	400 => __('%d Pixels', 400),
+	450 => __('%d Pixels', 450),
+	500 => __('%d Pixels', 500),
+	550 => __('%d Pixels', 550),
+	600 => __('%d Pixels', 600)
+);
+
 $devices = array_rekey(
 	flowview_db_fetch_assoc('SELECT id, name
 		FROM plugin_flowview_devices
@@ -474,6 +484,59 @@ $filter_edit = array(
 		'array' => $cutoff_octets
 	),
 	'spacer2' => array(
+		'method' => 'spacer',
+		'collapsible' => true,
+		'friendly_name' => __('Charting Options', 'flowview'),
+	),
+	'graph_type' => array(
+		'friendly_name' => __('Graph Type', 'flowview'),
+		'description' => __('The Graph Type to display by default.  They include Bar, Pie, and Treemap.', 'flowview'),
+		'method' => 'drop_array',
+		'value' => '|arg1:graph_type|',
+		'default' => 'bar',
+		'array' => array(
+			'bar'     => __('Bar Chart', 'flowview'),
+			'pie'     => __('Pie Chart', 'fowview'),
+			'treemap' => __('Treemap Chart', 'flowview')
+		)
+	),
+	'graph_height' => array(
+		'friendly_name' => __('Graph Height', 'flowview'),
+		'description' => __('The Graph Hight to use by default.', 'flowview'),
+		'method' => 'drop_array',
+		'value' => '|arg1:graph_height|',
+		'default' => 'bar',
+		'array' => $graph_heights
+	),
+	'panel_table' => array(
+		'friendly_name' => __('Table Panel', 'flowview'),
+		'description' => __('Should the Table Panel be displayed by default.', 'flowview'),
+		'method' => 'checkbox',
+		'value' => '|arg1:panel_table|',
+		'default' => 'on'
+	),
+	'panel_bytes' => array(
+		'friendly_name' => __('Bytes Panel', 'flowview'),
+		'description' => __('Should the Bytes Panel be displayed by default.', 'flowview'),
+		'method' => 'checkbox',
+		'value' => '|arg1:panel_bytes|',
+		'default' => ''
+	),
+	'panel_packets' => array(
+		'friendly_name' => __('Packets Panel', 'flowview'),
+		'description' => __('Should the Packets Panel be displayed by default.', 'flowview'),
+		'method' => 'checkbox',
+		'value' => '|arg1:panel_packets|',
+		'default' => ''
+	),
+	'panel_flows' => array(
+		'friendly_name' => __('Flows Panel', 'flowview'),
+		'description' => __('Should the Flows Panel be displayed by default.', 'flowview'),
+		'method' => 'checkbox',
+		'value' => '|arg1:panel_flows|',
+		'default' => ''
+	),
+	'spacer3' => array(
 		'method' => 'spacer',
 		'collapsible' => true,
 		'friendly_name' => __('Protocol Filters', 'flowview'),

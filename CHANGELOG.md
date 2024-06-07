@@ -1,6 +1,6 @@
 # Changelog
 
---- develop ---
+--- 3.4 ---
 
 * issue#66: Cacti flowview collector errors
 * issue#71: Flowview no data were displayed
@@ -15,10 +15,11 @@
 * issue#100: Change the name of config.php to something like config.php.template
 * issue#106: Properly detect the Cacti base on Ubuntu and Debian
 * issue#118: Protocol filter not working
+* issue#121: When you return to the FlowView tab, your navigation will be broken till the first click
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
 * issue: Sort field was being lost between selections
-* issue: Don't fail to find flowview_connect() if the plugin is disabled
+* issue: Dont fail to find flowview_connect() if the plugin is disabled
 * issue: Make Domains only Domains/Hostnames only to remove confusion
 * feature: Make it optional to query Arin to track Big Tech
 * feature: Allow Flowview to remember your last filter when re-entering the FlowView page
@@ -31,6 +32,9 @@
 * feature: Disable Charts when viewing printed reports
 * feature#97: Add FreeBSD service control
 * feature#117: Allow guest account access
+* feature#120: Save Charting Options when you Save a Filter
+* feature#122: Charts should have a Graph Title that Matches the Report Type
+* feature#123: Support Setting the Default Chart Height
 
 --- 3.3 ---
 

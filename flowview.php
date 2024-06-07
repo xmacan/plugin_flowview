@@ -203,6 +203,40 @@ function load_session_for_filter() {
 }
 
 function flowview_request_vars() {
+	/* restore the last session just in case */
+	if (!isset_request_var('query')) {
+		if (isset($_SESSION['sess_fview_query_last'])) {
+			set_request_var('query', $_SESSION['sess_fview_query_last']);
+		}
+	} else {
+		$_SESSION['sess_fview_query_last'] = get_filter_request_var('query');
+	}
+
+	/* initialize settings from the database if they are not set already */
+	if (isset_request_var('query') && !isset($_SESSION['sess_fv_' . get_filter_request_var('query')])) {
+		$listener = flowview_db_fetch_row_prepared('SELECT *
+			FROM plugin_flowview_queries
+			WHERE id = ?',
+			array(get_request_var('query')));
+
+		$columns = array('graph_type', 'graph_height', 'panel_table', 'panel_bytes', 'panel_packets', 'panel_flows');
+
+		if (cacti_sizeof($listener)) {
+			foreach($columns as $c) {
+				if (strpos($c, 'panel')) {
+					$rv  = str_replace('panel_', '', $c);
+					$rv .= 's';
+
+					if (!isset_request_var("{$rv}s")) {
+						set_request_var($c, $listener[$c] == 'on' ? 'true':'false');
+					}
+				} elseif (!isset_request_var($c)) {
+					set_request_var($c, $listener[$c]);
+				}
+			}
+		}
+	}
+
     /* ================= input validation and session storage ================= */
     $filters = array(
 		'sortfield' => array(
@@ -274,6 +308,10 @@ function flowview_request_vars() {
 			'filter' => FILTER_VALIDATE_REGEXP,
 			'options' => array('options' => array('regexp' => '(bar|pie|treemap)')),
 			'default' => 'bar'
+		),
+		'graph_height' => array(
+			'filter' => FILTER_VALIDATE_INT,
+			'default' => '400'
 		)
 	);
 

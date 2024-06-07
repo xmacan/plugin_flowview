@@ -186,7 +186,15 @@ function plugin_flowview_check_upgrade() {
 			)
 		);
 
-		flowview_setup_table();
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
+			flowview_db_execute("ALTER TABLE plugin_flowview_queries
+				ADD COLUMN graph_type varchar(10) NOT NULL default 'bar' AFTER resolve,
+				ADD COLUMN graph_height int unsigned NOT NULL default '400' AFTER graph_type,
+				ADD COLUMN panel_table char(2) NOT NULL default 'on' AFTER graph_height,
+				ADD COLUMN panel_bytes char(2) NOT NULL default 'on' AFTER panel_table,
+				ADD COLUMN panel_packets char(2) NOT NULL default 'on' AFTER panel_bytes,
+				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
+		}
 	}
 }
 
@@ -624,6 +632,12 @@ function flowview_setup_table() {
 		cutofflines varchar(8) NOT NULL,
 		cutoffoctets varchar(8) NOT NULL,
 		resolve varchar(2) NOT NULL,
+		graph_type varchar(10) NOT NULL default 'bar',
+		graph_height int unsigned NOT NULL default '400',
+		panel_table char(2) NOT NULL default 'on',
+		panel_bytes char(2) NOT NULL default 'on',
+		panel_packets char(2) NOT NULL default 'on',
+		panel_flows char(2) NOT NULL default 'on',
 		PRIMARY KEY (`id`))
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,

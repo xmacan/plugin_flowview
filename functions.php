@@ -292,6 +292,7 @@ function save_filter_form() {
 	get_filter_request_var('cutoffoctets');
 	get_filter_request_var('query');
 	get_filter_request_var('device_id');
+	get_filter_request_var('graph_height');
 	/* ==================================================== */
 
 	$report = get_nfilter_request_var('report');
@@ -315,7 +316,13 @@ function save_filter_form() {
 		printed = ?,
 		sortfield = ?,
 		cutofflines = ?,
-		cutoffoctets = ?
+		cutoffoctets = ?,
+		graph_type = ?,
+		graph_height = ?,
+		panel_table = ?,
+		panel_bytes = ?,
+		panel_packets = ?,
+		panel_flows = ?
 		WHERE id = ?',
 		array(
 			get_request_var('timespan'),
@@ -325,6 +332,12 @@ function save_filter_form() {
 			get_request_var('sortfield'),
 			get_request_var('cutofflines'),
 			get_request_var('cutoffoctets'),
+			get_request_var('graph_type'),
+			get_request_var('graph_height'),
+			get_request_var('table') == 'true' ? 'on':'',
+			get_request_var('bytes') == 'true' ? 'on':'',
+			get_request_var('packets') == 'true' ? 'on':'',
+			get_request_var('flows') == 'true' ? 'on':'',
 			get_request_var('query')
 		)
 	);
@@ -379,6 +392,13 @@ function save_filter() {
 	$save['cutofflines']     = get_nfilter_request_var('cutofflines');
 	$save['cutoffoctets']    = get_nfilter_request_var('cutoffoctets');
 	$save['resolve']         = get_nfilter_request_var('resolve');
+
+	$save['graph_type']      = get_nfilter_request_var('graph_type');
+	$save['graph_height']    = get_nfilter_request_var('graph_height');
+	$save['panel_table']     = isset_request_var('table') ? 'on':'';
+	$save['panel_bytes']     = isset_request_var('bytes') ? 'on':'';
+	$save['panel_packets']   = isset_request_var('packets') ? 'on':'';
+	$save['panel_flows']     = isset_request_var('flows') ? 'on':'';
 
 	$id = flowview_sql_save($save, 'plugin_flowview_queries', 'id', true);
 
@@ -726,6 +746,28 @@ function flowview_display_filter() {
 						</select>
 					</td>
 					<td>
+						<?php print __('Height', 'flowview');?>
+					</td>
+					<td>
+						<select id='graph_height'>
+							<?php
+							$heights = array(
+								300,
+								350,
+								400,
+								450,
+								500,
+								550,
+								600
+							);
+
+							foreach($heights as $h) {
+								print "<option value='$h'" . (get_request_var('graph_height') == $h ? ' selected':'') . '>' . __('%d Pixles', $h, 'flowview') . '</option>';
+							}
+							?>
+						</select>
+					</td>
+					<td>
 						<?php print __('Show/Hide', 'flowview');?>
 					</td>
 					<td class='nowrap'>
@@ -755,6 +797,16 @@ function flowview_display_filter() {
 	var date1Open = false;
 	var date2Open = false;
 	var graphType = '<?php print get_request_var('graph_type');?>';
+
+	var byteLabel      = '<?php print __('Bytes', 'flowview');?>';
+	var byteBarTitle   = '<?php print __('Top %s Distribution Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
+
+	var packetLabel    = '<?php print __('Packets', 'flowview');?>';
+	var packetBarTitle = '<?php print __('Top %s Distribution Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
+
+	var flowLabel      = '<?php print __('Flows', 'flowview');?>';
+	var flowBarTitle   = '<?php print __('Top %s Distribution Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
+
 	var pattern = [
 		'#1f77b4',
 		'#aec7e8',
@@ -817,7 +869,7 @@ function flowview_display_filter() {
 			changeQuery(true);
 		});
 
-		$('#domains, #exclude, #graph_type').off('change').on('change', function() {
+		$('#domains, #exclude, #graph_type, #graph_height').off('change').on('change', function() {
 			applyFilter(false);
 		});
 
@@ -993,25 +1045,26 @@ function flowview_display_filter() {
 		// Setup the charts
 		var charts = [ 'chartbytes', 'chartpackets', 'chartflows' ];
 		var width = $(window).width() - 50;
+
 		$.each(charts, function(key, value) {
 			switch(value) {
 				case 'chartbytes':
-					renderBarChart('bytes', 'chartbytes', '<?php print __('Bytes', 'flowview');?>', 400, width);
+					renderBarChart('bytes', 'chartbytes', byteBarTitle, byteLabel, $('#graph_height').val(), width);
 
 					break;
 				case 'chartflows':
-					renderBarChart('flows', 'chartflows', '<?php print __('Flows', 'flowview');?>', 400, width);
+					renderBarChart('flows', 'chartflows', flowBarTitle, flowLabel, $('#graph_height').val(), width);
 
 					break;
 				case 'chartpackets':
-					renderBarChart('packets', 'chartpackets', '<?php print __('Packets', 'flowview');?>', 400, width);
+					renderBarChart('packets', 'chartpackets', packetBarTitle, packetLabel, $('#graph_height').val(), width);
 
 					break;
 			}
 		});
 	});
 
-	function renderBarChart(type, bindto, label, height, width) {
+	function renderBarChart(type, bindto, title, label, height, width) {
 		$.getJSON('flowview.php?action=chartdata&type=' + type +
 			'&domains='      + $('#domains').is(':checked') +
 			'&query='        + $('#query').val()  +
@@ -1023,10 +1076,76 @@ function flowview_display_filter() {
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
 			'&exclude='      + $('#exclude').val() +
 			'&graph_type='   + $('#graph_type').val() +
+			'&graph_height=' + $('#graph_height').val() +
 			'&date1='        + $('#date1').val()   +
 			'&date2='        + $('#date2').val(), function(data) {
 
 			var chartPackets = bb.generate({
+				title: { text: title },
+				bindto: '#'+bindto,
+				size: {
+					height: height,
+					width: width
+				},
+				onresize: function() {
+					width = $(window).width() - 50;
+					this.resize({width:width});
+				},
+				data: {
+					type: graphType,
+					json: data,
+					mimeType: 'json',
+					keys: {
+						x: 'name',
+						value: ['value'],
+						index: ['index']
+					},
+					color: function(color, d) {
+						return pattern[d.index];
+					}
+				},
+				legend: { hide: true },
+				axis: {
+					x: {
+						type: 'category',
+						tick: {
+							rotate: 15,
+							multiline: false
+						},
+						height: 80
+					},
+					y: {
+						label: label,
+						position: 'outer-middle',
+						tick: {
+							format: function(d) { return numFormatter(d); }
+						}
+					}
+				}
+			});
+
+			Pace.stop();
+		});
+	}
+
+	function renderTreemapChart(type, bindto, label, height, width) {
+		$.getJSON('flowview.php?action=chartdata&type=' + type +
+			'&domains='      + $('#domains').is(':checked') +
+			'&query='        + $('#query').val()  +
+			'&report='       + $('#report').val() +
+			'&device_id='    + $('#device_id').val() +
+			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
+			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
+			'&cutofflines='  + $('#cutofflines').val()  +
+			'&cutoffoctets=' + $('#cutoffoctets').val() +
+			'&exclude='      + $('#exclude').val() +
+			'&graph_type='   + $('#graph_type').val() +
+			'&graph_height=' + $('#graph_height').val() +
+			'&date1='        + $('#date1').val()   +
+			'&date2='        + $('#date2').val(), function(data) {
+
+			var chartPackets = bb.generate({
+				title: { text: '<?php print __('Treemap Chart', 'flowview');?>' },
 				bindto: '#'+bindto,
 				size: {
 					height: height,
@@ -1115,8 +1234,13 @@ function flowview_display_filter() {
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
+			'&table='        + $('#table').is(':checked') +
+			'&bytes='        + $('#bytes').is(':checked') +
+			'&packets='      + $('#packets').is(':checked') +
+			'&flows='        + $('#flows').is(':checked') +
 			'&exclude='      + $('#exclude').val() +
-			'&graph_type='   + $('#graph_type').val(), function() {
+			'&graph_type='   + $('#graph_type').val() +
+			'&graph_height=' + $('#graph_height').val(), function() {
 			Pace.stop();
 		});
 	}
@@ -1196,6 +1320,7 @@ function flowview_display_filter() {
 			'&cutoffoctets='        + $('#cutoffoctets').val() +
 			'&exclude='             + $('#exclude').val() +
 			'&graph_type='          + $('#graph_type').val() +
+			'&graph_height='        + $('#graph_height').val() +
 			'&date1='               + $('#date1').val() +
 			'&date2='               + $('#date2').val() +
 			'&header=false'+extra);

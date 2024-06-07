@@ -126,11 +126,11 @@
 /*-- Axis --*/
 /*-- Grid --*/
 .bb-grid line {
-  stroke: #aaa;
+  stroke: #E0E0E0;
 }
 
 .bb-grid text {
-  fill: #aaa;
+  stroke: #E0E0E0;
 }
 
 .bb-xgrid, .bb-ygrid {
@@ -211,7 +211,8 @@
 
 /*-- Title --*/
 .bb-title {
-  font: 14px sans-serif;
+  font: 16px sans-serif;
+  fill: #E0E0E0;
 }
 
 /*-- Area --*/
