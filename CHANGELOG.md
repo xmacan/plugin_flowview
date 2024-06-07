@@ -19,6 +19,7 @@
 * issue: When changing the partition type, it does not take from the GUI right away
 * issue: Sort field was being lost between selections
 * issue: Don't fail to find flowview_connect() if the plugin is disabled
+* issue: Make Domains only Domains/Hostnames only to remove confusion
 * feature: Make it optional to query Arin to track Big Tech
 * feature: Allow Flowview to remember your last filter when re-entering the FlowView page
 * feature: Allow selection of the listener on the FlowView filter
@@ -26,6 +27,8 @@
 * feature: Store peers that connect to listeners for review and tagging
 * feature: Inform the user of how many listener streams are present and their status
 * feature: Track detected template definitions in the database and provide a way to view them
+* feature: Add color to Bar Charts
+* feature: Disable Charts when viewing printed reports
 * feature#97: Add FreeBSD service control
 
 --- 3.3 ---

@@ -217,6 +217,11 @@ function flowview_request_vars() {
 			'options' => array('options' => 'sanitize_search_string'),
 			'default' => 0
 		),
+		'graph_type' => array(
+			'filter' => FILTER_CALLBACK,
+			'options' => array('options' => 'sanitize_search_string'),
+			'default' => 'bar'
+		),
 		'cutofflines' => array(
 			'filter' => FILTER_VALIDATE_INT,
 			'default' => '20'

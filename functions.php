@@ -532,7 +532,7 @@ function flowview_display_filter($data) {
 					</td>
 					<td class='nowrap' title='<?php print __esc('Show only Domains on Charts Below');?>'>
 						<input type='checkbox' id='domains' <?php print (get_request_var('domains') == 'true' ? 'checked':'');?>>
-						<label for='domains'><?php print __('Domains Only', 'flowview');?></label>
+						<label for='domains'><?php print __('Domains/Hostnames Only', 'flowview');?></label>
 					</td>
 					<td>
 						<span>
@@ -716,11 +716,13 @@ function flowview_display_filter($data) {
 			<table class='filterTable'>
 				<tr>
 					<td>
-						<label for='flows'><?php print __('Graph type', 'flowview');?></label>
+						<?php print __('Graph', 'flowview');?>
+					</td>
+					<td>
 						<select name='graph_type' id='graph_type'>
 						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? 'selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
-						<?php print '<option value="pie"' . (get_request_var('graph_type') == 'pie' ? 'selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
-						<?php print '<option value="treemap"' . (get_request_var('graph_type') == 'treemap' ? 'selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
+						<?php print '<option disabled value="pie"' . (get_request_var('graph_type') == 'pie' ? 'selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
+						<?php print '<option disabled value="treemap"' . (get_request_var('graph_type') == 'treemap' ? 'selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
 						</select>
 					</td>
 					<td>
@@ -732,15 +734,15 @@ function flowview_display_filter($data) {
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='bytes' <?php print (get_request_var('bytes') == 'true' ? 'checked':'');?>>
-						<label for='bytes'><?php print __('Bytes graph', 'flowview');?></label>
+						<label for='bytes'><?php print __('Bytes', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='packets' <?php print (get_request_var('packets') == 'true' ? 'checked':'');?>>
-						<label for='packets'><?php print __('Packets graph', 'flowview');?></label>
+						<label for='packets'><?php print __('Packets', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
 						<input type='checkbox' id='flows' <?php print (get_request_var('flows') == 'true' ? 'checked':'');?>>
-						<label for='flows'><?php print __('Flows graph', 'flowview');?></label>
+						<label for='flows'><?php print __('Flows', 'flowview');?></label>
 					</td>
 				</tr>
 			</table>
@@ -753,6 +755,29 @@ function flowview_display_filter($data) {
 	var date1Open = false;
 	var date2Open = false;
 	var graph_type = '<?php print get_request_var('graph_type');?>';
+	var pattern = [
+		'#1f77b4',
+		'#aec7e8',
+		'#ff7f0e',
+		'#ffbb78',
+		'#2ca02c',
+		'#98df8a',
+		'#d62728',
+		'#ff9896',
+		'#9467bd',
+		'#c5b0d5',
+		'#8c564b',
+		'#c49c94',
+		'#e377c2',
+		'#f7b6d2',
+		'#7f7f7f',
+		'#c7c7c7',
+		'#bcbd22',
+		'#dbdb8d',
+		'#17becf',
+		'#9edae5'
+	];
+
 
 	if (height < 300 || height > 400) {
 		height = 400;
@@ -956,190 +981,98 @@ function flowview_display_filter($data) {
 			initTimespan();
 		}
 
+		if ($('#report').val().indexOf('p') >= 0) {
+			$('#bytes').prop('disabled', true);
+			$('#flows').prop('disabled', true);
+			$('#packets').prop('disabled', true);
+		} else {
+			$('#bytes').prop('disabled', false);
+			$('#flows').prop('disabled', false);
+			$('#packets').prop('disabled', false);
+		}
+
 		// Setup the charts
 		var charts = [ 'chartbytes', 'chartpackets', 'chartflows' ];
 		var width = $(window).width() - 50;
-		var pattern = [ '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5' ];
-
 		$.each(charts, function(key, value) {
 			switch(value) {
 				case 'chartbytes':
-					$.getJSON('flowview.php?action=chartdata&type=bytes' +
-						'&domains='      + $('#domains').is(':checked') +
-						'&query='        + $('#query').val()  +
-						'&report='       + $('#report').val() +
-						'&device_id='    + $('#device_id').val() +
-						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
-						'&cutofflines='  + $('#cutofflines').val() +
-						'&cutoffoctets=' + $('#cutoffoctets').val() +
-						'&exclude='      + $('#exclude').val() +
-						'&graph_type='   + $('#graph_type').val() +
-						'&date1='        + $('#date1').val()  +
-						'&date2='        + $('#date2').val(), function(data) {
-
-						var chartBytes = bb.generate({
-							bindto: '#chartbytes',
-							size: {
-								height: 400,
-								width: width
-							},
-							color: pattern,
-							onresize: function() {
-								width = $(window).width() - 50;
-								chartBytes.resize({width:width});
-							},
-							data: {
-								type: graph_type,
-								json: data,
-								mimeType: 'json',
-								keys: {
-									x: 'name',
-									value: ['value']
-								}
-							},
-							axis: {
-								x: {
-									type: 'category',
-									tick: {
-										rotate: 15,
-										multiline: false
-									},
-									height: 80
-								},
-								y: {
-									label: '<?php print __esc('Bytes', 'flowview');?>',
-									position: 'outer-middle',
-									tick: {
-										format: function(d) { return numFormatter(d); }
-									}
-								}
-							}
-						});
-
-						Pace.stop();
-					});
+					renderBarChart('bytes', 'chartbytes', '<?php print __('Bytes', 'flowview');?>', 400, width);
 
 					break;
 				case 'chartflows':
-					$.getJSON('flowview.php?action=chartdata&type=flows' +
-						'&domains='      + $('#domains').is(':checked') +
-						'&query='        + $('#query').val()  +
-						'&report='       + $('#report').val() +
-						'&device_id='    + $('#device_id').val() +
-						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
-						'&cutofflines='  + $('#cutofflines').val()  +
-						'&cutoffoctets=' + $('#cutoffoctets').val() +
-						'&exclude='      + $('#exclude').val() +
-						'&graph_type='   + $('#graph_type').val() +
-						'&date1='        + $('#date1').val()   +
-						'&date2='        + $('#date2').val(), function(data) {
-
-						var chartFlows = bb.generate({
-							bindto: '#chartflows',
-							size: {
-								height: 400,
-								width: width
-							},
-							color: pattern,
-							onresize: function() {
-								width = $(window).width() - 50;
-								chartFlows.resize({width:width});
-							},
-							data: {
-								json: data,
-								mimeType: 'json',
-								type: graph_type,
-								keys: {
-									x: 'name',
-									value: ['value']
-								}
-							},
-							axis: {
-								x: {
-									type: 'category',
-									tick: {
-										rotate: 15,
-										multiline: false
-									},
-									height: 80
-								},
-								y: {
-									label: '<?php print __esc('Flows', 'flowview');?>',
-									position: 'outer-middle',
-									tick: {
-										format: function(d) { return numFormatter(d); }
-									}
-								}
-							}
-						});
-
-						Pace.stop();
-					});
+					renderBarChart('flows', 'chartflows', '<?php print __('Flows', 'flowview');?>', 400, width);
 
 					break;
 				case 'chartpackets':
-					$.getJSON('flowview.php?action=chartdata&type=packets' +
-						'&domains='      + $('#domains').is(':checked') +
-						'&query='        + $('#query').val()  +
-						'&report='       + $('#report').val() +
-						'&device_id='    + $('#device_id').val() +
-						'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-						'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
-						'&cutofflines='  + $('#cutofflines').val()  +
-						'&cutoffoctets=' + $('#cutoffoctets').val() +
-						'&exclude='      + $('#exclude').val() +
-						'&graph_type='   + $('#graph_type').val() +
-						'&date1='        + $('#date1').val()   +
-						'&date2='        + $('#date2').val(), function(data) {
-
-						var chartPackets = bb.generate({
-							bindto: '#chartpackets',
-							size: {
-								height: 400,
-								width: width
-							},
-							color: pattern,
-							onresize: function() {
-								width = $(window).width() - 50;
-								chartPackets.resize({width:width});
-							},
-							data: {
-								json: data,
-								mimeType: 'json',
-								type: graph_type,
-								keys: {
-									x: 'name',
-									value: ['value']
-								}
-							},
-							axis: {
-								x: {
-									type: 'category',
-									tick: {
-										rotate: 15,
-										multiline: false
-									},
-									height: 80
-								},
-								y: {
-									label: '<?php print __esc('Packets', 'flowview');?>',
-									position: 'outer-middle',
-									tick: {
-										format: function(d) { return numFormatter(d); }
-									}
-								}
-							}
-						});
-
-						Pace.stop();
-					});
+					renderBarChart('packets', 'chartpackets', '<?php print __('Packets', 'flowview');?>', 400, width);
 
 					break;
 			}
 		});
 	});
+
+	function renderBarChart(type, bindto, label, height, width) {
+		$.getJSON('flowview.php?action=chartdata&type=' + type +
+			'&domains='      + $('#domains').is(':checked') +
+			'&query='        + $('#query').val()  +
+			'&report='       + $('#report').val() +
+			'&device_id='    + $('#device_id').val() +
+			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
+			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
+			'&cutofflines='  + $('#cutofflines').val()  +
+			'&cutoffoctets=' + $('#cutoffoctets').val() +
+			'&exclude='      + $('#exclude').val() +
+			'&graph_type='   + $('#graph_type').val() +
+			'&date1='        + $('#date1').val()   +
+			'&date2='        + $('#date2').val(), function(data) {
+
+			var chartPackets = bb.generate({
+				bindto: '#'+bindto,
+				size: {
+					height: height,
+					width: width
+				},
+				onresize: function() {
+					width = $(window).width() - 50;
+					this.resize({width:width});
+				},
+				data: {
+					type: graph_type,
+					json: data,
+					mimeType: 'json',
+					keys: {
+						x: 'name',
+						value: ['value'],
+						index: ['index']
+					},
+					color: function(color, d) {
+						return pattern[d.index];
+					}
+				},
+				legend: { hide: true },
+				axis: {
+					x: {
+						type: 'category',
+						tick: {
+							rotate: 15,
+							multiline: false
+						},
+						height: 80
+					},
+					y: {
+						label: label,
+						position: 'outer-middle',
+						tick: {
+							format: function(d) { return numFormatter(d); }
+						}
+					}
+				}
+			});
+
+			Pace.stop();
+		});
+	}
 
 	function numFormatter(num) {
 		suffix = '';
@@ -1183,7 +1116,7 @@ function flowview_display_filter($data) {
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
-			'&exclude='      + $('#exclude').val(), + 
+			'&exclude='      + $('#exclude').val(), +
 			'&graph_type='   + $('#graph_type').val(), function() {
 			Pace.stop();
 		});
@@ -1245,6 +1178,12 @@ function flowview_display_filter($data) {
 			var device_id = $('#device_id').val();
 		}
 
+		if (report.indexOf('p') >= 0) {
+			var extra='&table=true&bytes=false&packets=false&flows=false';
+		} else {
+			var extra='';
+		}
+
 		loadPageNoHeader(urlPath+'plugins/flowview/flowview.php' +
 			'?action=view'          +
 			'&domains='             + $('#domains').is(':checked') +
@@ -1260,7 +1199,7 @@ function flowview_display_filter($data) {
 			'&graph_type='          + $('#graph_type').val() +
 			'&date1='               + $('#date1').val() +
 			'&date2='               + $('#date2').val() +
-			'&header=false');
+			'&header=false'+extra);
 	}
 
 	function clearFilter() {
@@ -1663,37 +1602,65 @@ function flowview_get_chartdata() {
 			$columns  = array_keys($output['data'][0]);
 			$category = get_category_columns($report, $domains);
 
-			foreach($output['data'] as $row) {
-
+			foreach($output['data'] as $index => $row) {
 				$catstring = '';
-				foreach($category as $c) {
 
-					if ($domains != 'false' && strpos($c, 'domain')) {
+				foreach($category as $c) {
+					if ($domains != 'false' && strpos($c, 'domain') && ($report < 8 || $report > 11)) {
 						$p = array();
 
 						if (isset($row[$c])) {
-							$p = explode('.', $row[$c]);
+							if ($row[$c] != '') {
+								$p = explode('.', $row[$c]);
+							} else {
+								$p[] = __('unresolved', 'flowview');
+							}
 						} elseif (($c == 'src_domain' || $c == 'dst_domain') && isset($row['domain'])) {
-							$p = explode('.', $row['domain']);
+							if ($row['domain'] != '') {
+								$p = explode('.', $row['domain']);
+							} else {
+								$p[] = __('unresolved', 'flowview');
+							}
 						} elseif (($c == 'src_domain' || $c == 'dst_domain') && isset($row['rdomain'])) {
-							$p = explode('.', $row['rdomain']);
+							if ($row['rdomain'] != '') {
+								$p = explode('.', $row['rdomain']);
+							} else {
+								$p[] = __('unresolved', 'flowview');
+							}
+						} else {
+#							$p[] = __('unresolved', 'flowview');
 						}
 
 						if (cacti_sizeof($p)) {
 							$p = array_reverse($p);
-							$string = (isset($p[1]) ? $p[1]:'') . '.' . $p[0];
+
+							if (isset($p[1])) {
+								$string = (isset($p[1]) ? $p[1]:'') . '.' . $p[0];
+							} else {
+								$string = $p[0];
+							}
+
 							$catstring .= ($catstring != '' ? ' / ':'') . $string;
 						} else {
-							cacti_log('ERROR: Unable to process domain information.  Please open a ticket on GitHub', false, 'FLOWVIEW');
+							cacti_log("ERROR: Unable to process domain column:$c information for report:$report, type:$type.  Please open a ticket on GitHub", false, 'FLOWVIEW');
 						}
 					} else {
-						$catstring .= ($catstring != '' ? ' / ':'') . $row[$c];
+						if (isset($row[$c])) {
+							$catstring .= ($catstring != '' ? ' / ':'') . $row[$c];
+						} else {
+							cacti_log("ERROR: Unable to process column:$c information for report:$report, type:$type.  Please open a ticket on GitHub", false, 'FLOWVIEW');
+						}
 					}
+				}
+
+				if ($catstring == '') {
+					$catstring = __('unresolved', 'flowview');
 				}
 
 				$chartData[] = array(
 					'name'  => $catstring,
-					'value' => $row[$type]
+					'value' => $row[$type],
+					'index' => $index
 				);
 			}
 
@@ -2074,8 +2041,8 @@ function run_flow_query($session, $query_id, $start, $end) {
 					$sql_order         = 'ORDER BY ' . ($data['sortfield'] + 2) . ($data['sortfield'] > 1 ? ' DESC':' ASC');
 					break;
 				case 8:
-					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain';
-					$sql_inner = 'SELECT dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain';
+					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain';
+					$sql_inner = 'SELECT dst_addr, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, dst_domain, src_domain';
 
 					$sql_groupby       = 'GROUP BY INET6_NTOA(dst_addr)';
 					$sql_inner_groupby = 'GROUP BY dst_addr';
@@ -2648,7 +2615,7 @@ function display_domain($domain) {
 	if ($domain != '') {
 		return $domain;
 	} else {
-		return __('-- unresolved --', 'flowview');
+		return __('unresolved', 'flowview');
 	}
 }
 
