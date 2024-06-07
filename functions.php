@@ -468,7 +468,7 @@ function flowview_show_summary(&$data) {
 
 
 function flowview_display_filter() {
-	global $config, $graph_timeshifts, $graph_timespans;
+	global $config, $graph_timeshifts, $graph_timespans, $graph_heights;
 
 	flowview_connect();
 
@@ -491,7 +491,7 @@ function flowview_display_filter() {
 		}
 	}
 
-	html_start_box($title, '100%', '', '3', 'center', '');
+	html_start_box($title . '&nbsp;<font id="text"></font>', '100%', '', '3', 'center', '');
 
 	?>
 	<tr class='even'>
@@ -742,7 +742,7 @@ function flowview_display_filter() {
 						<select id='graph_type'>
 						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? ' selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
 						<?php print '<option disabled value="pie"' . (get_request_var('graph_type') == 'pie' ? ' selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
-						<?php print '<option disabled value="treemap"' . (get_request_var('graph_type') == 'treemap' ? ' selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
+						<?php print '<option value="treemap"' . (get_request_var('graph_type') == 'treemap' ? ' selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
 						</select>
 					</td>
 					<td>
@@ -751,18 +751,8 @@ function flowview_display_filter() {
 					<td>
 						<select id='graph_height'>
 							<?php
-							$heights = array(
-								300,
-								350,
-								400,
-								450,
-								500,
-								550,
-								600
-							);
-
-							foreach($heights as $h) {
-								print "<option value='$h'" . (get_request_var('graph_height') == $h ? ' selected':'') . '>' . __('%d Pixles', $h, 'flowview') . '</option>';
+							foreach($graph_heights as $h => $name) {
+								print "<option value='$h'" . (get_request_var('graph_height') == $h ? ' selected':'') . '>' . html_escape($name) . '</option>';
 							}
 							?>
 						</select>
@@ -800,12 +790,15 @@ function flowview_display_filter() {
 
 	var byteLabel      = '<?php print __('Bytes', 'flowview');?>';
 	var byteBarTitle   = '<?php print __('Top %s Distribution Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
+	var byteTreeTitle   = '<?php print __('Top %s Treemap Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
 
 	var packetLabel    = '<?php print __('Packets', 'flowview');?>';
 	var packetBarTitle = '<?php print __('Top %s Distribution Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
+	var packetTreeTitle = '<?php print __('Top %s Treemap Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
 
 	var flowLabel      = '<?php print __('Flows', 'flowview');?>';
 	var flowBarTitle   = '<?php print __('Top %s Distribution Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
+	var flowTreeTitle   = '<?php print __('Top %s Treemap Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
 
 	var pattern = [
 		'#1f77b4',
@@ -1049,15 +1042,30 @@ function flowview_display_filter() {
 		$.each(charts, function(key, value) {
 			switch(value) {
 				case 'chartbytes':
-					renderBarChart('bytes', 'chartbytes', byteBarTitle, byteLabel, $('#graph_height').val(), width);
+					if ($('#graph_type').val() == 'bar') {
+						renderBarChart('bytes', 'chartbytes', byteBarTitle, byteLabel, $('#graph_height').val(), width);
+					} else if ($('#graph_type').val() == 'pie') {
+					} else {
+						renderTreemapChart('bytes', 'chartbytes', byteTreeTitle, byteLabel, $('#graph_height').val(), width);
+					}
 
 					break;
 				case 'chartflows':
-					renderBarChart('flows', 'chartflows', flowBarTitle, flowLabel, $('#graph_height').val(), width);
+					if ($('#graph_type').val() == 'bar') {
+						renderBarChart('flows', 'chartflows', flowBarTitle, flowLabel, $('#graph_height').val(), width);
+					} else if ($('#graph_type').val() == 'pie') {
+					} else {
+						renderTreemapChart('flows', 'chartflows', flowTreeTitle, flowLabel, $('#graph_height').val(), width);
+					}
 
 					break;
 				case 'chartpackets':
-					renderBarChart('packets', 'chartpackets', packetBarTitle, packetLabel, $('#graph_height').val(), width);
+					if ($('#graph_type').val() == 'bar') {
+						renderBarChart('packets', 'chartpackets', packetBarTitle, packetLabel, $('#graph_height').val(), width);
+					} else if ($('#graph_type').val() == 'pie') {
+					} else {
+						renderTreemapChart('packets', 'chartpackets', packetTreeTitle, packetLabel, $('#graph_height').val(), width);
+					}
 
 					break;
 			}
@@ -1080,7 +1088,7 @@ function flowview_display_filter() {
 			'&date1='        + $('#date1').val()   +
 			'&date2='        + $('#date2').val(), function(data) {
 
-			var chartPackets = bb.generate({
+			var chartBar = bb.generate({
 				title: { text: title },
 				bindto: '#'+bindto,
 				size: {
@@ -1092,7 +1100,7 @@ function flowview_display_filter() {
 					this.resize({width:width});
 				},
 				data: {
-					type: graphType,
+					type: 'bar',
 					json: data,
 					mimeType: 'json',
 					keys: {
@@ -1128,7 +1136,7 @@ function flowview_display_filter() {
 		});
 	}
 
-	function renderTreemapChart(type, bindto, label, height, width) {
+	function renderTreemapChart(type, bindto, title, label, height, width) {
 		$.getJSON('flowview.php?action=chartdata&type=' + type +
 			'&domains='      + $('#domains').is(':checked') +
 			'&query='        + $('#query').val()  +
@@ -1144,9 +1152,21 @@ function flowview_display_filter() {
 			'&date1='        + $('#date1').val()   +
 			'&date2='        + $('#date2').val(), function(data) {
 
-			var chartPackets = bb.generate({
-				title: { text: '<?php print __('Treemap Chart', 'flowview');?>' },
+			var columns = [];
+
+			$.each(data, function(index, value) {
+				columns[index] = [value.name, value.value];
+			});
+
+			var chartTreemap = bb.generate({
+				title: { text: title },
 				bindto: '#'+bindto,
+				padding: {
+					top: 40,
+					right: 100,
+					bottom: 40,
+					left: 100
+				},
 				size: {
 					height: height,
 					width: width
@@ -1155,37 +1175,26 @@ function flowview_display_filter() {
 					width = $(window).width() - 50;
 					this.resize({width:width});
 				},
-				data: {
-					type: graphType,
-					json: data,
-					mimeType: 'json',
-					keys: {
-						x: 'name',
-						value: ['value'],
-						index: ['index']
-					},
-					color: function(color, d) {
-						return pattern[d.index];
-					}
-				},
-				legend: { hide: true },
-				axis: {
-					x: {
-						type: 'category',
-						tick: {
-							rotate: 15,
-							multiline: false
-						},
-						height: 80
-					},
-					y: {
-						label: label,
-						position: 'outer-middle',
-						tick: {
-							format: function(d) { return numFormatter(d); }
+				treemap: {
+					tile: 'binary',
+					label: {
+						threshold: 0.03,
+						format: function(value, ratio, id) {
+							var ratio = ratio * 100;
+							var dvalue = value;
+							var dratio = ratio.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' %';
+
+							return id + "\n" + numFormatter(dvalue).toLocaleString(undefined) + ' ' + label + "\n" + dratio;
 						}
 					}
-				}
+				},
+				data: {
+					type: 'treemap',
+					columns: columns,
+					labels: {
+						colors: '#fff'
+					}
+				},
 			});
 
 			Pace.stop();
@@ -1242,6 +1251,7 @@ function flowview_display_filter() {
 			'&graph_type='   + $('#graph_type').val() +
 			'&graph_height=' + $('#graph_height').val(), function() {
 			Pace.stop();
+			$('#text').show().text('[ <?php print __('Filter Settings Saved', 'flowview');?> ]').fadeOut(2000);
 		});
 	}
 

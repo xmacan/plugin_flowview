@@ -369,7 +369,9 @@ $graph_heights = array(
 	450 => __('%d Pixels', 450),
 	500 => __('%d Pixels', 500),
 	550 => __('%d Pixels', 550),
-	600 => __('%d Pixels', 600)
+	600 => __('%d Pixels', 600),
+	650 => __('%d Pixels', 650),
+	700 => __('%d Pixels', 700)
 );
 
 $devices = array_rekey(

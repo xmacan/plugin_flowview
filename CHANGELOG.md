@@ -30,11 +30,13 @@
 * feature: Track detected template definitions in the database and provide a way to view them
 * feature: Add color to Bar Charts
 * feature: Disable Charts when viewing printed reports
+* feature: Show visual indicator that the filter has been saved
 * feature#97: Add FreeBSD service control
 * feature#117: Allow guest account access
 * feature#120: Save Charting Options when you Save a Filter
 * feature#122: Charts should have a Graph Title that Matches the Report Type
 * feature#123: Support Setting the Default Chart Height
+* feature#124: Support Treemap Charts instead of Bar
 
 --- 3.3 ---
 
