@@ -76,6 +76,7 @@ $cutoff_lines = array(
 	'999999' => __('Return All Lines', 'flowview'),
 	'5'      => __('Top %d', 5, 'flowview'),
 	'10'     => __('Top %d', 10, 'flowview'),
+	'15'     => __('Top %d', 15, 'flowview'),
 	'20'     => __('Top %d', 20, 'flowview'),
 	'30'     => __('Top %d', 30, 'flowview'),
 	'40'     => __('Top %d', 40, 'flowview'),
