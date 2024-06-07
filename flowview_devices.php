@@ -239,7 +239,7 @@ function edit_devices() {
 		form_save_button('flowview_devices.php');
 
 		if (cacti_sizeof($device)) {
-			$streams = db_fetch_assoc_prepared('SELECT ds.*, COUNT(*) AS templates
+			$streams = flowview_db_fetch_assoc_prepared('SELECT ds.*, COUNT(*) AS templates
 				FROM plugin_flowview_device_streams AS ds
 				LEFT JOIN plugin_flowview_device_templates AS dt
 				USING (device_id, ext_addr)
@@ -297,7 +297,7 @@ function edit_devices() {
 			html_end_box(false);
 		}
 	} else {
-		$templates = db_fetch_assoc_prepared('SELECT *
+		$templates = flowview_db_fetch_assoc_prepared('SELECT *
 			FROM plugin_flowview_device_templates AS dt
 			WHERE dt.device_id = ?',
 			array($device['id']));

@@ -3437,7 +3437,8 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		if ($dns_name != $ip) {
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 				(ip, host, time)
-				VALUES (?, ?, ?)',
+				VALUES (?, ?, ?)
+				ON DUPLICATE KEY UPDATE time=VALUES(time)',
 				array($ip, $dns_name, $time));
 
 			return $dns_name . $suffix;
@@ -3451,7 +3452,8 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			if ($dns_name != $ip) {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, time)
-					VALUES (?, ?, ?)',
+					VALUES (?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time)',
 					array($ip, $dns_name, $time));
 
 				return $dns_name . $suffix;
@@ -3463,7 +3465,8 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	/* error - return the hostname */
 	flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 		(ip, host, time)
-		VALUES (?, ?, ?)',
+		VALUES (?, ?, ?)
+		ON DUPLICATE KEY UPDATE time=VALUES(time)',
 		array($ip, $ip, $time));
 
 	return $ip . $suffix;
