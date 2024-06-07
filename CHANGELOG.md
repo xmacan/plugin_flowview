@@ -30,6 +30,7 @@
 * feature: Add color to Bar Charts
 * feature: Disable Charts when viewing printed reports
 * feature#97: Add FreeBSD service control
+* feature#117: Allow guest account access
 
 --- 3.3 ---
 

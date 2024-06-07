@@ -22,6 +22,8 @@
  +-------------------------------------------------------------------------+
 */
 
+$guest_account = true;
+
 chdir('../../');
 include('./include/auth.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
