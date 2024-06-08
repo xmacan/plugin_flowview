@@ -277,6 +277,8 @@ function edit_filter() {
 		changeRType();
 
 		applyTimespan();
+
+		$('.tablesorter-resizable-container').hide();
 	});
 	</script>
 	<?php
@@ -973,6 +975,8 @@ function flowview_display_filter() {
 			cssIconNone: 'fa-sort',
 			cssIcon: 'fa'
 		});
+
+		$('.tablesorter-resizable-container').hide();
 
 		$('#startDate').click(function() {
 			if (date1Open) {
