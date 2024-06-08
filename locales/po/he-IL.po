@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2023-12-06 22:14-0600\n"
+"POT-Creation-Date: 2024-06-07 22:00-0400\n"
 "PO-Revision-Date: 2020-12-12 20:24-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: arrays.php:26 arrays.php:60 functions.php:469
+#: arrays.php:26 arrays.php:60 functions.php:578
 #, fuzzy
 msgid "Select a Report"
 msgstr "הדפס דוחות"
@@ -56,13 +56,13 @@ msgstr "UDP / יציאת מקור TCP"
 msgid "UDP/TCP Port"
 msgstr "UDP / יציאת TCP"
 
-#: arrays.php:37 arrays.php:213 arrays.php:219 arrays.php:308 arrays.php:324
-#: arrays.php:336 arrays.php:495 functions.php:2231
+#: arrays.php:37 arrays.php:215 arrays.php:221 arrays.php:310 arrays.php:326
+#: arrays.php:338 arrays.php:571 functions.php:2559
 #, fuzzy
 msgid "Source IP"
 msgstr "מקור IP"
 
-#: arrays.php:38 arrays.php:207 arrays.php:310 arrays.php:325 arrays.php:339
+#: arrays.php:38 arrays.php:209 arrays.php:312 arrays.php:327 arrays.php:341
 #, fuzzy
 msgid "Destination IP"
 msgstr "כתובת IP יעד"
@@ -97,13 +97,13 @@ msgstr "ממשק פלט"
 msgid "Input/Output Interface"
 msgstr "ממשק קלט / פלט"
 
-#: arrays.php:48 arrays.php:250 arrays.php:262 arrays.php:327 arrays.php:519
-#: functions.php:2255
+#: arrays.php:48 arrays.php:252 arrays.php:264 arrays.php:329 arrays.php:595
+#: functions.php:2583
 #, fuzzy
 msgid "Source AS"
 msgstr "מקור"
 
-#: arrays.php:49 arrays.php:256 arrays.php:263 arrays.php:328
+#: arrays.php:49 arrays.php:258 arrays.php:265 arrays.php:330
 #, fuzzy
 msgid "Destination AS"
 msgstr "יעד AS"
@@ -118,12 +118,12 @@ msgstr "מקור / יעד AS"
 msgid "IP ToS"
 msgstr "IP"
 
-#: arrays.php:54 arrays.php:282 arrays.php:294 functions.php:2263
+#: arrays.php:54 arrays.php:284 arrays.php:296 functions.php:2591
 #, fuzzy
 msgid "Source Prefix"
 msgstr "קידומת מקור"
 
-#: arrays.php:55 arrays.php:288
+#: arrays.php:55 arrays.php:290
 #, fuzzy
 msgid "Destination Prefix"
 msgstr "קידומת יעד"
@@ -140,1314 +140,1531 @@ msgstr "תזרים זרימה"
 
 #: arrays.php:62
 #, fuzzy
+msgid "Source/Destination IPs and Ports"
+msgstr "כתובת IP של מקור / יעד"
+
+#: arrays.php:63
+#, fuzzy
 msgid "AS Numbers"
 msgstr "AS מספרים"
 
-#: arrays.php:63
+#: arrays.php:64
 #, fuzzy
 msgid "132 Columns"
 msgstr "132 עמודות"
 
-#: arrays.php:64
+#: arrays.php:65
 #, fuzzy
 msgid "Show IP Accounting Emulation"
 msgstr "הצג הדמיית חשבונאות IP"
 
-#: arrays.php:68
+#: arrays.php:69
 #, fuzzy
 msgid "Any Part in Range"
 msgstr "כל חלק בטווח"
 
-#: arrays.php:69
+#: arrays.php:70
 #, fuzzy
 msgid "End Time in Range"
 msgstr "שעת סיום"
 
-#: arrays.php:70
+#: arrays.php:71
 #, fuzzy
 msgid "Start Time in Range"
 msgstr "שעת התחלה"
 
-#: arrays.php:71
+#: arrays.php:72
 #, fuzzy
 msgid "Entirely in Range"
 msgstr "לגמרי בטווח"
 
-#: arrays.php:75
+#: arrays.php:76
 #, fuzzy
 msgid "Return All Lines"
 msgstr "החזר את כל השורות"
 
-#: arrays.php:76 arrays.php:77 arrays.php:78 arrays.php:79 arrays.php:80
-#: arrays.php:81 arrays.php:82 arrays.php:83
+#: arrays.php:77 arrays.php:78 arrays.php:79 arrays.php:80 arrays.php:81
+#: arrays.php:82 arrays.php:83 arrays.php:84 arrays.php:85
 #, fuzzy, php-format
 msgid "Top %d"
 msgstr "למעלה% d"
 
-#: arrays.php:87
+#: arrays.php:89
 msgid "No Limit"
 msgstr "אין הגבלה"
 
-#: arrays.php:88 arrays.php:89 arrays.php:90 arrays.php:91 arrays.php:92
-#: arrays.php:93 arrays.php:94 arrays.php:95 arrays.php:96 arrays.php:97
-#: arrays.php:98 arrays.php:99 arrays.php:100
+#: arrays.php:90 arrays.php:91 arrays.php:92 arrays.php:93 arrays.php:94
+#: arrays.php:95 arrays.php:96 arrays.php:97 arrays.php:98 arrays.php:99
+#: arrays.php:100 arrays.php:101 arrays.php:102
 #, fuzzy, php-format
 msgid "%s Bytes"
 msgstr "%s בתים"
 
-#: arrays.php:104 arrays.php:383 flowview_filters.php:366
+#: arrays.php:106 arrays.php:406 flowview_devices.php:319
+#: flowview_filters.php:372
 msgid "All"
 msgstr "הכל"
 
-#: arrays.php:170 arrays.php:182
+#: arrays.php:172 arrays.php:184
 msgid "Source Domain"
 msgstr "מקור דומיין"
-
-#: arrays.php:171 arrays.php:177 arrays.php:184 arrays.php:190 arrays.php:196
-#: arrays.php:202 arrays.php:208 arrays.php:214 arrays.php:221 arrays.php:227
-#: arrays.php:233 arrays.php:239 arrays.php:245 arrays.php:251 arrays.php:257
-#: arrays.php:264 arrays.php:270 arrays.php:277 arrays.php:283 arrays.php:289
-#: arrays.php:296 functions.php:961 functions.php:2283 functions.php:2520
-#, fuzzy
-msgid "Flows"
-msgstr "זורם"
-
-#: arrays.php:172 arrays.php:178 arrays.php:185 arrays.php:191 arrays.php:197
-#: arrays.php:203 arrays.php:209 arrays.php:215 arrays.php:222 arrays.php:228
-#: arrays.php:234 arrays.php:240 arrays.php:246 arrays.php:252 arrays.php:258
-#: arrays.php:265 arrays.php:271 arrays.php:278 arrays.php:284 arrays.php:290
-#: arrays.php:297 arrays.php:315 arrays.php:329 arrays.php:344 arrays.php:350
-#: functions.php:905 functions.php:2287 functions.php:2518
-msgid "Bytes"
-msgstr "בייטים"
 
 #: arrays.php:173 arrays.php:179 arrays.php:186 arrays.php:192 arrays.php:198
 #: arrays.php:204 arrays.php:210 arrays.php:216 arrays.php:223 arrays.php:229
 #: arrays.php:235 arrays.php:241 arrays.php:247 arrays.php:253 arrays.php:259
 #: arrays.php:266 arrays.php:272 arrays.php:279 arrays.php:285 arrays.php:291
-#: arrays.php:298 arrays.php:314 arrays.php:330 arrays.php:343 arrays.php:349
-#: functions.php:1017 functions.php:2291 functions.php:2519
+#: arrays.php:298 arrays.php:359 functions.php:777 functions.php:801
+#: functions.php:2611 functions.php:2848
+#, fuzzy
+msgid "Flows"
+msgstr "זורם"
+
+#: arrays.php:174 arrays.php:180 arrays.php:187 arrays.php:193 arrays.php:199
+#: arrays.php:205 arrays.php:211 arrays.php:217 arrays.php:224 arrays.php:230
+#: arrays.php:236 arrays.php:242 arrays.php:248 arrays.php:254 arrays.php:260
+#: arrays.php:267 arrays.php:273 arrays.php:280 arrays.php:286 arrays.php:292
+#: arrays.php:299 arrays.php:317 arrays.php:331 arrays.php:346 arrays.php:352
+#: arrays.php:361 functions.php:769 functions.php:791 functions.php:2615
+#: functions.php:2846
+msgid "Bytes"
+msgstr "בייטים"
+
+#: arrays.php:175 arrays.php:181 arrays.php:188 arrays.php:194 arrays.php:200
+#: arrays.php:206 arrays.php:212 arrays.php:218 arrays.php:225 arrays.php:231
+#: arrays.php:237 arrays.php:243 arrays.php:249 arrays.php:255 arrays.php:261
+#: arrays.php:268 arrays.php:274 arrays.php:281 arrays.php:287 arrays.php:293
+#: arrays.php:300 arrays.php:316 arrays.php:332 arrays.php:345 arrays.php:351
+#: arrays.php:360 functions.php:773 functions.php:796 functions.php:2619
+#: functions.php:2847
 #, fuzzy
 msgid "Packets"
 msgstr "מנות"
 
-#: arrays.php:176 arrays.php:183
+#: arrays.php:178 arrays.php:185
 #, fuzzy
 msgid "Destination Domain"
 msgstr "כתובת IP יעד"
 
-#: arrays.php:189 arrays.php:195 arrays.php:201 flowview_devices.php:61
-#: flowview_devices.php:340
+#: arrays.php:191 arrays.php:197 arrays.php:203 flowview_devices.php:62
+#: flowview_devices.php:579
 msgid "Port"
 msgstr "פורט"
 
-#: arrays.php:220 arrays.php:527 functions.php:2235
+#: arrays.php:222 arrays.php:603 functions.php:2563
 #, fuzzy
 msgid "Dest IP"
 msgstr "כתובת IP של Dest"
 
-#: arrays.php:226 functions.php:2227
+#: arrays.php:228 functions.php:2555
 msgid "IP Address"
 msgstr "כתובת IP"
 
-#: arrays.php:232 arrays.php:311 arrays.php:326 arrays.php:341
-#: functions.php:2271
+#: arrays.php:234 arrays.php:313 arrays.php:328 arrays.php:343
+#: functions.php:2599
 msgid "Protocol"
 msgstr "פרוטוקול"
 
-#: arrays.php:238 arrays.php:275
+#: arrays.php:240 arrays.php:277
 #, fuzzy
 msgid "Input IF"
 msgstr "קלט אם"
 
-#: arrays.php:244 arrays.php:276
+#: arrays.php:246 arrays.php:278
 #, fuzzy
 msgid "Output IF"
 msgstr "תבנית פלט"
 
-#: arrays.php:269
+#: arrays.php:271
 msgid "TOS"
 msgstr "תנאי שירות"
 
-#: arrays.php:295
+#: arrays.php:297
 #, fuzzy
 msgid "Destingation Prefix"
 msgstr "קידומת יעד"
 
-#: arrays.php:301 functions.php:543 functions.php:2436 functions.php:2460
+#: arrays.php:303 functions.php:658 functions.php:2764 functions.php:2788
 msgid "N/A"
 msgstr "לא זמין"
 
-#: arrays.php:307 arrays.php:335 functions.php:2247
+#: arrays.php:309 arrays.php:337 functions.php:2575
 #, fuzzy
 msgid "Source IF"
 msgstr "מקור"
 
-#: arrays.php:309 arrays.php:338
+#: arrays.php:311 arrays.php:340
 #, fuzzy
 msgid "Destination IF"
 msgstr "כתובת IP יעד"
 
-#: arrays.php:312 arrays.php:337 functions.php:2239
+#: arrays.php:314 arrays.php:339 arrays.php:357 functions.php:2567
 #, fuzzy
 msgid "Source Port"
 msgstr "יציאות מקור (ים)"
 
-#: arrays.php:313 arrays.php:340
+#: arrays.php:315 arrays.php:342 arrays.php:358
 #, fuzzy
 msgid "Destination Port"
 msgstr "כתובת IP יעד"
 
-#: arrays.php:316 arrays.php:333 flowview_schedules.php:88 functions.php:2195
+#: arrays.php:318 arrays.php:335 flowview_schedules.php:96 functions.php:2523
 msgid "Start Time"
 msgstr "זמן התחלה"
 
-#: arrays.php:317 arrays.php:334 functions.php:2199
+#: arrays.php:319 arrays.php:336 functions.php:2527
 msgid "End Time"
 msgstr "שעת סיום"
 
-#: arrays.php:318
+#: arrays.php:320
 msgid "Active"
 msgstr "פעיל"
 
-#: arrays.php:319
+#: arrays.php:321
 #, fuzzy
 msgid "B/Pk"
 msgstr "B / PK"
 
-#: arrays.php:320
+#: arrays.php:322
 #, fuzzy
 msgid "Ts"
 msgstr "Ts"
 
-#: arrays.php:321
+#: arrays.php:323
 #, fuzzy
 msgid "Fl"
 msgstr "Fl"
 
-#: arrays.php:342 functions.php:2279
+#: arrays.php:344 functions.php:2607
 msgid "Flags"
 msgstr "דגלים"
 
-#: arrays.php:347
+#: arrays.php:349 arrays.php:355
 msgid "Source"
 msgstr "מקור"
 
-#: arrays.php:348
+#: arrays.php:350 arrays.php:356
 msgid "Destination"
 msgstr "יעד"
 
-#: arrays.php:365
+#: arrays.php:366 arrays.php:367 arrays.php:368 arrays.php:369 arrays.php:370
+#: arrays.php:371 arrays.php:372 arrays.php:373 arrays.php:374
+#, php-format
+msgid "%d Pixels"
+msgstr ""
+
+#: arrays.php:388
 #, fuzzy
 msgid "General Filters"
 msgstr "מחיקת מסננים"
 
-#: arrays.php:368 functions.php:413
+#: arrays.php:391 functions.php:503
 msgid "Filter"
 msgstr "סינון"
 
-#: arrays.php:369
+#: arrays.php:392
 #, fuzzy
 msgid "The Saved Filter to display."
 msgstr "המסנן השמור להצגה."
 
-#: arrays.php:372
+#: arrays.php:395
 #, fuzzy
 msgid "New Filter"
 msgstr "סינון"
 
-#: arrays.php:377 flowview_filters.php:324
+#: arrays.php:400 flowview_filters.php:330 functions.php:522
 #, fuzzy
 msgid "Listener"
 msgstr "מקשיב"
 
-#: arrays.php:378
+#: arrays.php:401
 #, fuzzy
 msgid "The Listener to use for the Filter."
 msgstr "המאזין לשימוש עבור המסנן."
 
-#: arrays.php:386
+#: arrays.php:409
 msgid "Presets"
 msgstr "קבועים מראש"
 
-#: arrays.php:387
+#: arrays.php:410
 #, fuzzy
 msgid "If this Filter is based upon a pre-defined Timespan, select it here."
 msgstr "אם מסנן זה מבוסס על זמן מוגדר מראש, בחר אותו כאן."
 
-#: arrays.php:396
+#: arrays.php:419
 #, fuzzy
 msgid "Detailed Filter Criteria"
 msgstr "קריטריוני סינון מפורטים"
 
-#: arrays.php:399 flowview_filters.php:329
+#: arrays.php:422 flowview_filters.php:335
 #, fuzzy
 msgid "Report Type"
 msgstr "דוח: [חדש]"
 
-#: arrays.php:400
+#: arrays.php:423
 #, fuzzy
 msgid "The Report Type to use by default for this Filter when creating a Report."
 msgstr "סוג הדוח לשימוש כברירת מחדל עבור מסנן זה בעת יצירת דוח."
 
-#: arrays.php:403
+#: arrays.php:426
 #, fuzzy
 msgid "Printed"
 msgstr "נדפס:"
 
-#: arrays.php:403
+#: arrays.php:426
 msgid "Statistical"
 msgstr "סטטיסטי"
 
-#: arrays.php:407
+#: arrays.php:430
 msgid "Statistical Report"
 msgstr "דו ח סטטיסטי"
 
-#: arrays.php:408
+#: arrays.php:431
 #, fuzzy
 msgid "The Display Report Type to use by default for this Filter when creating a Report."
 msgstr "סוג דוח התצוגה לשימוש כברירת מחדל עבור מסנן זה בעת יצירת דוח."
 
-#: arrays.php:415
+#: arrays.php:438
 #, fuzzy
 msgid "Printed Report"
 msgstr "הדפס דוחות"
 
-#: arrays.php:416
+#: arrays.php:439
 #, fuzzy
 msgid "The Printed Report Type to use by default for this Filter when creating a Printed Report."
 msgstr "סוג הדוח המודפס לשימוש כברירת מחדל עבור מסנן זה בעת יצירת דוח מודפס."
 
-#: arrays.php:423
+#: arrays.php:446
 #, fuzzy
 msgid "Range Rules"
 msgstr "ניהול לוחות זמנים"
 
-#: arrays.php:424
+#: arrays.php:447
 #, fuzzy
 msgid "Constrain the Filter Data by these time filter rules."
 msgstr "הגבל את נתוני הסינון לפי כללי סינון הזמן הללו."
 
-#: arrays.php:431
+#: arrays.php:454
 #, fuzzy
 msgid "Resolve IP's"
 msgstr "פתרון כתובות:"
 
-#: arrays.php:432
+#: arrays.php:455
 #, fuzzy
 msgid "Resolve IP Addresses to Domain Names."
 msgstr "פתרון כתובות:"
 
-#: arrays.php:437 flowview_schedules.php:580
+#: arrays.php:460 flowview_schedules.php:596
 msgid "Yes"
 msgstr "כן"
 
-#: arrays.php:438 flowview_schedules.php:580
+#: arrays.php:461 flowview_schedules.php:596
 msgid "No"
 msgstr "לא"
 
-#: arrays.php:442 flowview_filters.php:339 functions.php:494
+#: arrays.php:465 flowview_filters.php:345 functions.php:603
 #, fuzzy
 msgid "Sort Field"
 msgstr "שדה מיון:"
 
-#: arrays.php:443
+#: arrays.php:466
 #, fuzzy
 msgid "The default Sort Field for the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "שדה המיון המוגדר כברירת מחדל עבור המסנן. הגדרה זו תחול על כל הדוחות המתוזמנים."
 
-#: arrays.php:450
+#: arrays.php:473
 #, fuzzy
 msgid "Maximum Rows"
 msgstr "מקסימום שורות"
 
-#: arrays.php:451
+#: arrays.php:474
 #, fuzzy
 msgid "The Maximum Rows to provide in the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "שורות מקסימום לספק במסנן. הגדרה זו תחול על כל הדוחות המתוזמנים."
 
-#: arrays.php:458
+#: arrays.php:481
 #, fuzzy
 msgid "Minimum Bytes"
 msgstr "בתים מינימליים:"
 
-#: arrays.php:459
+#: arrays.php:482
 #, fuzzy
 msgid "The Minimum Total Bytes to consider for the Filter.  Any flow totals that are less than this many bytes will be ignored."
 msgstr "סה\"כ הבתים המינימליים שיש לקחת בחשבון עבור המסנן. יתעלם מכל סכומי הזרימה שהם פחות מביתים רבים."
 
-#: arrays.php:468
+#: arrays.php:491
+msgid "Charting Options"
+msgstr ""
+
+#: arrays.php:494
+msgid "Graph Type"
+msgstr ""
+
+#: arrays.php:495
+msgid "The Graph Type to display by default.  They include Bar, Pie, and Treemap."
+msgstr ""
+
+#: arrays.php:500
+msgid "Bar Chart"
+msgstr ""
+
+#: arrays.php:501
+msgid "Pie Chart"
+msgstr ""
+
+#: arrays.php:502
+msgid "Treemap Chart"
+msgstr ""
+
+#: arrays.php:506
+msgid "Graph Height"
+msgstr ""
+
+#: arrays.php:507
+msgid "The Graph Hight to use by default."
+msgstr ""
+
+#: arrays.php:514
+#, fuzzy
+#| msgid "Table"
+msgid "Table Panel"
+msgstr "טבלה"
+
+#: arrays.php:515
+msgid "Should the Table Panel be displayed by default."
+msgstr ""
+
+#: arrays.php:521
+#, fuzzy
+msgid "Bytes Panel"
+msgstr "סרגל בתים"
+
+#: arrays.php:522
+msgid "Should the Bytes Panel be displayed by default."
+msgstr ""
+
+#: arrays.php:528
+#, fuzzy
+msgid "Packets Panel"
+msgstr "בר Packets"
+
+#: arrays.php:529
+msgid "Should the Packets Panel be displayed by default."
+msgstr ""
+
+#: arrays.php:535
+#, fuzzy
+msgid "Flows Panel"
+msgstr "תזרים בר"
+
+#: arrays.php:536
+msgid "Should the Flows Panel be displayed by default."
+msgstr ""
+
+#: arrays.php:544
 #, fuzzy
 msgid "Protocol Filters"
 msgstr "פרוטוקולים"
 
-#: arrays.php:471
+#: arrays.php:547
 msgid "Protocols"
 msgstr "פרוטוקולים"
 
-#: arrays.php:472
+#: arrays.php:548
 #, fuzzy
 msgid "Select the Specific Protocol for the Filter."
 msgstr "בחר את הפרוטוקול הספציפי עבור המסנן."
 
-#: arrays.php:479
+#: arrays.php:555
 #, fuzzy
 msgid "TCP Flags"
 msgstr "דגלי TCP"
 
-#: arrays.php:480
+#: arrays.php:556
 #, fuzzy
 msgid "The TCP Flags to search for in the Filter.  This can be a comma delimited list of TCP Flags"
 msgstr "דגלי TCP לחיפוש במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של דגלי TCP"
 
-#: arrays.php:487
+#: arrays.php:563
 #, fuzzy
 msgid "TOS Fields"
 msgstr "שדות TOS"
 
-#: arrays.php:488
+#: arrays.php:564
 #, fuzzy
 msgid "The TOS Fields to search for in the Filter.  This can be a comma delimited list of TOS Fields"
 msgstr "שדות ה- TOS לחיפוש במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של שדות TOS"
 
-#: arrays.php:496
+#: arrays.php:572
 #, fuzzy
 msgid "Filter on the select Source IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "סנן ב- IP המקור הנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של כתובות IPv4 או IPv6, או רשימה המופרדת בפסיקים של טווחי כתובות IPv4 או IPv6 בפורמט CIDR (למשל, 192.168.1.0/24)."
 
-#: arrays.php:503
+#: arrays.php:579
 #, fuzzy
 msgid "Source Ports"
 msgstr "יציאות מקור (ים)"
 
-#: arrays.php:504
+#: arrays.php:580
 #, fuzzy
 msgid "Filter on the select Source Ports for in the Filter.  This can be a comma delimited list of Source Ports."
 msgstr "סנן ביציאות המקור שנבחרו במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של יציאות מקור."
 
-#: arrays.php:511
+#: arrays.php:587
 #, fuzzy
 msgid "Source Interface"
 msgstr "ממשק המקור"
 
-#: arrays.php:512
+#: arrays.php:588
 #, fuzzy
 msgid "Filter on the select Source Interface for in the Filter.  This can be a comma delimited list of Source Interfaces"
 msgstr "סנן בממשק המקור הנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של ממשקי מקור"
 
-#: arrays.php:520
+#: arrays.php:596
 #, fuzzy
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Source AS's"
 msgstr "סנן לפי היעד AS שנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של מקורות AS"
 
-#: arrays.php:528
+#: arrays.php:604
 #, fuzzy
 msgid "Filter on the select Destination IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "סנן ב- IP היעד שנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של כתובות IPv4 או IPv6, או רשימה המופרדת בפסיקים של טווחי כתובות IPv4 או IPv6 בפורמט CIDR (למשל, 192.168.1.0/24)."
 
-#: arrays.php:535
+#: arrays.php:611
 #, fuzzy
 msgid "Dest Ports"
 msgstr "נמל דסט"
 
-#: arrays.php:536
+#: arrays.php:612
 #, fuzzy
 msgid "Filter on the select Destination Ports for in the Filter.  This can be a comma delimited list of Destimation Ports."
 msgstr "סנן ביציאת היעד שבחרת במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של יציאות Destimation."
 
-#: arrays.php:543
+#: arrays.php:619
 #, fuzzy
 msgid "Dest Interface"
 msgstr "ממשק Dest"
 
-#: arrays.php:544
+#: arrays.php:620
 #, fuzzy
 msgid "Filter on the select Destination Interface for in the Filter.  This can be a comma delimited list of Destimation Interfaces."
 msgstr "סנן בממשק היעד שנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של ממשקי Destimation."
 
-#: arrays.php:551 functions.php:2259
+#: arrays.php:627 functions.php:2587
 #, fuzzy
 msgid "Dest AS"
 msgstr "Dest AS"
 
-#: arrays.php:552
+#: arrays.php:628
 #, fuzzy
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Destimation AS's"
 msgstr "סנן לפי היעד AS שנבחר עבור במסנן. זו יכולה להיות רשימה המופרדת בפסיקים של Destimation AS"
 
-#: flowview_devices.php:30 flowview_filters.php:36 flowview_schedules.php:35
+#: flowview_devices.php:31 flowview_filters.php:37 flowview_schedules.php:37
 msgid "Delete"
 msgstr "מחק"
 
-#: flowview_devices.php:38
-msgid "Device Name"
-msgstr "שם ההתקן:% 1"
-
 #: flowview_devices.php:39
+#, fuzzy
+msgid "Listener Name"
+msgstr "מקשיב"
+
+#: flowview_devices.php:40
 #, fuzzy
 msgid "Name of the device to be displayed."
 msgstr "שם ההתקן שיוצג."
 
-#: flowview_devices.php:44
+#: flowview_devices.php:45
 #, fuzzy
 msgid "Collection Method"
 msgstr "אוסף Medhod"
 
-#: flowview_devices.php:45
+#: flowview_devices.php:46
 #, fuzzy
 msgid "There are two support collection methods, the first utilizes the legacy flow-tools binaries and the second leverages Cacti's own PHP based flow stream server."
 msgstr "ישנן שתי שיטות איסוף תמיכה, הראשונה משתמשת בבינאריות של כלי זרימה מדור קודם והשנייה ממנפת את שרת זרם הזרימה מבוסס ה- Cacti של PHP."
 
-#: flowview_devices.php:52
+#: flowview_devices.php:53
 #, fuzzy
 msgid "Allowed Host"
 msgstr "מארח מורשה"
 
-#: flowview_devices.php:53
+#: flowview_devices.php:54
 #, fuzzy
 msgid "IP Address of the device that is allowed to send to this flow collector.  Leave as 0 for any host."
 msgstr "כתובת ה- IP של המכשיר שאליו ניתן לשלוח לאספן זרימה זה. השאר כמו 0 עבור כל מארח."
 
-#: flowview_devices.php:62
+#: flowview_devices.php:63
 #, fuzzy
 msgid "Port this collector will listen on."
 msgstr "נמל אספן זה יקשיב."
 
-#: flowview_devices.php:138
+#: flowview_devices.php:142
 #, fuzzy
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
 msgstr "לחץ על 'המשך' כדי למחוק את מאזיני הזרימה הזמינים. לאחר מכן, תצטרך להפעיל מחדש את זרימת שירות לכידת."
 
-#: flowview_devices.php:139
-#, fuzzy
-msgid "Also, remember to remove any leftover files from your Net-Flow Capture location."
-msgstr "כמו כן, זכור להסיר את כל הקבצים שנותרו מהאתר של 'זרימת רשת'."
-
-#: flowview_devices.php:146
+#: flowview_devices.php:149
 #, fuzzy
 msgid "You must select at least one device."
 msgstr "עליך לבחור לפחות מכשיר אחד."
 
-#: flowview_devices.php:149 flowview_filters.php:153 flowview_schedules.php:246
+#: flowview_devices.php:152 flowview_filters.php:156 flowview_schedules.php:256
 msgid "Continue"
 msgstr "המשך"
 
-#: flowview_devices.php:157 flowview_filters.php:161 flowview_schedules.php:254
+#: flowview_devices.php:160 flowview_filters.php:164 flowview_schedules.php:264
 msgid "Cancel"
 msgstr "ביטול"
 
-#: flowview_devices.php:210
+#: flowview_devices.php:218
 #, fuzzy, php-format
-msgid "Device [edit: %s]"
-msgstr "התקן [עריכה: %s]"
+msgid "Listener [edit: %s]"
+msgstr "דוח: [עריכה: %s]"
 
-#: flowview_devices.php:212
+#: flowview_devices.php:222
 #, fuzzy
-msgid "Device [new]"
-msgstr "מכשיר [חדש]"
+msgid "Listener [new]"
+msgstr "דוח: [חדש]"
 
-#: flowview_devices.php:276
+#: flowview_devices.php:254 flowview_devices.php:374
+#, fuzzy
+#| msgid "IP Address"
+msgid "Address"
+msgstr "כתובת IP"
+
+#: flowview_devices.php:258 flowview_devices.php:584
+msgid "Status"
+msgstr "סטטוס"
+
+#: flowview_devices.php:262 functions.php:30
+msgid "Templates"
+msgstr ""
+
+#: flowview_devices.php:266 flowview_devices.php:601
+#, fuzzy
+msgid "Last Updated"
+msgstr "מסנן עודכן"
+
+#: flowview_devices.php:268
+msgid "Active Streams update every 5 minutes"
+msgstr ""
+
+#: flowview_devices.php:294
+msgid "No Inbound Streams Detected"
+msgstr ""
+
+#: flowview_devices.php:305
+msgid "Listener Detected Templates"
+msgstr ""
+
+#: flowview_devices.php:314
+msgid "Template"
+msgstr ""
+
+#: flowview_devices.php:329 flowview_devices.php:519 flowview_filters.php:257
+#: flowview_schedules.php:479 functions.php:559
+msgid "Go"
+msgstr "עבור"
+
+#: flowview_devices.php:378
+msgid "Template ID"
+msgstr ""
+
+#: flowview_devices.php:382
+#, fuzzy
+#| msgid "Filter Name"
+msgid "Field Name"
+msgstr "שם הסינון"
+
+#: flowview_devices.php:386
+msgid "Field ID"
+msgstr ""
+
+#: flowview_devices.php:390
+#, fuzzy
+msgid "Field Type"
+msgstr "שם הסינון"
+
+#: flowview_devices.php:394
+msgid "Length"
+msgstr ""
+
+#: flowview_devices.php:398
+msgid "Unpack"
+msgstr ""
+
+#: flowview_devices.php:438
+msgid "No Inbound Stream Templates Detected"
+msgstr ""
+
+#: flowview_devices.php:504
 #, fuzzy
 msgid "FlowView Listeners"
 msgstr "FlowView מאזינים"
 
-#: flowview_devices.php:285 flowview_filters.php:230 flowview_schedules.php:442
+#: flowview_devices.php:513 flowview_filters.php:236 flowview_schedules.php:458
 msgid "Search"
 msgstr "חיפוש"
 
-#: flowview_devices.php:291 flowview_filters.php:251 flowview_schedules.php:463
-#: functions.php:450
-msgid "Go"
-msgstr "עבור"
-
-#: flowview_devices.php:291 flowview_filters.php:251 flowview_schedules.php:463
+#: flowview_devices.php:519 flowview_filters.php:257 flowview_schedules.php:479
 #, fuzzy
 msgid "Set/Refresh Filters"
 msgstr "הגדר / רענן מסננים"
 
-#: flowview_devices.php:294 flowview_filters.php:254 flowview_schedules.php:466
-#: functions.php:451
+#: flowview_devices.php:522 flowview_filters.php:260 flowview_schedules.php:482
+#: functions.php:560
 msgid "Clear"
 msgstr "נקה"
 
-#: flowview_devices.php:294 flowview_filters.php:254 flowview_schedules.php:466
+#: flowview_devices.php:522 flowview_filters.php:260 flowview_schedules.php:482
 msgid "Clear Filters"
 msgstr "מחיקת מסננים"
 
-#: flowview_devices.php:328 setup.php:181 setup.php:228
+#: flowview_devices.php:556 setup.php:217 setup.php:264
 #, fuzzy
 msgid "Listeners"
 msgstr "מאזינים"
 
-#: flowview_devices.php:337
+#: flowview_devices.php:566
 msgid "Name"
 msgstr "שם"
 
-#: flowview_devices.php:338
+#: flowview_devices.php:570
 msgid "Method"
 msgstr "שיטה"
 
-#: flowview_devices.php:339
+#: flowview_devices.php:574
 #, fuzzy
 msgid "Allowed From"
 msgstr "מותר מ"
 
-#: flowview_devices.php:341
-msgid "Status"
-msgstr "סטטוס"
-
-#: flowview_devices.php:342
+#: flowview_devices.php:589
 #, fuzzy
 msgid "Observed Listen"
 msgstr "נצפה האזינו"
 
-#: flowview_devices.php:354
+#: flowview_devices.php:591
+msgid "The port security actually observed on the listeners port."
+msgstr ""
+
+#: flowview_devices.php:595
+msgid "Streams"
+msgstr ""
+
+#: flowview_devices.php:597
+msgid "The number of inbound connections from various sources."
+msgstr ""
+
+#: flowview_devices.php:603
+msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
+msgstr ""
+
+#: flowview_devices.php:630
 msgid "Cacti"
 msgstr "צבריים"
 
-#: flowview_devices.php:357
-msgid "Down"
-msgstr "למטה"
-
-#: flowview_devices.php:357
-msgid "Up"
-msgstr "למעלה"
-
-#: flowview_devices.php:363
+#: flowview_devices.php:641
 #, fuzzy
 msgid "No Flowview Listeners"
 msgstr "FlowView מאזינים"
 
-#: flowview_filters.php:35 flowview_schedules.php:34
+#: flowview_filters.php:36 flowview_schedules.php:36
 msgid "Send Now"
 msgstr "שלח עכשיו"
 
-#: flowview_filters.php:37 flowview_schedules.php:36
+#: flowview_filters.php:38 flowview_schedules.php:38
 msgid "Disable"
 msgstr "כיבוי"
 
-#: flowview_filters.php:38 flowview_schedules.php:37
+#: flowview_filters.php:39 flowview_schedules.php:39
 msgid "Enable"
 msgstr "אפשר"
 
-#: flowview_filters.php:129
+#: flowview_filters.php:132
 #, fuzzy
 msgid "Click 'Continue' to delete the following Filter(s) and all matching Filter."
 msgstr "לחץ על 'המשך' כדי למחוק את התזמונים הבאים."
 
-#: flowview_filters.php:136
+#: flowview_filters.php:139
 #, fuzzy
 msgid "Click 'Continue' to Disable the following Filters(s) and all matching Filter."
 msgstr "לחץ על 'המשך' כדי לבטל את התזמונים הבאים."
 
-#: flowview_filters.php:143
+#: flowview_filters.php:146
 #, fuzzy
 msgid "Click 'Continue' to Enable the following Filters(s)."
 msgstr "לחץ על 'המשך' כדי להפעיל את התזמונים הבאים."
 
-#: flowview_filters.php:150
+#: flowview_filters.php:153
 #, fuzzy
 msgid "You must select at least one Filter."
 msgstr "עליך לבחור לפחות מכשיר אחד."
 
-#: flowview_filters.php:218
+#: flowview_filters.php:224
 #, fuzzy
 msgid "FlowView Filters"
 msgstr "מסננים זרימה"
 
-#: flowview_filters.php:220
+#: flowview_filters.php:226
 #, fuzzy
 msgid "FlowView Filters [ Add Devices before Filters ]"
 msgstr "מסנני FlowView [הוסף התקנים לפני מסננים]"
 
-#: flowview_filters.php:236 flowview_filters.php:350 setup.php:182
-#: setup.php:284
+#: flowview_filters.php:242 flowview_filters.php:356 setup.php:218
+#: setup.php:320
 msgid "Filters"
 msgstr "מסננים"
 
-#: flowview_filters.php:240 flowview_schedules.php:452
+#: flowview_filters.php:246 flowview_schedules.php:468
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: flowview_filters.php:319 flowview_schedules.php:73
-#: flowview_schedules.php:535
+#: flowview_filters.php:325 flowview_schedules.php:81
+#: flowview_schedules.php:551
 msgid "Filter Name"
 msgstr "שם הסינון"
 
-#: flowview_filters.php:334
+#: flowview_filters.php:340
 msgid "ID"
 msgstr "מזהה"
 
-#: flowview_filters.php:344
+#: flowview_filters.php:350
 msgid "Resolution"
 msgstr "רזולוציה"
 
-#: flowview_schedules.php:41
+#: flowview_schedules.php:43
 #, fuzzy
 msgid "Every Hour"
 msgstr "כל שעה"
 
-#: flowview_schedules.php:42 flowview_schedules.php:43
 #: flowview_schedules.php:44 flowview_schedules.php:45
+#: flowview_schedules.php:46 flowview_schedules.php:47
 #, fuzzy, php-format
 msgid "Every %d Hours"
 msgstr "כל% d שעות"
 
-#: flowview_schedules.php:46
+#: flowview_schedules.php:48
 msgid "Every Day"
 msgstr "כל יום"
 
-#: flowview_schedules.php:47
+#: flowview_schedules.php:49
 msgid "Every Week"
 msgstr "כל שבוע"
 
-#: flowview_schedules.php:48
+#: flowview_schedules.php:50
 #, fuzzy, php-format
 msgid "Every %d Weeks, 2"
 msgstr "כל% d שבועות, 2"
 
-#: flowview_schedules.php:49
+#: flowview_schedules.php:51
 msgid "Every Month"
 msgstr "כל חודש"
 
-#: flowview_schedules.php:56
+#: flowview_schedules.php:64
 msgid "Title"
 msgstr "כותרת"
 
-#: flowview_schedules.php:58
+#: flowview_schedules.php:66
 #, fuzzy
 msgid "New Schedule"
 msgstr "לוח זמנים חדש"
 
-#: flowview_schedules.php:59
+#: flowview_schedules.php:67
 #, fuzzy
 msgid "Enter a Report Title for the FlowView Schedule."
 msgstr "הזן כותרת דוח עבור לוח הזמנים של FlowView."
 
-#: flowview_schedules.php:65 flowview_schedules.php:555
+#: flowview_schedules.php:73 flowview_schedules.php:571
 msgid "Enabled"
 msgstr "מאופשר"
 
-#: flowview_schedules.php:68
+#: flowview_schedules.php:76
 #, fuzzy
 msgid "Whether or not this NetFlow Scan will be sent."
 msgstr "בין אם זה NetFlow סריקה או לא יישלחו."
 
-#: flowview_schedules.php:74
+#: flowview_schedules.php:82
 #, fuzzy
 msgid "Name of the query to run."
 msgstr "שם השאילתה להפעלה."
 
-#: flowview_schedules.php:79
+#: flowview_schedules.php:87
 #, fuzzy
 msgid "Send Interval"
 msgstr "שלח מרווח"
 
-#: flowview_schedules.php:80
+#: flowview_schedules.php:88
 #, fuzzy
 msgid "How often to send this NetFlow Report?"
 msgstr "באיזו תדירות יש לשלוח דוח NetFlow זה?"
 
-#: flowview_schedules.php:89
+#: flowview_schedules.php:97
 #, fuzzy
 msgid "This is the first date / time to send the NetFlow Scan email.  All future Emails will be calculated off of this time plus the interval given above."
 msgstr "זהו התאריך והשעה הראשונים לשליחת דוא\"ל סריקה של NetFlow. כל הודעות האימייל העתידיות יחושבו מחוץ לזמן זה בתוספת מרווח הזמן."
 
-#: flowview_schedules.php:97
+#: flowview_schedules.php:105
 msgid "Email Addresses"
 msgstr "כתובות דוא\"ל"
 
-#: flowview_schedules.php:98
+#: flowview_schedules.php:106
 #, fuzzy
 msgid "Email addresses (command delimited) to send this NetFlow Scan to."
 msgstr "כתובות דואר אלקטרוני (מופרדות בפקודה) כדי לשלוח את NetFlow Scan אל."
 
-#: flowview_schedules.php:105 setup.php:369
+#: flowview_schedules.php:113 setup.php:405
 #, fuzzy
 msgid "Format File to Use"
 msgstr "עיצוב קובץ לשימוש"
 
-#: flowview_schedules.php:108 setup.php:372
+#: flowview_schedules.php:116 setup.php:408
 #, fuzzy
 msgid "Choose the custom html wrapper and CSS file to use.  This file contains both html and CSS to wrap around your report.  If it contains more than simply CSS, you need to place a special <REPORT> tag inside of the file.  This format tag will be replaced by the report content.  These files are located in the 'formats' directory."
 msgstr "בחר את עטיפת ה- HTML המותאמת אישית ואת קובץ ה- CSS לשימוש. קובץ זה מכיל גם html וגם CSS כדי לעטוף את הדוח שלך. אם הוא מכיל יותר מסתם CSS, עליך להציב מבצע מיוחד<REPORT> תג בתוך הקובץ. תג פורמט זה יוחלף בתוכן הדוח. קבצים אלה ממוקמים בספריה 'פורמטים'."
 
-#: flowview_schedules.php:177
+#: flowview_schedules.php:187
 #, fuzzy, php-format
 msgid "Sent Scheduled Report %s in Background."
 msgstr "נשלח דוח מתוזמן %s ברקע."
 
-#: flowview_schedules.php:180
+#: flowview_schedules.php:190
 #, fuzzy
 msgid "Reports will arrive once Complete."
 msgstr "הדוחות יגיעו לאחר השלמתם."
 
-#: flowview_schedules.php:215
+#: flowview_schedules.php:225
 #, fuzzy
 msgid "Click 'Continue' to delete the following Schedule(s)."
 msgstr "לחץ על 'המשך' כדי למחוק את התזמונים הבאים."
 
-#: flowview_schedules.php:222
+#: flowview_schedules.php:232
 #, fuzzy
 msgid "Click 'Continue' to send the following Schedule(s) now."
 msgstr "לחץ על 'המשך' כדי לשלוח את התזמונים הבאים."
 
-#: flowview_schedules.php:229
+#: flowview_schedules.php:239
 #, fuzzy
 msgid "Click 'Continue' to Disable the following Schedule(s)."
 msgstr "לחץ על 'המשך' כדי לבטל את התזמונים הבאים."
 
-#: flowview_schedules.php:236
+#: flowview_schedules.php:246
 #, fuzzy
 msgid "Click 'Continue' to Enable the following Schedule(s)."
 msgstr "לחץ על 'המשך' כדי להפעיל את התזמונים הבאים."
 
-#: flowview_schedules.php:243
+#: flowview_schedules.php:253
 #, fuzzy
 msgid "You must select at least one schedule."
 msgstr "עליך לבחור לפחות לוח זמנים אחד."
 
-#: flowview_schedules.php:337
+#: flowview_schedules.php:351
 #, fuzzy, php-format
 msgid "Report: [edit: %s]"
 msgstr "דוח: [עריכה: %s]"
 
-#: flowview_schedules.php:339
+#: flowview_schedules.php:353
 #, fuzzy
 msgid "Report: [new]"
 msgstr "דוח: [חדש]"
 
-#: flowview_schedules.php:360 functions.php:589
+#: flowview_schedules.php:374 functions.php:704
 #, fuzzy
 msgid "Start Date Selector"
 msgstr "בורר תאריך התחלה"
 
-#: flowview_schedules.php:430
+#: flowview_schedules.php:446
 #, fuzzy
 msgid "FlowView Schedules"
 msgstr "לוחות זמנים של זרימה"
 
-#: flowview_schedules.php:432
+#: flowview_schedules.php:448
 #, fuzzy
 msgid "FlowView Schedules [ Add Devices before Schedules ]"
 msgstr "לוחות זמנים של FlowView [הוסף התקנים לפני לוחות זמנים]"
 
-#: flowview_schedules.php:448 flowview_schedules.php:560 setup.php:183
-#: setup.php:256
+#: flowview_schedules.php:464 flowview_schedules.php:576 setup.php:219
+#: setup.php:292
 msgid "Schedules"
 msgstr "תזמונים"
 
-#: flowview_schedules.php:531
+#: flowview_schedules.php:547
 msgid "Schedule Title"
 msgstr "כותרת התזמון"
 
-#: flowview_schedules.php:539
+#: flowview_schedules.php:555
 msgid "Interval"
 msgstr "מרווח"
 
-#: flowview_schedules.php:543
+#: flowview_schedules.php:559
 msgid "Start Date"
 msgstr "תאריך התחלה"
 
-#: flowview_schedules.php:547
+#: flowview_schedules.php:563
 #, fuzzy
 msgid "Next Send"
 msgstr "שלח"
 
-#: flowview_schedules.php:551
+#: flowview_schedules.php:567
 msgid "Email"
 msgstr "אימייל"
 
-#: functions.php:39
+#: functions.php:29
+#, fuzzy
+msgid "General"
+msgstr "מחיקת מסננים"
+
+#: functions.php:73
 #, fuzzy
 msgid "Select a Report Type First"
 msgstr "הדפס דוחות"
 
-#: functions.php:65
+#: functions.php:101
 #, fuzzy, php-format
 msgid "Filter: [edit: %s]"
 msgstr "דוח: [עריכה: %s]"
 
-#: functions.php:67
+#: functions.php:103
 #, fuzzy
 msgid "Filter: [new]"
 msgstr "דוח: [חדש]"
 
-#: functions.php:387
+#: functions.php:477
 #, fuzzy
 msgid "Undefined Filter [ Select Filter to get Details ]"
 msgstr "מסנן לא מוגדר [בחר מסנן לקבלת פרטים]"
 
-#: functions.php:397
+#: functions.php:487
 #, fuzzy, php-format
 msgid "Statistical Report: %s [ Including overrides as specified below ]"
 msgstr "דוח סטטיסטי: %s [כולל עקיפות כמפורט להלן]"
 
-#: functions.php:399
+#: functions.php:489
 #, fuzzy, php-format
 msgid "Printed Report: %s [ Including overrides as specified below ]"
 msgstr "דוח מודפס: %s [כולל עקיפות כמפורט להלן]"
 
-#: functions.php:417
+#: functions.php:507
 #, fuzzy
 msgid "Select a Filter"
 msgstr "הדפס דוחות"
 
-#: functions.php:432
+#: functions.php:526
+#, fuzzy
+msgid "Select a Listener"
+msgstr "הדפס דוחות"
+
+#: functions.php:541
 msgid "Exclude"
 msgstr "לא לכלול"
 
-#: functions.php:436
+#: functions.php:545
 msgid "None"
 msgstr "ללא"
 
-#: functions.php:437
+#: functions.php:546
 #, fuzzy
 msgid "Top Sample"
 msgstr "מדגם ראשון"
 
-#: functions.php:438
+#: functions.php:547
 #, fuzzy
 msgid "Top 2 Samples"
 msgstr "למעלה 2 דוגמאות"
 
-#: functions.php:439
+#: functions.php:548
 #, fuzzy
 msgid "Top 3 Samples"
 msgstr "למעלה 3 דוגמאות"
 
-#: functions.php:440
+#: functions.php:549
 #, fuzzy
 msgid "Top 4 Samples"
 msgstr "למעלה 4 דוגמאות"
 
-#: functions.php:441
+#: functions.php:550
 #, fuzzy
 msgid "Top 5 Samples"
 msgstr "למעלה 5 דוגמאות"
 
-#: functions.php:444
+#: functions.php:553
 #, fuzzy
 msgid "Show only Domains on Charts Below"
 msgstr "הצג רק תחומים בתרשימים למטה"
 
-#: functions.php:446
+#: functions.php:555
 #, fuzzy
-msgid "Domains Only"
+msgid "Domains/Hostnames Only"
 msgstr "תחומים בלבד"
 
-#: functions.php:450
+#: functions.php:559
 msgid "Apply Filter"
 msgstr "הצג תוצאות"
 
-#: functions.php:451
+#: functions.php:560
 msgid "Clear Filter"
 msgstr "איפוס סינון"
 
-#: functions.php:452
+#: functions.php:561
 msgid "Edit"
 msgstr "ערוך"
 
-#: functions.php:452
+#: functions.php:561
 #, fuzzy
 msgid "Edit Current Filter"
 msgstr "ערוך את המסנן הנוכחי"
 
-#: functions.php:453
+#: functions.php:562
 msgid "Save"
 msgstr "שמור"
 
-#: functions.php:453
+#: functions.php:562
 #, fuzzy
 msgid "Save Overrides to Selected Filter"
 msgstr "שמור עקיפות במסנן שנבחר"
 
-#: functions.php:461
+#: functions.php:570
 msgid "Report"
 msgstr "דו\"ח"
 
-#: functions.php:472
+#: functions.php:581
 #, fuzzy, php-format
 msgid "Statistical: %s"
 msgstr "סטטיסטיקות"
 
-#: functions.php:478
+#: functions.php:587
 #, fuzzy, php-format
 msgid "Printed: %s"
 msgstr "נדפס:"
 
-#: functions.php:482 functions.php:499
+#: functions.php:591 functions.php:608
 #, fuzzy
 msgid "Select a Filter First"
 msgstr "הדפס דוחות"
 
-#: functions.php:532
+#: functions.php:647
 msgid "Lines"
 msgstr "שורות"
 
-#: functions.php:550
+#: functions.php:665
 #, fuzzy
 msgid "Octets"
 msgstr "שמיניות"
 
-#: functions.php:568
+#: functions.php:683
 msgid "Timespan"
 msgstr "זמן"
 
-#: functions.php:577
+#: functions.php:692
 msgid "Custom"
 msgstr "מותאם אישית"
 
-#: functions.php:583
+#: functions.php:698
 msgid "From"
 msgstr "מ"
 
-#: functions.php:592
+#: functions.php:707
 msgid "To"
 msgstr "אל"
 
-#: functions.php:598
+#: functions.php:713
 #, fuzzy
 msgid "End Date Selector"
 msgstr "סיים את בורר התאריכים"
 
-#: functions.php:601
+#: functions.php:716
 #, fuzzy
 msgid "Shift Time Backward"
 msgstr "משמרת זמן לאחור"
 
-#: functions.php:604
+#: functions.php:719
 #, fuzzy
 msgid "Define Shifting Interval"
 msgstr "הגדר מרווח מעבר"
 
-#: functions.php:617
+#: functions.php:732
 #, fuzzy
 msgid "Shift Time Forward"
 msgstr "משמרת זמן קדימה"
 
-#: functions.php:624
+#: functions.php:739
+msgid "Graph"
+msgstr ""
+
+#: functions.php:743
+msgid "Bar"
+msgstr ""
+
+#: functions.php:744
+#, fuzzy
+msgid "Pie"
+msgstr "נדפס:"
+
+#: functions.php:745
+msgid "Treemap"
+msgstr ""
+
+#: functions.php:749
+msgid "Height"
+msgstr ""
+
+#: functions.php:761
 msgid "Show/Hide"
 msgstr "הצג/הסתר"
 
-#: functions.php:628
+#: functions.php:765
 msgid "Table"
 msgstr "טבלה"
 
-#: functions.php:632
-#, fuzzy
-msgid "Bytes Bar"
-msgstr "סרגל בתים"
+#: functions.php:792
+#, php-format
+msgid "Top %s Distribution Chart of Bytes"
+msgstr ""
 
-#: functions.php:636
-#, fuzzy
-msgid "Packets Bar"
-msgstr "בר Packets"
+#: functions.php:793
+#, php-format
+msgid "Top %s Pie Chart of Bytes"
+msgstr ""
 
-#: functions.php:640
-#, fuzzy
-msgid "Flows Bar"
-msgstr "תזרים בר"
+#: functions.php:794
+#, php-format
+msgid "Top %s Treemap Chart of Bytes"
+msgstr ""
 
-#: functions.php:1179
+#: functions.php:797
+#, php-format
+msgid "Top %s Distribution Chart of Packets"
+msgstr ""
+
+#: functions.php:798
+#, php-format
+msgid "Top %s Pie Chart of Packets"
+msgstr ""
+
+#: functions.php:799
+#, php-format
+msgid "Top %s Treemap Chart of Packets"
+msgstr ""
+
+#: functions.php:802
+#, php-format
+msgid "Top %s Distribution Chart of Flows"
+msgstr ""
+
+#: functions.php:803
+#, php-format
+msgid "Top %s Pie Chart of Flows"
+msgstr ""
+
+#: functions.php:804
+#, php-format
+msgid "Top %s Treemap Chart of Flows"
+msgstr ""
+
+#: functions.php:1323
+#, fuzzy
+msgid "Filter Settings Saved"
+msgstr "הגדרות סינון נשמרו"
+
+#: functions.php:1439
 #, fuzzy, php-format
 msgid "Client/Private (%s)"
 msgstr "לקוח / פרטי (%s)"
 
-#: functions.php:1181
+#: functions.php:1441
 #, fuzzy
 msgid "icmp (0)"
 msgstr "icmp (0)"
 
-#: functions.php:1192
+#: functions.php:1452
 #, fuzzy, php-format
 msgid "Unknown (%s)"
 msgstr "לא ידוע"
 
-#: functions.php:1223
+#: functions.php:1485
 #, fuzzy
 msgid "Cacti Flowview"
 msgstr "Cacti Flowview"
 
-#: functions.php:1229
+#: functions.php:1491
 #, fuzzy, php-format
 msgid "Netflow - %s"
 msgstr "Netflow -%"
 
-#: functions.php:1420
+#: functions.php:1684
 #, fuzzy, php-format
 msgid "Subnet Filter: %s is not a value CIDR format"
 msgstr "מסנן רשת משנה: %s אינו פורמט CIDR ערכי"
 
-#: functions.php:1832 functions.php:1833 functions.php:1834 functions.php:1835
-#: functions.php:1836 functions.php:1837 functions.php:1838 functions.php:1839
-#: functions.php:1840 functions.php:1841 functions.php:1842 functions.php:1843
-#: functions.php:1844 functions.php:1845 functions.php:1846 functions.php:1847
-#: functions.php:1848 functions.php:1849 functions.php:1850 functions.php:1851
-#: functions.php:1852 functions.php:1853 functions.php:1854 functions.php:1855
-#: functions.php:1856 functions.php:1857
+#: functions.php:1817 functions.php:1823 functions.php:1829 functions.php:1832
+#: functions.php:1858 functions.php:2819
+#, fuzzy
+msgid "unresolved"
+msgstr "- לא פתור -"
+
+#: functions.php:2147 functions.php:2148 functions.php:2149 functions.php:2150
+#: functions.php:2151 functions.php:2152 functions.php:2153 functions.php:2154
+#: functions.php:2155 functions.php:2156 functions.php:2157 functions.php:2158
+#: functions.php:2159 functions.php:2160 functions.php:2161 functions.php:2162
+#: functions.php:2163 functions.php:2164 functions.php:2165 functions.php:2166
+#: functions.php:2167 functions.php:2168 functions.php:2169 functions.php:2170
+#: functions.php:2171 functions.php:2172
 #, fuzzy, php-format
 msgid "%d - %d Bytes"
 msgstr "%s בתים"
 
-#: functions.php:1858
+#: functions.php:2173
 #, fuzzy, php-format
 msgid "> %d Bytes"
 msgstr "%s בתים"
 
-#: functions.php:2203
+#: functions.php:2531
 #, fuzzy
 msgid "Source DNS"
 msgstr "מקור AS"
 
-#: functions.php:2207
+#: functions.php:2535
 #, fuzzy
 msgid "Source Root DNS"
 msgstr "מקור AS"
 
-#: functions.php:2211
+#: functions.php:2539
 #, fuzzy
 msgid "Dest DNS"
 msgstr "Dest AS"
 
-#: functions.php:2215
+#: functions.php:2543
 #, fuzzy
 msgid "Dest Root DNS"
 msgstr "נמל דסט"
 
-#: functions.php:2219
+#: functions.php:2547
 #, fuzzy
 msgid "DNS"
 msgstr "DSR"
 
-#: functions.php:2223
+#: functions.php:2551
 #, fuzzy
 msgid "Root DNS"
 msgstr "שורש DNS"
 
-#: functions.php:2243
+#: functions.php:2571
 #, fuzzy
 msgid "Dest Port"
 msgstr "נמל דסט"
 
-#: functions.php:2251
+#: functions.php:2579
 #, fuzzy
 msgid "Dest IF"
 msgstr "Dest IF"
 
-#: functions.php:2267
+#: functions.php:2595
 #, fuzzy
 msgid "Dest Prefix"
 msgstr "קידומת Dest"
 
-#: functions.php:2275
+#: functions.php:2603
 #, fuzzy
 msgid "Type of Service"
 msgstr "סוג שירות"
 
-#: functions.php:2294
+#: functions.php:2622
 #, fuzzy
 msgid "Bytes/Packet"
 msgstr "מנות"
 
-#: functions.php:2491
-#, fuzzy
-msgid "-- unresolved --"
-msgstr "- לא פתור -"
-
-#: functions.php:2597
+#: functions.php:2925
 #, fuzzy, php-format
 msgid "Boolean: %s, Numeric: %s, Hex: %s"
 msgstr "בוליאני: %s, מספרי: %s, הקס: %s"
 
-#: functions.php:2608
+#: functions.php:2936
 #, fuzzy
 msgid "Low Delay"
 msgstr "עיכוב נמוך"
 
-#: functions.php:2609
+#: functions.php:2937
 #, fuzzy
 msgid "Throughput"
 msgstr "תפוקה"
 
-#: functions.php:2610
+#: functions.php:2938
 #, fuzzy
 msgid "Reliability"
 msgstr "מהימנות"
 
-#: functions.php:2611
+#: functions.php:2939
 #, fuzzy
 msgid "Mincost"
 msgstr "מינקוסט"
 
-#: functions.php:2615
+#: functions.php:2943
 #, fuzzy
 msgid "Net Control"
 msgstr "שליטה נטו"
 
-#: functions.php:2616
+#: functions.php:2944
 #, fuzzy
 msgid "Internet Control"
 msgstr "בקרת אינטרנט"
 
-#: functions.php:2617
+#: functions.php:2945
 #, fuzzy
 msgid "Critic ECP"
 msgstr "ביקורת ECP"
 
-#: functions.php:2618
+#: functions.php:2946
 #, fuzzy
 msgid "Flash Override"
 msgstr "ביטול פלאש"
 
-#: functions.php:2619
+#: functions.php:2947
 msgid "Flash"
 msgstr "פלאש"
 
-#: functions.php:2620
+#: functions.php:2948
 msgid "Immediate"
 msgstr "מיידי"
 
-#: functions.php:2621
+#: functions.php:2949
 msgid "Priority"
 msgstr "עדיפות"
 
-#: functions.php:2622
+#: functions.php:2950
 #, fuzzy
 msgid "Routine"
 msgstr "שגרה"
 
-#: functions.php:2662
+#: functions.php:2990
 #, fuzzy
 msgid "Summary Statistics"
 msgstr "סיכום סטטיסטיקות"
 
-#: functions.php:2673
+#: functions.php:3001
 #, fuzzy, php-format
 msgid "IP Packet Size Distribution (%%)"
 msgstr "התפלגות גודל מנות IP (%)"
 
-#: functions.php:2678
+#: functions.php:3006
 #, fuzzy, php-format
 msgid "Packets per Flow Distribution (%%)"
 msgstr "מנות לכל התפלגות זרימה (%)"
 
-#: functions.php:2683
+#: functions.php:3011
 #, fuzzy, php-format
 msgid "Octets per Flow Distribution (%%)"
 msgstr "אוקטטים לכל התפלגות זרימה (%)"
 
-#: functions.php:2688
+#: functions.php:3016
 #, fuzzy, php-format
 msgid "Flow Time Distribution (%%)"
 msgstr "התפלגות זמן זרימה (%)"
 
-#: functions.php:2871
+#: functions.php:3203
 #, fuzzy
 msgid "You must select a Statistics Report or Printed Report!"
 msgstr "עליך לבחור דוח סטטיסטי או דוח מודפס!"
 
-#: functions.php:2875
+#: functions.php:3207
 #, fuzzy
 msgid "You must select only a Statistics Report or a Printed Report (not both)!"
 msgstr "עליך לבחור רק דוח סטטיסטי או דוח מודפס (לא שניהם)!"
 
-#: functions.php:2879
+#: functions.php:3211
 #, fuzzy
 msgid "Invalid dates, End Date/Time is earlier than Start Date/Time!"
 msgstr "תאריכים לא חוקיים, תאריך / שעה סיום מוקדם יותר מאשר תאריך התחלה / זמן!"
 
-#: functions.php:2890 functions.php:2895
+#: functions.php:3222 functions.php:3227
 #, fuzzy
 msgid "Invalid IP for the Source Address!<br>(Must be in the form of '192.168.0.1')"
 msgstr "כתובת IP לא חוקית עבור כתובת המקור! <br> (חייב להיות בצורה של '192.168.0.1')"
 
-#: functions.php:2902 functions.php:2906 functions.php:2910
+#: functions.php:3234 functions.php:3238 functions.php:3242
 #, fuzzy
 msgid "Invalid subnet for the Source Address!<br>(Must be in the form of '192.168.0.1/255.255.255.0' or '192.168.0.1/24')"
 msgstr "תת רשת לא חוקית עבור כתובת המקור! <br> (חייב להיות בצורה של '192.168.0.1/255.255.255.0' או '192.168.0.1/24')"
 
-#: functions.php:2924 functions.php:2928
+#: functions.php:3256 functions.php:3260
 #, fuzzy
 msgid "Invalid IP for the Destination Address!<br>(Must be in the form of '192.168.0.1')"
 msgstr "כתובת IP לא חוקית עבור כתובת היעד! <br> (חייב להיות בצורה של '192.168.0.1')"
 
-#: functions.php:2934 functions.php:2938 functions.php:2942
+#: functions.php:3266 functions.php:3270 functions.php:3274
 #, fuzzy
 msgid "Invalid subnet for the Destination Address!<br>(Must be in the form of '192.168.0.1/255.255.255.0' or '192.168.0.1/24')"
 msgstr "תת רשת לא חוקית עבור כתובת היעד! <br> (חייב להיות בצורה של '192.168.0.1/255.255.255.0' או '192.168.0.1/24')"
 
-#: functions.php:2960
+#: functions.php:3292
 #, fuzzy
 msgid "Invalid value for Source Interface!"
 msgstr "ערך לא חוקי עבור ממשק המקור!"
 
-#: functions.php:2976
+#: functions.php:3308
 #, fuzzy
 msgid "Invalid value for Source Port! (0 - 65535)"
 msgstr "ערך לא חוקי עבור יציאת מקור! (0 - 65535)"
 
-#: functions.php:2992
+#: functions.php:3324
 #, fuzzy
 msgid "Invalid value for Source AS! (0 - 65535)"
 msgstr "ערך לא חוקי עבור מקור AS! (0 - 65535)"
 
-#: functions.php:3008
+#: functions.php:3340
 #, fuzzy
 msgid "Invalid value for Destination Interface!"
 msgstr "ערך לא חוקי עבור ממשק היעד!"
 
-#: functions.php:3024
+#: functions.php:3356
 #, fuzzy
 msgid "Invalid value for Destination Port! (0 - 65535)"
 msgstr "ערך לא חוקי עבור נמל יעד! (0 - 65535)"
 
-#: functions.php:3040
+#: functions.php:3372
 #, fuzzy
 msgid "Invalid value for Destination AS! (0 - 65535)"
 msgstr "ערך לא חוקי עבור יעד AS! (0 - 65535)"
 
-#: functions.php:3056
+#: functions.php:3388
 #, fuzzy
 msgid "Invalid value for Protocol! (1 - 255)"
 msgstr "ערך לא חוקי עבור פרוטוקול! (1 - 255)"
 
-#: functions.php:3068
+#: functions.php:3400
 #, fuzzy
 msgid "Invalid value for TCP Flag! (ex: 0x1b or 0x1b/SA or SA/SA)"
 msgstr "ערך לא חוקי עבור TCP דגל! (לדוגמה: 0x1b או 0x1b / SA או SA / SA)"
 
-#: functions.php:3077
+#: functions.php:3409
 #, fuzzy
 msgid "Invalid value for Cutoff Octets!"
 msgstr "ערך לא חוקי עבור אוקטס Cutoff!"
 
-#: functions.php:3084
+#: functions.php:3416
 #, fuzzy
 msgid "Invalid value for Cutoff Lines!"
 msgstr "ערך לא חוקי עבור קווי חיתוך!"
 
-#: functions.php:3091
+#: functions.php:3423
 #, fuzzy
 msgid "Invalid value for Sort Field!"
 msgstr "ערך לא חוקי עבור שדה מיון!"
 
-#: functions.php:3118
+#: functions.php:3450
 #, fuzzy, php-format
 msgid "FlowView Chart for %s Type is %s"
 msgstr "תרשים זרימה עבור סוג %s הוא %s"
 
-#: functions.php:3425
+#: functions.php:3764
 #, fuzzy
 msgid "Total Flows"
 msgstr "זרימות מקסיות:"
 
-#: functions.php:3430
+#: functions.php:3769
 #, fuzzy
 msgid "Bytes Exchanged"
 msgstr "בתים הוחלפו"
 
-#: functions.php:3434
+#: functions.php:3773
 #, fuzzy
 msgid "Packets Examined"
 msgstr "בר Packets"
@@ -1462,148 +1679,180 @@ msgstr "- מציג זרימה"
 msgid "Plugin -> Flow Admin"
 msgstr "- מנהל זרימה"
 
-#: setup.php:174
+#: setup.php:42 setup.php:62
+msgid "Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing."
+msgstr ""
+
+#: setup.php:210
 #, fuzzy
 msgid "The Filter has been Deleted"
 msgstr "המסנן נמחק"
 
-#: setup.php:175
+#: setup.php:211
 #, fuzzy
 msgid "The Filter has been Updated"
 msgstr "המסנן עודכן"
 
-#: setup.php:180
+#: setup.php:216
 msgid "Import/Export"
 msgstr "ייבוא/ייצוא"
 
-#: setup.php:181 setup.php:182 setup.php:183 setup.php:188 setup.php:319
-#: setup.php:321
+#: setup.php:217 setup.php:218 setup.php:219 setup.php:224 setup.php:355
+#: setup.php:357
 #, fuzzy
 msgid "FlowView"
 msgstr "תזרים"
 
-#: setup.php:191
+#: setup.php:227
 #, fuzzy
 msgid "Normal User"
 msgstr "משתמש רגיל"
 
-#: setup.php:192
+#: setup.php:228
 msgid "System Administration"
 msgstr "ניהול המערכת"
 
-#: setup.php:200 setup.php:221 setup.php:347
+#: setup.php:236 setup.php:257 setup.php:383
 #, fuzzy
 msgid "Flow Viewer"
 msgstr "מציג זרימה"
 
-#: setup.php:207
-msgid "(view)"
-msgstr "(הצגה)"
+#: setup.php:243
+msgid "Dashboard"
+msgstr ""
 
-#: setup.php:214 setup.php:242 setup.php:270 setup.php:298
+#: setup.php:250 setup.php:278 setup.php:306 setup.php:334
 #, fuzzy
 msgid "(save)"
 msgstr "שמור"
 
-#: setup.php:235 setup.php:263 setup.php:291
+#: setup.php:271 setup.php:299 setup.php:327
 msgid "(edit)"
 msgstr "(עריכה)"
 
-#: setup.php:249 setup.php:277 setup.php:305
+#: setup.php:285 setup.php:313 setup.php:341
 #, fuzzy
 msgid "(actions)"
 msgstr "פעולות"
 
-#: setup.php:352
+#: setup.php:388
 #, fuzzy
 #| msgid "Resolution"
 msgid "Hostname Resolution"
 msgstr "רזולוציה"
 
-#: setup.php:353
+#: setup.php:389
 #, fuzzy
 msgid "The method by which you wish to resolve hostnames."
 msgstr "השיטה שבאמצעותה ברצונך לפתור שמות מארחים."
 
-#: setup.php:356
+#: setup.php:392
 #, fuzzy
 msgid "Use Local Server"
 msgstr "השתמש בשרת מקומי"
 
-#: setup.php:357
+#: setup.php:393
 #, fuzzy
 msgid "Use DNS Server Below"
 msgstr "השתמש שרת DNS להלן"
 
-#: setup.php:358
+#: setup.php:394
 #, fuzzy
 msgid "Don't Resolve DNS"
 msgstr "אין לפתור DNS"
 
-#: setup.php:363
+#: setup.php:399
 msgid "Use Arin to Find Unregistered Domains"
 msgstr ""
 
-#: setup.php:364
+#: setup.php:400
 msgid "Many Big Tech data collection services like to mask their ownership of domains to obfuscate the fact that they are collecting your personal information.  If you are concerned with this and your Cacti install has access to the Internet, you can use Arin to remove the mask from those Big Tech companies."
 msgstr ""
 
-#: setup.php:376
+#: setup.php:412
 #, fuzzy
 msgid "Data Retention Policy"
 msgstr "מדיניות שמירת נתונים"
 
-#: setup.php:377
+#: setup.php:413
 #, fuzzy
 msgid "The amount of time Cacti will maintain the partitioned Flow tables."
 msgstr "משך הזמן שקקטוסים ישמור על טבלאות הזרימה המחולקות."
 
-#: setup.php:380
+#: setup.php:416
 #, fuzzy, php-format
 msgid "%d Week"
 msgstr "% d בשבוע"
 
-#: setup.php:381 setup.php:382
+#: setup.php:417 setup.php:418
 #, fuzzy, php-format
 msgid "%d Weeks"
 msgstr "% d שבועות"
 
-#: setup.php:383
+#: setup.php:419
 #, fuzzy, php-format
 msgid "%d Month"
 msgstr "% d חודש"
 
-#: setup.php:384 setup.php:385 setup.php:386 setup.php:387
+#: setup.php:420 setup.php:421 setup.php:422 setup.php:423
 #, fuzzy, php-format
 msgid "%d Months"
 msgstr "% חודשים"
 
-#: setup.php:388
+#: setup.php:424
 #, fuzzy, php-format
 msgid "%d Year"
 msgstr "% d שנה"
 
-#: setup.php:393
+#: setup.php:429
 #, fuzzy
 msgid "Database Partitioning Scheme"
 msgstr "תוכנית חלוקת מסדי נתונים"
 
-#: setup.php:394
+#: setup.php:430
 #, fuzzy
 msgid "Depending on the number of flows per minute, you may require more tables per day."
 msgstr "בהתאם למספר הזרימות לדקה, יתכן שתזדקק לטבלאות נוספות ביום."
 
-#: setup.php:397
+#: setup.php:433
 msgid "Daily"
 msgstr "יומי"
 
-#: setup.php:398
+#: setup.php:434
 msgid "Hourly"
 msgstr "שעתי"
 
-#: setup.php:404
+#: setup.php:440
 msgid "Misc"
 msgstr "שונות"
+
+#~ msgid "Device Name"
+#~ msgstr "שם ההתקן:% 1"
+
+#, fuzzy
+#~ msgid "Also, remember to remove any leftover files from your Net-Flow Capture location."
+#~ msgstr "כמו כן, זכור להסיר את כל הקבצים שנותרו מהאתר של 'זרימת רשת'."
+
+#, fuzzy
+#~ msgid "Device [edit: %s]"
+#~ msgstr "התקן [עריכה: %s]"
+
+#, fuzzy
+#~ msgid "Device [new]"
+#~ msgstr "מכשיר [חדש]"
+
+#~ msgid "Down"
+#~ msgstr "למטה"
+
+#~ msgid "Up"
+#~ msgstr "למעלה"
+
+#, fuzzy
+#~ msgid "Packets Bar"
+#~ msgstr "בר Packets"
+
+#~ msgid "(view)"
+#~ msgstr "(הצגה)"
 
 #, fuzzy
 #~ msgid "New Flow"
@@ -1902,14 +2151,6 @@ msgstr "שונות"
 #~ msgstr "כתובת IP"
 
 #, fuzzy
-#~ msgid "Filter Updated"
-#~ msgstr "מסנן עודכן"
-
-#, fuzzy
-#~ msgid "Filter Settings Saved"
-#~ msgstr "הגדרות סינון נשמרו"
-
-#, fuzzy
 #~ msgid "Filter Saved"
 #~ msgstr "המסנן נשמר"
 
@@ -1940,10 +2181,6 @@ msgstr "שונות"
 #, fuzzy
 #~ msgid "View"
 #~ msgstr "הצג"
-
-#, fuzzy
-#~ msgid "Filter Type"
-#~ msgstr "שם הסינון"
 
 #, fuzzy
 #~ msgid "End Date"
