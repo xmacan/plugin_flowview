@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: flowview on cacti 1.1.34\n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-06-07 22:00-0400\n"
-"PO-Revision-Date: 2024-03-04 00:20+0000\n"
+"PO-Revision-Date: 2024-06-07 22:20-0400\n"
 "Last-Translator: Junhua Huang <junhuahuang1218@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <http://translate.cacti.net/projects/cacti/flowview/zh_Hans/>\n"
-"Language: zh-CN\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: arrays.php:26 arrays.php:60 functions.php:578
 msgid "Select a Report"
@@ -31,7 +31,6 @@ msgid "Source Root Domain"
 msgstr "源根域"
 
 #: arrays.php:30
-#, fuzzy
 msgid "Destination Root Domain"
 msgstr "目标IP"
 
@@ -118,8 +117,6 @@ msgid "Flow Times"
 msgstr "流动时间"
 
 #: arrays.php:62
-#, fuzzy
-#| msgid "Source/Destination IP"
 msgid "Source/Destination IPs and Ports"
 msgstr "源/目标IP"
 
@@ -132,32 +129,26 @@ msgid "132 Columns"
 msgstr "132列"
 
 #: arrays.php:65
-#, fuzzy
 msgid "Show IP Accounting Emulation"
 msgstr "显示IP计费仿真"
 
 #: arrays.php:69
-#, fuzzy
 msgid "Any Part in Range"
 msgstr "范围内的任何零件"
 
 #: arrays.php:70
-#, fuzzy
 msgid "End Time in Range"
 msgstr "结束时间"
 
 #: arrays.php:71
-#, fuzzy
 msgid "Start Time in Range"
 msgstr "开始时间"
 
 #: arrays.php:72
-#, fuzzy
 msgid "Entirely in Range"
 msgstr "整个范围"
 
 #: arrays.php:76
-#, fuzzy
 msgid "Return All Lines"
 msgstr "返回所有行"
 
@@ -217,7 +208,6 @@ msgid "Packets"
 msgstr "包"
 
 #: arrays.php:178 arrays.php:185
-#, fuzzy
 msgid "Destination Domain"
 msgstr "目标IP"
 
@@ -252,7 +242,6 @@ msgid "TOS"
 msgstr "TOS"
 
 #: arrays.php:297
-#, fuzzy
 msgid "Destingation Prefix"
 msgstr "目标前缀"
 
@@ -261,14 +250,12 @@ msgid "N/A"
 msgstr "N/A"
 
 #: arrays.php:309 arrays.php:337 functions.php:2575
-#, fuzzy
 msgid "Source IF"
 msgstr "无来源"
 
 #: arrays.php:311 arrays.php:340
-#, fuzzy
 msgid "Destination IF"
-msgstr "日志目标"
+msgstr "目标AS"
 
 #: arrays.php:314 arrays.php:339 arrays.php:357 functions.php:2567
 msgid "Source Port"
@@ -318,10 +305,9 @@ msgstr "目的地"
 #: arrays.php:371 arrays.php:372 arrays.php:373 arrays.php:374
 #, php-format
 msgid "%d Pixels"
-msgstr ""
+msgstr "%d像素"
 
 #: arrays.php:388
-#, fuzzy
 msgid "General Filters"
 msgstr "清除过滤"
 
@@ -330,7 +316,6 @@ msgid "Filter"
 msgstr "过滤"
 
 #: arrays.php:392
-#, fuzzy
 msgid "The Saved Filter to display."
 msgstr "显示已保存的过滤器。"
 
@@ -343,7 +328,6 @@ msgid "Listener"
 msgstr "监听"
 
 #: arrays.php:401
-#, fuzzy
 msgid "The Listener to use for the Filter."
 msgstr "用于过滤器的侦听器。"
 
@@ -352,12 +336,10 @@ msgid "Presets"
 msgstr "预置"
 
 #: arrays.php:410
-#, fuzzy
 msgid "If this Filter is based upon a pre-defined Timespan, select it here."
 msgstr "如果此过滤器基于预定义的时间跨度，请在此处选择它。"
 
 #: arrays.php:419
-#, fuzzy
 msgid "Detailed Filter Criteria"
 msgstr "详细的过滤条件"
 
@@ -366,7 +348,6 @@ msgid "Report Type"
 msgstr "报告类型"
 
 #: arrays.php:423
-#, fuzzy
 msgid "The Report Type to use by default for this Filter when creating a Report."
 msgstr "创建报告时默认用于此筛选器的报告类型。"
 
@@ -375,47 +356,38 @@ msgid "Printed"
 msgstr "打印"
 
 #: arrays.php:426
-#, fuzzy
 msgid "Statistical"
 msgstr "统计："
 
 #: arrays.php:430
-#, fuzzy
 msgid "Statistical Report"
 msgstr "选择一个统计报告"
 
 #: arrays.php:431
-#, fuzzy
 msgid "The Display Report Type to use by default for this Filter when creating a Report."
 msgstr "创建报告时默认用于此筛选器的显示报告类型。"
 
 #: arrays.php:438
-#, fuzzy
 msgid "Printed Report"
-msgstr "选择报告打印"
+msgstr "您只能选择一份统计报告或一份打印报告（不是两种）！"
 
 #: arrays.php:439
-#, fuzzy
 msgid "The Printed Report Type to use by default for this Filter when creating a Printed Report."
 msgstr "创建打印报告时默认用于此筛选器的打印报告类型。"
 
 #: arrays.php:446
-#, fuzzy
 msgid "Range Rules"
 msgstr "管理时间表"
 
 #: arrays.php:447
-#, fuzzy
 msgid "Constrain the Filter Data by these time filter rules."
 msgstr "通过这些时间过滤器规则约束过滤器数据。"
 
 #: arrays.php:454
-#, fuzzy
 msgid "Resolve IP's"
 msgstr "解析地址："
 
 #: arrays.php:455
-#, fuzzy
 msgid "Resolve IP Addresses to Domain Names."
 msgstr "解析地址："
 
@@ -428,12 +400,10 @@ msgid "No"
 msgstr "不"
 
 #: arrays.php:465 flowview_filters.php:345 functions.php:603
-#, fuzzy
 msgid "Sort Field"
 msgstr "排序字段："
 
 #: arrays.php:466
-#, fuzzy
 msgid "The default Sort Field for the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "过滤器的默认排序字段。此设置将应用于所有计划的报告。"
 
@@ -442,93 +412,82 @@ msgid "Maximum Rows"
 msgstr "最大行数"
 
 #: arrays.php:474
-#, fuzzy
 msgid "The Maximum Rows to provide in the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "过滤器中要提供的最大行数。此设置将应用于所有计划的报告。"
 
 #: arrays.php:481
-#, fuzzy
 msgid "Minimum Bytes"
 msgstr "最小字节数："
 
 #: arrays.php:482
-#, fuzzy
 msgid "The Minimum Total Bytes to consider for the Filter.  Any flow totals that are less than this many bytes will be ignored."
 msgstr "过滤器要考虑的最小总字节数。小于此字节总数的任何流总数将被忽略。"
 
 #: arrays.php:491
 msgid "Charting Options"
-msgstr ""
+msgstr "图表选项"
 
 #: arrays.php:494
 msgid "Graph Type"
-msgstr ""
+msgstr "图形类型"
 
 #: arrays.php:495
 msgid "The Graph Type to display by default.  They include Bar, Pie, and Treemap."
-msgstr ""
+msgstr "默认情况下要显示的图形类型。 它们包括 Bar、Pie 和 Treemap。"
 
 #: arrays.php:500
 msgid "Bar Chart"
-msgstr ""
+msgstr "条形图"
 
 #: arrays.php:501
 msgid "Pie Chart"
-msgstr ""
+msgstr "饼图"
 
 #: arrays.php:502
 msgid "Treemap Chart"
-msgstr ""
+msgstr "树状图"
 
 #: arrays.php:506
 msgid "Graph Height"
-msgstr ""
+msgstr "图形高度"
 
 #: arrays.php:507
 msgid "The Graph Hight to use by default."
-msgstr ""
+msgstr "默认情况下要使用的 Graph Hight。"
 
 #: arrays.php:514
-#, fuzzy
-#| msgid "Table"
 msgid "Table Panel"
 msgstr "表"
 
 #: arrays.php:515
 msgid "Should the Table Panel be displayed by default."
-msgstr ""
+msgstr "是否应默认显示表格面板。"
 
 #: arrays.php:521
-#, fuzzy
-#| msgid "Bytes Bar"
 msgid "Bytes Panel"
 msgstr "Bytes Bar"
 
 #: arrays.php:522
 msgid "Should the Bytes Panel be displayed by default."
-msgstr ""
+msgstr "是否应默认显示“字节”面板。"
 
 #: arrays.php:528
-#, fuzzy
 msgid "Packets Panel"
 msgstr "Packets Bar"
 
 #: arrays.php:529
 msgid "Should the Packets Panel be displayed by default."
-msgstr ""
+msgstr "默认情况下是否应显示“数据包”面板。"
 
 #: arrays.php:535
-#, fuzzy
-#| msgid "Flows Bar"
 msgid "Flows Panel"
 msgstr "Flows Bar"
 
 #: arrays.php:536
 msgid "Should the Flows Panel be displayed by default."
-msgstr ""
+msgstr "是否应默认显示“流”面板。"
 
 #: arrays.php:544
-#, fuzzy
 msgid "Protocol Filters"
 msgstr "协议"
 
@@ -537,7 +496,6 @@ msgid "Protocols"
 msgstr "协议"
 
 #: arrays.php:548
-#, fuzzy
 msgid "Select the Specific Protocol for the Filter."
 msgstr "选择过滤器的特定协议。"
 
@@ -546,7 +504,6 @@ msgid "TCP Flags"
 msgstr "TCP标志"
 
 #: arrays.php:556
-#, fuzzy
 msgid "The TCP Flags to search for in the Filter.  This can be a comma delimited list of TCP Flags"
 msgstr "在过滤器中搜索的TCP标志。这可以是TCP标志的逗号分隔列表"
 
@@ -555,12 +512,10 @@ msgid "TOS Fields"
 msgstr "TOS字段"
 
 #: arrays.php:564
-#, fuzzy
 msgid "The TOS Fields to search for in the Filter.  This can be a comma delimited list of TOS Fields"
 msgstr "在过滤器中搜索的TOS字段。这可以是逗号分隔的TOS字段列表"
 
 #: arrays.php:572
-#, fuzzy
 msgid "Filter on the select Source IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "在筛选器中选择的源IP上进行筛选。这可以是IPv4或IPv6地址的逗号分隔列表，也可以是CIDR格式（例如192.168.1.0/24）的IPv4或IPv6地址范围的逗号分隔列表。"
 
@@ -569,7 +524,6 @@ msgid "Source Ports"
 msgstr "源端口"
 
 #: arrays.php:580
-#, fuzzy
 msgid "Filter on the select Source Ports for in the Filter.  This can be a comma delimited list of Source Ports."
 msgstr "在“过滤器”中选择的“源端口”上进行过滤。这可以是逗号分隔的源端口列表。"
 
@@ -578,27 +532,22 @@ msgid "Source Interface"
 msgstr "源接口"
 
 #: arrays.php:588
-#, fuzzy
 msgid "Filter on the select Source Interface for in the Filter.  This can be a comma delimited list of Source Interfaces"
 msgstr "在过滤器中选择源接口上进行过滤。这可以是源接口的逗号分隔列表"
 
 #: arrays.php:596
-#, fuzzy
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Source AS's"
 msgstr "在筛选器中选择的目标AS上进行筛选。这可以是逗号分隔的来源AS的列表"
 
 #: arrays.php:604
-#, fuzzy
 msgid "Filter on the select Destination IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "在筛选器中选择的目标IP上进行筛选。这可以是IPv4或IPv6地址的逗号分隔列表，也可以是CIDR格式（例如192.168.1.0/24）的IPv4或IPv6地址范围的逗号分隔列表。"
 
 #: arrays.php:611
-#, fuzzy
 msgid "Dest Ports"
 msgstr "目标端口"
 
 #: arrays.php:612
-#, fuzzy
 msgid "Filter on the select Destination Ports for in the Filter.  This can be a comma delimited list of Destimation Ports."
 msgstr "在筛选器中选择的目标端口上进行筛选。这可以是以逗号分隔的“目标端口”列表。"
 
@@ -607,7 +556,6 @@ msgid "Dest Interface"
 msgstr "目标接口"
 
 #: arrays.php:620
-#, fuzzy
 msgid "Filter on the select Destination Interface for in the Filter.  This can be a comma delimited list of Destimation Interfaces."
 msgstr "在筛选器中选择的目标接口上进行筛选。这可以是Destimation接口的逗号分隔列表。"
 
@@ -616,7 +564,6 @@ msgid "Dest AS"
 msgstr "目标AS"
 
 #: arrays.php:628
-#, fuzzy
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Destimation AS's"
 msgstr "在筛选器中选择的目标AS上进行筛选。这可以是Destimation AS的逗号分隔列表"
 
@@ -625,8 +572,6 @@ msgid "Delete"
 msgstr "删除"
 
 #: flowview_devices.php:39
-#, fuzzy
-#| msgid "Listener"
 msgid "Listener Name"
 msgstr "监听"
 
@@ -635,12 +580,10 @@ msgid "Name of the device to be displayed."
 msgstr "要显示的设备的名称。"
 
 #: flowview_devices.php:45
-#, fuzzy
 msgid "Collection Method"
 msgstr "收集方法"
 
 #: flowview_devices.php:46
-#, fuzzy
 msgid "There are two support collection methods, the first utilizes the legacy flow-tools binaries and the second leverages Cacti's own PHP based flow stream server."
 msgstr "有两种支持收集方法，第一种利用旧版流程工具二进制文件，第二种利用Cacti自己的基于PHP的流服务器。"
 
@@ -673,20 +616,17 @@ msgid "Cancel"
 msgstr "取消"
 
 #: flowview_devices.php:218
-#, fuzzy, php-format
+#, php-format
 msgid "Listener [edit: %s]"
-msgstr "报告：[编辑：％s]"
+msgstr "监听器 [编辑： %s]"
 
 #: flowview_devices.php:222
-#, fuzzy
 msgid "Listener [new]"
 msgstr "报告：[新]"
 
 #: flowview_devices.php:254 flowview_devices.php:374
-#, fuzzy
-#| msgid "IP Address"
 msgid "Address"
-msgstr "IP地址"
+msgstr "地址"
 
 #: flowview_devices.php:258 flowview_devices.php:584
 msgid "Status"
@@ -694,29 +634,27 @@ msgstr "状态"
 
 #: flowview_devices.php:262 functions.php:30
 msgid "Templates"
-msgstr ""
+msgstr "模板"
 
 #: flowview_devices.php:266 flowview_devices.php:601
-#, fuzzy
-#| msgid "Filter Updated"
 msgid "Last Updated"
-msgstr "过滤器更新"
+msgstr "最后更新"
 
 #: flowview_devices.php:268
 msgid "Active Streams update every 5 minutes"
-msgstr ""
+msgstr "活动流每 5 分钟更新一次"
 
 #: flowview_devices.php:294
 msgid "No Inbound Streams Detected"
-msgstr ""
+msgstr "未检测到入站流"
 
 #: flowview_devices.php:305
 msgid "Listener Detected Templates"
-msgstr ""
+msgstr "侦听器检测到的模板"
 
 #: flowview_devices.php:314
 msgid "Template"
-msgstr ""
+msgstr "模板"
 
 #: flowview_devices.php:329 flowview_devices.php:519 flowview_filters.php:257
 #: flowview_schedules.php:479 functions.php:559
@@ -725,34 +663,31 @@ msgstr "Go"
 
 #: flowview_devices.php:378
 msgid "Template ID"
-msgstr ""
+msgstr "模板ID"
 
 #: flowview_devices.php:382
-#, fuzzy
-#| msgid "Filter Name"
 msgid "Field Name"
-msgstr "过滤器名称"
+msgstr "字段名称"
 
 #: flowview_devices.php:386
 msgid "Field ID"
-msgstr ""
+msgstr "字段ID"
 
 #: flowview_devices.php:390
-#, fuzzy
 msgid "Field Type"
-msgstr "过滤器名称"
+msgstr "字段类型"
 
 #: flowview_devices.php:394
 msgid "Length"
-msgstr ""
+msgstr "长度"
 
 #: flowview_devices.php:398
 msgid "Unpack"
-msgstr ""
+msgstr "解包  Unpack"
 
 #: flowview_devices.php:438
 msgid "No Inbound Stream Templates Detected"
-msgstr ""
+msgstr "未检测到入站流模板"
 
 #: flowview_devices.php:504
 msgid "FlowView Listeners"
@@ -792,32 +727,30 @@ msgid "Allowed From"
 msgstr "允许来自"
 
 #: flowview_devices.php:589
-#, fuzzy
 msgid "Observed Listen"
 msgstr "观察听"
 
 #: flowview_devices.php:591
 msgid "The port security actually observed on the listeners port."
-msgstr ""
+msgstr "在侦听器端口上实际观察到的端口安全性。"
 
 #: flowview_devices.php:595
 msgid "Streams"
-msgstr ""
+msgstr "日志流"
 
 #: flowview_devices.php:597
 msgid "The number of inbound connections from various sources."
-msgstr ""
+msgstr "来自各种源的入站连接数。"
 
 #: flowview_devices.php:603
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
-msgstr ""
+msgstr "从收集的所有流中获取的最长更新时间。 此值每 5 分钟更新一次。"
 
 #: flowview_devices.php:630
 msgid "Cacti"
 msgstr "Cacti"
 
 #: flowview_devices.php:641
-#, fuzzy
 msgid "No Flowview Listeners"
 msgstr "FlowView监听器"
 
@@ -834,32 +767,26 @@ msgid "Enable"
 msgstr "启用"
 
 #: flowview_filters.php:132
-#, fuzzy
 msgid "Click 'Continue' to delete the following Filter(s) and all matching Filter."
 msgstr "点击“继续”删除下列时间表。"
 
 #: flowview_filters.php:139
-#, fuzzy
 msgid "Click 'Continue' to Disable the following Filters(s) and all matching Filter."
 msgstr "点击“继续”以禁用以下计划"
 
 #: flowview_filters.php:146
-#, fuzzy
 msgid "Click 'Continue' to Enable the following Filters(s)."
 msgstr "点击“继续”以启用以下计划"
 
 #: flowview_filters.php:153
-#, fuzzy
 msgid "You must select at least one Filter."
 msgstr "您必须至少选择一个设备。"
 
 #: flowview_filters.php:224
-#, fuzzy
 msgid "FlowView Filters"
 msgstr "流量过滤器"
 
 #: flowview_filters.php:226
-#, fuzzy
 msgid "FlowView Filters [ Add Devices before Filters ]"
 msgstr "FlowView过滤器[在过滤器之前添加设备]"
 
@@ -967,12 +894,11 @@ msgstr ""
 "这些文件位于'formats'目录."
 
 #: flowview_schedules.php:187
-#, fuzzy, php-format
+#, php-format
 msgid "Sent Scheduled Report %s in Background."
 msgstr "已在后台发送预定报告%s。"
 
 #: flowview_schedules.php:190
-#, fuzzy
 msgid "Reports will arrive once Complete."
 msgstr "一旦完成，报告将到达。"
 
@@ -997,12 +923,11 @@ msgid "You must select at least one schedule."
 msgstr "您必须至少选择一个时间表。"
 
 #: flowview_schedules.php:351
-#, fuzzy, php-format
+#, php-format
 msgid "Report: [edit: %s]"
-msgstr "报告：[编辑：％s]"
+msgstr "报告：[编辑：%s]"
 
 #: flowview_schedules.php:353
-#, fuzzy
 msgid "Report: [new]"
 msgstr "报告：[新]"
 
@@ -1015,7 +940,6 @@ msgid "FlowView Schedules"
 msgstr "FlowView时间表"
 
 #: flowview_schedules.php:448
-#, fuzzy
 msgid "FlowView Schedules [ Add Devices before Schedules ]"
 msgstr "FlowView时间表[在时间表之前添加设备]"
 
@@ -1045,47 +969,41 @@ msgid "Email"
 msgstr "电子邮件"
 
 #: functions.php:29
-#, fuzzy
 msgid "General"
-msgstr "清除过滤"
+msgstr "基本"
 
 #: functions.php:73
-#, fuzzy
 msgid "Select a Report Type First"
 msgstr "选择报告打印"
 
 #: functions.php:101
-#, fuzzy, php-format
+#, php-format
 msgid "Filter: [edit: %s]"
-msgstr "报告：[编辑：％s]"
+msgstr "过滤器：[编辑：%s]"
 
 #: functions.php:103
-#, fuzzy
 msgid "Filter: [new]"
 msgstr "报告：[新]"
 
 #: functions.php:477
-#, fuzzy
 msgid "Undefined Filter [ Select Filter to get Details ]"
 msgstr "未定义的过滤器[选择过滤器以获取详细信息]"
 
 #: functions.php:487
-#, fuzzy, php-format
+#, php-format
 msgid "Statistical Report: %s [ Including overrides as specified below ]"
 msgstr "统计报告：%s [包括以下指定的替代项]"
 
 #: functions.php:489
-#, fuzzy, php-format
+#, php-format
 msgid "Printed Report: %s [ Including overrides as specified below ]"
 msgstr "印刷报告：%s [包括以下指定的替代项]"
 
 #: functions.php:507
-#, fuzzy
 msgid "Select a Filter"
 msgstr "选择报告打印"
 
 #: functions.php:526
-#, fuzzy
 msgid "Select a Listener"
 msgstr "选择报告打印"
 
@@ -1118,12 +1036,10 @@ msgid "Top 5 Samples"
 msgstr "顶部样本5"
 
 #: functions.php:553
-#, fuzzy
 msgid "Show only Domains on Charts Below"
 msgstr "在下面的图表上仅显示域"
 
 #: functions.php:555
-#, fuzzy
 msgid "Domains/Hostnames Only"
 msgstr "仅域"
 
@@ -1140,7 +1056,6 @@ msgid "Edit"
 msgstr "编辑"
 
 #: functions.php:561
-#, fuzzy
 msgid "Edit Current Filter"
 msgstr "编辑当前过滤器"
 
@@ -1149,7 +1064,6 @@ msgid "Save"
 msgstr "保存"
 
 #: functions.php:562
-#, fuzzy
 msgid "Save Overrides to Selected Filter"
 msgstr "将替代保存到选定的过滤器"
 
@@ -1158,27 +1072,24 @@ msgid "Report"
 msgstr "报告"
 
 #: functions.php:581
-#, fuzzy, php-format
+#, php-format
 msgid "Statistical: %s"
-msgstr "统计："
+msgstr "统计：%s"
 
 #: functions.php:587
-#, fuzzy, php-format
+#, php-format
 msgid "Printed: %s"
-msgstr "打印："
+msgstr "印刷： %s"
 
 #: functions.php:591 functions.php:608
-#, fuzzy
 msgid "Select a Filter First"
 msgstr "选择报告打印"
 
 #: functions.php:647
-#, fuzzy
 msgid "Lines"
 msgstr "日志默认显示最后多少行"
 
 #: functions.php:665
-#, fuzzy
 msgid "Octets"
 msgstr "八位位组"
 
@@ -1216,25 +1127,23 @@ msgstr "向前移动时间"
 
 #: functions.php:739
 msgid "Graph"
-msgstr ""
+msgstr "图形模板"
 
 #: functions.php:743
 msgid "Bar"
-msgstr ""
+msgstr "栏"
 
 #: functions.php:744
-#, fuzzy
-#| msgid "Printed"
 msgid "Pie"
-msgstr "打印"
+msgstr "饼图"
 
 #: functions.php:745
 msgid "Treemap"
-msgstr ""
+msgstr "树状图"
 
 #: functions.php:749
 msgid "Height"
-msgstr ""
+msgstr "高度"
 
 #: functions.php:761
 msgid "Show/Hide"
@@ -1247,60 +1156,58 @@ msgstr "表"
 #: functions.php:792
 #, php-format
 msgid "Top %s Distribution Chart of Bytes"
-msgstr ""
+msgstr "字节数的前%s分布图"
 
 #: functions.php:793
 #, php-format
 msgid "Top %s Pie Chart of Bytes"
-msgstr ""
+msgstr "前 %s 个饼图字节数"
 
 #: functions.php:794
 #, php-format
 msgid "Top %s Treemap Chart of Bytes"
-msgstr ""
+msgstr "前 %s 个树状图字节图"
 
 #: functions.php:797
 #, php-format
 msgid "Top %s Distribution Chart of Packets"
-msgstr ""
+msgstr "数据包的前%s分布图"
 
 #: functions.php:798
 #, php-format
 msgid "Top %s Pie Chart of Packets"
-msgstr ""
+msgstr "前 %s 个数据包饼图"
 
 #: functions.php:799
 #, php-format
 msgid "Top %s Treemap Chart of Packets"
-msgstr ""
+msgstr "Top %s Treemap 数据包图"
 
 #: functions.php:802
 #, php-format
 msgid "Top %s Distribution Chart of Flows"
-msgstr ""
+msgstr "流量的前 %s 分布图"
 
 #: functions.php:803
 #, php-format
 msgid "Top %s Pie Chart of Flows"
-msgstr ""
+msgstr "前 %s 个饼图流程图"
 
 #: functions.php:804
 #, php-format
 msgid "Top %s Treemap Chart of Flows"
-msgstr ""
+msgstr "前 %s 条状图流程图"
 
 #: functions.php:1323
-#, fuzzy
 msgid "Filter Settings Saved"
 msgstr "过滤器设置已保存"
 
 #: functions.php:1439
-#, fuzzy, php-format
+#, php-format
 msgid "Client/Private (%s)"
 msgstr "客户/私人（%s）"
 
 #: functions.php:1441
-#, fuzzy
 msgid "icmp (0)"
 msgstr "icmp（0）"
 
@@ -1314,20 +1221,19 @@ msgid "Cacti Flowview"
 msgstr "Cacti Flowview"
 
 #: functions.php:1491
-#, fuzzy, php-format
+#, php-format
 msgid "Netflow - %s"
-msgstr "Netflow - %"
+msgstr "Netflow - %s"
 
 #: functions.php:1684
-#, fuzzy, php-format
+#, php-format
 msgid "Subnet Filter: %s is not a value CIDR format"
 msgstr "子网筛选器：%s不是值CIDR格式"
 
 #: functions.php:1817 functions.php:1823 functions.php:1829 functions.php:1832
 #: functions.php:1858 functions.php:2819
-#, fuzzy
 msgid "unresolved"
-msgstr "-未解决-"
+msgstr "未解决"
 
 #: functions.php:2147 functions.php:2148 functions.php:2149 functions.php:2150
 #: functions.php:2151 functions.php:2152 functions.php:2153 functions.php:2154
@@ -1336,32 +1242,28 @@ msgstr "-未解决-"
 #: functions.php:2163 functions.php:2164 functions.php:2165 functions.php:2166
 #: functions.php:2167 functions.php:2168 functions.php:2169 functions.php:2170
 #: functions.php:2171 functions.php:2172
-#, fuzzy, php-format
+#, php-format
 msgid "%d - %d Bytes"
-msgstr "%s Bytes"
+msgstr "%d - %d 字节"
 
 #: functions.php:2173
-#, fuzzy, php-format
+#, php-format
 msgid "> %d Bytes"
 msgstr "%d Bytes"
 
 #: functions.php:2531
-#, fuzzy
 msgid "Source DNS"
 msgstr "来源AS"
 
 #: functions.php:2535
-#, fuzzy
 msgid "Source Root DNS"
 msgstr "来源AS"
 
 #: functions.php:2539
-#, fuzzy
 msgid "Dest DNS"
 msgstr "目标AS"
 
 #: functions.php:2543
-#, fuzzy
 msgid "Dest Root DNS"
 msgstr "目标端口"
 
@@ -1370,7 +1272,6 @@ msgid "DNS"
 msgstr "DNS"
 
 #: functions.php:2551
-#, fuzzy
 msgid "Root DNS"
 msgstr "根DNS"
 
@@ -1391,12 +1292,11 @@ msgid "Type of Service"
 msgstr "服务类型"
 
 #: functions.php:2622
-#, fuzzy
 msgid "Bytes/Packet"
 msgstr "包"
 
 #: functions.php:2925
-#, fuzzy, php-format
+#, php-format
 msgid "Boolean: %s, Numeric: %s, Hex: %s"
 msgstr "布尔值：%s，数字：%s，十六进制：%s"
 
@@ -1409,32 +1309,26 @@ msgid "Throughput"
 msgstr "吞吐量"
 
 #: functions.php:2938
-#, fuzzy
 msgid "Reliability"
 msgstr "可靠性"
 
 #: functions.php:2939
-#, fuzzy
 msgid "Mincost"
 msgstr "最低成本"
 
 #: functions.php:2943
-#, fuzzy
 msgid "Net Control"
 msgstr "网络控制"
 
 #: functions.php:2944
-#, fuzzy
 msgid "Internet Control"
 msgstr "互联网控制"
 
 #: functions.php:2945
-#, fuzzy
 msgid "Critic ECP"
 msgstr "评论家ECP"
 
 #: functions.php:2946
-#, fuzzy
 msgid "Flash Override"
 msgstr "闪存覆盖"
 
@@ -1459,22 +1353,22 @@ msgid "Summary Statistics"
 msgstr "摘要统计"
 
 #: functions.php:3001
-#, fuzzy, php-format
+#, php-format
 msgid "IP Packet Size Distribution (%%)"
 msgstr "IP数据包大小分布（％）"
 
 #: functions.php:3006
-#, fuzzy, php-format
+#, php-format
 msgid "Packets per Flow Distribution (%%)"
 msgstr "每个流量分配的数据包（%%）"
 
 #: functions.php:3011
-#, fuzzy, php-format
+#, php-format
 msgid "Octets per Flow Distribution (%%)"
 msgstr "每流量分布的八位字节（%%）"
 
 #: functions.php:3016
-#, fuzzy, php-format
+#, php-format
 msgid "Flow Time Distribution (%%)"
 msgstr "流量时间分布（％）"
 
@@ -1556,33 +1450,28 @@ msgid "FlowView Chart for %s Type is %s"
 msgstr "FlowView图表 %s 类型是 %s"
 
 #: functions.php:3764
-#, fuzzy
 msgid "Total Flows"
 msgstr "最大流量："
 
 #: functions.php:3769
-#, fuzzy
 msgid "Bytes Exchanged"
 msgstr "字节交换"
 
 #: functions.php:3773
-#, fuzzy
 msgid "Packets Examined"
 msgstr "Packets Bar"
 
 #: setup.php:34
-#, fuzzy
 msgid "Plugin -> Flow Viewer"
 msgstr "插件 - &gt;流程查看器"
 
 #: setup.php:35
-#, fuzzy
 msgid "Plugin -> Flow Admin"
 msgstr "插件 - > Flow Admin"
 
 #: setup.php:42 setup.php:62
 msgid "Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing."
-msgstr ""
+msgstr "请重命名 flowview 目录中的 config.php.dist 或 config_local.php.dist 文件，并在安装之前更改数据库设置。"
 
 #: setup.php:210
 msgid "The Filter has been Deleted"
@@ -1615,7 +1504,7 @@ msgstr "流量查看器"
 
 #: setup.php:243
 msgid "Dashboard"
-msgstr ""
+msgstr "仪表盘"
 
 #: setup.php:250 setup.php:278 setup.php:306 setup.php:334
 msgid "(save)"
@@ -1630,8 +1519,6 @@ msgid "(actions)"
 msgstr "（动作）"
 
 #: setup.php:388
-#, fuzzy
-#| msgid "Resolution"
 msgid "Hostname Resolution"
 msgstr "分辨率"
 
@@ -1640,35 +1527,30 @@ msgid "The method by which you wish to resolve hostnames."
 msgstr "您希望解析主机名的方法。"
 
 #: setup.php:392
-#, fuzzy
 msgid "Use Local Server"
 msgstr "使用本地服务器"
 
 #: setup.php:393
-#, fuzzy
 msgid "Use DNS Server Below"
 msgstr "使用备用DNS服务器"
 
 #: setup.php:394
-#, fuzzy
 msgid "Don't Resolve DNS"
 msgstr "不要解析DNS"
 
 #: setup.php:399
 msgid "Use Arin to Find Unregistered Domains"
-msgstr ""
+msgstr "使用 Arin 查找未注册的域名"
 
 #: setup.php:400
 msgid "Many Big Tech data collection services like to mask their ownership of domains to obfuscate the fact that they are collecting your personal information.  If you are concerned with this and your Cacti install has access to the Internet, you can use Arin to remove the mask from those Big Tech companies."
-msgstr ""
+msgstr "许多大型科技数据收集服务喜欢掩盖他们对域名的所有权，以混淆他们正在收集您的个人信息的事实。 如果您担心这一点并且您的 Cacti 安装可以访问 Internet，您可以使用 Arin 从那些大型科技公司那里移除面具。"
 
 #: setup.php:412
-#, fuzzy
 msgid "Data Retention Policy"
 msgstr "资料保留政策"
 
 #: setup.php:413
-#, fuzzy
 msgid "The amount of time Cacti will maintain the partitioned Flow tables."
 msgstr "仙人掌将维护分区流表的时间。"
 
@@ -1698,12 +1580,10 @@ msgid "%d Year"
 msgstr "%d 年"
 
 #: setup.php:429
-#, fuzzy
 msgid "Database Partitioning Scheme"
 msgstr "数据库分区方案"
 
 #: setup.php:430
-#, fuzzy
 msgid "Depending on the number of flows per minute, you may require more tables per day."
 msgstr "根据每分钟的流数，您可能每天需要更多表。"
 
