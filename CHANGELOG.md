@@ -33,6 +33,7 @@
 * feature: Show visual indicator that the filter has been saved
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
+* feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries
 * feature#117: Allow guest account access
 * feature#120: Save Charting Options when you Save a Filter
 * feature#122: Charts should have a Graph Title that Matches the Report Type

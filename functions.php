@@ -3580,9 +3580,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 					/* return the hostname, without the trailing '.' */
 					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-						(ip, host, time)
-						VALUES (?, ?, ?)',
-						array($ip, $hostname, $time));
+						(ip, host, source, time)
+						VALUES (?, ?, ?, ?)
+						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+						array($ip, $hostname, 'Specified DNS', $time));
 
 					return $hostname . $suffix;
 				}
@@ -3603,17 +3604,19 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			if ($ip != $dns_name) {
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, time)
-					VALUES (?, ?, ?)',
-					array($ip, $dns_name, $time));
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'ARIN', $time));
 
 				return $ip . $suffix;
 			} else {
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, time)
-					VALUES (?, ?, ?)',
-					array($ip, $ip, $time));
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $ip, 'ARIN Error', $time));
 
 				return $ip . $suffix;
 			}
@@ -3627,9 +3630,19 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			if ($ip != $dns_name) {
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, time)
-					VALUES (?, ?, ?)',
-					array($ip, $dns_name, $time));
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'ARIN', $time));
+
+				return $ip . $suffix;
+			} else {
+				/* error - return the hostname we constructed (without the . on the end) */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $ip, 'ARIN Error', $time));
 
 				return $ip . $suffix;
 			}
@@ -3644,10 +3657,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 		if ($dns_name != $ip) {
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-				(ip, host, time)
-				VALUES (?, ?, ?)
-				ON DUPLICATE KEY UPDATE time=VALUES(time)',
-				array($ip, $dns_name, $time));
+				(ip, host, source, time)
+				VALUES (?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+				array($ip, $dns_name, 'Local DNS', $time));
 
 			return $dns_name . $suffix;
 		} else {
@@ -3659,12 +3672,21 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			if ($dns_name != $ip) {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, time)
-					VALUES (?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time)',
-					array($ip, $dns_name, $time));
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'ARIN', $time));
 
 				return $dns_name . $suffix;
+			} else {
+				/* error - return the hostname we constructed (without the . on the end) */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $ip, 'ARIN Error', $time));
+
+				return $ip . $suffix;
 			}
 		}
 
@@ -3672,10 +3694,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 	/* error - return the hostname */
 	flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-		(ip, host, time)
-		VALUES (?, ?, ?)
-		ON DUPLICATE KEY UPDATE time=VALUES(time)',
-		array($ip, $ip, $time));
+		(ip, host, source, time)
+		VALUES (?, ?, ?, ?)
+		ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+		array($ip, $ip, 'DNS Error', $time));
 
 	return $ip . $suffix;
 }

@@ -182,7 +182,7 @@ function flowview_upgrade($current, $old) {
 		}
 
 		db_execute("UPDATE plugin_realms
-			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php'
+			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
 			WHERE plugin='flowview'
 			AND file LIKE '%devices%'");
 
@@ -208,6 +208,14 @@ function flowview_upgrade($current, $old) {
 				ADD COLUMN panel_bytes char(2) NOT NULL default 'on' AFTER panel_table,
 				ADD COLUMN panel_packets char(2) NOT NULL default 'on' AFTER panel_bytes,
 				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
+				DROP PRIMARY KEY,
+				ADD PRIMARY KEY(id),
+				ADD UNIQUE KEY ip(ip),
+				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
 		}
 
 		cacti_log('Flowview Database Upgrade Complete', true, 'FLOWVIEW');

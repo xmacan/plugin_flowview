@@ -32,7 +32,7 @@ function plugin_flowview_install() {
 	api_plugin_register_hook('flowview', 'page_head',             'flowview_page_head',            'setup.php');
 
 	api_plugin_register_realm('flowview', 'flowview.php', __('Plugin -> Flow Viewer', 'flowview'), 1);
-	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php', __('Plugin -> Flow Admin', 'flowview'), 1);
+	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php', __('Plugin -> Flow Admin', 'flowview'), 1);
 
 	flowview_determine_config();
 
@@ -134,6 +134,7 @@ function flowview_config_arrays() {
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_devices.php']   = __('Listeners', 'flowview');
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_filters.php']   = __('Filters', 'flowview');
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_schedules.php'] = __('Schedules', 'flowview');
+			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_dnscache.php']  = __('DNS Cache', 'flowview');
 		}
 	}
 	$menu = $menu2;
@@ -485,10 +486,13 @@ function flowview_setup_table() {
 	global $config, $settings, $flowviewdb_default;
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
+		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		ip varchar(45) NOT NULL default '',
 		host varchar(255) NOT NULL default '',
+		source varchar(40) NOT NULL default '',
 		time bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY (ip))
+		PRIMARY KEY (id),
+		UNIQUE KEY ip (ip))
 		ENGINE=MEMORY,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
