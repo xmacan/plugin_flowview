@@ -188,7 +188,7 @@ function view_dns_cache() {
 					</td>
 					<td>
 						<select id='source' name='source' onChange='applyFilter()'>
-							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default');?></option>
+							<option value='-1'<?php print (get_request_var('source') == '-1' ? ' selected>':'>') . __('Any');?></option>
 							<?php
 							$sources = array_rekey(
 								db_fetch_assoc('SELECT DISTINCT source
