@@ -91,12 +91,6 @@ function flowview_upgrade($current, $old) {
 	flowview_connect();
 
 	if ($current != $old) {
-		if (!$force) {
-			cacti_log("Upgrading Flowview Database Schema from $old to $current.", true, 'FLOWVIEW');
-		} else {
-			cacti_log("Force Upgrading Flowview Database Schema.", true, 'FLOWVIEW');
-		}
-
 		$bad_titles = flowview_db_fetch_cell('SELECT COUNT(*)
 			FROM plugin_flowview_schedules
 			WHERE title=""');
