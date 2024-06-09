@@ -43,7 +43,7 @@ if (cacti_sizeof($tables)) {
 				MODIFY COLUMN dst_rdomain VARCHAR(40) NOT NULL DEFAULT '',
 				MODIFY COLUMN dst_rport VARCHAR(20) NOT NULL DEFAULT '',
 				MODIFY COLUMN nexthop VARCHAR(48) NOT NULL DEFAULT '',
-				COLLATE=utf8mb4_unicode_ci, CHARSET=utf8mb4");
+				COLLATE=latin1_swedish_ci, CHARSET=latin1");
 		}
 	}
 }

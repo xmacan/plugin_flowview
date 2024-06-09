@@ -38,6 +38,7 @@
 * feature#122: Charts should have a Graph Title that Matches the Report Type
 * feature#123: Support Setting the Default Chart Height
 * feature#124: Support Treemap Charts instead of Bar
+* feature#125: Perform Schema Upgrades in the Background
 
 --- 3.3 ---
 

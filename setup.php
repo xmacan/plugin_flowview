@@ -75,11 +75,15 @@ function plugin_flowview_upgrade() {
 	return false;
 }
 
-function plugin_flowview_check_upgrade() {
+function plugin_flowview_check_upgrade($force = false) {
+	global $config;
+
 	$files = array('plugins.php', 'flowview.php', 'index.php');
 	if (isset($_SERVER['PHP_SELF']) && !in_array(basename($_SERVER['PHP_SELF']), $files)) {
 		return;
 	}
+
+	include_once($config['base_path'] . '/lib/poller.php');
 
 	flowview_connect();
 
@@ -90,89 +94,10 @@ function plugin_flowview_check_upgrade() {
 		FROM plugin_config
 		WHERE directory="flowview"');
 
-	if ($current != $old) {
-		$bad_titles = flowview_db_fetch_cell('SELECT COUNT(*)
-			FROM plugin_flowview_schedules
-			WHERE title=""');
+	if ($current != $old || $force) {
+		$php_binary = read_config_option('path_php_binary');
 
-		if (!flowview_db_column_exists('plugin_flowview_devices', 'cmethod')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN cmethod int unsigned default "0" AFTER name');
-
-			flowview_db_execute('UPDATE plugin_flowview_devices SET cmethod=1');
-		}
-
-		if (flowview_db_column_exists('plugin_flowview_devices', 'nesting')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_devices
-				DROP COLUMN nesting,
-				DROP COLUMN version,
-				DROP COLUMN rotation,
-				DROP COLUMN expire,
-				DROP COLUMN compression'
-			);
-		}
-
-		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_schedules CHANGE COLUMN savedquery query_id INT unsigned NOT NULL default "0"');
-		}
-
-		if (!flowview_db_column_exists('plugin_flowview_schedules', 'format_file')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_schedules ADD COLUMN format_file VARCHAR(128) DEFAULT "" AFTER email');
-		}
-
-		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache');
-		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_flow_stats');
-		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_details');
-
-		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN protocols varchar(32) default ""');
-
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
-		}
-
-		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME
-			FROM information_schema.TABLES
-			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"');
-
-		if (cacti_sizeof($raw_tables)) {
-			foreach($raw_tables as $t) {
-				$good = flowview_db_fetch_row("SHOW INDEXES
-					FROM `" . $t['TABLE_NAME'] . "`
-					WHERE Key_name='keycol'
-					AND Column_name='src_if';");
-
-				if (!cacti_sizeof($good)) {
-					cacti_log('NOTE: Updating unique key for ' . $t['TABLE_NAME'], false, 'FLOWVIEW');
-
-					if (db_index_exists($t['TABLE_NAME'], 'keycol')) {
-						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
-							DROP INDEX `keycol`,
-							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`, `dst_addr`, `dst_port`, `dst_if`, `start_time`, `end_time`)');
-					} else {
-						flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . '
-							ADD UNIQUE INDEX `keycol` (`listener_id`, `src_addr`, `src_port`, `src_if`,`dst_addr`,`dst_port`, `dst_if`, `start_time`, `end_time`)');
-					}
-				}
-			}
-		}
-
-		if ($bad_titles) {
-			/* update titles for those that don't have them */
-			flowview_db_execute("UPDATE plugin_flowview_schedules SET title='Ugraded Schedule' WHERE title=''");
-
-			/* Set the new version */
-			db_execute_prepared("REPLACE INTO settings (name, value) VALUES ('plugin_flowview_version', ?)", array($current));
-
-			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
-		}
-
-		db_execute("UPDATE plugin_realms
-			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php'
-			WHERE plugin='flowview'
-			AND file LIKE '%devices%'");
-
-		db_execute("UPDATE plugin_config
-			SET version='$current'
-			WHERE directory='flowview'");
+		exec_background($php_binary . ' ' . $config['base_path'] . '/plugins/flowview/flowview_upgrade.php');
 
 		db_execute_prepared("UPDATE plugin_config SET
 			version = ?, name = ?, author = ?, webpage = ?
@@ -185,17 +110,9 @@ function plugin_flowview_check_upgrade() {
 				$info['name']
 			)
 		);
-
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
-			flowview_db_execute("ALTER TABLE plugin_flowview_queries
-				ADD COLUMN graph_type varchar(10) NOT NULL default 'bar' AFTER resolve,
-				ADD COLUMN graph_height int unsigned NOT NULL default '400' AFTER graph_type,
-				ADD COLUMN panel_table char(2) NOT NULL default 'on' AFTER graph_height,
-				ADD COLUMN panel_bytes char(2) NOT NULL default 'on' AFTER panel_table,
-				ADD COLUMN panel_packets char(2) NOT NULL default 'on' AFTER panel_bytes,
-				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
-		}
 	}
+
+	raise_message('flowview_upgrade', __('Please be advised that Flowview Tables are being upgraded in background.  This may take some time. Check the Cacti log for more information'), MESSAGE_LEVEL_INFO);
 }
 
 function plugin_flowview_version() {

@@ -4035,11 +4035,12 @@ function create_raw_partition($table) {
 
 	$data['primary']   = 'sequence';
 	$data['keys'][]    = array('name' => 'listener_id', 'columns' => 'listener_id');
-	$data['unique_keys'][]    = array('name' => 'keycol', 'columns' => 'listener_id`,`src_addr`,`src_port`,`dst_addr`,`dst_port`,`start_time`,`end_time', 'unique' => true);
+	$data['keys'][]    = array('name' => 'ex_addr', 'columns' => 'ex_addr');
+	$data['keys'][]    = array('name' => 'end_time', 'columns' => 'end_time');
 
 	$data['type']       = 'InnoDB';
-	$data['collate']    = 'utf8mb4_unicode_ci';
-	$data['charset']    = 'utf8mb4';
+	$data['collate']    = 'latin1_swedish_ci';
+	$data['charset']    = 'latin1';
 	$data['row_format'] = 'Dynamic';
 	$data['comment']    = 'Plugin Flowview - Details Report Data';
 
