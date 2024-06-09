@@ -4042,13 +4042,14 @@ function flowview_get_owner_from_arin($host) {
 			$alternate    = $json['net']['ref']['$'];
 
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_arin_information
-				(cidr, net_range, name, parent, net_type, origin_as, registration, last_changed, comments, self, alternate)
-				VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?)
+				(cidr, net_range, name, parent, net_type, origin_as, registration, last_changed, comments, self, alternate, json_data)
+				VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?, ?)
 				ON DUPLICATE KEY UPDATE
 					name = VALUES(name),
 					parent = VALUES(parent),
 					net_type = VALUES(net_type),
 					last_changed = VALUES(last_changed),
+					json_data = VALUES(json_data),
 					comments = VALUES(comments)',
 				array(
 					$cidr,
@@ -4061,7 +4062,8 @@ function flowview_get_owner_from_arin($host) {
 					$last_changed,
 					$comments,
 					$self,
-					$alternate
+					$alternate,
+					$response
 				)
 			);
 

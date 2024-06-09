@@ -152,6 +152,7 @@ function flowview_upgrade($current, $old) {
 			`comments` varchar(128) NOT NULL DEFAULT '',
 			`self` varchar(128) NOT NULL DEFAULT '',
 			`alternate` varchar(128) NOT NULL DEFAULT '',
+			`json_data` blob NOT NULL DEFAULT '',
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `cidr` (`cidr`))
 			ENGINE=InnoDB
