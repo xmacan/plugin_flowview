@@ -199,7 +199,7 @@ function view_dns_cache() {
 
 							if (cacti_sizeof($sources) > 0) {
 								foreach ($sources as $key => $value) {
-									print "<option value='" . $key . "'"; if (get_request_var('rows') == $key) { print ' selected'; } print '>' . html_escape($value) . "</option>\n";
+									print "<option value='" . $key . "'"; if (get_request_var('source') == $key) { print ' selected'; } print '>' . html_escape($value) . "</option>\n";
 								}
 							}
 							?>
