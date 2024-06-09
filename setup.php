@@ -110,9 +110,9 @@ function plugin_flowview_check_upgrade($force = false) {
 				$info['name']
 			)
 		);
-	}
 
-	raise_message('flowview_upgrade', __('Please be advised that Flowview Tables are being upgraded in background.  This may take some time. Check the Cacti log for more information'), MESSAGE_LEVEL_INFO);
+		raise_message('flowview_upgrade', __('Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information'), MESSAGE_LEVEL_INFO);
+	}
 }
 
 function plugin_flowview_version() {
