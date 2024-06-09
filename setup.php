@@ -496,6 +496,25 @@ function flowview_setup_table() {
 		ENGINE=MEMORY,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowview_default . "`.`plugin_flowview_arin_information` (
+		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		`cidr` varchar(20) NOT NULL DEFAULT '',
+		`net_range` varchar(64) NOT NULL DEFAULT '',
+		`name` varchar(64) NOT NULL DEFAULT '',
+		`parent` varchar(64) NOT NULL DEFAULT '',
+		`net_type` varchar(64) NOT NULL DEFAULT '',
+		`origin_as` varchar(64) NOT NULL DEFAULT '',
+		`registration` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		`last_changed` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		`comments` varchar(128) NOT NULL DEFAULT '',
+		`self` varchar(128) NOT NULL DEFAULT '',
+		`alternate` varchar(128) NOT NULL DEFAULT '',
+		PRIMARY KEY (`id`),
+		UNIQUE KEY `cidr` (`cidr`))
+		ENGINE=InnoDB
+		ROW_FORMAT=DYNAMIC
+		COMMENT='Holds ARIN Records Downloaded for Caching'");
+
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(64) NOT NULL,

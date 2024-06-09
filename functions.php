@@ -3486,7 +3486,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	$slashpos = strpos($ip, '/');
 	if ($slashpos) {
 		$suffix = substr($ip, $slashpos);
-		$ip = substr($ip, 0,$slashpos);
+		$ip = substr($ip, 0, $slashpos);
 	} else {
 		$suffix = '';
 	}
@@ -3595,22 +3595,36 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				$position += $len[1] + 1;
 			} while ($len != 0);
 
+			$dns_name = flowview_check_for_private_network($ip);
+			if ($ip != $dns_name) {
+				/* good dns_name */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'Static Private', $time));
+
+				return $dns_name;
+			}
+
 			if (read_config_option('flowview_use_arin') == 'on') {
 				$dns_name = flowview_get_owner_from_arin($ip);
 			} else {
 				$dns_name = $ip;
 			}
 
-			if ($ip != $dns_name) {
-				/* error - return the hostname we constructed (without the . on the end) */
+			if ($ip != $dns_name && $dns_name !== false) {
+				/* good dns_name */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
 					VALUES (?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 					array($ip, $dns_name, 'ARIN', $time));
 
-				return $ip . $suffix;
+				return $dns_name;
 			} else {
+				$dns_name = 'ip-' . str_replace('.', '-', $host);
+
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
@@ -3618,16 +3632,29 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 					array($ip, $ip, 'ARIN Error', $time));
 
-				return $ip . $suffix;
+				return $dns_name;
 			}
 		} else {
+			$dns_name = flowview_check_for_private_network($ip);
+			if ($ip != $dns_name) {
+				/* good dns_name */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'Static Private', $time));
+
+				return $dns_name;
+			}
+
+			/* specified DNS failed, try ARIN */
 			if (read_config_option('flowview_use_arin') == 'on') {
 				$dns_name = flowview_get_owner_from_arin($ip);
 			} else {
 				$dns_name = $ip;
 			}
 
-			if ($ip != $dns_name) {
+			if ($ip != $dns_name && $dns_name !== false) {
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
@@ -3635,16 +3662,18 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 					array($ip, $dns_name, 'ARIN', $time));
 
-				return $ip . $suffix;
+				return $dns_name;
 			} else {
+				$dns_name = 'ip-' . str_replace('.', '-', $host);
+
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
 					VALUES (?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $ip, 'ARIN Error', $time));
+					array($ip, $dns_name, 'ARIN Error', $time));
 
-				return $ip . $suffix;
+				return $dns_name;
 			}
 		}
 	} else {
@@ -3662,23 +3691,37 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 				array($ip, $dns_name, 'Local DNS', $time));
 
-			return $dns_name . $suffix;
+			return $dns_name;
 		} else {
+			$dns_name = flowview_check_for_private_network($ip);
+			if ($ip != $dns_name) {
+				/* good dns_name */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'Static Private', $time));
+
+				return $dns_name;
+			}
+
 			if (read_config_option('flowview_use_arin') == 'on') {
 				$dns_name = flowview_get_owner_from_arin($ip);
 			} else {
 				$dns_name = $ip;
 			}
 
-			if ($dns_name != $ip) {
+			if ($dns_name != $ip && $dns_name !== false) {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
 					VALUES (?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 					array($ip, $dns_name, 'ARIN', $time));
 
-				return $dns_name . $suffix;
+				return $dns_name;
 			} else {
+				$dns_name = 'ip-' . str_replace('.', '-', $host);
+
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
@@ -3686,20 +3729,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
 					array($ip, $ip, 'ARIN Error', $time));
 
-				return $ip . $suffix;
+				return $dns_name;
 			}
 		}
-
 	}
-
-	/* error - return the hostname */
-	flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-		(ip, host, source, time)
-		VALUES (?, ?, ?, ?)
-		ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-		array($ip, $ip, 'DNS Error', $time));
-
-	return $ip . $suffix;
 }
 
 function flowview_get_color($as_array = false) {
@@ -3876,9 +3909,7 @@ function flowview_viewchart() {
 	}
 }
 
-function flowview_get_owner_from_arin($host) {
-	static $curlgood = true;
-
+function flowview_check_for_private_network($host) {
 	if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 		$parts = explode('.', $host);
 
@@ -3906,8 +3937,6 @@ function flowview_get_owner_from_arin($host) {
 			return 'ip-' . str_replace('.', '-', $host) . '.mcast.net';
 		} elseif ($parts[0] >= 240 && $parts[0] <= 255) {
 			return 'ip-' . str_replace('.', '-', $host) . '.private.net';
-		} elseif ($curlgood == false) {
-			return 'ip-' . str_replace('.', '-', $host) . '.unknown.net';
 		}
 	} elseif (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 		$parts = explode(':', $host);
@@ -3919,6 +3948,16 @@ function flowview_get_owner_from_arin($host) {
 		} elseif ($parts[0] >= 'FC00') {
 			return 'ip-' . str_replace('.', '-', $host) . '.private.net';
 		}
+	}
+
+	return $host;
+}
+
+function flowview_get_owner_from_arin($host) {
+	static $curlgood = true;
+
+	if ($host == '' || $host == '0.0.0.0') {
+		return false;
 	}
 
 	$ch = curl_init();
@@ -3938,17 +3977,104 @@ function flowview_get_owner_from_arin($host) {
 
 	if ($curl_errno > 0) {
 		$curlgood = false;
-		return $host;
+
+		return false;
 	} elseif ($response != '') {
 		$json = json_decode($response, true);
 
-		if (isset($json['net']['name']['$'])) {
-			return 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+		if (isset($json['net'])) {
+			/* debugging */
+			if (1 == 0) {
+				cacti_log("The host is: $host", true, 'FLOWVIEW');
+				print_r($json);
+			}
+
+			if (isset($json['net']['netBlocks']['netBlock']['startAddress'])) {
+				$cidr = $json['net']['netBlocks']['netBlock']['startAddress']['$'] . '/' .
+					$json['net']['netBlocks']['netBlock']['cidrLength']['$'];
+
+				$net_range = $json['net']['netBlocks']['netBlock']['startAddress']['$'] . '/' .
+					$json['net']['netBlocks']['netBlock']['cidrLength']['$'] . ' - ' .
+					$json['net']['netBlocks']['netBlock']['endAddress']['$'];
+
+				$net_type = $json['net']['netBlocks']['netBlock']['description']['$'];
+			} elseif (isset($json['net']['netBlocks']['netBlock'][0]['startAddress'])) {
+				/* only get the first net block */
+				$cidr = $json['net']['netBlocks']['netBlock'][0]['startAddress']['$'] . '/' .
+					$json['net']['netBlocks']['netBlock'][0]['cidrLength']['$'];
+
+				$net_range = $json['net']['netBlocks']['netBlock'][0]['startAddress']['$'] . '/' .
+					$json['net']['netBlocks']['netBlock'][0]['cidrLength']['$'] . ' - ' .
+					$json['net']['netBlocks']['netBlock'][0]['endAddress']['$'];
+
+				$net_type = $json['net']['netBlocks']['netBlock'][0]['description']['$'];
+			}
+
+			$name         = $json['net']['name']['$'];
+			$registration = strtotime($json['net']['registrationDate']['$']);
+
+			if (isset($json['net']['parentNetRef']['@name'])) {
+				$parent = $json['net']['parentNetRef']['@name'];
+			} else {
+				$parent = '';
+			}
+
+
+			if (isset($json['net']['originASes']['originAS']['$'])) {
+				$origin_as = $json['net']['originASes']['originAS']['$'];
+			} else {
+				$origin_as = '';
+			}
+
+			$last_changed = strtotime($json['net']['updateDate']['$']);
+
+			if (isset($json['net']['comment']['line']['$'])) {
+				$comments = $json['net']['comment']['line']['$'];
+
+				if (strpos($comments, 'BEGIN CERTIFICATE') !== false) {
+					$comments = '';
+				}
+			} else {
+				$comments = '';
+			}
+
+			$self         = $json['net']['rdapRef']['$'];
+			$alternate    = $json['net']['ref']['$'];
+
+			flowview_db_execute_prepared('INSERT INTO plugin_flowview_arin_information
+				(cidr, net_range, name, parent, net_type, origin_as, registration, last_changed, comments, self, alternate)
+				VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?)
+				ON DUPLICATE KEY UPDATE
+					name = VALUES(name),
+					parent = VALUES(parent),
+					net_type = VALUES(net_type),
+					last_changed = VALUES(last_changed),
+					comments = VALUES(comments)',
+				array(
+					$cidr,
+					$net_range,
+					$name,
+					$parent,
+					$net_type,
+					$origin_as,
+					$registration,
+					$last_changed,
+					$comments,
+					$self,
+					$alternate
+				)
+			);
+
+			if (isset($json['net']['name']['$'])) {
+				return 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+			} else {
+				return false;
+			}
 		} else {
-			return 'ip-' . str_replace('.', '-', $host);
+			return false;
 		}
 	} else {
-		return 'ip-' . str_replace('.', '-', $host);
+		return false;
 	}
 }
 

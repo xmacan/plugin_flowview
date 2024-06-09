@@ -139,6 +139,62 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
 		}
 
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowview_default . "`.`plugin_flowview_arin_information` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`cidr` varchar(20) NOT NULL DEFAULT '',
+			`net_range` varchar(64) NOT NULL DEFAULT '',
+			`name` varchar(64) NOT NULL DEFAULT '',
+			`parent` varchar(64) NOT NULL DEFAULT '',
+			`net_type` varchar(64) NOT NULL DEFAULT '',
+			`origin_as` varchar(64) NOT NULL DEFAULT '',
+			`registration` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`last_changed` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`comments` varchar(128) NOT NULL DEFAULT '',
+			`self` varchar(128) NOT NULL DEFAULT '',
+			`alternate` varchar(128) NOT NULL DEFAULT '',
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `cidr` (`cidr`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds ARIN Records Downloaded for Caching'");
+
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
+			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
+
+			flowview_db_execute("ALTER TABLE plugin_flowview_queries
+				ADD COLUMN graph_type varchar(10) NOT NULL default 'bar' AFTER resolve,
+				ADD COLUMN graph_height int unsigned NOT NULL default '400' AFTER graph_type,
+				ADD COLUMN panel_table char(2) NOT NULL default 'on' AFTER graph_height,
+				ADD COLUMN panel_bytes char(2) NOT NULL default 'on' AFTER panel_table,
+				ADD COLUMN panel_packets char(2) NOT NULL default 'on' AFTER panel_bytes,
+				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
+				DROP PRIMARY KEY,
+				ADD PRIMARY KEY(id),
+				ADD UNIQUE KEY ip(ip),
+				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
+		}
+
+		if ($bad_titles) {
+			cacti_log("Fixing Bad Titles in the plugin_flowview_schedules table.", true, 'FLOWVIEW');
+
+			/* update titles for those that don't have them */
+			flowview_db_execute("UPDATE plugin_flowview_schedules SET title='Ugraded Schedule' WHERE title=''");
+
+			/* Set the new version */
+			db_execute_prepared("REPLACE INTO settings (name, value) VALUES ('plugin_flowview_version', ?)", array($current));
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
+		}
+
+		db_execute("UPDATE plugin_realms
+			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
+			WHERE plugin='flowview'
+			AND file LIKE '%devices%'");
+
 		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, TABLE_COLLATION
 			FROM information_schema.TABLES
 			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"');
@@ -169,23 +225,6 @@ function flowview_upgrade($current, $old) {
 			}
 		}
 
-		if ($bad_titles) {
-			cacti_log("Fixing Bad Titles in the plugin_flowview_schedules table.", true, 'FLOWVIEW');
-
-			/* update titles for those that don't have them */
-			flowview_db_execute("UPDATE plugin_flowview_schedules SET title='Ugraded Schedule' WHERE title=''");
-
-			/* Set the new version */
-			db_execute_prepared("REPLACE INTO settings (name, value) VALUES ('plugin_flowview_version', ?)", array($current));
-
-			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
-		}
-
-		db_execute("UPDATE plugin_realms
-			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
-			WHERE plugin='flowview'
-			AND file LIKE '%devices%'");
-
 		db_execute_prepared("UPDATE plugin_config SET
 			version = ?, name = ?, author = ?, webpage = ?
 			WHERE directory = ?",
@@ -197,26 +236,6 @@ function flowview_upgrade($current, $old) {
 				$info['name']
 			)
 		);
-
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
-			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
-
-			flowview_db_execute("ALTER TABLE plugin_flowview_queries
-				ADD COLUMN graph_type varchar(10) NOT NULL default 'bar' AFTER resolve,
-				ADD COLUMN graph_height int unsigned NOT NULL default '400' AFTER graph_type,
-				ADD COLUMN panel_table char(2) NOT NULL default 'on' AFTER graph_height,
-				ADD COLUMN panel_bytes char(2) NOT NULL default 'on' AFTER panel_table,
-				ADD COLUMN panel_packets char(2) NOT NULL default 'on' AFTER panel_bytes,
-				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
-		}
-
-		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
-				DROP PRIMARY KEY,
-				ADD PRIMARY KEY(id),
-				ADD UNIQUE KEY ip(ip),
-				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
-		}
 
 		cacti_log('Flowview Database Upgrade Complete', true, 'FLOWVIEW');
 	}

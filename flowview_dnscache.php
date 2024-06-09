@@ -143,6 +143,11 @@ function view_dns_cache() {
 			'pageset' => true,
 			'default' => ''
 		),
+		'source' => array(
+			'filter' => FILTER_DEFAULT,
+			'pageset' => true,
+			'default' => '-1'
+		),
 		'sort_column' => array(
 			'filter' => FILTER_CALLBACK,
 			'default' => 'host',
@@ -179,6 +184,28 @@ function view_dns_cache() {
 						<input type='text' class='ui-state-default ui-corner-all' id='filter' name='filter' size='25' value='<?php print html_escape_request_var('filter');?>'>
 					</td>
 					<td>
+						<?php print __('Source');?>
+					</td>
+					<td>
+						<select id='source' name='source' onChange='applyFilter()'>
+							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default');?></option>
+							<?php
+							$sources = array_rekey(
+								db_fetch_assoc('SELECT DISTINCT source
+									FROM plugin_flowview_dnscache
+									ORDER BY source'),
+								'source', 'source'
+							);
+
+							if (cacti_sizeof($sources) > 0) {
+								foreach ($sources as $key => $value) {
+									print "<option value='" . $key . "'"; if (get_request_var('rows') == $key) { print ' selected'; } print '>' . html_escape($value) . "</option>\n";
+								}
+							}
+							?>
+						</select>
+					</td>
+					<td>
 						<?php print __('Entries');?>
 					</td>
 					<td>
@@ -207,6 +234,7 @@ function view_dns_cache() {
 			function applyFilter() {
 				strURL  = 'flowview_dnscache.php?header=false';
 				strURL += '&filter='+$('#filter').val();
+				strURL += '&source='+$('#source').val();
 				strURL += '&rows='+$('#rows').val();
 				loadPageNoHeader(strURL);
 			}
@@ -249,6 +277,10 @@ function view_dns_cache() {
 		$sql_where = 'WHERE (host LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR ip LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR source LIKE ' . db_qstr('%' . get_request_var('filter') . '%') . ')';
+	}
+
+	if (get_request_var('source') != '-1') {
+		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . ' source = ' . db_qstr(get_request_var('source'));
 	}
 
 	$total_rows = db_fetch_cell("SELECT COUNT(*)

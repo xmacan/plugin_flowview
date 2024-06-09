@@ -40,6 +40,7 @@
 * feature#123: Support Setting the Default Chart Height
 * feature#124: Support Treemap Charts instead of Bar
 * feature#125: Perform Schema Upgrades in the Background
+* feature#126: Cache ARIN Responses for reference
 
 --- 3.3 ---
 
