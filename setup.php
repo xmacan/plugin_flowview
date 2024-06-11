@@ -44,6 +44,7 @@ function plugin_flowview_install() {
 		exit;
 	}
 
+	flowview_setup_table();
 }
 
 function plugin_flowview_uninstall() {
@@ -484,6 +485,8 @@ function flowview_connect() {
 
 function flowview_setup_table() {
 	global $config, $settings, $flowviewdb_default;
+
+	flowview_connect();
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,

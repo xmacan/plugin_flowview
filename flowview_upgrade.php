@@ -139,7 +139,7 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
 		}
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowview_default . "`.`plugin_flowview_arin_information` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
 			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			`cidr` varchar(20) NOT NULL DEFAULT '',
 			`net_range` varchar(64) NOT NULL DEFAULT '',
