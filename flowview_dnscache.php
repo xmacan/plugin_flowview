@@ -95,7 +95,7 @@ function form_actions() {
 		if (get_nfilter_request_var('drp_action') == '1') { /* delete */
 			print "<tr>
 				<td class='textArea'>
-					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entriy.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($cdef_array)) . "</p>
+					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entriy.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($dns_array)) . "</p>
 					<div class='itemlist'><ul>$dns_list</ul></div>
 				</td>
 			</tr>\n";

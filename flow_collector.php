@@ -23,8 +23,19 @@
  +-------------------------------------------------------------------------+
 */
 
+if (function_exists('pcntl_async_signals')) {
+	pcntl_async_signals(true);
+} else {
+	declare(ticks = 100);
+}
+
+ini_set('output_buffering', 'Off');
+ini_set('max_runtime', '-1');
+ini_set('memory_limit', '-1');
+
 chdir(__DIR__ . '/../../');
 include('./include/cli_check.php');
+include_once($config['base_path'] . '/lib/poller.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
@@ -33,7 +44,7 @@ ini_set('max_execution_time', '-1');
 flowview_connect();
 
 $debug     = false;
-$lversion  = array();
+$taskname  = '';
 
 $shortopts = 'VvHh';
 $longopts = array(
@@ -69,6 +80,12 @@ foreach($options as $arg => $value) {
 
 			break;
 	}
+}
+
+/* install signal handlers for UNIX only */
+if (function_exists('pcntl_signal')) {
+	pcntl_signal(SIGTERM, 'sig_handler');
+	pcntl_signal(SIGINT, 'sig_handler');
 }
 
 $templates = array();
@@ -615,7 +632,8 @@ $listener  = flowview_db_fetch_row_prepared('SELECT *
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
 	device_id int(11) unsigned NOT NULL default '0',
 	ext_addr varchar(32) NOT NULL default '',
-	name varchar(64) NOT NULL,
+	name varchar(64) NOT NULL default '',
+	version varchar(5) NOT NULL default '',
 	last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (device_id, ext_addr))
 	ENGINE=InnoDB,
@@ -634,10 +652,27 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`p
 	COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
 if (cacti_sizeof($listener)) {
-	$previous_version = -1;
-	$templates_set    = false;
-	$streams          = array();
-	$sstart           = time();
+	/**
+	 * Register the master process
+	 */
+	$taskname = 'child_' . $listener['id'];
+
+	// 50 Years by default
+	if (!register_process_start('flowview', $taskname, $config['poller_id'], 10 * 157680000)) {
+		exit(0);
+	}
+
+	$previous_version    = -1;
+	$refresh_seconds     = 300;
+	$stream_refreshed    = array(); // We update the heartbeat every $refresh_seconds per peer
+	$tmpl_refreshed      = array(); // We update the templates every $refresh_seconds per peer
+	$lversion            = array(); // Track version changes
+	$sstart              = time();
+
+	flowview_db_execute_prepared("UPDATE INTO `" . $flowviewdb_default . "`.`plugin_flowview_device`
+		SET last_updated = NOW
+		WHERE device_id = ?",
+		array($listener['id']));
 
 	while (true) {
 		$socket = stream_socket_server('udp://0.0.0.0:' . $listener['port'], $errno, $errstr, STREAM_SERVER_BIND);
@@ -649,19 +684,18 @@ if (cacti_sizeof($listener)) {
 		while (true) {
 			$p = stream_socket_recvfrom($socket, 1500, 0, $peer);
 
+			if (!isset($stream_refreshed[$peer])) {
+				$stream_refreshed[$peer] = false;
+			}
+
+			if (!isset($tmpl_refreshed[$peer])) {
+				$tmpl_refreshed[$peer] = false;
+			}
+
 			if ($start > 0) {
 				$end = microtime(true);
 				debug('-----------------------------------------------');
 				debug(sprintf('Flow: Sleep Time: %0.2f', $end - $start));
-			}
-
-			if (!isset($streams[$peer])) {
-				flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-					(device_id, ext_addr) VALUES (?, ?)
-					ON DUPLICATE KEY UPDATE last_updated=NOW()",
-					array($listener['id'], $peer));
-
-				$streams[$peer] = $peer;
 			}
 
 			$start = microtime(true);
@@ -672,13 +706,15 @@ if (cacti_sizeof($listener)) {
 				if (isset($lversion[$peer]) && $version[1] != $lversion[$peer]) {
 					debug('Flow: Detecting version change to v' . $version[1]);
 
-					$templates       = array();
-					$templates_set   = false;
-					$lversion[$peer] = $version[1];
+					$templates        = array();
+					$stream_refreshed[$peer] = false;
+					$tmpl_refreshed[$peer]   = false;
+					$lversion[$peer]         = $version[1];
+				}
 
-					flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-						WHERE device_id = ? AND ext_addr = ?",
-						array($listener['id'], $peer));
+				if (!$stream_refreshed[$peer]) {
+					update_flowview_streams($listener['id'], $peer, $version[1]);
+					$stream_refreshed[$peer] = true;
 				}
 
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
@@ -708,7 +744,7 @@ if (cacti_sizeof($listener)) {
 				break;
 			}
 
-			if (!$templates_set && isset($templates[$peer]) && cacti_sizeof($templates[$peer])) {
+			if (!$tmpl_refreshed[$peer] && isset($templates[$peer]) && cacti_sizeof($templates[$peer])) {
 				foreach($templates[$peer] AS $template_id => $t) {
 					flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_templates`
 						(device_id, ext_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
@@ -716,21 +752,50 @@ if (cacti_sizeof($listener)) {
 						array($listener['id'], $peer, $template_id, json_encode($t)));
 				}
 
-				$templates_set = true;
+				$tmpl_refreshed[$peer] = true;
 			}
 
 			$send = time();
 
-			if ($send - $sstart > 300) {
-				$streams       = array();
-				$sstart        = time();
-				$templates_set = false;
+			if ($send - $sstart > $refresh_seconds) {
+				$sstart = time();
+				$stream_refreshed[$peer] = false;
+
+				heartbeat_process('flowview', 'client_' . $listener['id'], $config['poller_id']);
+
+				flowview_db_execute_prepared("UPDATE INTO `" . $flowviewdb_default . "`.`plugin_flowview_device`
+					SET last_updated = NOW
+					WHERE device_id = ?",
+					array($listener['id']));
 			}
 		}
 	}
 }
 
 exit(0);
+
+function update_flowview_streams($listener_id, $peer, $version) {
+	global $flowviewdb_default;
+
+	if ($version == 5) {
+		$db_version = 'v5';
+	} elseif ($version == 9) {
+		$db_version = 'v9';
+	} elseif ($version == 10) {
+		$db_version = 'IPFIX';
+	}
+
+	flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+		(device_id, ext_addr, version) VALUES (?, ?, ?)
+		ON DUPLICATE KEY UPDATE version=VALUES(version),
+			version=VALUES(version),
+			last_updated=NOW()",
+		array($listener_id, $peer, $db_version));
+
+	flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+		WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
+		array($listener_id));
+}
 
 function database_check_connect() {
 	global $config;
@@ -1623,12 +1688,41 @@ function check_set(&$data, $index, $quote = false) {
 	}
 }
 
-/*  display_version - displays version information */
+/**
+ * sig_handler - provides a generic means to catch exceptions to the Cacti log.
+ *
+ * @param  (int) $signo - the signal that was thrown by the interface.
+ *
+ * @return (void)
+ */
+function sig_handler($signo) {
+	global $taskname, $config;
+
+	switch ($signo) {
+		case SIGTERM:
+		case SIGINT:
+			cacti_log("WARNING: Flowview Listener $taskname by signal", false, 'CLEANUP');
+
+			unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+
+			exit(1);
+			break;
+		default:
+			/* ignore all other signals */
+	}
+}
+
+/**
+ * display_version - displays version information
+ */
 function display_version() {
 	$version = get_cacti_cli_version();
 	print "Cacti Flow Capture Utility, Version $version, " . COPYRIGHT_YEARS . PHP_EOL;
 }
 
+/**
+ * display_help - displays help information
+ */
 function display_help() {
 	display_version();
 

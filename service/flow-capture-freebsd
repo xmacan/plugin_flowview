@@ -28,8 +28,19 @@ if (!file_exists($cacti_base) || !is_dir($cacti_base)) {
 	$cacti_base = '/usr/local/share/cacti';
 } 
 
+/**
+ * determine the cacti base directory
+ */
+$cacti_base = get_cacti_base();
+
+if ($cacti_base === false) {
+	print 'FATAL: Cacti install base directory can not be determined' . PHP_EOL;
+	exit(1);
+}
+
 include_once($cacti_base . '/include/cli_check.php');
 include_once($cacti_base . '/lib/poller.php');
+include_once($cacti_base . '/plugins/flowview/setup.php');
 include_once($cacti_base . '/plugins/flowview/functions.php');
 
 global $global, $cacti_base;
@@ -58,3 +69,20 @@ do {
 	sleep (10);
 }
 while (true);
+
+function get_cacti_base() {
+	$cacti_bases = array(
+		'/var/www/html/cacti',
+		'/usr/local/share/cacti',
+		'/usr/share/cacti/'
+	);
+
+	foreach($cacti_bases as $cacti_base) {
+		if (file_exists($cacti_base) || is_dir($cacti_base)) {
+			return $cacti_base;
+		}
+	} 
+
+	return false;
+}
+

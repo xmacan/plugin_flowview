@@ -533,7 +533,8 @@ function flowview_setup_table() {
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ext_addr varchar(32) NOT NULL default '',
-		name varchar(64) NOT NULL,
+		name varchar(64) NOT NULL default '',
+		version varchar(5) NOT NULL default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		PRIMARY KEY (device_id, ext_addr))
 		ENGINE=InnoDB,

@@ -239,13 +239,17 @@ function edit_devices() {
 		form_save_button('flowview_devices.php');
 
 		if (cacti_sizeof($device)) {
-			$streams = flowview_db_fetch_assoc_prepared('SELECT ds.*, COUNT(*) AS templates
+			$streams = flowview_db_fetch_assoc_prepared('SELECT ds.*, SUM(dt.templates) AS templates
 				FROM plugin_flowview_device_streams AS ds
-				LEFT JOIN plugin_flowview_device_templates AS dt
+				LEFT JOIN (
+					SELECT device_id, ext_addr, COUNT(*) AS templates
+					FROM plugin_flowview_device_templates AS dt
+					WHERE device_id = ?
+				) AS dt
 				USING (device_id, ext_addr)
 				WHERE ds.device_id = ?
 				GROUP BY ds.device_id',
-				array($device['id']));
+				array($device['id'], $device['id']));
 
 			html_start_box('Inbound Streams and Status', '100%', '', '4', 'center', '');
 
@@ -257,6 +261,10 @@ function edit_devices() {
 				array(
 					'display' => __('Status', 'flowview'),
 					'align'   => 'left'
+				),
+				array(
+					'display' => __('Version', 'flowview'),
+					'align'   => 'right'
 				),
 				array(
 					'display' => __('Templates', 'flowview'),
@@ -281,9 +289,14 @@ function edit_devices() {
 						$status = 1;
 					}
 
+					if (empty($row['templates'])) {
+						$row['templates'] = 0;
+					}
+
 					form_alternate_row('line' . $i, true);
 					form_selectable_cell($row['ext_addr'], $i);
 					form_selectable_cell(get_colored_device_status('', $status), $i);
+					form_selectable_cell($row['version'], $i, '', 'right');
 					form_selectable_cell($row['templates'], $i, '', 'right');
 					form_selectable_cell($row['last_updated'], $i, '', 'right');
 					form_end_row();
@@ -488,7 +501,7 @@ function show_devices () {
 	$sql_order = get_order_string();
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$sql = "SELECT fd.*, COUNT(*) AS streams, MAX(fs.last_updated) AS last_updated
+	$sql = "SELECT fd.*, COUNT(*) AS streams, GROUP_CONCAT(DISTINCT version) AS versions, MAX(fs.last_updated) AS last_updated
 		FROM plugin_flowview_devices AS fd
 		LEFT JOIN plugin_flowview_device_streams AS fs
 		ON fd.id = fs.device_id
@@ -597,6 +610,12 @@ function show_devices () {
 			'tip'   => __('The number of inbound connections from various sources.', 'flowview'),
 			'align' => 'right'
 		),
+		'nosort2' => array(
+			'display' => __('Stream Versions', 'flowview'),
+			'sort' => 'ASC',
+			'tip'   => __('The Traffic Flow versions being observed.', 'flowview'),
+			'align' => 'right'
+		),
 		'last_updated' => array(
 			'display' => __('Last Updated', 'flowview'),
 			'sort' => 'ASC',
@@ -612,7 +631,7 @@ function show_devices () {
 			if ($os == 'freebsd') {
 				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
 			} else {
-				$status = shell_exec("netstat -anp | grep ':" . $row['port'] . " '");
+				$status = shell_exec("netstat -an | grep ':" . $row['port'] . " '");
 			}
 
 			if (is_string($status)) {
@@ -633,6 +652,7 @@ function show_devices () {
 			form_selectable_cell(get_colored_device_status('', $status), $row['id'], '', 'right');
 			form_selectable_cell(isset($parts[3]) ? $parts[3]:'-', $row['id'], '', 'right');
 			form_selectable_cell($row['streams'], $row['id'], '', 'right');
+			form_selectable_cell($row['versions'], $row['id'], '', 'right');
 			form_selectable_cell($row['last_updated'], $row['id'], '', 'right');
 			form_checkbox_cell($row['name'], $row['id']);
 			form_end_row();

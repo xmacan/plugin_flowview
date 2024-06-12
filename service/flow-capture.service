@@ -26,10 +26,11 @@ After=network.target mariadb.service
 [Service]
 User=root
 TimeoutStartSec=0
-Type=forking
+Type=simple
 KillMode=process
 WorkingDirectory=/tmp
 ExecStart=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture --systemd
+ExecStop=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture stop
 Restart=always
 RestartSec=2
  

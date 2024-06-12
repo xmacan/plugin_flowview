@@ -25,9 +25,14 @@
 function display_tabs($id) {
 	global $config;
 
+	$streams = listener_has_templates($id);
+
 	/* present a tabbed interface */
 	$tabs['general']   = array('url' => 'flowview_devices.php', 'name' => __('General', 'flowview'));
-	$tabs['templates'] = array('url' => 'flowview_devices.php', 'name' => __('Templates', 'flowview'));
+
+	if ($streams) {
+		$tabs['templates'] = array('url' => 'flowview_devices.php', 'name' => __('Templates', 'flowview'));
+	}
 
 	/* if they were redirected to the page, let's set that up */
 	if (!isset_request_var('tab')) {
@@ -52,6 +57,16 @@ function display_tabs($id) {
 	}
 
 	print "</ul></nav></div>";
+}
+
+function listener_has_templates($id) {
+	$streams = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
+		FROM plugin_flowview_device_streams
+		WHERE version != "v5"
+		AND device_id = ?',
+		array($id));
+
+	return $streams > 0 ? true:false;
 }
 
 function sort_filter() {
@@ -3623,7 +3638,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 				return $dns_name;
 			} else {
-				$dns_name = 'ip-' . str_replace('.', '-', $host);
+				$dns_name = 'ip-' . str_replace('.', '-', $ip);
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
@@ -3664,7 +3679,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 				return $dns_name;
 			} else {
-				$dns_name = 'ip-' . str_replace('.', '-', $host);
+				$dns_name = 'ip-' . str_replace('.', '-', $ip);
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
@@ -4011,14 +4026,18 @@ function flowview_get_owner_from_arin($host) {
 			}
 
 			$name         = $json['net']['name']['$'];
-			$registration = strtotime($json['net']['registrationDate']['$']);
+
+			if (isset($json['net']['registrationDate']['$'])) {
+				$registration = strtotime($json['net']['registrationDate']['$']);
+			} else {
+				$registration = 0;
+			}
 
 			if (isset($json['net']['parentNetRef']['@name'])) {
 				$parent = $json['net']['parentNetRef']['@name'];
 			} else {
 				$parent = '';
 			}
-
 
 			if (isset($json['net']['originASes']['originAS']['$'])) {
 				$origin_as = $json['net']['originASes']['originAS']['$'];
