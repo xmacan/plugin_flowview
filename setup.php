@@ -546,6 +546,7 @@ function flowview_setup_table() {
 		device_id int(11) unsigned NOT NULL default '0',
 		ext_addr varchar(32) NOT NULL default '',
 		template_id int(11) unsigned NOT NULL default '0',
+		supported tinyint unsigned NOT NULL default '0',
 		column_spec blob default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		PRIMARY KEY (device_id, ext_addr, template_id))

@@ -193,6 +193,38 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
 		}
 
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+			device_id int(11) unsigned NOT NULL default '0',
+			ext_addr varchar(32) NOT NULL default '',
+			name varchar(64) NOT NULL default '',
+			version varchar(5) NOT NULL default '',
+			last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			PRIMARY KEY (device_id, ext_addr))
+			ENGINE=InnoDB,
+			ROW_FORMAT=DYNAMIC,
+			COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
+
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
+			device_id int(11) unsigned NOT NULL default '0',
+			ext_addr varchar(32) NOT NULL default '',
+			template_id int(11) unsigned NOT NULL default '0',
+			supported tinyint unsigned NOT NULL default '0'
+			column_spec blob default '',
+			last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			PRIMARY KEY (device_id, ext_addr, template_id))
+			ENGINE=InnoDB,
+			ROW_FORMAT=DYNAMIC,
+			COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
+
+		if (!flowview_db_column_exists('plugin_flowview_deivce_templates', 'supported')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_deivce_templates
+				ADD COLUMN supported tinyint unsigned NOT NULL default "0" AFTER template_id');
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_deivces', 'last_updated')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN last_updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP');
+		}
+
 		db_execute("UPDATE plugin_realms
 			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
 			WHERE plugin='flowview'
