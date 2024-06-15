@@ -356,12 +356,12 @@ function flowview_config_settings() {
 		)
 	);
 
-	$tabs['misc'] = __('Misc', 'flowview');
+	$tabs['Flowview'] = __('Flowview', 'flowview');
 
-	if (isset($settings['misc'])) {
-		$settings['misc'] = array_merge($settings['misc'], $temp);
+	if (isset($settings['Flowview'])) {
+		$settings['Flowview'] = array_merge($settings['Flowview'], $temp);
 	} else {
-		$settings['misc'] = $temp;
+		$settings['Flowview'] = $temp;
 	}
 }
 
@@ -499,7 +499,7 @@ function flowview_setup_table() {
 		ENGINE=MEMORY,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowview_default . "`.`plugin_flowview_arin_information` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 		`cidr` varchar(20) NOT NULL DEFAULT '',
 		`net_range` varchar(64) NOT NULL DEFAULT '',
@@ -525,6 +525,7 @@ function flowview_setup_table() {
 		cmethod int(11) unsigned NOT NULL default '0',
 		allowfrom varchar(32) NOT NULL default '0',
 		port int(11) unsigned NOT NULL,
+		last_updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 		PRIMARY KEY (id))
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,
