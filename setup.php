@@ -309,7 +309,7 @@ function flowview_config_settings() {
 			'method' => 'drop_array',
 			'array' => array(
 				0 => __('Use Local Server', 'flowview'),
-				1 => __('Use DNS Server Below', 'flowview'),
+				1 => __('Use DNS Servers under Mail/Reporting/DNS', 'flowview'),
 				2 => __('Don\'t Resolve DNS', 'flowview')
 			),
 			'default' => 0
@@ -356,12 +356,12 @@ function flowview_config_settings() {
 		)
 	);
 
-	$tabs['Flowview'] = __('Flowview', 'flowview');
+	$tabs['flowview'] = __('Flowview', 'flowview');
 
-	if (isset($settings['Flowview'])) {
-		$settings['Flowview'] = array_merge($settings['Flowview'], $temp);
+	if (isset($settings['flowview'])) {
+		$settings['flowview'] = array_merge($settings['flowview'], $temp);
 	} else {
-		$settings['Flowview'] = $temp;
+		$settings['flowview'] = $temp;
 	}
 }
 
