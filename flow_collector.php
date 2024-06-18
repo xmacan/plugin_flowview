@@ -1546,7 +1546,6 @@ function flowview_template_supported($template, $tid) {
 		'ipNextHopIPv4Address'        => 15,
 		'flowEndSysUpTime'            => 21,
 		'flowStartSysUpTime'          => 22,
-		'samplingInterval'            => 34,
 	);
 
 	$required_fields_v6 = array(
@@ -1577,14 +1576,14 @@ function flowview_template_supported($template, $tid) {
 	if (isset($columns['12'])) {
 		foreach($required_fields_v4 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-cacti_log('Column with field id ' . $field_id . ' Does not exist for V4 flow template');
+cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv4 flow template');
 				return false;
 			}
 		}
 	} elseif (isset($columns['28'])) {
 		foreach($required_fields_v6 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-cacti_log('Column with field id ' . $field_id . ' Does not exist for V6 flow template');
+cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv6 flow template');
 				return false;
 			}
 		}
