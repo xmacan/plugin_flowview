@@ -60,9 +60,10 @@ $longopts = array(
 	'help',
 );
 
-global $options;
+global $options, $reload;
 
 $options = getopt($shortopts, $longopts);
+$reload  = false;
 
 if (isset($options['systemd'])) {
 	start(true);
@@ -77,6 +78,9 @@ if (isset($options['systemd'])) {
 			break;
 		case 'restart':
 			restart();
+			break;
+		case 'reload':
+			reload();
 			break;
 		default:
 			print 'Usage: /etc/init.d/flow-capture {start|stop|restart}' . PHP_EOL;
@@ -97,6 +101,7 @@ if (isset($options['systemd'])) {
 if (function_exists('pcntl_signal')) {
 	pcntl_signal(SIGTERM, 'sig_handler');
 	pcntl_signal(SIGINT, 'sig_handler');
+	pcntl_signal(SIGHUP, 'sig_handler');
 }
 
 function get_cacti_base() {
@@ -116,7 +121,7 @@ function get_cacti_base() {
 }
 
 function start($systemd = true) {
-	global $config, $cacti_base;
+	global $config, $cacti_base, $reload;
 
 	// 50 years by default
 	if (!register_process_start('flowview', 'master', $config['poller_id'], 10 * 157680000)) {
@@ -174,6 +179,26 @@ function restart() {
 	start(false);
 }
 
+function reload() {
+	global $config, $reload;
+
+	$reload = true;
+
+	$running = db_fetch_assoc_prepared('SELECT * 
+		FROM processes 
+		WHERE tasktype = "flowview" 
+		AND taskname != "master" 
+		AND taskid = ?', 
+		array($config['poller_id']));
+
+	if (cacti_sizeof($running)) {
+		foreach($running as $task) {
+			cacti_log(sprintf('Signaling Process %s to reload its configuration!', $task['taskname']), false, 'FLOWVIEW');
+			posix_kill($task['pid'], SIGHUP);
+		}
+	}
+}
+
 /**
  * sig_handler - provides a generic means to catch exceptions to the Cacti log.
  *
@@ -185,9 +210,13 @@ function sig_handler($signo) {
 	global $config;
 
 	switch ($signo) {
+		case SIGHUP:
+			cacti_log('NOTE: Flow capture received request to reload!', false, 'FLOWVIEW');
+
+			break;
 		case SIGTERM:
 		case SIGINT:
-			cacti_log("WARNING: Flowview Master Collector terminated by user", false, 'FLOWVIEW');
+			cacti_log("WARNING: Flowview main collector was terminated by user", false, 'FLOWVIEW');
 
 			flowview_kill_running_processes();
 			unregister_process('flowview', 'master', $config['poller_id'], getmypid());
@@ -218,7 +247,7 @@ function flowview_kill_running_processes() {
 
 	if (cacti_sizeof($processes)) {
 		foreach($processes as $p) {
-			cacti_log(sprintf('WARNING: Killing FlowView Child: %s PID: %d due to another due to signal or overrun.', ucfirst($p['taskname']), $p['pid']), false, 'CLEANUP');
+			cacti_log(sprintf('WARNING: Killing FlowView Child: %s PID: %d due to another due to signal or overrun.', ucfirst($p['taskname']), $p['pid']), false, 'FLOWVIEW');
 			posix_kill($p['pid'], SIGTERM);
 
 			unregister_process($p['tasktype'], $p['taskname'], $p['taskid'], $p['pid']);

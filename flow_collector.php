@@ -44,6 +44,7 @@ ini_set('max_execution_time', '-1');
 flowview_connect();
 
 $debug     = false;
+$reload    = true;
 $taskname  = '';
 
 $shortopts = 'VvHh';
@@ -86,6 +87,7 @@ foreach($options as $arg => $value) {
 if (function_exists('pcntl_signal')) {
 	pcntl_signal(SIGTERM, 'sig_handler');
 	pcntl_signal(SIGINT, 'sig_handler');
+	pcntl_signal(SIGHUP, 'sig_handler');
 }
 
 $templates  = array();
@@ -676,6 +678,15 @@ if (cacti_sizeof($listener)) {
 		array($listener['id']));
 
 	while (true) {
+		if ($reload) {
+			$listener  = flowview_db_fetch_row_prepared('SELECT *
+				FROM plugin_flowview_devices
+				WHERE id = ?',
+				array($listener_id));
+
+			$reload = false;
+		}
+
 		$socket = stream_socket_server('udp://0.0.0.0:' . $listener['port'], $errno, $errstr, STREAM_SERVER_BIND);
 
 		if (!$socket) {
@@ -701,7 +712,7 @@ if (cacti_sizeof($listener)) {
 
 			$start = microtime(true);
 
-			if ($p !== false ) {
+			if ($p !== false && !$reload) {
 				$version = unpack('n', substr($p, 0, 2));
 
 				if (isset($lversion[$peer]) && $version[1] != $lversion[$peer]) {
@@ -742,6 +753,8 @@ if (cacti_sizeof($listener)) {
 
 				$start = microtime(true);
 			} else {
+				fclose($socket);
+
 				break;
 			}
 
@@ -1783,12 +1796,26 @@ function check_set(&$data, $index, $quote = false) {
  * @return (void)
  */
 function sig_handler($signo) {
-	global $taskname, $config;
+	global $taskname, $config, $reload;
 
 	switch ($signo) {
+		case SIGHUP:
+			cacti_log('NOTE: Flow Collector request received to reload is running configuration.', false, 'FLOWVIEW');
+
+			$reload = true;
+
+			$setting = read_config_option('flowview_partition', true);
+			$setting = read_config_option('settings_from_email', true);
+			$setting = read_config_option('settings_from_name', true);
+			$setting = read_user_setting('first_weekdayid', false, true);
+			$setting = read_config_option('settings_dns_primary', true);
+			$setting = read_config_option('flowview_dns_method', true);
+			$setting = read_config_option('flowview_use_arin', true);
+
+			break;
 		case SIGTERM:
 		case SIGINT:
-			cacti_log("WARNING: Flowview Listener $taskname by signal", false, 'CLEANUP');
+			cacti_log("WARNING: Flowview Listener $taskname is shutting down by signal!", false, 'FLOWVIEW');
 
 			unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
 

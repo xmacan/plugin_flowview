@@ -1762,7 +1762,7 @@ function get_tables_for_query($start, $end = null) {
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
-	$part_type  = read_config_option('flowview_partition', true);
+	$part_type  = read_config_option('flowview_partition');
 	$inc_tables = array();
 
 	if ($end === null) {
@@ -3735,7 +3735,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 				return $dns_name;
 			} else {
-				$dns_name = 'ip-' . str_replace('.', '-', $host);
+				$dns_name = 'ip-' . str_replace('.', '-', $ip);
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache

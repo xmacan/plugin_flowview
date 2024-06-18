@@ -32,6 +32,7 @@
 * feature: Add color to Bar Charts
 * feature: Disable Charts when viewing printed reports
 * feature: Show visual indicator that the filter has been saved
+* feature: Add SIGHUP signal handling to flow-capture and flow_collector.php
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries
