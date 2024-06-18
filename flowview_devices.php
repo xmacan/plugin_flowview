@@ -242,11 +242,11 @@ function edit_devices() {
 			$streams = flowview_db_fetch_assoc_prepared('SELECT ds.*, SUM(dt.templates) AS templates
 				FROM plugin_flowview_device_streams AS ds
 				LEFT JOIN (
-					SELECT device_id, ext_addr, COUNT(*) AS templates
+					SELECT device_id, ex_addr, COUNT(*) AS templates
 					FROM plugin_flowview_device_templates AS dt
 					WHERE device_id = ?
 				) AS dt
-				USING (device_id, ext_addr)
+				USING (device_id, ex_addr)
 				WHERE ds.device_id = ?
 				GROUP BY ds.device_id',
 				array($device['id'], $device['id']));
@@ -294,7 +294,7 @@ function edit_devices() {
 					}
 
 					form_alternate_row('line' . $i, true);
-					form_selectable_cell($row['ext_addr'], $i);
+					form_selectable_cell($row['ex_addr'], $i);
 					form_selectable_cell(get_colored_device_status('', $status), $i);
 					form_selectable_cell($row['version'], $i, '', 'right');
 					form_selectable_cell($row['templates'], $i, '', 'right');
@@ -433,7 +433,7 @@ function edit_devices() {
 					if (cacti_sizeof($items)) {
 						foreach($items as $ti) {
 							print '<tr>';
-							form_selectable_cell($row['ext_addr'], $i);
+							form_selectable_cell($row['ex_addr'], $i);
 							form_selectable_cell($row['template_id'], $i);
 							form_selectable_cell($ti['name'], $i);
 							form_selectable_cell($ti['field_id'], $i, '', 'right');

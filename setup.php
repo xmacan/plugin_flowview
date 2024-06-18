@@ -533,23 +533,23 @@ function flowview_setup_table() {
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
 		device_id int(11) unsigned NOT NULL default '0',
-		ext_addr varchar(32) NOT NULL default '',
+		ex_addr varchar(46) NOT NULL default '',
 		name varchar(64) NOT NULL default '',
 		version varchar(5) NOT NULL default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-		PRIMARY KEY (device_id, ext_addr))
+		PRIMARY KEY (device_id, ex_addr))
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 		device_id int(11) unsigned NOT NULL default '0',
-		ext_addr varchar(32) NOT NULL default '',
+		ex_addr varchar(46) NOT NULL default '',
 		template_id int(11) unsigned NOT NULL default '0',
 		supported tinyint unsigned NOT NULL default '0',
 		column_spec blob default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-		PRIMARY KEY (device_id, ext_addr, template_id))
+		PRIMARY KEY (device_id, ex_addr, template_id))
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");

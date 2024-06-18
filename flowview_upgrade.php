@@ -88,11 +88,23 @@ cacti_log('Upgrading from v' . $old_version . ' to ' . $current_version, true, '
 flowview_upgrade($current_version, $old_version);
 
 function flowview_upgrade($current, $old) {
-	global $flowviewdb_default;
+	global $flowviewdb_default, $info;
 
 	flowview_connect();
 
 	if ($current != $old) {
+		db_execute_prepared("UPDATE plugin_config SET
+			version = ?, name = ?, author = ?, webpage = ?
+			WHERE directory = ?",
+			array(
+				$info['version'],
+				$info['longname'],
+				$info['author'],
+				$info['homepage'],
+				$info['name']
+			)
+		);
+
 		$bad_titles = flowview_db_fetch_cell('SELECT COUNT(*)
 			FROM plugin_flowview_schedules
 			WHERE title=""');
@@ -195,34 +207,52 @@ function flowview_upgrade($current, $old) {
 
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
 			device_id int(11) unsigned NOT NULL default '0',
-			ext_addr varchar(32) NOT NULL default '',
+			ex_addr varchar(46) NOT NULL default '',
 			name varchar(64) NOT NULL default '',
 			version varchar(5) NOT NULL default '',
 			last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			PRIMARY KEY (device_id, ext_addr))
+			PRIMARY KEY (device_id, ex_addr))
 			ENGINE=InnoDB,
 			ROW_FORMAT=DYNAMIC,
 			COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 			device_id int(11) unsigned NOT NULL default '0',
-			ext_addr varchar(32) NOT NULL default '',
+			ex_addr varchar(46) NOT NULL default '',
 			template_id int(11) unsigned NOT NULL default '0',
-			supported tinyint unsigned NOT NULL default '0'
+			supported tinyint unsigned NOT NULL default '0',
 			column_spec blob default '',
 			last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			PRIMARY KEY (device_id, ext_addr, template_id))
+			PRIMARY KEY (device_id, ex_addr, template_id))
 			ENGINE=InnoDB,
 			ROW_FORMAT=DYNAMIC,
 			COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
-		if (!flowview_db_column_exists('plugin_flowview_deivce_templates', 'supported')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_deivce_templates
+		if (!flowview_db_column_exists('plugin_flowview_device_templates', 'supported')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_device_templates
 				ADD COLUMN supported tinyint unsigned NOT NULL default "0" AFTER template_id');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_deivces', 'last_updated')) {
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'last_updated')) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN last_updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP');
+		}
+
+		if (flowview_db_column_exists('plugin_flowview_device_streams', 'ext_addr')) {
+			flowview_db_execute('TRUNCATE plugin_flowview_device_streams');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_device_streams
+				DROP PRIMARY KEY,
+				CHANGE COLUMN ext_addr ex_addr varchar(46) NOT NULL default "",
+				ADD PRIMARY KEY (device_id, ex_addr)');
+		}
+
+		if (flowview_db_column_exists('plugin_flowview_device_templates', 'ext_addr')) {
+			flowview_db_execute('TRUNCATE plugin_flowview_device_templates');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_device_templates
+				DROP PRIMARY KEY,
+				CHANGE COLUMN ext_addr ex_addr varchar(46) NOT NULL default "",
+				ADD PRIMARY KEY (device_id, ex_addr, template_id)');
 		}
 
 		db_execute("UPDATE plugin_realms
@@ -249,6 +279,8 @@ function flowview_upgrade($current, $old) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX end_time (end_time)';
 			}
 
+			$alter .= ($alter != '' ? ', ':'') . 'MODIFY COLUMN ex_addr VARCHAR(46) NOT NULL default ""';
+
 			if (!flowview_db_column_exists($t['TABLE_NAME'], 'ex_addr')) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX ex_addr (ex_addr)';
 			}
@@ -258,19 +290,9 @@ function flowview_upgrade($current, $old) {
 
 				flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . ' ' . $alter);
 			}
-		}
 
-		db_execute_prepared("UPDATE plugin_config SET
-			version = ?, name = ?, author = ?, webpage = ?
-			WHERE directory = ?",
-			array(
-				$info['version'],
-				$info['longname'],
-				$info['author'],
-				$info['homepage'],
-				$info['name']
-			)
-		);
+			flowview_db_execute('UPDATE ' . $t['TABLE_NAME'] . ' SET ex_addr = SUBSTRING_INDEX(ex_addr, ":", 1)');
+		}
 
 		cacti_log('Flowview Database Upgrade Complete', true, 'FLOWVIEW');
 	}

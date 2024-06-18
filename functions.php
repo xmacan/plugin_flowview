@@ -4165,7 +4165,7 @@ function create_raw_partition($table) {
 	$data['columns'][] = array('name' => 'sampling_interval', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'default' => '0');
 
 	// Router information
-	$data['columns'][] = array('name' => 'ex_addr', 'type' => 'varbinary(16)', 'NULL' => false, 'default' => '');
+	$data['columns'][] = array('name' => 'ex_addr', 'type' => 'varchar(46)', 'NULL' => false, 'default' => '');
 	$data['columns'][] = array('name' => 'sysuptime', 'type' => 'bigint(20)', 'NULL' => false, 'default' => '0');
 
 	// Source Details

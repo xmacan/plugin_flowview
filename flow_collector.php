@@ -634,22 +634,22 @@ $listener  = flowview_db_fetch_row_prepared('SELECT *
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
 	device_id int(11) unsigned NOT NULL default '0',
-	ext_addr varchar(32) NOT NULL default '',
+	ex_addr varchar(46) NOT NULL default '',
 	name varchar(64) NOT NULL default '',
 	version varchar(5) NOT NULL default '',
 	last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (device_id, ext_addr))
+	PRIMARY KEY (device_id, ex_addr))
 	ENGINE=InnoDB,
 	ROW_FORMAT=DYNAMIC,
 	COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 	device_id int(11) unsigned NOT NULL default '0',
-	ext_addr varchar(32) NOT NULL default '',
+	ex_addr varchar(46) NOT NULL default '',
 	template_id int(11) unsigned NOT NULL default '0',
 	column_spec blob default '',
 	last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (device_id, ext_addr, template_id))
+	PRIMARY KEY (device_id, ex_addr, template_id))
 	ENGINE=InnoDB,
 	ROW_FORMAT=DYNAMIC,
 	COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
@@ -696,12 +696,14 @@ if (cacti_sizeof($listener)) {
 		while (true) {
 			$p = stream_socket_recvfrom($socket, 1500, 0, $peer);
 
-			if (!isset($stream_refreshed[$peer])) {
-				$stream_refreshed[$peer] = false;
+			$ex_addr = get_peer_address($peer);
+
+			if (!isset($stream_refreshed[$ex_addr])) {
+				$stream_refreshed[$ex_addr] = false;
 			}
 
-			if (!isset($tmpl_refreshed[$peer])) {
-				$tmpl_refreshed[$peer] = false;
+			if (!isset($tmpl_refreshed[$ex_addr])) {
+				$tmpl_refreshed[$ex_addr] = false;
 			}
 
 			if ($start > 0) {
@@ -715,18 +717,18 @@ if (cacti_sizeof($listener)) {
 			if ($p !== false && !$reload) {
 				$version = unpack('n', substr($p, 0, 2));
 
-				if (isset($lversion[$peer]) && $version[1] != $lversion[$peer]) {
+				if (isset($lversion[$ex_addr]) && $version[1] != $lversion[$ex_addr]) {
 					debug('Flow: Detecting version change to v' . $version[1]);
 
 					$templates        = array();
-					$stream_refreshed[$peer] = false;
-					$tmpl_refreshed[$peer]   = false;
-					$lversion[$peer]         = $version[1];
+					$stream_refreshed[$ex_addr] = false;
+					$tmpl_refreshed[$ex_addr]   = false;
+					$lversion[$ex_addr]         = $version[1];
 				}
 
-				if (!$stream_refreshed[$peer]) {
-					update_flowview_streams($listener['id'], $peer, $version[1]);
-					$stream_refreshed[$peer] = true;
+				if (!$stream_refreshed[$ex_addr]) {
+					update_flowview_streams($listener['id'], $ex_addr, $version[1]);
+					$stream_refreshed[$ex_addr] = true;
 				}
 
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
@@ -734,15 +736,15 @@ if (cacti_sizeof($listener)) {
 				database_check_connect();
 
 				if ($version[1] == 5) {
-					process_fv5($p, $peer);
+					process_fv5($p, $ex_addr);
 
 					$previous_version = 5;
 				} elseif ($version[1] == 9) {
-					process_fv9($p, $peer);
+					process_fv9($p, $ex_addr);
 
 					$previous_version = 9;
 				} elseif ($version[1] == 10) {
-					process_fv10($p, $peer);
+					process_fv10($p, $ex_addr);
 
 					$previous_version = 10;
 				}
@@ -758,22 +760,22 @@ if (cacti_sizeof($listener)) {
 				break;
 			}
 
-			if (!$tmpl_refreshed[$peer] && isset($templates[$peer]) && cacti_sizeof($templates[$peer])) {
-				foreach($templates[$peer] AS $template_id => $t) {
+			if (!$tmpl_refreshed[$ex_addr] && isset($templates[$ex_addr]) && cacti_sizeof($templates[$ex_addr])) {
+				foreach($templates[$ex_addr] AS $template_id => $t) {
 					flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_templates`
-						(device_id, ext_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
+						(device_id, ex_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
 						ON DUPLICATE KEY UPDATE column_spec=VALUES(column_spec), last_updated=NOW()",
-						array($listener['id'], $peer, $template_id, json_encode($t)));
+						array($listener['id'], $ex_addr, $template_id, json_encode($t)));
 				}
 
-				$tmpl_refreshed[$peer] = true;
+				$tmpl_refreshed[$ex_addr] = true;
 			}
 
 			$send = time();
 
 			if ($send - $sstart > $refresh_seconds) {
 				$sstart = time();
-				$stream_refreshed[$peer] = false;
+				$stream_refreshed[$ex_addr] = false;
 
 				heartbeat_process('flowview', 'client_' . $listener['id'], $config['poller_id']);
 
@@ -788,7 +790,20 @@ if (cacti_sizeof($listener)) {
 
 exit(0);
 
-function update_flowview_streams($listener_id, $peer, $version) {
+function get_peer_address($peer) {
+	$parts = explode(':', $peer);
+
+	/* remove the port part */
+	$parts = array_slice($parts, 1, -1);
+
+	if (cacti_sizeof($parts) > 1) {
+		return implode(':', $parts);
+	} else {
+		return $parts[0];
+	}
+}
+
+function update_flowview_streams($listener_id, $ex_addr, $version) {
 	global $flowviewdb_default;
 
 	if ($version == 5) {
@@ -800,11 +815,11 @@ function update_flowview_streams($listener_id, $peer, $version) {
 	}
 
 	flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-		(device_id, ext_addr, version) VALUES (?, ?, ?)
+		(device_id, ex_addr, version) VALUES (?, ?, ?)
 		ON DUPLICATE KEY UPDATE version=VALUES(version),
 			version=VALUES(version),
 			last_updated=NOW()",
-		array($listener_id, $peer, $db_version));
+		array($listener_id, $ex_addr, $db_version));
 
 	flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
 		WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
@@ -835,7 +850,7 @@ function database_check_connect() {
 	}
 }
 
-function process_fv5($p, $peer) {
+function process_fv5($p, $ex_addr) {
 	global $listener_id;
 
 	flowview_connect();
@@ -863,7 +878,7 @@ function process_fv5($p, $peer) {
 		$src_addr = $data['src_addr1'] . '.' . $data['src_addr2'] . '.' . $data['src_addr3'] . '.' . $data['src_addr4'];
 		$dst_addr = $data['dst_addr1'] . '.' . $data['dst_addr2'] . '.' . $data['dst_addr3'] . '.' . $data['dst_addr4'];
 		$nexthop  = $data['nexthop1']  . '.' . $data['nexthop2']  . '.' . $data['nexthop3']  . '.' . $data['nexthop4'];
-		$ex_addr  = $peer;
+		$ex_addr  = $ex_addr;
 
 		$rstime = ($data['First'] - $header['sysuptime']) / 1000;
 		$rsmsec = substr($data['First'] - $header['sysuptime'], -3);
@@ -1022,13 +1037,13 @@ function get_unpack_syntax(&$field, $version) {
 	debug("Flow: Name: $name, Id: $id, Length: $length, Type: $prepac, Unpack: {$field['unpack']}");
 }
 
-function process_fv9($p, $peer) {
+function process_fv9($p, $ex_addr) {
 	global $templates, $tlengths, $allfields, $pacmap, $listener_id;
 
 	flowview_connect();
 
-	if (!isset($templates[$peer])) {
-		$templates[$peer] = array();
+	if (!isset($templates[$ex_addr])) {
+		$templates[$ex_addr] = array();
 	}
 
 	/* process header */
@@ -1076,7 +1091,7 @@ function process_fv9($p, $peer) {
 					debug('===============================================');
 					debug("Flow: Template Id: $tid with $fcount fields");
 
-					$templates[$peer][$tid] = array();
+					$templates[$ex_addr][$tid] = array();
 
 					for ($a = 0; $a < $fcount; $a++) {
 						$field = substr($p, $h, 4);
@@ -1112,31 +1127,31 @@ function process_fv9($p, $peer) {
 							$tf['unpack'] = 'C' . $tf['length'];
 						}
 
-						$templates[$peer][$tid][] = $tf;
+						$templates[$ex_addr][$tid][] = $tf;
 						$h += 4;
 						$k += 4;
 						$j++;
 					}
 
-					if (!flowview_template_supported($templates[$peer][$tid], $tid)) {
-						$tsupported[$peer][$tid] = false;
+					if (!flowview_template_supported($templates[$ex_addr][$tid], $tid)) {
+						$tsupported[$ex_addr][$tid] = false;
 
 						flowview_db_execute_prepared('UPDATE plugin_flowview_device_templates
 							SET supported = 0
-							WHERE device_id = ? AND ext_addr = ? AND template_id = ?',
-							array($listener_id, $peer, $tid));
+							WHERE device_id = ? AND ex_addr = ? AND template_id = ?',
+							array($listener_id, $ex_addr, $tid));
 					} else {
-						$tsupported[$peer][$tid] = false;
+						$tsupported[$ex_addr][$tid] = false;
 
 						flowview_db_execute_prepared('UPDATE plugin_flowview_device_templates
 							SET supported = 1
-							WHERE device_id = ? AND ext_addr = ? AND template_id = ?',
-							array($listener_id, $peer, $tid));
+							WHERE device_id = ? AND ex_addr = ? AND template_id = ?',
+							array($listener_id, $ex_addr, $tid));
 					}
 
 					debug("Flow: Template Captured, Template:$tid Size: $tlength");
 
-					$tlengths[$peer][$tid] = $tlength;
+					$tlengths[$ex_addr][$tid] = $tlength;
 				}
 
 				debug('Flow: Templates Captured');
@@ -1153,7 +1168,7 @@ function process_fv9($p, $peer) {
 			$j++;
 		} elseif ($fsid > 255) {
 			// Flow Data Set
-			if (cacti_sizeof($templates[$peer])) {
+			if (cacti_sizeof($templates[$ex_addr])) {
 				debug('Flow: Data Found, Processing');
 			} else {
 				debug('Flow: Data Found, Awaiting Templates');
@@ -1162,13 +1177,13 @@ function process_fv9($p, $peer) {
 			$tid = $fsid;
 			$k   = 4;
 
-			if (isset($templates[$peer][$tid])) {
+			if (isset($templates[$ex_addr][$tid])) {
 				debug('Flow: Template Found: ' . $tid);
 
 				while ($k < $fslen) {
 					$data = array();
 
-					foreach ($templates[$peer][$tid] as $t) {
+					foreach ($templates[$ex_addr][$tid] as $t) {
 						$id = $t['field_id'];
 
 						$field = substr($p, $h, $t['length']);
@@ -1223,7 +1238,7 @@ function process_fv9($p, $peer) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $peer, $flowtime, $sysuptime);
+						$result = process_v9_v10($data, $ex_addr, $flowtime, $sysuptime);
 					}
 
 					if ($result !== false) {
@@ -1238,7 +1253,7 @@ function process_fv9($p, $peer) {
 					 * version 9 flows can include padding check for a length
 					 * less than a total template and if found finish up.
 					 */
-					if ($remaining < $tlengths[$peer][$tid]) {
+					if ($remaining < $tlengths[$ex_addr][$tid]) {
 						$k = $fslen;
 					}
 				}
@@ -1289,13 +1304,13 @@ function get_sql_prefix($flowtime) {
 	return 'INSERT IGNORE INTO ' . $table . ' (listener_id, engine_type, engine_id, sampling_interval, ex_addr, sysuptime, src_addr, src_domain, src_rdomain, src_as, src_if, src_prefix, src_port, src_rport, dst_addr, dst_domain, dst_rdomain, dst_as, dst_if, dst_prefix, dst_port, dst_rport, nexthop, protocol, start_time, end_time, flows, packets, bytes, bytes_ppacket, tos, flags) VALUES ';
 }
 
-function process_fv10($p, $peer) {
+function process_fv10($p, $ex_addr) {
 	global $templates, $tlengths, $allfields, $pacmap;
 
 	flowview_connect();
 
-	if (!isset($templates[$peer])) {
-		$templates[$peer] = array();
+	if (!isset($templates[$ex_addr])) {
+		$templates[$ex_addr] = array();
 	}
 
 	/* process header */
@@ -1341,7 +1356,7 @@ function process_fv10($p, $peer) {
 					debug('===============================================');
 					debug("Flow: Template Id: $tid with $fcount fields");
 
-					$templates[$peer][$tid] = array();
+					$templates[$ex_addr][$tid] = array();
 
 					for ($a = 0; $a < $fcount; $a++) {
 						$field = substr($p, $h, 4);
@@ -1377,14 +1392,14 @@ function process_fv10($p, $peer) {
 							$tf['unpack'] = 'C' . $tf['length'];
 						}
 
-						$templates[$peer][$tid][] = $tf;
+						$templates[$ex_addr][$tid][] = $tf;
 						$h += 4;
 						$k += 4;
 					}
 
 					debug("Flow: Template Captured, Template:$tid Size: $tlength");
 
-					$tlengths[$peer][$tid] = $tlength;
+					$tlengths[$ex_addr][$tid] = $tlength;
 				}
 			} else {
 				debug('Flow: Bad Template Records');
@@ -1400,7 +1415,7 @@ function process_fv10($p, $peer) {
 			$i += $fslen;
 		} elseif ($fsid > 255) {
 			// Data Set
-			if (cacti_sizeof($templates[$peer])) {
+			if (cacti_sizeof($templates[$ex_addr])) {
 				debug('Flow: Data Found, Processing');
 			} else {
 				debug('Flow: Data Found, Awaiting Templates');
@@ -1410,13 +1425,13 @@ function process_fv10($p, $peer) {
 			$k   = 4;
 			$j   = 0;
 
-			if (isset($templates[$peer][$tid])) {
+			if (isset($templates[$ex_addr][$tid])) {
 				debug('Flow: Template Found: ' . $tid);
 
 				while ($k < $fslen) {
 					$data = array();
 
-					foreach ($templates[$peer][$tid] as $t) {
+					foreach ($templates[$ex_addr][$tid] as $t) {
 						$id    = $t['field_id'];
 
 						$field = substr($p, $h, $t['length']);
@@ -1466,7 +1481,7 @@ function process_fv10($p, $peer) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $peer, $flowtime);
+						$result = process_v9_v10($data, $ex_addr, $flowtime);
 					}
 
 					if ($result !== false) {
@@ -1481,7 +1496,7 @@ function process_fv10($p, $peer) {
 					 * version 9 flows can include padding check for a length
 					 * less than a total template and if found finish up.
 					 */
-					if ($remaining < $tlengths[$peer][$tid]) {
+					if ($remaining < $tlengths[$ex_addr][$tid]) {
 						$k = $fslen;
 					}
 				}
@@ -1574,7 +1589,7 @@ cacti_log('Column with field id ' . $field_id . ' Does not exist for V6 flow tem
 	return true;
 }
 
-function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
+function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 	global $listener_id, $partition;
 
 	$fieldname = array(
@@ -1736,7 +1751,7 @@ function process_v9_v10($data, $peer, $flowtime, $sysuptime = 0) {
 		check_set($data, $fieldname['engine_type'])       . ', ' .
 		check_set($data, $fieldname['engine_id'])         . ', ' .
 		check_set($data, $fieldname['sampling_interval']) . ', ' .
-		db_qstr($peer)                                    . ', ' .
+		db_qstr($ex_addr)                                    . ', ' .
 		$sysuptime                                        . ', ' .
 
 		'INET6_ATON("' . $src_addr . '")'                 . ', ' .

@@ -16,6 +16,7 @@
 * issue#106: Properly detect the Cacti base on Ubuntu and Debian
 * issue#118: Protocol filter not working
 * issue#121: When you return to the FlowView tab, your navigation will be broken till the first click
+* issue#139: Remove the source port from the ex_addr as it breaks multiple things
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
 * issue: Sort field was being lost between selections
