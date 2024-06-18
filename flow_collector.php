@@ -794,12 +794,14 @@ function get_peer_address($peer) {
 	$parts = explode(':', $peer);
 
 	/* remove the port part */
-	$parts = array_slice($parts, 1, -1);
+	array_pop($parts);
 
 	if (cacti_sizeof($parts) > 1) {
 		return implode(':', $parts);
-	} else {
+	} elseif (isset($parts[0])) {
 		return $parts[0];
+	} else {
+		return $peer;
 	}
 }
 
