@@ -1441,7 +1441,7 @@ function flowview_display_filter() {
 	html_end_box();
 }
 
-function get_port_name($port_num, $port_proto) {
+function get_port_name($port_num, $port_proto = 6) {
 	global $config, $graph_timespans;
 
 	flowview_connect();
@@ -2485,11 +2485,11 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case '7':
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_port, INET6_NTOA(dst_addr) AS dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
-					$sql_inner = 'SELECT src_addr, src_port, dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
+					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_port, protocol, INET6_NTOA(dst_addr) AS dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
+					$sql_inner = 'SELECT src_addr, src_port, protocol, dst_addr, dst_port, SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
-					$sql_groupby       = 'GROUP BY INET6_NTOA(src_addr), src_port, INET6_NTOA(dst_addr), dst_port';
-					$sql_inner_groupby = 'GROUP BY src_addr, src_port, dst_addr, dst_port';
+					$sql_groupby       = 'GROUP BY INET6_NTOA(src_addr), src_port, protocol, INET6_NTOA(dst_addr), dst_port';
+					$sql_inner_groupby = 'GROUP BY src_addr, src_port, protocol, dst_addr, dst_port';
 
 					if ($data['sortfield'] < 2) {
 						$sql_order = 'ORDER BY INET6_NTOA(' . ($data['sortfield'] + 1) . ') ' . ($data['sortfield'] > 1 ? ' DESC':' ASC');
@@ -2690,11 +2690,19 @@ function run_flow_query($session, $query_id, $start, $end) {
 					}
 
 					if (isset($r['src_port'])) {
-						$table .= '<td class="left nowrap">' . get_port_name($r['src_port'], $r['protocol']) . '</td>';
+						if (isset($r['protocol'])) {
+							$table .= '<td class="left nowrap">' . get_port_name($r['src_port'], $r['protocol']) . '</td>';
+						} else {
+							$table .= '<td class="left nowrap">' . get_port_name($r['src_port'], 6) . '</td>';
+						}
 					}
 
 					if (isset($r['dst_port'])) {
-						$table .= '<td class="left nowrap">' . get_port_name($r['dst_port'], $r['protocol']) . '</td>';
+						if (isset($r['protocol'])) {
+							$table .= '<td class="left nowrap">' . get_port_name($r['dst_port'], $r['protocol']) . '</td>';
+						} else {
+							$table .= '<td class="left nowrap">' . get_port_name($r['dst_port'], 6) . '</td>';
+						}
 					}
 
 					if (isset($r['src_if'])) {
