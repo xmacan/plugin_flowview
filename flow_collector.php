@@ -643,6 +643,8 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`p
 	ROW_FORMAT=DYNAMIC,
 	COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
+flowview_db_execute('DELETE FROM plugin_flowview_device_streams WHERE ex_addr LIKE "%:%"');
+
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 	device_id int(11) unsigned NOT NULL default '0',
 	ex_addr varchar(46) NOT NULL default '',
@@ -653,6 +655,8 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`p
 	ENGINE=InnoDB,
 	ROW_FORMAT=DYNAMIC,
 	COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
+
+flowview_db_execute('DELETE FROM plugin_flowview_device_templates WHERE ex_addr LIKE "%:%"');
 
 if (cacti_sizeof($listener)) {
 	/**

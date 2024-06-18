@@ -23,13 +23,14 @@
 */
 
 function plugin_flowview_install() {
-	api_plugin_register_hook('flowview', 'config_arrays',         'flowview_config_arrays',        'setup.php');
-	api_plugin_register_hook('flowview', 'draw_navigation_text',  'flowview_draw_navigation_text', 'setup.php');
-	api_plugin_register_hook('flowview', 'config_settings',       'flowview_config_settings',      'setup.php');
-	api_plugin_register_hook('flowview', 'poller_bottom',         'flowview_poller_bottom',        'setup.php');
-	api_plugin_register_hook('flowview', 'top_header_tabs',       'flowview_show_tab',             'setup.php');
-	api_plugin_register_hook('flowview', 'top_graph_header_tabs', 'flowview_show_tab',             'setup.php');
-	api_plugin_register_hook('flowview', 'page_head',             'flowview_page_head',            'setup.php');
+	api_plugin_register_hook('flowview', 'config_arrays',          'flowview_config_arrays',          'setup.php');
+	api_plugin_register_hook('flowview', 'draw_navigation_text',   'flowview_draw_navigation_text',   'setup.php');
+	api_plugin_register_hook('flowview', 'config_settings',        'flowview_config_settings',        'setup.php');
+	api_plugin_register_hook('flowview', 'poller_bottom',          'flowview_poller_bottom',          'setup.php');
+	api_plugin_register_hook('flowview', 'top_header_tabs',        'flowview_show_tab',               'setup.php');
+	api_plugin_register_hook('flowview', 'top_graph_header_tabs',  'flowview_show_tab',               'setup.php');
+	api_plugin_register_hook('flowview', 'page_head',              'flowview_page_head',              'setup.php');
+	api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php');
 
 	api_plugin_register_realm('flowview', 'flowview.php', __('Plugin -> Flow Viewer', 'flowview'), 1);
 	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php', __('Plugin -> Flow Admin', 'flowview'), 1);
@@ -290,10 +291,46 @@ function flowview_page_head() {
 	}
 }
 
+function flowview_global_settings_update() {
+	$dns_method  = read_config_option('flowview_dns_method', true);
+	$arin_use    = read_config_option('flowview_use_arin', true);
+	$hup_process = false;
+
+	if (isset($_SESSION['sess_flowview_settings'])) {
+		if ($dns_method != $_SESSION['sess_flowview_settings']['dns_method']) {
+			$hup_process = true;
+		}
+
+		if ($arin_use != $_SESSION['sess_flowview_settings']['arin_use']) {
+			$hup_process = true;
+		}
+	}
+
+	if ($hup_process) {
+		$pid = db_fetch_cell('SELECT pid FROM processes WHERE tasktype="flowview" AND taskname="master"');
+
+		if ($pid > 0) {
+			if (!defined('SIGHUP')) {
+				define('SIGHUP', 1);
+			}
+
+			posix_kill($pid, SIGHUP);
+		}
+	}
+}
+
 function flowview_config_settings() {
 	global $config, $settings, $tabs;
 
 	include_once($config['base_path'] . '/lib/reports.php');
+
+	$dns_method = read_config_option('flowview_dns_method', true);
+	$arin_use   = read_config_option('flowview_use_arin', true);
+
+	$_SESSION['sess_flowview_settings'] = array(
+		'dns_method' => $dns_method,
+		'arin_use'   => $arin_use
+	);
 
 	$formats = reports_get_format_files();
 

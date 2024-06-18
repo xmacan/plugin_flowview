@@ -189,14 +189,28 @@ function save_devices () {
 
 	$id = flowview_sql_save($save, 'plugin_flowview_devices', 'id', true);
 
+	$pid = db_fetch_cell('SELECT pid FROM processes WHERE tasktype="flowview" AND taskname="master"');
+
 	if (is_error_message()) {
 		raise_message(2);
 
 		header('Location: flowview_devices.php?header=false&action=edit&id=' . (empty($id) ? get_request_var('id') : $id));
 		exit;
-	}
+	} else {
+		if ($pid > 0) {
+			if (!defined('SIGHUP')) {
+				define('SIGHUP', 1);
+			}
 
-	raise_message(1);
+			posix_kill($pid, SIGHUP);
+
+			sleep(3);
+
+			raise_message('flow_save', __('Save Successful.  The Flowview Listener has been saved, and the service restarted.', 'flowview'), MESSAGE_LEVEL_INFO);
+		} else {
+			raise_message('flow_save', __('Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running.', 'flowview'), MESSAGE_LEVEL_WARN);
+		}
+	}
 
 	header('Location: flowview_devices.php?header=false');
 	exit;
