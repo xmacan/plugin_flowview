@@ -4236,6 +4236,8 @@ function create_raw_partition($table) {
 function flowview_fix_collate_issues() {
 	global $config;
 
+	return false;
+
 	flowview_connect();
 
 	$tables = array_rekey(
