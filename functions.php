@@ -3524,7 +3524,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		$priv_dns_name = gethostbyaddr($ip);
 
 		if ($priv_dns_name == $ip || $priv_dns_name === false) {
-			/* good dns_name */
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 				(ip, host, source, time)
 				VALUES (?, ?, ?, ?)
@@ -3533,6 +3532,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			return $dns_name;
 		} else {
+			if (strpos($priv_dns_name, '.') === false) {
+				$priv_dns_name .= '.' . read_config_option('flowview_local_domain');
+			}
+
 			/* good dns_name */
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 				(ip, host, source, time)
@@ -3569,6 +3572,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			return $dns_name . $suffix;
 		} catch(Net_DNS2_Exception $e) {
+			/* the resolver did not work, try the old method */
 			$dns_name = gethostbyaddr($ip);
 
 			if ($dns_name === false || $dns_name == $ip) {
@@ -3600,12 +3604,16 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					return $dns_name;
 				}
 			} else {
+				if (strpos($dns_name, '.') === false) {
+					$dns_name .= '.' . read_config_option('flowview_local_domain');
+				}
+
 				/* return the hostname, without the trailing '.' */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
 					VALUES (?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'System DNS', $time));
+					array($ip, $dns_name, 'Local DNS', $time));
 
 				return $dns_name . $suffix;
 			}
@@ -3619,6 +3627,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		}
 
 		if ($dns_name != $ip) {
+			if (strpos($dns_name, '.') === false) {
+				$dns_name .= '.' . read_config_option('flowview_local_domain');
+			}
+
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 				(ip, host, source, time)
 				VALUES (?, ?, ?, ?)

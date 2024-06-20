@@ -292,9 +292,10 @@ function flowview_page_head() {
 }
 
 function flowview_global_settings_update() {
-	$dns_method  = read_config_option('flowview_dns_method', true);
-	$arin_use    = read_config_option('flowview_use_arin', true);
-	$hup_process = false;
+	$dns_method   = read_config_option('flowview_dns_method', true);
+	$arin_use     = read_config_option('flowview_use_arin', true);
+	$local_domain = read_config_option('flowview_local_domain', true);
+	$hup_process  = false;
 
 	if (isset($_SESSION['sess_flowview_settings'])) {
 		if ($dns_method != $_SESSION['sess_flowview_settings']['dns_method']) {
@@ -302,6 +303,10 @@ function flowview_global_settings_update() {
 		}
 
 		if ($arin_use != $_SESSION['sess_flowview_settings']['arin_use']) {
+			$hup_process = true;
+		}
+
+		if ($local_domain != $_SESSION['sess_flowview_settings']['local_domain']) {
 			$hup_process = true;
 		}
 	}
@@ -324,12 +329,14 @@ function flowview_config_settings() {
 
 	include_once($config['base_path'] . '/lib/reports.php');
 
-	$dns_method = read_config_option('flowview_dns_method', true);
-	$arin_use   = read_config_option('flowview_use_arin', true);
+	$dns_method   = read_config_option('flowview_dns_method', true);
+	$arin_use     = read_config_option('flowview_use_arin', true);
+	$local_domain = read_config_option('flowview_local_domain', true);
 
 	$_SESSION['sess_flowview_settings'] = array(
-		'dns_method' => $dns_method,
-		'arin_use'   => $arin_use
+		'dns_method'   => $dns_method,
+		'arin_use'     => $arin_use,
+		'local_domain' => $local_domain
 	);
 
 	$formats = reports_get_format_files();
@@ -351,8 +358,16 @@ function flowview_config_settings() {
 			),
 			'default' => 0
 		),
+		'flowview_local_domain' => array(
+			'friendly_name' => __('Local Domain Name', 'monitor'),
+			'method' => 'textbox',
+			'default' => 'mydomain.net',
+			'description' => __('For host IP addresses that resolve locally without a domain, append this suffix to the resolved hostname.', 'monitor'),
+			'max_length' => 30,
+			'size' => 30
+		),
 		'flowview_use_arin' => array(
-			'friendly_name' => __('Use Arin to Find Unregistered Domains', 'syslog'),
+			'friendly_name' => __('Use Arin to Find Unregistered Domains and AS Numbers', 'syslog'),
 			'description' => __('Many Big Tech data collection services like to mask their ownership of domains to obfuscate the fact that they are collecting your personal information.  If you are concerned with this and your Cacti install has access to the Internet, you can use Arin to remove the mask from those Big Tech companies.', 'flowview'),
 			'method' => 'checkbox',
 			'default' => 'on'

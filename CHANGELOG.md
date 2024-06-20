@@ -37,6 +37,7 @@
 * feature: Add SIGHUP signal handling to flow-capture and flow_collector.php
 * feature: Add support for Net/DNS2 to improve alternate DNS resolution support
 * feature: Allow DNS Cache to be purged with a single button press.
+* feature: Append local domain to locally resolved addresses from the system DNS
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries
