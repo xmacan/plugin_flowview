@@ -37,7 +37,8 @@ This will start the service.
 * First, copy the file flow-capture.service into /etc/systemd/system
 
 * Then, edit the file and ensure that the path to the flow-capture script is
-  accurate
+  accurate and the user account matches that of the Web Server.  This second
+  point is pretty important.
 
 * Then, run 'systemctl daemon-reload'
 
