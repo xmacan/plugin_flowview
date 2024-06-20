@@ -3505,8 +3505,9 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		return $cache['host'];
 	}
 
-	$dns1 = read_config_option('settings_dns_primary');
-	$dns2 = read_config_option('settings_dns_secondary');
+	$dns1    = read_config_option('settings_dns_primary');
+	$dns2    = read_config_option('settings_dns_secondary');
+	$timeout = ceil(read_config_option('settings_dns_timeout')/1000);
 
 	$time = time();
 
@@ -3557,66 +3558,80 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			$nameservers[] = $dns2;
 		}
 
-		$resolver = new Net_DNS2_Resolver(array('nameservers' => $nameservers));
+		$resolver = new Net_DNS2_Resolver(
+			array(
+				'nameservers' => $nameservers,
+				'timeout'     => $timeout
+			)
+		);
 
 		try {
 			$resp = $resolver->query($ip, 'PTR');
-			$dns_name = $resp->answer[0]->ptrdname;
+
+			if (isset($resp->answer[0])) {
+				if (property_exists($resp->answer[0], 'ptrdname')) {
+					$dns_name = $resp->answer[0]->ptrdname;
+
+					/* return the hostname, without the trailing '.' */
+					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+						(ip, host, source, time)
+						VALUES (?, ?, ?, ?)
+						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+						array($ip, $dns_name, 'Specified DNS', $time));
+
+					return $dns_name . $suffix;
+				}
+			} else {
+				cacti_log("WARNING: DNS Lookup for IP $ip Failed. No Response!", false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
+			}
+		} catch(Net_DNS2_Exception $e) {
+			cacti_log("WARNING: DNS Lookup for IP $ip Failed. Exception Response.", false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
+		}
+
+		/* the resolver did not work, try the old method */
+		$dns_name = gethostbyaddr($ip);
+
+		if ($dns_name === false || $dns_name == $ip) {
+			if (read_config_option('flowview_use_arin') == 'on') {
+				$dns_name = flowview_get_owner_from_arin($ip);
+			} else {
+				$dns_name = $ip;
+			}
+
+			if ($ip != $dns_name && $dns_name !== false) {
+				/* good dns_name */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'ARIN', $time));
+
+				return $dns_name;
+			} else {
+				$dns_name = 'ip-' . str_replace('.', '-', $ip) . '.arin-error.net';
+
+				/* error - return the hostname we constructed (without the . on the end) */
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'ARIN Error', $time));
+
+				return $dns_name;
+			}
+		} else {
+			if (strpos($dns_name, '.') === false) {
+				$dns_name .= '.' . read_config_option('flowview_local_domain');
+			}
 
 			/* return the hostname, without the trailing '.' */
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 				(ip, host, source, time)
 				VALUES (?, ?, ?, ?)
 				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-				array($ip, $dns_name, 'Specified DNS', $time));
+				array($ip, $dns_name, 'Local DNS', $time));
 
 			return $dns_name . $suffix;
-		} catch(Net_DNS2_Exception $e) {
-			/* the resolver did not work, try the old method */
-			$dns_name = gethostbyaddr($ip);
-
-			if ($dns_name === false || $dns_name == $ip) {
-				if (read_config_option('flowview_use_arin') == 'on') {
-					$dns_name = flowview_get_owner_from_arin($ip);
-				} else {
-					$dns_name = $ip;
-				}
-
-				if ($ip != $dns_name && $dns_name !== false) {
-					/* good dns_name */
-					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-						(ip, host, source, time)
-						VALUES (?, ?, ?, ?)
-						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-						array($ip, $dns_name, 'ARIN', $time));
-
-					return $dns_name;
-				} else {
-					$dns_name = 'ip-' . str_replace('.', '-', $ip) . '.arin-error.net';
-
-					/* error - return the hostname we constructed (without the . on the end) */
-					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-						(ip, host, source, time)
-						VALUES (?, ?, ?, ?)
-						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-						array($ip, $dns_name, 'ARIN Error', $time));
-
-					return $dns_name;
-				}
-			} else {
-				if (strpos($dns_name, '.') === false) {
-					$dns_name .= '.' . read_config_option('flowview_local_domain');
-				}
-
-				/* return the hostname, without the trailing '.' */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Local DNS', $time));
-
-				return $dns_name . $suffix;
-			}
 		}
 	} else {
 		$address = gethostbyaddr($ip);
