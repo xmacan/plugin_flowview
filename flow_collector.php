@@ -692,7 +692,14 @@ if (cacti_sizeof($listener)) {
 			$reload = false;
 		}
 
-		$socket = stream_socket_server('udp://0.0.0.0:' . $listener['port'], $errno, $errstr, STREAM_SERVER_BIND);
+		$protocol = strtolower($listener['protocol']);
+		if ($listener['allowfrom'] != '0' && $listener['allowfrom'] != '') {
+			$url = "$protocol://{$listener['allowfrom']}:{$listener['port']}";
+		} else {
+			$url = "$protocol://0.0.0.0:{$listener['port']}";
+		}
+
+		$socket = stream_socket_server($url, $errno, $errstr, STREAM_SERVER_BIND);
 
 		if (!$socket) {
 		    die("$errstr ($errno)");

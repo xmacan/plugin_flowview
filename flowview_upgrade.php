@@ -131,6 +131,10 @@ function flowview_upgrade($current, $old) {
 			);
 		}
 
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'protocol')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN protocol char(3) NOT NULL default "UDP" AFTER port');
+		}
+
 		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
 			cacti_log("Adding savedquery column to plugin_flowview_schedules table.", true, 'FLOWVIEW');
 

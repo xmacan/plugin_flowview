@@ -66,6 +66,14 @@ $device_edit = array(
 		'max_length' => '5',
 		'size' => '30'
 	),
+	'protocol' => array(
+		'method' => 'drop_array',
+		'friendly_name' => __('Protocol', 'flowview'),
+		'description' => __('The IP Protocol to use for this listener.', 'flowview'),
+		'value' => '|arg1:protocl|',
+		'array' => array('UDP' => __('UDP Protocol', 'flowview'), 'TCP' => __('TCP Protocol', 'flowview')),
+		'default' => 'UDP'
+	),
 	'id' => array(
 		'method' => 'hidden_zero',
 		'value' => '|arg1:id|'
@@ -186,6 +194,7 @@ function save_devices () {
 	$save['cmethod']     = get_nfilter_request_var('cmethod');
 	$save['allowfrom']   = get_nfilter_request_var('allowfrom');
 	$save['port']        = get_nfilter_request_var('port');
+	$save['protocol']    = get_nfilter_request_var('protocol');
 
 	$id = flowview_sql_save($save, 'plugin_flowview_devices', 'id', true);
 
@@ -643,6 +652,11 @@ function show_devices () {
 			'sort' => 'ASC',
 			'align' => 'right'
 		),
+		'protocol' => array(
+			'display' => __('Protocol', 'flowview'),
+			'sort' => 'ASC',
+			'align' => 'right'
+		),
 		'nosort0' => array(
 			'display' => __('Status', 'flowview'),
 			'sort' => 'ASC',
@@ -680,10 +694,13 @@ function show_devices () {
 		foreach ($result as $row) {
 			if ($os == 'freebsd') {
 				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
+				$column = 3;
 			} else {
 				$status = shell_exec("ss -lntu | grep ':" . $row['port'] . " '");
+				$column = 4;
 				if (empty($status)) {
 					$status = shell_exec("netstat -an | grep ':" . $row['port'] . " '");
+					$column = 3;
 				}
 			}
 
@@ -702,8 +719,9 @@ function show_devices () {
 			form_selectable_cell(__('Cacti', 'flowview'), $row['id']);
 			form_selectable_cell($row['allowfrom'], $row['id'], '', 'right');
 			form_selectable_cell($row['port'], $row['id'], '', 'right');
+			form_selectable_cell($row['protocol'], $row['id'], '', 'right');
 			form_selectable_cell(get_colored_device_status('', $status), $row['id'], '', 'right');
-			form_selectable_cell(isset($parts[3]) ? $parts[3]:'-', $row['id'], '', 'right');
+			form_selectable_cell(isset($parts[$column]) ? $parts[$column]:'-', $row['id'], '', 'right');
 			form_selectable_cell($row['streams'], $row['id'], '', 'right');
 			form_selectable_cell($row['versions'], $row['id'], '', 'right');
 			form_selectable_cell($row['last_updated'], $row['id'], '', 'right');

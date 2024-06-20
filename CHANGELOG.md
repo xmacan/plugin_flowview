@@ -48,6 +48,7 @@
 * feature#125: Perform Schema Upgrades in the Background
 * feature#126: Cache ARIN Responses for reference
 * feature#127: Show Stream Fowview Versions being Received by the Receiver 
+* feature#143: Support tcp listener
 
 --- 3.3 ---
 
