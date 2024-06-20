@@ -24,6 +24,7 @@
 * issue: Dont fail to find flowview_connect() if the plugin is disabled
 * issue: Make Domains only Domains/Hostnames only to remove confusion
 * issue: Rework the SystemD startup process to use Cactis registration and unregistration functions
+* issue: Allowed incoming address range was not working
 * feature: Make it optional to query Arin to track Big Tech
 * feature: Allow Flowview to remember your last filter when re-entering the FlowView page
 * feature: Allow selection of the listener on the FlowView filter
