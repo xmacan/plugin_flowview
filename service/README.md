@@ -23,7 +23,7 @@ any time you add or remove a listener, you will need to restart the service.
 * Then, run 'chkconfig --add flow-capture
 
 * Then, edit /etc/init.d/flow-capture and ensure the cacti_base variable is set
-  properly
+  properly and the $webuser variable is set correctly per your operating system.
 
 * Lastly, run:
   ```

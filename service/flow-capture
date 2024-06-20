@@ -28,6 +28,12 @@
 # chkconfig: 2345 95 00
 */
 
+/* modify this line if you are using an init.d operating system.  Ensure 
+ * that it matches your apache account.  Some use 'apache' others use
+ * www-user or www-data.
+ */
+$webuser = 'apache';
+
 if (function_exists('pcntl_async_signals')) {
     pcntl_async_signals(true);
 } else {
@@ -121,11 +127,16 @@ function get_cacti_base() {
 }
 
 function start($systemd = true) {
-	global $config, $cacti_base, $reload;
+	global $config, $cacti_base, $reload, $webuser;;
 
 	// 50 years by default
 	if (!register_process_start('flowview', 'master', $config['poller_id'], 10 * 157680000)) {
 		exit(0);
+	}
+
+	if (!$systemd) {
+		posix_seteuid(posix_getpwnam($webuser)['uid']);
+		posix_setegid(posix_getpwnam($webuser)['gid']);
 	}
 
 	print 'NOTE: Starting Flow Collection' . PHP_EOL;
