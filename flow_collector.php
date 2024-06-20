@@ -1147,7 +1147,7 @@ function process_fv9($p, $ex_addr) {
 							WHERE device_id = ? AND ex_addr = ? AND template_id = ?',
 							array($listener_id, $ex_addr, $tid));
 					} else {
-						$tsupported[$ex_addr][$tid] = false;
+						$tsupported[$ex_addr][$tid] = true;
 
 						flowview_db_execute_prepared('UPDATE plugin_flowview_device_templates
 							SET supported = 1
@@ -1155,7 +1155,7 @@ function process_fv9($p, $ex_addr) {
 							array($listener_id, $ex_addr, $tid));
 					}
 
-					debug("Flow: Template Captured, Template:$tid Size: $tlength");
+					debug("Flow: Template Captured, Template:$tid Size:$tlength");
 
 					$tlengths[$ex_addr][$tid] = $tlength;
 				}
@@ -1403,6 +1403,22 @@ function process_fv10($p, $ex_addr) {
 						$k += 4;
 					}
 
+					if (!flowview_template_supported($templates[$ex_addr][$tid], $tid)) {
+						$tsupported[$ex_addr][$tid] = false;
+
+						flowview_db_execute_prepared('UPDATE plugin_flowview_device_templates
+							SET supported = 0
+							WHERE device_id = ? AND ex_addr = ? AND template_id = ?',
+							array($listener_id, $ex_addr, $tid));
+					} else {
+						$tsupported[$ex_addr][$tid] = true;
+
+						flowview_db_execute_prepared('UPDATE plugin_flowview_device_templates
+							SET supported = 1
+							WHERE device_id = ? AND ex_addr = ? AND template_id = ?',
+							array($listener_id, $ex_addr, $tid));
+					}
+
 					debug("Flow: Template Captured, Template:$tid Size: $tlength");
 
 					$tlengths[$ex_addr][$tid] = $tlength;
@@ -1576,14 +1592,14 @@ function flowview_template_supported($template, $tid) {
 	if (isset($columns['12'])) {
 		foreach($required_fields_v4 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv4 flow template');
+				cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv4 flow template');
 				return false;
 			}
 		}
 	} elseif (isset($columns['28'])) {
 		foreach($required_fields_v6 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv6 flow template');
+				cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv6 flow template');
 				return false;
 			}
 		}
@@ -1756,7 +1772,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 		check_set($data, $fieldname['engine_type'])       . ', ' .
 		check_set($data, $fieldname['engine_id'])         . ', ' .
 		check_set($data, $fieldname['sampling_interval']) . ', ' .
-		db_qstr($ex_addr)                                    . ', ' .
+		db_qstr($ex_addr)                                 . ', ' .
 		$sysuptime                                        . ', ' .
 
 		'INET6_ATON("' . $src_addr . '")'                 . ', ' .

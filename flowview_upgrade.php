@@ -93,6 +93,8 @@ function flowview_upgrade($current, $old) {
 	flowview_connect();
 
 	if ($current != $old) {
+		api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php', true);
+
 		db_execute_prepared("UPDATE plugin_config SET
 			version = ?, name = ?, author = ?, webpage = ?
 			WHERE directory = ?",

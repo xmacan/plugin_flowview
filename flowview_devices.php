@@ -259,10 +259,11 @@ function edit_devices() {
 					SELECT device_id, ex_addr, COUNT(*) AS templates
 					FROM plugin_flowview_device_templates AS dt
 					WHERE device_id = ?
+					GROUP BY ex_addr
 				) AS dt
 				USING (device_id, ex_addr)
 				WHERE ds.device_id = ?
-				GROUP BY ds.device_id',
+				GROUP BY ds.ex_addr',
 				array($device['id'], $device['id']));
 
 			html_start_box('Inbound Streams and Status', '100%', '', '4', 'center', '');
@@ -324,9 +325,28 @@ function edit_devices() {
 			html_end_box(false);
 		}
 	} else {
-		$templates = flowview_db_fetch_assoc_prepared('SELECT *
+		if (isset_request_var('ex_addr') && get_request_var('ex_addr') != 0) {
+			$sql_where = ' AND ex_addr = ?';
+			$sql_params[] = $device['id'];
+			$sql_params[] = get_nfilter_request_var('ex_addr');
+		} else {
+			$sql_where = '';
+			$sql_params[] = $device['id'];
+		}
+
+		$templates = flowview_db_fetch_assoc_prepared("SELECT *
 			FROM plugin_flowview_device_templates AS dt
-			WHERE dt.device_id = ?',
+			WHERE dt.device_id = ?
+			$sql_where", $sql_params);
+
+		$dtemplates = flowview_db_fetch_assoc_prepared("SELECT DISTINCT template_id
+			FROM plugin_flowview_device_templates AS dt
+			WHERE dt.device_id = ?
+			$sql_where", $sql_params);
+
+		$addrs = db_fetch_assoc_prepared('SELECT DISTINCT ex_addr
+			FROM plugin_flowview_device_templates
+			WHERE device_id = ?',
 			array($device['id']));
 
 		html_start_box(__('Listener Detected Templates', 'flowview'), '100%', '', '4', 'center', '');
@@ -338,6 +358,20 @@ function edit_devices() {
 				<table class='filterTable'>
 					<tr>
 						<td>
+							<?php print __('Ex Addr', 'flowview');?>
+						</td>
+						<td>
+							<select id='ex_addr'>
+								<?php
+								print "<option value='0' " . (get_request_var('template') == '0' ? 'selected':'') . '>' . __('All', 'flowview') . '</option>';
+
+								foreach($addrs as $a) {
+									print "<option value='{$a['ex_addr']}' " . (get_request_var('ex_addr') == $a['ex_addr'] ? 'selected':'') . '>' . $a['ex_addr'] . '</option>';
+								}
+								?>
+							</select>
+						</td>
+						<td>
 							<?php print __('Template', 'flowview');?>
 						</td>
 						<td>
@@ -345,7 +379,7 @@ function edit_devices() {
 								<?php
 								print "<option value='0' " . (get_request_var('template') == '0' ? 'selected':'') . '>' . __('All', 'flowview') . '</option>';
 
-								foreach($templates as $t) {
+								foreach($dtemplates as $t) {
 									print "<option value='{$t['template_id']}' " . (get_request_var('template') == $t['template_id'] ? 'selected':'') . '>' . $t['template_id'] . '</option>';
 								}
 								?>
@@ -363,11 +397,12 @@ function edit_devices() {
 			function applyFilter() {
 				strURL  = 'flowview_devices.php?action=edit&id=<?php print get_request_var('id');?>&tab=templates&header=false';
 				strURL += '&template=' + $('#template').val();
+				strURL += '&ex_addr='  + $('#ex_addr').val();
 				loadPageNoHeader(strURL);
 			}
 
 			$(function() {
-				$('#template').change(function() {
+				$('#template, #ex_addr').change(function() {
 					applyFilter();
 				});
 
@@ -377,6 +412,7 @@ function edit_devices() {
 
 				$('#sorttable').tablesorter({
 					widgets: ['zebra', 'resizable'],
+					sortList: [[3,0]],
 					widgetZebra: { css: ['even', 'odd'] },
 					headerTemplate: '<div class="textSubHeaderDark">{content} {icon}</div>',
 					cssIconAsc: 'fa-sort-up',
