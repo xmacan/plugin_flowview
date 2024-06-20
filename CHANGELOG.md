@@ -17,6 +17,7 @@
 * issue#118: Protocol filter not working
 * issue#121: When you return to the FlowView tab, your navigation will be broken till the first click
 * issue#139: Remove the source port from the ex_addr as it breaks multiple things
+* issue#141: Using specific DNS servers results in unpack errors.
 * issue: Flowview DNS Setting removed by accident
 * issue: When changing the partition type, it does not take from the GUI right away
 * issue: Sort field was being lost between selections
@@ -34,6 +35,8 @@
 * feature: Disable Charts when viewing printed reports
 * feature: Show visual indicator that the filter has been saved
 * feature: Add SIGHUP signal handling to flow-capture and flow_collector.php
+* feature: Add support for Net/DNS2 to improve alternate DNS resolution support
+* feature: Allow DNS Cache to be purged with a single button press.
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries

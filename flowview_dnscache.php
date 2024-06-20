@@ -39,6 +39,10 @@ switch (get_request_var('action')) {
 		form_actions();
 
 		break;
+	case 'purge':
+		flowview_connect();
+		flowview_db_execute('TRUNCATE plugin_flowview_dnscache');
+		raise_message('flowview_dns_purge', __('DNS Cache has been purged.  It will refill as records come in.', 'flowview'), MESSAGE_LEVEL_INFO);
 	default:
 		top_header();
 
@@ -222,8 +226,9 @@ function view_dns_cache() {
 					</td>
 					<td>
 						<span>
-							<input type='button' class='ui-button ui-corner-all ui-widget' id='refresh' value='<?php print __esc('Go');?>' title='<?php print __esc('Set/Refresh Filters');?>'>
-							<input type='button' class='ui-button ui-corner-all ui-widget' id='clear' value='<?php print __esc('Clear');?>' title='<?php print __esc('Clear Filters');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='refresh' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='clear' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='purge' value='<?php print __esc('Purge', 'flowview');?>' title='<?php print __esc('Purge the DNS Cache');?>'>
 						</span>
 					</td>
 				</tr>
@@ -244,17 +249,22 @@ function view_dns_cache() {
 				loadPageNoHeader(strURL);
 			}
 
+			function purgeFilter() {
+				strURL = 'flowview_dnscache.php?action=purge&header=false';
+				loadPageNoHeader(strURL);
+			}
+
 			$(function() {
 				$('#refresh').click(function() {
 					applyFilter();
 				});
 
-				$('#has_graphs').click(function() {
-					applyFilter();
-				});
-
 				$('#clear').click(function() {
 					clearFilter();
+				});
+
+				$('#purge').click(function() {
+					purgeFilter();
 				});
 
 				$('#form').submit(function(event) {

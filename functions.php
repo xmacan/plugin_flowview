@@ -3484,11 +3484,14 @@ function flowview_draw_chart($type, $title) {
 	$chartid++;
 }
 
-/*	flowview_get_dns_from_ip - This function provides a good method of performing
-  a rapid lookup of a DNS entry for a host so long as you don't have to look far.
-*/
+/**
+ * flowview_get_dns_from_ip - This function provides a good method of performing
+ * a rapid lookup of a DNS entry for a host so long as you don't have to look far.
+ */
 function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	global $config;
+
+	include_once($config['base_path'] . '/plugins/flowview/Net/DNS2.php');
 
 	flowview_connect();
 
@@ -3502,7 +3505,8 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		return $cache['host'];
 	}
 
-	$dns = read_config_option('settings_dns_primary');
+	$dns1 = read_config_option('settings_dns_primary');
+	$dns2 = read_config_option('settings_dns_secondary');
 
 	$time = time();
 
@@ -3514,193 +3518,100 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		$suffix = '';
 	}
 
-	if (read_config_option('flowview_dns_method') == 1 && $dns != '') {
-		/* random transaction number (for routers etc to get the reply back) */
-		$data = rand(10, 99);
+	/* check for private ranges first */
+	$dns_name = flowview_check_for_private_network($ip);
+	if ($ip != $dns_name) {
+		$priv_dns_name = gethostbyaddr($ip);
 
-		/* trim it to 2 bytes */
-		$data = substr($data, 0, 2);
+		if ($priv_dns_name == $ip || $priv_dns_name === false) {
+			/* good dns_name */
+			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+				(ip, host, source, time)
+				VALUES (?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+				array($ip, $dns_name, 'Static Private', $time));
 
-		/* create request header */
-		$data .= "\1\0\0\1\0\0\0\0\0\0";
+			return $dns_name;
+		} else {
+			/* good dns_name */
+			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+				(ip, host, source, time)
+				VALUES (?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+				array($ip, $priv_dns_name, 'Local DNS', $time));
 
-		/* split IP into octets */
-		$octets = explode('.', $ip);
+			return $priv_dns_name;
+		}
+	}
 
-		/* perform a quick error check */
-		if (cacti_count($octets) != 4) {
-			return 'ERROR';
+	/* now let's try our specified DNS if this option is selected */
+	if (read_config_option('flowview_dns_method') == 1 && ($dns1 != '' || $dns2 != '')) {
+		if ($dns1 != '') {
+			$nameservers[] = $dns1;
 		}
 
-		/* needs a byte to indicate the length of each segment of the request */
-		for ($x=3; $x>=0; $x--) {
-			switch (strlen($octets[$x])) {
-			case 1: // 1 byte long segment
-				$data .= "\1"; break;
-			case 2: // 2 byte long segment
-				$data .= "\2"; break;
-			case 3: // 3 byte long segment
-				$data .= "\3"; break;
-			default: // segment is too big, invalid IP
-				return 'ERROR';
-			}
-
-			/* and the segment itself */
-			$data .= $octets[$x];
+		if ($dns2 != '') {
+			$nameservers[] = $dns2;
 		}
 
-		/* and the final bit of the request */
-		$data .= "\7in-addr\4arpa\0\0\x0C\0\1";
+		$resolver = new Net_DNS2_Resolver(array('nameservers' => $nameservers));
 
-		/* create UDP socket */
-		$handle = @fsockopen("udp://$dns", 53);
+		try {
+			$resp = $resolver->query($ip, 'PTR');
+			$dns_name = $resp->answer[0]->ptrdname;
 
-		@stream_set_timeout($handle, floor($timeout/1000), ($timeout*1000)%1000000);
-		@stream_set_blocking($handle, 1);
+			/* return the hostname, without the trailing '.' */
+			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+				(ip, host, source, time)
+				VALUES (?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+				array($ip, $dns_name, 'Specified DNS', $time));
 
-		/* send our request (and store request size so we can cheat later) */
-		$requestsize = @fwrite($handle, $data);
+			return $dns_name . $suffix;
+		} catch(Net_DNS2_Exception $e) {
+			$dns_name = gethostbyaddr($ip);
 
-		/* get the response */
-		$response = @fread($handle, 1000);
+			if ($dns_name === false || $dns_name == $ip) {
+				if (read_config_option('flowview_use_arin') == 'on') {
+					$dns_name = flowview_get_owner_from_arin($ip);
+				} else {
+					$dns_name = $ip;
+				}
 
-		/* check to see if it timed out */
-		$info = @stream_get_meta_data($handle);
-
-		/* close the socket */
-		@fclose($handle);
-
-		if ($info['timed_out']) {
-			return 'ip-' . str_replace('.', '-', $ip) . '.timeout.net';
-		}
-
-		/* more error handling */
-		if ($response == '') {
-			return 'ip-' . str_replace('.', '-', $ip) . '.error.net';
-		}
-
-		/* parse the response and find the response type */
-		$type = @unpack('s', substr($response, $requestsize+2));
-
-		if ($type[1] == 0x0C00) {
-			/* set up our variables */
-			$host = '';
-			$len = 0;
-
-			/* set our pointer at the beginning of the hostname uses the request
-			   size from earlier rather than work it out.
-			*/
-			$position = $requestsize + 12;
-
-			/* reconstruct the hostname */
-			do {
-				/* get segment size */
-				$len = unpack('c', substr($response, $position));
-
-				/* null terminated string, so length 0 = finished */
-				if ($len[1] == 0) {
-					$hostname = substr($host, 0, strlen($host) -1);
-
-					/* return the hostname, without the trailing '.' */
+				if ($ip != $dns_name && $dns_name !== false) {
+					/* good dns_name */
 					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 						(ip, host, source, time)
 						VALUES (?, ?, ?, ?)
 						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-						array($ip, $hostname, 'Specified DNS', $time));
+						array($ip, $dns_name, 'ARIN', $time));
 
-					return $hostname . $suffix;
+					return $dns_name;
+				} else {
+					$dns_name = 'ip-' . str_replace('.', '-', $ip) . '.arin-error.net';
+
+					/* error - return the hostname we constructed (without the . on the end) */
+					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+						(ip, host, source, time)
+						VALUES (?, ?, ?, ?)
+						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+						array($ip, $dns_name, 'ARIN Error', $time));
+
+					return $dns_name;
 				}
-
-				/* add the next segment to our host */
-				$host .= substr($response, $position+1, $len[1]) . '.';
-
-				/* move pointer on to the next segment */
-				$position += $len[1] + 1;
-			} while ($len != 0);
-
-			$dns_name = flowview_check_for_private_network($ip);
-			if ($ip != $dns_name) {
-				/* good dns_name */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Static Private', $time));
-
-				return $dns_name;
-			}
-
-			if (read_config_option('flowview_use_arin') == 'on') {
-				$dns_name = flowview_get_owner_from_arin($ip);
 			} else {
-				$dns_name = $ip;
-			}
-
-			if ($ip != $dns_name && $dns_name !== false) {
-				/* good dns_name */
+				/* return the hostname, without the trailing '.' */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
 					VALUES (?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN', $time));
+					array($ip, $dns_name, 'System DNS', $time));
 
-				return $dns_name;
-			} else {
-				$dns_name = 'ip-' . str_replace('.', '-', $ip);
-
-				/* error - return the hostname we constructed (without the . on the end) */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $ip, 'ARIN Error', $time));
-
-				return $dns_name;
-			}
-		} else {
-			$dns_name = flowview_check_for_private_network($ip);
-			if ($ip != $dns_name) {
-				/* good dns_name */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Static Private', $time));
-
-				return $dns_name;
-			}
-
-			/* specified DNS failed, try ARIN */
-			if (read_config_option('flowview_use_arin') == 'on') {
-				$dns_name = flowview_get_owner_from_arin($ip);
-			} else {
-				$dns_name = $ip;
-			}
-
-			if ($ip != $dns_name && $dns_name !== false) {
-				/* error - return the hostname we constructed (without the . on the end) */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN', $time));
-
-				return $dns_name;
-			} else {
-				$dns_name = 'ip-' . str_replace('.', '-', $ip);
-
-				/* error - return the hostname we constructed (without the . on the end) */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN Error', $time));
-
-				return $dns_name;
+				return $dns_name . $suffix;
 			}
 		}
 	} else {
-		$address = @gethostbyaddr($ip);
+		$address = gethostbyaddr($ip);
 		$dns_name = $ip;
 
 		if ($address !== false) {
@@ -3716,18 +3627,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			return $dns_name;
 		} else {
-			$dns_name = flowview_check_for_private_network($ip);
-			if ($ip != $dns_name) {
-				/* good dns_name */
-				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Static Private', $time));
-
-				return $dns_name;
-			}
-
 			if (read_config_option('flowview_use_arin') == 'on') {
 				$dns_name = flowview_get_owner_from_arin($ip);
 			} else {

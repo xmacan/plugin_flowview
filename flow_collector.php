@@ -38,6 +38,7 @@ include('./include/cli_check.php');
 include_once($config['base_path'] . '/lib/poller.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
+chdir(__DIR__);
 
 ini_set('max_execution_time', '-1');
 
