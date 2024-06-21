@@ -3698,6 +3698,25 @@ function flowview_get_color($as_array = false) {
 	}
 }
 
+/**
+ * get_colored_field_column - given a flow templates field id
+ * return a supported or non-supported text with the correct
+ * color.
+ *
+ * @param int     - The flowview template  id
+ *
+ * @return - a string containing html that represents the field id's status
+ */
+function get_colored_field_column($field_id) {
+	global $supported_fieldids;
+
+	if (isset($supported_fieldids[$field_id])) {
+		return "<span class='deviceUp'>" . __('Supported', 'flowview') . "</span>";
+	} else {
+		return "<span class='deviceDown'>" . __('Not Supported', 'flowview') . "</span>";
+	}
+}
+
 /** flowview_report_session()
  *
  * This function will update the checkbox

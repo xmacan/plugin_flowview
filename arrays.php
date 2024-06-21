@@ -167,6 +167,197 @@ $ip_protocols_array = array(
 	98 => 'ENCAP'
 );
 
+$required_fields_v4 = array(
+	'octetDeltaCount'             => 1,
+	'packetDeltaCount'            => 2,
+	'protocolIdentifier'          => 4,
+	'ipClassOfService'            => 5,
+	'tcpControlBits'              => 6,
+	'sourceTransportPort'         => 7,
+	'sourceIPv4Address'           => 8,
+	'sourceIPv4PrefixLength'      => 9,
+	'ingressInterface'            => 10,
+	'destinationTransportPort'    => 11,
+	'destinationIPv4Address'      => 12,
+	'destinationIPv4PrefixLength' => 13,
+	'egressInterface'             => 14,
+	'ipNextHopIPv4Address'        => 15,
+	'flowEndSysUpTime'            => 21,
+	'flowStartSysUpTime'          => 22,
+);
+
+$required_fields_v6 = array(
+	'octetDeltaCount'             => 1,
+	'packetDeltaCount'            => 2,
+	'protocolIdentifier'          => 4,
+	'ipClassOfService'            => 5,
+	'tcpControlBits'              => 6,
+	'sourceTransportPort'         => 7,
+	'ingressInterface'            => 10,
+	'destinationTransportPort'    => 11,
+	'egressInterface'             => 14,
+	'flowEndSysUpTime'            => 21,
+	'flowStartSysUpTime'          => 22,
+	'sourceIPv6Address'           => 27,
+	'destinationIPv6Address'      => 28,
+	'sourceIPv6PrefixLength'      => 29,
+	'destinationIPv6PrefixLength' => 30,
+	'samplingInterval'            => 34,
+	'ipVersion'                   => 60,
+	'ipNextHopIPv6Address'        => 62,
+);
+
+$supported_fields = array(
+	'engine_type'       => 38,
+	'engine_id'         => 39,
+	'sampling_interval' => 34,
+	'ipVersion'         => 60,
+	'sysuptime'         => 160,
+
+	'src_addr'          => 8,
+	'src_addr_ipv6'     => 27,
+	'src_prefix'        => 9,
+	'src_prefix_ipv6'   => 29,
+	'src_if'            => 10,
+	'src_as'            => 16,
+
+	'dst_addr'          => 12,
+	'dst_addr_ipv6'     => 28,
+	'dst_prefix'        => 13,
+	'dst_prefix_ipv6'   => 30,
+	'dst_if'            => 14,
+	'dst_as'            => 17,
+
+	'nexthop'           => 15,
+	'nexthop_ipv6'      => 62,
+
+	'dPkts'             => 2,
+	'dOctets'           => 1,
+	'src_port'          => 7,
+	'dst_port'          => 11,
+
+	'protocol'          => 4,
+	'tos'               => 5,
+	'flags'             => 6,
+	'start_time'        => 22,
+	'end_time'          => 21
+);
+
+$supported_fieldids = array(
+	1 => array(
+		'column' => 'dOctets',
+		'name'   => 'octetDeltaCount'
+	),
+	2 => array(
+		'column' => 'dPkts',
+		'name'   => 'packetDeltaCount'
+	),
+	4 => array(
+		'column' => 'protocol',
+		'name'   => 'protocolIdentifier'
+	),
+	5 => array(
+		'column' => 'tos',
+		'name'   => 'ipClassOfService'
+	),
+	6 => array(
+		'column' => 'flags',
+		'name'   => 'tcpControlBits'
+	),
+	7 => array(
+		'column' => 'src_port',
+		'name'   => 'sourceTransportPort'
+	),
+	8 => array(
+		'column' => 'src_addr',
+		'name'   => 'sourceIPv4Address'
+	),
+	9 => array(
+		'column' => 'src_prefix',
+		'name'   => 'sourceIPv4PrefixLength'
+	),
+	10 => array(
+		'column' => 'src_if',
+		'name'   => 'ingressInterface'
+	),
+	11 => array(
+		'column' => 'dst_port',
+		'name'   => 'destinationTransportPort'
+	),
+	12 => array(
+		'column' => 'dst_addr',
+		'name'   => 'destinationIPv4Address'
+	),
+	13 => array(
+		'column' => 'dst_prefix',
+		'name'   => 'destinationIPv4PrefixLength'
+	),
+	14 => array(
+		'column' => 'dst_if',
+		'name'   => 'egressInterface'
+	),
+	15 => array(
+		'column' => 'nexthop',
+		'name'   => 'ipNextHopIPv4Address'
+	),
+	16 => array(
+		'column' => 'src_as',
+		'name'   => 'bgpSourceAsNumber'
+	),
+	17 => array(
+		'column' => 'dst_as',
+		'name'   => 'bgpDestinationAsNumber'
+	),
+	21 => array(
+		'column' => 'end_time',
+		'name'   => 'flowEndSysUpTime'
+	),
+	22 => array(
+		'column' => 'start_time',
+		'name'   => 'flowStartSysUpTime'
+	),
+	27 => array(
+		'column' => 'src_addr_ipv6',
+		'name'   => 'sourceIPv6Address'
+	),
+	28 => array(
+		'column' => 'dst_addr_ipv6',
+		'name'   => 'destinationIPv6Address'
+	),
+	29 => array(
+		'column' => 'src_prefix_ipv6',
+		'name'   => 'sourceIPv6PrefixLength'
+	),
+	30 => array(
+		'column' => 'dst_prefix_ipv6',
+		'name'   => 'destinationIPv6PrefixLength'
+	),
+	34 => array(
+		'column' => 'sampling_interval',
+		'name'   => 'samplingInterval'
+	),
+	38 => array(
+		'column' => 'engine_type',
+		'name'   => 'engineType'
+	),
+	39 => array(
+		'column' => 'engine_id',
+		'name'   => 'engineId'
+	),
+	60 => array(
+		'column' => 'ipVersion',
+		'name'   => 'ipVersion'
+	),
+	62 => array(
+		'column' => 'nexthop_ipv6',
+		'name'   => 'ipNextHopIPv6Address'
+	),
+	160 => array(
+		'column' => 'sysuptime',
+		'name'   => 'systemInitTimeMilliseconds'
+	)
+);
+
 $stat_columns_array = array(
 	2  => array(
 		__('Source Domain', 'flowview'),

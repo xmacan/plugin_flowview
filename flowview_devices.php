@@ -27,6 +27,10 @@ include('./include/auth.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
+flowview_connect();
+
+include_once($config['base_path'] . '/plugins/flowview/arrays.php');
+
 $flow_actions = array(
 	1 => __('Delete', 'flowview')
 );
@@ -102,8 +106,6 @@ switch (get_request_var('action')) {
 function actions_devices () {
 	global $flow_actions, $config;
 
-	flowview_connect();
-
 	if (isset_request_var('selected_items')) {
 		$selected_items = sanitize_unserialize_selected_items(get_nfilter_request_var('selected_items'));
 
@@ -178,8 +180,6 @@ function actions_devices () {
 }
 
 function save_devices () {
-	flowview_connect();
-
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	/* ==================================================== */
@@ -226,9 +226,7 @@ function save_devices () {
 }
 
 function edit_devices() {
-	global $device_edit;
-
-	flowview_connect();
+	global $device_edit, $supported_fieldids;
 
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
@@ -455,6 +453,10 @@ function edit_devices() {
 				'align'   => 'left'
 			),
 			array(
+				'display' => __('Supported', 'flowview'),
+				'align'   => 'left'
+			),
+			array(
 				'display' => __('Field ID', 'flowview'),
 				'align'   => 'right'
 			),
@@ -488,6 +490,7 @@ function edit_devices() {
 			foreach ($templates as $row) {
 				$items = json_decode($row['column_spec'], true);
 
+
 				if (get_request_var('template') == 0 || get_request_var('template') == $row['template_id']) {
 					if (cacti_sizeof($items)) {
 						foreach($items as $ti) {
@@ -495,6 +498,7 @@ function edit_devices() {
 							form_selectable_cell($row['ex_addr'], $i);
 							form_selectable_cell($row['template_id'], $i);
 							form_selectable_cell($ti['name'], $i);
+							form_selectable_cell(get_colored_field_column($ti['field_id']), $i);
 							form_selectable_cell($ti['field_id'], $i, '', 'right');
 							form_selectable_cell($ti['pack'], $i, '', 'right');
 							form_selectable_cell($ti['length'], $i, '', 'right');
@@ -519,8 +523,6 @@ function edit_devices() {
 function show_devices () {
 	global $action, $expire_arr, $rotation_arr, $version_arr, $nesting_arr;
 	global $config, $flow_actions;
-
-	flowview_connect();
 
 	if (substr_count(strtolower(PHP_OS), 'freebsd')) {
 		$os = 'freebsd';
