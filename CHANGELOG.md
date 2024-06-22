@@ -23,12 +23,12 @@
 * issue: Sort field was being lost between selections
 * issue: Dont fail to find flowview_connect() if the plugin is disabled
 * issue: Make Domains only Domains/Hostnames only to remove confusion
-* issue: Rework the SystemD startup process to use Cactis registration and unregistration functions
+* issue: Rework the SystemD startup process to use Cacti registration and unregistration functions
 * issue: Allowed incoming address range was not working
 * feature: Make it optional to query Arin to track Big Tech
-* feature: Allow Flowview to remember your last filter when re-entering the FlowView page
+* feature: Allow FlowView to remember your last filter when re-entering the FlowView page
 * feature: Allow selection of the listener on the FlowView filter
-* feature: Redesign flow_collectors.php for formalize support for IPFIX in Flowview
+* feature: Redesign flow_collectors.php for formalize support for IPFIX in FlowView
 * feature: Store peers that connect to listeners for review and tagging
 * feature: Inform the user of how many listener streams are present and their status
 * feature: Track detected template definitions in the database and provide a way to view them
@@ -50,7 +50,7 @@
 * feature#124: Support Treemap Charts instead of Bar
 * feature#125: Perform Schema Upgrades in the Background
 * feature#126: Cache ARIN Responses for reference
-* feature#127: Show Stream Fowview Versions being Received by the Receiver 
+* feature#127: Show stream FlowView versions being ingested 
 * feature#143: Support tcp listener
 
 --- 3.3 ---
