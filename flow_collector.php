@@ -796,7 +796,7 @@ function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed,
 	}
 
 	if (!$stream_refreshed[$ex_addr] || $ssend[$ex_addr] - $sstart[$ex_addr] > $refresh_seconds) {
-		cacti_log(sprintf('Updating Listener:%s for ex_addr:%s', $listener_id, $ex_addr), false, 'FLOWVIEW');
+		cacti_log(sprintf('Updating Listener:%s for ex_addr:%s', $listener_id, $ex_addr), false, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 
 		$sstart[$ex_addr] = time();
 
