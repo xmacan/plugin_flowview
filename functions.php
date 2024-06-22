@@ -4172,7 +4172,7 @@ function create_raw_partition($table) {
 	$data['row_format'] = 'Dynamic';
 	$data['comment']    = 'Plugin Flowview - Details Report Data';
 
-	flowview_db_table_create( $table, $data);
+	flowview_db_table_create($table, $data);
 
 	// Work around for unicode issues
 	flowview_fix_collate_issues();

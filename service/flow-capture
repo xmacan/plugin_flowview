@@ -129,8 +129,7 @@ function get_cacti_base() {
 function start($systemd = true) {
 	global $config, $cacti_base, $reload, $webuser;;
 
-	// 50 years by default
-	if (!register_process_start('flowview', 'master', $config['poller_id'], 10 * 157680000)) {
+	if (!register_process_start('flowview', 'master', $config['poller_id'], 900)) {
 		exit(0);
 	}
 

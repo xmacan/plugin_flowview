@@ -419,7 +419,7 @@ function edit_devices() {
 
 				$('#sorttable').tablesorter({
 					widgets: ['zebra', 'resizable'],
-					sortList: [[3,0]],
+					sortList: [[4,0]],
 					widgetZebra: { css: ['even', 'odd'] },
 					headerTemplate: '<div class="textSubHeaderDark">{content} {icon}</div>',
 					cssIconAsc: 'fa-sort-up',

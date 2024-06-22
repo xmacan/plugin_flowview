@@ -350,3 +350,19 @@ function flowview_db_affected_rows() {
 	return db_affected_rows($flowview_cnn);;
 }
 
+/**
+ * flowview_db_index_exists - checks whether an index exists
+ *
+ * @param  (string)        The name of the table
+ * @param  (string)        The name of the index
+ * @param  (bool)          Whether to log error messages, defaults to true
+ * @param  (bool|resource) The connection to use or false to use the default
+ *
+ * @return (bool) The output of the sql query as a single variable
+ */
+function flowview_db_index_exists($table, $index, $log = true) {
+	global $flowview_cnn;
+
+	return db_index_exists($table, $index, $log, $flowview_cnn);
+}
+

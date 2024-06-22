@@ -80,12 +80,23 @@ $current_version = $info['version'];
 /* do a version check */
 if ($forcever == '' && $old_version == $current_version) {
 	cacti_log('Your Flowview is already up to date (v' . $current_version . ' vs v' . $old_version . ') not upgrading.  Use --forcever to override', true, 'FLOWVIEW');
-	exit;
+	exit(0);
+}
+
+if (!register_process_start('flowview', 'upgrade', 1, 86400)) {
+	if (empty($forcever)) {
+		print 'WARNING: Running process detected.  To override use --forcever' . PHP_EOL;
+		exit(1);
+	}
 }
 
 cacti_log('Upgrading from v' . $old_version . ' to ' . $current_version, true, 'FLOWVIEW');
 
 flowview_upgrade($current_version, $old_version);
+
+unregister_process('flowview', 'upgrade', 1);
+
+exit(0);
 
 function flowview_upgrade($current, $old) {
 	global $flowviewdb_default, $info;
@@ -285,9 +296,19 @@ function flowview_upgrade($current, $old) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX end_time (end_time)';
 			}
 
-			$alter .= ($alter != '' ? ', ':'') . 'MODIFY COLUMN ex_addr VARCHAR(46) NOT NULL default ""';
+			$columns = array_rekey(
+				flowview_db_fetch_assoc('SHOW COLUMNS FROM ' . $t['TABLE_NAME']),
+				'Field', array('Type', 'Null', 'Key', 'Default', 'Extra')
+			);
 
-			if (!flowview_db_column_exists($t['TABLE_NAME'], 'ex_addr')) {
+			if (isset($columns['ex_addr']) && stripos($columns['ex_addr']['Type'], 'VARCHAR') === false) {
+				$alter .= ($alter != '' ? ', ':'') . 'MODIFY COLUMN ex_addr VARCHAR(46) NOT NULL default ""';
+				$ex_change = true;
+			} else {
+				$ex_change = false;
+			}
+
+			if (!flowview_db_index_exists($t['TABLE_NAME'], 'ex_addr')) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX ex_addr (ex_addr)';
 			}
 
@@ -295,9 +316,11 @@ function flowview_upgrade($current, $old) {
 				cacti_log("Altering Table {$t['TABLE_NAME']} Using this alter $alter.", true, 'FLOWVIEW');
 
 				flowview_db_execute('ALTER TABLE ' . $t['TABLE_NAME'] . ' ' . $alter);
-			}
 
-			flowview_db_execute('UPDATE ' . $t['TABLE_NAME'] . ' SET ex_addr = SUBSTRING_INDEX(ex_addr, ":", 1)');
+				if ($ex_change) {
+					flowview_db_execute('UPDATE ' . $t['TABLE_NAME'] . ' SET ex_addr = SUBSTRING_INDEX(ex_addr, ":", 1)');
+				}
+			}
 		}
 
 		cacti_log('Flowview Database Upgrade Complete', true, 'FLOWVIEW');

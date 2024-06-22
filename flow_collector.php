@@ -668,17 +668,13 @@ if (cacti_sizeof($listener)) {
 	 */
 	$taskname = 'child_' . $listener['id'];
 
-	// 50 Years by default
-	if (!register_process_start('flowview', $taskname, $config['poller_id'], 10 * 157680000)) {
+	if (!register_process_start('flowview', $taskname, $config['poller_id'], 900)) {
 		exit(0);
 	}
 
 	$previous_version    = -1;
 	$refresh_seconds     = 300;
-	$stream_refreshed    = array(); // We update the heartbeat every $refresh_seconds per peer
 	$tmpl_refreshed      = array(); // We update the templates every $refresh_seconds per peer
-	$lversion            = array(); // Track version changes
-	$sstart              = time();
 
 	flowview_db_execute_prepared("UPDATE `" . $flowviewdb_default . "`.`plugin_flowview_devices`
 		SET last_updated = NOW()
@@ -713,10 +709,6 @@ if (cacti_sizeof($listener)) {
 
 			$ex_addr = get_peer_address($peer);
 
-			if (!isset($stream_refreshed[$ex_addr])) {
-				$stream_refreshed[$ex_addr] = false;
-			}
-
 			if (!isset($tmpl_refreshed[$ex_addr])) {
 				$tmpl_refreshed[$ex_addr] = false;
 			}
@@ -732,19 +724,7 @@ if (cacti_sizeof($listener)) {
 			if ($p !== false && !$reload) {
 				$version = unpack('n', substr($p, 0, 2));
 
-				if (isset($lversion[$ex_addr]) && $version[1] != $lversion[$ex_addr]) {
-					debug('Flow: Detecting version change to v' . $version[1]);
-
-					$templates        = array();
-					$stream_refreshed[$ex_addr] = false;
-					$tmpl_refreshed[$ex_addr]   = false;
-					$lversion[$ex_addr]         = $version[1];
-				}
-
-				if (!$stream_refreshed[$ex_addr]) {
-					update_flowview_streams($listener['id'], $ex_addr, $version[1]);
-					$stream_refreshed[$ex_addr] = true;
-				}
+				update_stream_stats($listener['id'], $ex_addr, $version[1], $tmpl_refreshed, $templates, $refresh_seconds);
 
 				debug("Flow: Packet from: $peer v" . $version[1] . " - Len: " . strlen($p));
 
@@ -785,25 +765,74 @@ if (cacti_sizeof($listener)) {
 
 				$tmpl_refreshed[$ex_addr] = true;
 			}
-
-			$send = time();
-
-			if ($send - $sstart > $refresh_seconds) {
-				$sstart = time();
-				$stream_refreshed[$ex_addr] = false;
-
-				heartbeat_process('flowview', 'client_' . $listener['id'], $config['poller_id']);
-
-				flowview_db_execute_prepared("UPDATE `" . $flowviewdb_default . "`.`plugin_flowview_devices`
-					SET last_updated = NOW()
-					WHERE id = ?",
-					array($listener['id']));
-			}
 		}
 	}
 }
 
 exit(0);
+
+function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed, &$templates, $refresh_seconds) {
+	global $config, $flowviewdb_default;
+
+	static $stream_refreshed; // We update the heartbeat every $refresh_seconds per peer
+	static $sstart;           // Array of ex_addr start times
+	static $ssend;            // Array of ex_addr end times
+	static $lversion;         // Array of ex_addr end times
+
+	if (!isset($sstart[$ex_addr])) {
+		$sstart[$ex_addr] = time();
+	}
+
+	if (!isset($stream_refreshed[$ex_addr])) {
+		$stream_refreshed[$ex_addr] = false;
+	}
+
+	if (!isset($lversion[$ex_addr]) || (isset($lversion[$ex_addr]) && $version != $lversion[$ex_addr])) {
+		debug('Flow: Detecting version initialization/change to v' . $version);
+
+		$templates                  = array();
+		$stream_refreshed[$ex_addr] = false;
+		$tmpl_refreshed[$ex_addr]   = false;
+	}
+
+	if (!$stream_refreshed[$ex_addr] || $ssend[$ex_addr] - $sstart[$ex_addr] > $refresh_seconds) {
+		cacti_log(sprintf('Updating Listener:%s for ex_addr:%s', $listener_id, $ex_addr), false, 'FLOWVIEW');
+
+		$sstart[$ex_addr] = time();
+
+		if ($version == 5) {
+			$db_version = 'v5';
+		} elseif ($version == 9) {
+			$db_version = 'v9';
+		} elseif ($version == 10) {
+			$db_version = 'IPFIX';
+		}
+
+		$update_time = date('Y-m-d H:i:s');
+
+		flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+			(device_id, ex_addr, version, last_updated) VALUES (?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE
+				version=VALUES(version),
+				last_updated=VALUES(last_updated)",
+			array($listener_id, $ex_addr, $db_version, $update_time));
+
+		flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+			WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
+			array($listener_id));
+
+		heartbeat_process('flowview', 'child_' . $listener_id, $config['poller_id']);
+
+		flowview_db_execute_prepared("UPDATE `" . $flowviewdb_default . "`.`plugin_flowview_devices`
+			SET last_updated = NOW()
+			WHERE id = ?",
+			array($listener_id));
+	}
+
+	$lversion[$ex_addr]         = $version;
+	$ssend[$ex_addr]            = time();
+	$stream_refreshed[$ex_addr] = true;
+}
 
 function get_peer_address($peer) {
 	$parts = explode(':', $peer);
@@ -820,29 +849,6 @@ function get_peer_address($peer) {
 	}
 }
 
-function update_flowview_streams($listener_id, $ex_addr, $version) {
-	global $flowviewdb_default;
-
-	if ($version == 5) {
-		$db_version = 'v5';
-	} elseif ($version == 9) {
-		$db_version = 'v9';
-	} elseif ($version == 10) {
-		$db_version = 'IPFIX';
-	}
-
-	flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-		(device_id, ex_addr, version) VALUES (?, ?, ?)
-		ON DUPLICATE KEY UPDATE version=VALUES(version),
-			version=VALUES(version),
-			last_updated=NOW()",
-		array($listener_id, $ex_addr, $db_version));
-
-	flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-		WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
-		array($listener_id));
-}
-
 function database_check_connect() {
 	global $config;
 
@@ -856,7 +862,19 @@ function database_check_connect() {
 		flowview_db_close();
 
 		while(true) {
-			$db_conn = flowview_db_connect_real($database_hostname, $database_username, $database_password, $database_default, $database_type, $database_port, $database_retries, $database_ssl, $database_ssl_key, $database_ssl_cert, $database_ssl_ca);
+			$db_conn = flowview_db_connect_real(
+				$database_hostname,
+				$database_username,
+				$database_password,
+				$database_default,
+				$database_type,
+				$database_port,
+				$database_retries,
+				$database_ssl,
+				$database_ssl_key,
+				$database_ssl_cert,
+				$database_ssl_ca
+			);
 
 			if (!is_object($db_conn)) {
 				sleep(1);
