@@ -50,7 +50,6 @@ function display_tabs($id) {
 				'plugins/flowview/' . $tab['url'] .
 				'?action=edit' .
 				'&id=' . $id .
-				'&template=0' .
 				'&tab=' . $shortname) .
 				"'>" . $tab['name'] . "</a></li>";
 		}

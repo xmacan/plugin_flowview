@@ -332,6 +332,41 @@ function edit_devices() {
 			html_end_box(false);
 		}
 	} else {
+		if (!isset_request_var('ex_addr')) {
+			$ex_addr = db_fetch_cell_prepared('SELECT ex_addr
+				FROM plugin_flowview_device_templates
+				WHERE device_id = ?
+				LIMIT 1', array($device['id']));
+
+			set_request_var('ex_addr', $ex_addr);
+		}
+
+		if (!isset_request_var('template')) {
+			$template_id = db_fetch_cell_prepared('SELECT template_id
+				FROM plugin_flowview_device_templates
+				WHERE device_id = ?
+				AND ex_addr = ?
+				LIMIT 1', array($device['id'], get_request_var('ex_addr')));
+
+			set_request_var('template', $template_id);
+		}
+
+		/* ================= input validation and session storage ================= */
+		$filters = array(
+			'template' => array(
+				'filter' => FILTER_VALIDATE_INT,
+				'default' => '-1'
+			),
+			'ex_addr' => array(
+				'filter' => FILTER_CALLBACK,
+				'default' => '-1',
+				'options' => array('options' => 'sanitize_search_string')
+			)
+		);
+
+		validate_store_request_vars($filters, 'sess_fvdt');
+		/* ================= input validation ================= */
+
 		if (isset_request_var('ex_addr') && get_request_var('ex_addr') != 0) {
 			$sql_where = ' AND ex_addr = ?';
 			$sql_params[] = $device['id'];
