@@ -3708,9 +3708,9 @@ function flowview_get_color($as_array = false) {
  * @return - a string containing html that represents the field id's status
  */
 function get_colored_field_column($field_id) {
-	global $supported_fieldids;
+	global $flow_fieldids;
 
-	if (isset($supported_fieldids[$field_id])) {
+	if (isset($flow_fieldids[$field_id])) {
 		return "<span class='deviceUp'>" . __('Supported', 'flowview') . "</span>";
 	} else {
 		return "<span class='deviceDown'>" . __('Not Supported', 'flowview') . "</span>";

@@ -207,7 +207,7 @@ $required_fields_v6 = array(
 	'ipNextHopIPv6Address'        => 62,
 );
 
-$supported_fields = array(
+$flow_fields = array(
 	'engine_type'       => 38,
 	'engine_id'         => 39,
 	'sampling_interval' => 34,
@@ -243,7 +243,7 @@ $supported_fields = array(
 	'end_time'          => 21
 );
 
-$supported_fieldids = array(
+$flow_fieldids = array(
 	1 => array(
 		'column' => 'dOctets',
 		'name'   => 'octetDeltaCount'
@@ -317,19 +317,19 @@ $supported_fieldids = array(
 		'name'   => 'flowStartSysUpTime'
 	),
 	27 => array(
-		'column' => 'src_addr_ipv6',
+		'column' => 'src_addr',
 		'name'   => 'sourceIPv6Address'
 	),
 	28 => array(
-		'column' => 'dst_addr_ipv6',
+		'column' => 'dst_addr',
 		'name'   => 'destinationIPv6Address'
 	),
 	29 => array(
-		'column' => 'src_prefix_ipv6',
+		'column' => 'src_prefix',
 		'name'   => 'sourceIPv6PrefixLength'
 	),
 	30 => array(
-		'column' => 'dst_prefix_ipv6',
+		'column' => 'dst_prefix',
 		'name'   => 'destinationIPv6PrefixLength'
 	),
 	34 => array(
@@ -349,7 +349,7 @@ $supported_fieldids = array(
 		'name'   => 'ipVersion'
 	),
 	62 => array(
-		'column' => 'nexthop_ipv6',
+		'column' => 'nexthop',
 		'name'   => 'ipNextHopIPv6Address'
 	),
 	160 => array(

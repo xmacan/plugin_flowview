@@ -1644,61 +1644,23 @@ function flowview_template_supported($template, $tid) {
 }
 
 function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
-	global $listener_id, $partition, $supported_fields;
-
-//  These are now global, but keeping these here for development
-//
-//	$supported_fields = array(
-//		'engine_type'       => 38,
-//		'engine_id'         => 39,
-//		'sampling_interval' => 34,
-//		'ipVersion'         => 60,
-//		'sysuptime'         => 160,
-//
-//		'src_addr'          => 8,
-//		'src_addr_ipv6'     => 27,
-//		'src_prefix'        => 9,
-//		'src_prefix_ipv6'   => 29,
-//		'src_if'            => 10,
-//		'src_as'            => 16,
-//
-//		'dst_addr'          => 12,
-//		'dst_addr_ipv6'     => 28,
-//		'dst_prefix'        => 13,
-//		'dst_prefix_ipv6'   => 30,
-//		'dst_if'            => 14,
-//		'dst_as'            => 17,
-//
-//		'nexthop'           => 15,
-//		'nexthop_ipv6'      => 62,
-//
-//		'dPkts'             => 2,
-//		'dOctets'           => 1,
-//		'src_port'          => 7,
-//		'dst_port'          => 11,
-//
-//		'protocol'          => 4,
-//		'tos'               => 5,
-//		'flags'             => 6,
-//		'start_time'        => 22,
-//		'end_time'          => 21
-//	);
+	global $listener_id, $partition, $flow_fields;
 
 	$flows = 1;
 
-	if (isset($data[$supported_fields['src_addr_ipv6']])) {
-		$src_addr   = $data[$supported_fields['src_addr_ipv6']];
+	if (isset($data[$flow_fields['src_addr_ipv6']])) {
+		$src_addr   = $data[$flow_fields['src_addr_ipv6']];
 
-		if (isset($data[$supported_fields['src_prefix_ipv6']])) {
-			$src_prefix = $data[$supported_fields['src_prefix_ipv6']];
+		if (isset($data[$flow_fields['src_prefix_ipv6']])) {
+			$src_prefix = $data[$flow_fields['src_prefix_ipv6']];
 		} else {
 			$src_prefix = 0;
 		}
-	} elseif (isset($data[$supported_fields['src_addr']])) {
-		$src_addr   = $data[$supported_fields['src_addr']];
+	} elseif (isset($data[$flow_fields['src_addr']])) {
+		$src_addr   = $data[$flow_fields['src_addr']];
 
-		if (isset($data[$supported_fields['src_prefix']])) {
-			$src_prefix = $data[$supported_fields['src_prefix']];
+		if (isset($data[$flow_fields['src_prefix']])) {
+			$src_prefix = $data[$flow_fields['src_prefix']];
 		} else {
 			$src_prefix = 0;
 		}
@@ -1707,19 +1669,19 @@ function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 		return false;
 	}
 
-	if (isset($data[$supported_fields['dst_addr_ipv6']])) {
-		$dst_addr = $data[$supported_fields['dst_addr_ipv6']];
+	if (isset($data[$flow_fields['dst_addr_ipv6']])) {
+		$dst_addr = $data[$flow_fields['dst_addr_ipv6']];
 
-		if (isset($data[$supported_fields['dst_prefix_ipv6']])) {
-			$dst_prefix = $data[$supported_fields['dst_prefix_ipv6']];
+		if (isset($data[$flow_fields['dst_prefix_ipv6']])) {
+			$dst_prefix = $data[$flow_fields['dst_prefix_ipv6']];
 		} else {
 			$dst_prefix = 0;
 		}
-	} elseif (isset($data[$supported_fields['dst_addr']])) {
-		$dst_addr = $data[$supported_fields['dst_addr']];
+	} elseif (isset($data[$flow_fields['dst_addr']])) {
+		$dst_addr = $data[$flow_fields['dst_addr']];
 
-		if (isset($data[$supported_fields['dst_prefix']])) {
-			$dst_prefix = $data[$supported_fields['dst_prefix']];
+		if (isset($data[$flow_fields['dst_prefix']])) {
+			$dst_prefix = $data[$flow_fields['dst_prefix']];
 		} else {
 			$dst_prefix = 0;
 		}
@@ -1728,54 +1690,48 @@ function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 		return false;
 	}
 
-	if (isset($data[$supported_fields['nexthop_ipv6']])) {
-		$nexthop = $data[$supported_fields['nexthop_ipv6']];
-	} elseif (isset($data[$supported_fields['nexthop']])) {
-		$nexthop = $data[$supported_fields['nexthop']];
+	if (isset($data[$flow_fields['nexthop_ipv6']])) {
+		$nexthop = $data[$flow_fields['nexthop_ipv6']];
+	} elseif (isset($data[$flow_fields['nexthop']])) {
+		$nexthop = $data[$flow_fields['nexthop']];
 	} else {
 		$nexthop = '';
 	}
 
-	if (isset($data[$supported_fields['sysuptime']]) && abs($data[$supported_fields['end_time']] - $data[$supported_fields['sysuptime']]) < 3) {
-		$rstime = ($data[$supported_fields['start_time']] - $data[$supported_fields['sysuptime']]) / 1000;
-		$rsmsec = substr($data[$supported_fields['start_time']] - $data[$supported_fields['sysuptime']], -3);
-		$retime = ($data[$supported_fields['end_time']] - $data[$supported_fields['sysuptime']]) / 1000;
-		$remsec = substr($data[$supported_fields['end_time']] - $data[$supported_fields['sysuptime']], -3);
+	if (isset($data[$flow_fields['sysuptime']]) && abs($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']]) < 3) {
+		$rstime = ($data[$flow_fields['start_time']] - $data[$flow_fields['sysuptime']]) / 1000;
+		$rsmsec = substr($data[$flow_fields['start_time']] - $data[$flow_fields['sysuptime']], -3);
+		$retime = ($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']]) / 1000;
+		$remsec = substr($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']], -3);
 
 		$start_time = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . $rsmsec;
 		$end_time   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . $remsec;
-		$sysuptime = $data[$supported_fields['sysuptime']];
-
-		//debug("Flow: Case 3 SysUptime:{$sysuptime}, StartTime:{$data[$supported_fields['start_time']]}, StartDate:{$start_date}, EndTime:{$data[$supported_fields['end_time']]}, EndDate:{$end_date}");
+		$sysuptime = $data[$flow_fields['sysuptime']];
 	} elseif ($sysuptime > 0) {
 		$rsmsec = $rstime = $remsec = $retime = 0;
 
-		if (isset($data[$supported_fields['start_time']])) {
-			$rstime = ($data[$supported_fields['start_time']] - $sysuptime) / 1000;
-			$rsmsec = substr('000' . ($data[$supported_fields['start_time']] - $sysuptime), -3);
+		if (isset($data[$flow_fields['start_time']])) {
+			$rstime = ($data[$flow_fields['start_time']] - $sysuptime) / 1000;
+			$rsmsec = substr('000' . ($data[$flow_fields['start_time']] - $sysuptime), -3);
 		}
 
-		if (isset($data[$supported_fields['end_time']])) {
-			$retime = ($data[$supported_fields['end_time']] - $sysuptime) / 1000;
-			$remsec = substr('000' . ($data[$supported_fields['end_time']] - $sysuptime), -3);
+		if (isset($data[$flow_fields['end_time']])) {
+			$retime = ($data[$flow_fields['end_time']] - $sysuptime) / 1000;
+			$remsec = substr('000' . ($data[$flow_fields['end_time']] - $sysuptime), -3);
 		}
 
 		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
 		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
-
-		//debug("Flow: Case 2 SysUptime:{$sysuptime}, StartTime:{$data[$supported_fields['start_time']]}, StartDate:{$start_date}, EndTime:{$data[$supported_fields['end_time']]}, EndDate:{$end_date}");
 	} else {
-		if (isset($data[$supported_fields['start_time']]) && isset($data[$supported_fields['end_time']])) {
-			$delta_milli = intval(($data[$supported_fields['end_time']] - $data[$supported_fields['start_time']]) / 1000);
-			$delta_sec   = floor($data[$supported_fields['end_time']] - $data[$supported_fields['start_time']]);
+		if (isset($data[$flow_fields['start_time']]) && isset($data[$flow_fields['end_time']])) {
+			$delta_milli = intval(($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]) / 1000);
+			$delta_sec   = floor($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]);
 		} else {
 			$delta_milli = $delta_sec = 0;
 		}
 
 		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . $delta_milli;
 		$end_date   = date('Y-m-d H:i:s.v', intval($flowtime));
-
-		//debug("Flow: Case 1 SysUptime:{$sysuptime}, StartTime:{$flowtime}, StartDate:{$start_date}, EndTime:{$flowtime}, EndDate:{$end_date}");
 	}
 
 	$src_domain  = flowview_get_dns_from_ip($src_addr, 100);
@@ -1784,61 +1740,61 @@ function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 	$dst_domain  = flowview_get_dns_from_ip($dst_addr, 100);
 	$dst_rdomain = flowview_get_rdomain_from_domain($dst_domain, $dst_addr);
 
-	if (isset($data[$supported_fields['src_port']])) {
-		$src_rport = flowview_translate_port($data[$supported_fields['src_port']], false, false);
+	if (isset($data[$flow_fields['src_port']])) {
+		$src_rport = flowview_translate_port($data[$flow_fields['src_port']], false, false);
 	} else {
 		$src_rport = 0;
 	}
 
-	if (isset($data[$supported_fields['dst_port']])) {
-		$dst_rport = flowview_translate_port($data[$supported_fields['dst_port']], false, false);
+	if (isset($data[$flow_fields['dst_port']])) {
+		$dst_rport = flowview_translate_port($data[$flow_fields['dst_port']], false, false);
 	} else {
 		$dst_rport = 0;
 	}
 
-	if (isset($data[$supported_fields['dPkts']]) && $data[$supported_fields['dPkts']] > 0) {
-		$pps = round($data[$supported_fields['dOctets']] / $data[$supported_fields['dPkts']], 3);
+	if (isset($data[$flow_fields['dPkts']]) && $data[$flow_fields['dPkts']] > 0) {
+		$pps = round($data[$flow_fields['dOctets']] / $data[$flow_fields['dPkts']], 3);
 	} else {
 		$pps = 0;
 	}
 
 	$sql = '(' .
-		$listener_id                                      . ', ' .
-		check_set($data, $supported_fields['engine_type'])       . ', ' .
-		check_set($data, $supported_fields['engine_id'])         . ', ' .
-		check_set($data, $supported_fields['sampling_interval']) . ', ' .
-		db_qstr($ex_addr)                                 . ', ' .
-		$sysuptime                                        . ', ' .
+		$listener_id                                        . ', ' .
+		check_set($data, $flow_fields['engine_type'])       . ', ' .
+		check_set($data, $flow_fields['engine_id'])         . ', ' .
+		check_set($data, $flow_fields['sampling_interval']) . ', ' .
+		db_qstr($ex_addr)                                   . ', ' .
+		$sysuptime                                          . ', ' .
 
-		'INET6_ATON("' . $src_addr . '")'                 . ', ' .
-		db_qstr($src_domain)                              . ', ' .
-		db_qstr($src_rdomain)                             . ', ' .
-		check_set($data, $supported_fields['src_as'])            . ', ' .
-		check_set($data, $supported_fields['src_if'])            . ', ' .
-		$src_prefix                                       . ', ' .
-		check_set($data, $supported_fields['src_port'])          . ', ' .
-		db_qstr($src_rport)                               . ', ' .
+		'INET6_ATON("' . $src_addr . '")'                   . ', ' .
+		db_qstr($src_domain)                                . ', ' .
+		db_qstr($src_rdomain)                               . ', ' .
+		check_set($data, $flow_fields['src_as'])            . ', ' .
+		check_set($data, $flow_fields['src_if'])            . ', ' .
+		$src_prefix                                         . ', ' .
+		check_set($data, $flow_fields['src_port'])          . ', ' .
+		db_qstr($src_rport)                                 . ', ' .
 
-		'INET6_ATON("' . $dst_addr . '")'                 . ', ' .
-		db_qstr($dst_domain)                              . ', ' .
-		db_qstr($dst_rdomain)                             . ', ' .
-		check_set($data, $supported_fields['dst_as'])            . ', ' .
-		check_set($data, $supported_fields['dst_if'])            . ', ' .
-		$dst_prefix                                       . ', ' .
-		check_set($data, $supported_fields['dst_port'])          . ', ' .
-		db_qstr($dst_rport)                               . ', ' .
+		'INET6_ATON("' . $dst_addr . '")'                   . ', ' .
+		db_qstr($dst_domain)                                . ', ' .
+		db_qstr($dst_rdomain)                               . ', ' .
+		check_set($data, $flow_fields['dst_as'])            . ', ' .
+		check_set($data, $flow_fields['dst_if'])            . ', ' .
+		$dst_prefix                                         . ', ' .
+		check_set($data, $flow_fields['dst_port'])          . ', ' .
+		db_qstr($dst_rport)                                 . ', ' .
 
-		db_qstr($nexthop)                                 . ', ' .
-		check_set($data, $supported_fields['protocol'])          . ', ' .
-		db_qstr($start_date)                              . ', ' .
-		db_qstr($end_date)                                . ', ' .
+		db_qstr($nexthop)                                   . ', ' .
+		check_set($data, $flow_fields['protocol'])          . ', ' .
+		db_qstr($start_date)                                . ', ' .
+		db_qstr($end_date)                                  . ', ' .
 
-		$flows                                            . ', ' .
-		check_set($data, $supported_fields['dPkts'])             . ', ' .
-		check_set($data, $supported_fields['dOctets'])           . ', ' .
-		$pps                                              . ', ' .
-		check_set($data, $supported_fields['tos'])               . ', ' .
-		check_set($data, $supported_fields['flags'])             . ')';
+		$flows                                              . ', ' .
+		check_set($data, $flow_fields['dPkts'])             . ', ' .
+		check_set($data, $flow_fields['dOctets'])           . ', ' .
+		$pps                                                . ', ' .
+		check_set($data, $flow_fields['tos'])               . ', ' .
+		check_set($data, $flow_fields['flags'])             . ')';
 
 	return $sql;
 }

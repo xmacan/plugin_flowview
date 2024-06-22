@@ -226,7 +226,7 @@ function save_devices () {
 }
 
 function edit_devices() {
-	global $device_edit, $supported_fieldids;
+	global $device_edit, $flow_fieldids;
 
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
