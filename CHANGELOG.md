@@ -16,6 +16,7 @@
 * issue#106: Properly detect the Cacti base on Ubuntu and Debian
 * issue#118: Protocol filter not working
 * issue#121: When you return to the FlowView tab, your navigation will be broken till the first click
+* issue#132: The CIDR syntax filtering does not return correct results
 * issue#139: Remove the source port from the ex_addr as it breaks multiple things
 * issue#141: Using specific DNS servers results in unpack errors.
 * issue: Flowview DNS Setting removed by accident
@@ -55,6 +56,7 @@
 * feature#128: Flowview attempts to import all streams even those that are reporting other information that is not supported by flowview
 * feature#143: Support tcp listener
 * feature#144: Allow mapping of a local subnet to a named private domain for home users
+* feature#145: Use prepared statements for Flowview Filters to protect against SQL injections
 
 --- 3.3 ---
 

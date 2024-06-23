@@ -1643,7 +1643,7 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
  *  This function constructs a $sql_where from numeric data
  *
  */
-function get_numeric_filter($sql_where, $value, $column) {
+function get_numeric_filter($sql_where, &$sql_params, $value, $column) {
 	$values = array();
 
 	$sql_where = trim($sql_where);
@@ -1652,6 +1652,8 @@ function get_numeric_filter($sql_where, $value, $column) {
 		$value = implode(',', $value);
 	}
 
+	$instr = '';
+
 	if ($value != '') {
 		$parts  = explode(',', $value);
 
@@ -1659,11 +1661,12 @@ function get_numeric_filter($sql_where, $value, $column) {
 			$part = trim($part);
 
 			if (is_numeric($part)) {
-				$values[] = $part;
+				$instr .= ($instr != '' ? ', ':'') . '?';
+				$sql_params[] = $part;
 			}
 		}
 
-		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '`' . $column . '` IN (' . implode(',', $values) . ')';
+		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . "`$column` IN ($instr)";
 	}
 
 	return $sql_where;
@@ -1674,7 +1677,7 @@ function get_numeric_filter($sql_where, $value, $column) {
  *  This function constructs a $sql_where from ip ranges
  *
  */
-function get_ip_filter($sql_where, $value, $column) {
+function get_ip_filter($sql_where, &$sql_params, $value, $column) {
 	$sql_where = trim($sql_where);
 
 	if ($value != '') {
@@ -1697,12 +1700,21 @@ function get_ip_filter($sql_where, $value, $column) {
 					$subnet  = inet_ntop($addr['subnet']);
 					$network = inet_ntop($addr['subnet'] & $addr['ip']);
 
-					$sql_where .= ($i == 0 ? '':' OR ') . "$column & INET6_ATON('" . $subnet . "') = INET6_ATON('" . $network . "')";
+					$sql_where .= ($i == 0 ? '':' OR ') .
+						"(`$column` & INET6_ATON(?) = INET6_ATON(?) OR `$column` & INET_ATON(?) = INET_ATON(?))";
+
+					$sql_params[] = $subnet;
+					$sql_params[] = $network;
+					$sql_params[] = $subnet;
+					$sql_params[] = $network;
 				} else {
 					raise_message('subnet_filter', __('Subnet Filter: %s is not a value CIDR format', $part, 'flowview'), MESSAGE_LEVEL_ERROR);
 				}
 			} else {
-				$sql_where .= ($i == 0 ? '':' OR ') . "$column = INET6_ATON('$part')";
+				$sql_where .= ($i == 0 ? '':' OR ') . "(`$column` = INET6_ATON(?) OR `$column` = INET_ATON(?)";
+
+				$sql_params[] = $part;
+				$sql_params[] = $part;
 			}
 
 			$i++;
@@ -1719,7 +1731,7 @@ function get_ip_filter($sql_where, $value, $column) {
  *  This function constructs a $sql_where a date range and range type
  *
  */
-function get_date_filter($sql_where, $start, $end, $range_type = 1) {
+function get_date_filter($sql_where, &$sql_params, $start, $end, $range_type = 1) {
 	$sql_where = trim($sql_where);
 
 	$date1 = date('Y-m-d H:i:s', $start);
@@ -1728,19 +1740,37 @@ function get_date_filter($sql_where, $start, $end, $range_type = 1) {
 	switch($range_type) {
 		case 1: // Any part in specified time span
 			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') .
-				'(`start_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '" OR
-				`end_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '")';
+				'(`start_time` BETWEEN ? AND ? OR `end_time` BETWEEN ? AND ?)';
+
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+
 			break;
 		case 2: // End Time in Specified Time Span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`end_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '")';
+			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`end_time` BETWEEN ? AND ?)';
+
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+
 			break;
 		case 3: // Start Time in Specified Time Span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`start_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '")';
+			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`start_time` BETWEEN ? AND ?)';
+
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+
 			break;
 		case 4: // Entirety in Specitifed Time Span
 			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') .
-				'(`start_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '" AND
-				`end_time` BETWEEN "' . $date1 . '" AND "' . $date2 . '")';
+				'(`start_time` BETWEEN ? AND ? AND `end_time` BETWEEN ? AND ?)';
+
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+			$sql_params[] = $date1;
+			$sql_params[] = $date2;
+
 			break;
 		default:
 			break;
@@ -2009,9 +2039,10 @@ function run_flow_query($session, $query_id, $start, $end) {
 		return false;
 	}
 
-	$key       = get_flowview_session_key($query_id, $start, $end);
-	$time      = time();
-	$sql_where = '';
+	$key        = get_flowview_session_key($query_id, $start, $end);
+	$time       = time();
+	$sql_where  = '';
+	$sql_params = array();
 
 	if ($session && isset($_SESSION['sess_flowdata'][$key])) {
 		return $_SESSION['sess_flowdata'][$key]['data'];
@@ -2033,11 +2064,11 @@ function run_flow_query($session, $query_id, $start, $end) {
 		array($query_id));
 
 	if (isset_request_var('includeif') && get_request_var('includeif') > 0) {
-		$sql_where = get_date_filter($sql_where, $start, $end, get_request_var('includeif'));
+		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end, get_request_var('includeif'));
 	} elseif ($data['includeif'] > 0) {
-		$sql_where = get_date_filter($sql_where, $start, $end, $data['includeif']);
+		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end, $data['includeif']);
 	} else {
-		$sql_where = get_date_filter($sql_where, $start, $end);
+		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end);
 	}
 
 	// Handle Limit Override
@@ -2054,14 +2085,14 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	if (get_request_var('exclude') > 0) {
-		$sql_limit = 'LIMIT ' . get_request_var('exclude') .  ',' . $lines;
+		$sql_limit = 'LIMIT ' . get_filter_request_var('exclude') .  ',' . $lines;
 	} else {
 		$sql_limit = 'LIMIT ' . $lines;
 	}
 
 	// Handle Octets Override
-	if (isset_request_var('cutoffoctets') && get_request_var('cutoffoctets') > 0) {
-		$sql_having = 'HAVING bytes > ' . get_request_var('cutoffoctets');
+	if (isset_request_var('cutoffoctets') && get_filter_request_var('cutoffoctets') > 0) {
+		$sql_having = 'HAVING bytes > ' . get_filter_request_var('cutoffoctets');
 	} elseif ($data['cutoffoctets'] > 0) {
 		$sql_having = 'HAVING bytes < ' . $data['cutoffoctets'];
 	} else {
@@ -2070,57 +2101,57 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 	/* source ip filter */
 	if (isset($data['sourceip']) && $data['sourceip'] != '') {
-		$sql_where = get_ip_filter($sql_where, $data['sourceip'], 'src_addr');
+		$sql_where = get_ip_filter($sql_where, $sql_params, $data['sourceip'], 'src_addr');
 	}
 
 	/* source interface filter */
 	if (isset($data['sourceinterface']) && $data['sourceinterface'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['sourceinterface'], 'src_if');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['sourceinterface'], 'src_if');
 	}
 
 	/* source port filter */
 	if (isset($data['sourceport']) && $data['sourceport'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['sourceport'], 'src_port');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['sourceport'], 'src_port');
 	}
 
 	/* source as filter */
 	if (isset($data['sourceas']) && $data['sourceas'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['sourceas'], 'src_as');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['sourceas'], 'src_as');
 	}
 
 	/* destination ip filter */
 	if (isset($data['destip']) && $data['destip'] != '') {
-		$sql_where = get_ip_filter($sql_where, $data['destip'], 'dst_addr');
+		$sql_where = get_ip_filter($sql_where, $sql_params, $data['destip'], 'dst_addr');
 	}
 
 	/* destination interface filter */
 	if (isset($data['destinterface']) && $data['destinterface'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['destinterface'], 'dst_if');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['destinterface'], 'dst_if');
 	}
 
 	/* destination port filter */
 	if (isset($data['destport']) && $data['destport'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['destport'], 'dst_port');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['destport'], 'dst_port');
 	}
 
 	/* destination as filter */
 	if (isset($data['destas']) && $data['destas'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['destas'], 'dst_as');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['destas'], 'dst_as');
 	}
 
 	/* protocols filter */
 	if (isset($data['protocols']) && $data['protocols'] != '' && $data['protocols'] != '0') {
-		$sql_where = get_numeric_filter($sql_where, $data['protocols'], 'protocol');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['protocols'], 'protocol');
 	}
 
 	/* tcp flags filter */
 	if (isset($data['tcpflags']) && $data['tcpflags'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['tcpflags'], 'flags');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['tcpflags'], 'flags');
 	}
 
 	/* tos filter */
 	if (isset($data['tosfields']) && $data['tosfields'] != '') {
-		$sql_where = get_numeric_filter($sql_where, $data['tosfields'], 'tos');
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['tosfields'], 'tos');
 	}
 
 	// Handle Report Override
@@ -2500,17 +2531,22 @@ function run_flow_query($session, $query_id, $start, $end) {
 			}
 		}
 
-		$tables  = get_tables_for_query($start, $end);
-		$sql     = '';
-		$results = array();
+		$tables     = get_tables_for_query($start, $end);
+		$sql        = '';
+		$all_params = array();
+		$results    = array();
 
 		if (cacti_sizeof($tables)) {
 			foreach($tables as $t) {
 				if (isset($sql_inner1)) {
 					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner1 FROM $t $sql_where $sql_inner_groupby1";
+					$all_params = array_merge($all_params, $sql_params);
+
 					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner2 FROM $t $sql_where $sql_inner_groupby2";
+					$all_params = array_merge($all_params, $sql_params);
 				} else {
 					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner FROM $t $sql_where $sql_inner_groupby";
+					$all_params = array_merge($all_params, $sql_params);
 				}
 			}
 
@@ -2518,9 +2554,9 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 			//cacti_log(str_replace("\n", " ", str_replace("\t", '', $sql)));
 			if ($data['statistics'] == 99) {
-				$results = flowview_db_fetch_row($sql);
+				$results = flowview_db_fetch_row_prepared($sql, $all_params);
 			} else {
-				$results = flowview_db_fetch_assoc($sql);
+				$results = flowview_db_fetch_assoc_prepared($sql, $all_params);
 			}
 		}
 
