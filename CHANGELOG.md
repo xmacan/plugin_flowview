@@ -43,6 +43,7 @@
 * feature: Show supported or not supported status when viewing Flow Templates
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
+* feature#111: Add a Template Export Button to make sharing Template information with the Cacti Group Easy
 * feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries
 * feature#114: Provide an External Address dropdown in the Filter Definition
 * feature#116: Have flow-capture automatically restart collectors that have crashed

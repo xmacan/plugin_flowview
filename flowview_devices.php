@@ -87,20 +87,72 @@ $device_edit = array(
 switch (get_request_var('action')) {
 	case 'actions':
 		actions_devices();
+
+		break;
+	case 'export':
+		export_template();
+
 		break;
 	case 'save':
 		save_devices ();
+
 		break;
 	case 'edit':
 		top_header();
 		edit_devices();
 		bottom_footer();
+
 		break;
 	default:
 		top_header();
 		show_devices ();
 		bottom_footer();
+
 		break;
+}
+
+function export_template() {
+	global $flow_fieldids;
+
+	$template_id = get_filter_request_var('template');
+	$device_id   = get_filter_request_var('id');
+	$ex_addr     = get_nfilter_request_var('ex_addr');
+
+	$data = db_fetch_cell_prepared('SELECT column_spec
+		FROM plugin_flowview_device_templates
+		WHERE device_id = ?
+		AND template_id = ?
+		AND ex_addr = ?',
+		array($device_id, $template_id, $ex_addr));
+
+	if ($data != '') {
+		$data = json_decode($data, true);
+
+		foreach($data as $index => $detail) {
+			if (isset($flow_fieldids[$detail['field_id']])) {
+				$data[$index]['supported'] = 'yes';
+			} else {
+				$data[$index]['supported'] = 'no';
+			}
+		}
+
+		if (function_exists('yaml_emit')) {
+			$data = yaml_emit($data, JSON_PRETTY_PRINT);
+			header('Content-type: application/yaml');
+	        header('Content-Disposition: attachment; filename=template_export.yaml');
+		} else {
+			$data = json_encode($data, JSON_PRETTY_PRINT);
+			header('Content-type: application/json');
+	        header('Content-Disposition: attachment; filename=template_export.json');
+			print $data;
+		}
+
+		exit;
+	} else {
+		raise_message_javascript('notemplate', __('No Flow Template was found for Device ID:%s and Template ID:%s', $device_id, $template_id, 'flowview'), MESSAGE_LEVEL_ERROR);
+
+		exit;
+	}
 }
 
 function actions_devices () {
@@ -430,6 +482,7 @@ function edit_devices() {
 						<td>
 							<span>
 								<input id='go' type='button' value='<?php print __('Go', 'flowview');?>'>
+								<input id='export' type='button' value='<?php print __('Export', 'flowview');?>'>
 							</span>
 						</td>
 					</tr>
@@ -443,6 +496,16 @@ function edit_devices() {
 				loadPageNoHeader(strURL);
 			}
 
+			function exportFilter() {
+				strURL  = 'flowview_devices.php?action=export&id=<?php print get_request_var('id');?>&tab=templates&header=false';
+				strURL += '&template=' + $('#template').val();
+				strURL += '&ex_addr='  + $('#ex_addr').val();
+
+				document.location = strURL;
+
+				Pace.stop();
+			}
+
 			$(function() {
 				$('#template, #ex_addr').change(function() {
 					applyFilter();
@@ -450,6 +513,10 @@ function edit_devices() {
 
 				$('#go').click(function() {
 					applyFilter();
+				});
+
+				$('#export').click(function() {
+					exportFilter();
 				});
 
 				$('#sorttable').tablesorter({
