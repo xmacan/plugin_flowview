@@ -673,7 +673,7 @@ if (cacti_sizeof($listener)) {
 	 */
 	$taskname = 'child_' . $listener['id'];
 
-	if (!register_process_start('flowview', $taskname, $config['poller_id'], 900)) {
+	if (!register_process_start('flowview', $taskname, $config['poller_id'], 315360000)) {
 		exit(0);
 	}
 

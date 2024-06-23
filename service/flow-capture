@@ -129,7 +129,7 @@ function get_cacti_base() {
 function start($systemd = true) {
 	global $config, $cacti_base, $reload, $webuser;;
 
-	if (!register_process_start('flowview', 'master', $config['poller_id'], 900)) {
+	if (!register_process_start('flowview', 'master', $config['poller_id'], 315360000)) {
 		exit(0);
 	}
 
