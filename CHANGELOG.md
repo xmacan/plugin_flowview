@@ -52,6 +52,7 @@
 * feature#125: Perform Schema Upgrades in the Background
 * feature#126: Cache ARIN Responses for reference
 * feature#127: Show stream FlowView versions being ingested 
+* feature#128: Flowview attempts to import all streams even those that are reporting other information that is not supported by flowview
 * feature#143: Support tcp listener
 * feature#144: Allow mapping of a local subnet to a named private domain for home users
 
