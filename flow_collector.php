@@ -87,6 +87,11 @@ foreach($options as $arg => $value) {
 	}
 }
 
+if (empty($listener_id)) {
+	print "FATAL: You must provide a --listener-id" . PHP_EOL;
+	exit(1);
+}
+
 /* install signal handlers for UNIX only */
 if (function_exists('pcntl_signal')) {
 	pcntl_signal(SIGTERM, 'sig_handler');
@@ -671,6 +676,8 @@ if (cacti_sizeof($listener)) {
 	if (!register_process_start('flowview', $taskname, $config['poller_id'], 900)) {
 		exit(0);
 	}
+
+	cacti_log("WARNING: Flowview Listener child_$listener_id is starting up", false, 'FLOWVIEW');
 
 	$previous_version    = -1;
 	$refresh_seconds     = 300;
