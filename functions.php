@@ -377,6 +377,8 @@ function save_filter() {
 	$save['id']              = get_nfilter_request_var('id');
 	$save['name']            = get_nfilter_request_var('name');
 	$save['device_id']       = get_nfilter_request_var('device_id');
+	$save['template_id']     = get_nfilter_request_var('template_id');
+	$save['ex_addr']         = get_nfilter_request_var('ex_addr');
 
 	$save['timespan']        = get_nfilter_request_var('timespan');
 	$save['startdate']       = get_nfilter_request_var('date1');
@@ -2097,6 +2099,22 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql_having = 'HAVING bytes < ' . $data['cutoffoctets'];
 	} else {
 		$sql_having = '';
+	}
+
+	/* device id filter */
+	if (isset($data['device_id']) && $data['device_id'] > 0) {
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['device_id'], 'listener_id');
+	}
+
+	/* ex_addr filter */
+	if (isset($data['ex_addr']) && $data['ex_addr'] != '') {
+		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
+		$sql_params[] = $data['ex_addr'];
+	}
+
+	/* template id filter */
+	if (isset($data['template_id']) && $data['template_id'] >= 0) {
+		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['template_id'], 'template_id');
 	}
 
 	/* source ip filter */
@@ -4198,6 +4216,9 @@ function create_raw_partition($table) {
 
 	// Listener information
 	$data['columns'][] = array('name' => 'listener_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
+
+	// Template information for v9 and IPFIX
+	$data['columns'][] = array('name' => 'template_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
 
 	// Engine Information
 	$data['columns'][] = array('name' => 'engine_type', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'default' => '0');

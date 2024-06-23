@@ -167,7 +167,19 @@ function flowview_upgrade($current, $old) {
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id')) {
 			cacti_log("Adding device_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
-			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int unsigned NOT NULL default "0" AFTER name');
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int(11) unsigned NOT NULL default "0" AFTER name');
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'template_id')) {
+			cacti_log("Adding template_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(11) unsigned NOT NULL default "0" AFTER device_id');
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr')) {
+			cacti_log("Adding ex_addr column to plugin_flowview_queries table.", true, 'FLOWVIEW');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN ex_addr varchar(46) NOT NULL default "" AFTER template_id');
 		}
 
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
@@ -279,7 +291,8 @@ function flowview_upgrade($current, $old) {
 
 		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, TABLE_COLLATION
 			FROM information_schema.TABLES
-			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"');
+			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"
+			ORDER BY TABLE_NAME DESC');
 
 		foreach($raw_tables as $t) {
 			$alter = '';
@@ -290,6 +303,14 @@ function flowview_upgrade($current, $old) {
 
 			if (flowview_db_column_exists($t['TABLE_NAME'], 'keycol')) {
 				$alter .= ($alter != '' ? ', ':'') . 'DROP KEY keycol';
+			}
+
+			if (!flowview_db_column_exists($t['TABLE_NAME'], 'template_id')) {
+				$alter .= ($alter != '' ? ', ':'') . 'ADD COLUMN template_id int(11) unsigned NOT NULL default "0" AFTER listener_id';
+			}
+
+			if (!flowview_db_index_exists($t['TABLE_NAME'], 'template_id')) {
+				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX template_id (template_id)';
 			}
 
 			if (!flowview_db_column_exists($t['TABLE_NAME'], 'end_time')) {

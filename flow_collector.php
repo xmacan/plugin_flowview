@@ -951,6 +951,7 @@ function process_fv5($p, $ex_addr) {
 
 		$sql[] = '(' .
 			$listener_id                    . ', ' .
+			'0'                             . ', ' .
 			db_qstr($header['engine_type']) . ', ' .
 			db_qstr($header['engine_id'])   . ', ' .
 			db_qstr($header['sample_int'])  . ', ' .
@@ -1280,7 +1281,7 @@ function process_fv9($p, $ex_addr) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $ex_addr, $flowtime, $sysuptime);
+						$result = process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime);
 					}
 
 					if ($result !== false) {
@@ -1343,7 +1344,7 @@ function get_sql_prefix($flowtime) {
 
 	$last_table = $table;
 
-	return 'INSERT IGNORE INTO ' . $table . ' (listener_id, engine_type, engine_id, sampling_interval, ex_addr, sysuptime, src_addr, src_domain, src_rdomain, src_as, src_if, src_prefix, src_port, src_rport, dst_addr, dst_domain, dst_rdomain, dst_as, dst_if, dst_prefix, dst_port, dst_rport, nexthop, protocol, start_time, end_time, flows, packets, bytes, bytes_ppacket, tos, flags) VALUES ';
+	return 'INSERT IGNORE INTO ' . $table . ' (listener_id, template_id, engine_type, engine_id, sampling_interval, ex_addr, sysuptime, src_addr, src_domain, src_rdomain, src_as, src_if, src_prefix, src_port, src_rport, dst_addr, dst_domain, dst_rdomain, dst_as, dst_if, dst_prefix, dst_port, dst_rport, nexthop, protocol, start_time, end_time, flows, packets, bytes, bytes_ppacket, tos, flags) VALUES ';
 }
 
 function process_fv10($p, $ex_addr) {
@@ -1539,7 +1540,7 @@ function process_fv10($p, $ex_addr) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $ex_addr, $flowtime);
+						$result = process_v9_v10($data, $ex_addr, $flowtime, $tid);
 					}
 
 					if ($result !== false) {
@@ -1650,7 +1651,7 @@ function flowview_template_supported($template, $tid) {
 	return true;
 }
 
-function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
+function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 	global $listener_id, $partition, $flow_fields;
 
 	$flows = 1;
@@ -1767,6 +1768,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $sysuptime = 0) {
 
 	$sql = '(' .
 		$listener_id                                        . ', ' .
+		$tid                                                . ', ' .
 		check_set($data, $flow_fields['engine_type'])       . ', ' .
 		check_set($data, $flow_fields['engine_id'])         . ', ' .
 		check_set($data, $flow_fields['sampling_interval']) . ', ' .

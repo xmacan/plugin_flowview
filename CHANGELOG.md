@@ -44,6 +44,7 @@
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#112: Provide a means to view the DNS Cache and Prune/Edit Entries
+* feature#114: Provide an External Address dropdown in the Filter Definition
 * feature#116: Have flow-capture automatically restart collectors that have crashed
 * feature#117: Allow guest account access
 * feature#120: Save Charting Options when you Save a Filter
@@ -56,7 +57,8 @@
 * feature#128: Flowview attempts to import all streams even those that are reporting other information that is not supported by flowview
 * feature#143: Support tcp listener
 * feature#144: Allow mapping of a local subnet to a named private domain for home users
-* feature#145: Use prepared statements for Flowview Filters to protect against SQL injections
+* feature#145: Add the V9/IPFIX Template IDs to the flowview raw tables
+* feature#146: Use prepared statements for Flowview Filters to protect against SQL injections
 
 --- 3.3 ---
 
