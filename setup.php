@@ -292,21 +292,14 @@ function flowview_page_head() {
 }
 
 function flowview_global_settings_update() {
-	$dns_method   = read_config_option('flowview_dns_method', true);
-	$arin_use     = read_config_option('flowview_use_arin', true);
-	$local_domain = read_config_option('flowview_local_domain', true);
-	$hup_process  = false;
+	global $flowview_sighup_settings;
 
-	if (isset($_SESSION['sess_flowview_settings'])) {
-		if ($dns_method != $_SESSION['sess_flowview_settings']['dns_method']) {
-			$hup_process = true;
-		}
+	$hup_process   = false;
 
-		if ($arin_use != $_SESSION['sess_flowview_settings']['arin_use']) {
-			$hup_process = true;
-		}
+	foreach($flowview_sighup_setttings as $setting) {
+		$$setting = read_config_option($setting, true);
 
-		if ($local_domain != $_SESSION['sess_flowview_settings']['local_domain']) {
+		if ($$setting != $_SESSION['sess_flowview_settings'][$setting]) {
 			$hup_process = true;
 		}
 	}
@@ -325,19 +318,15 @@ function flowview_global_settings_update() {
 }
 
 function flowview_config_settings() {
-	global $config, $settings, $tabs;
+	global $config, $settings, $tabs, $flowview_sighup_settings;
 
 	include_once($config['base_path'] . '/lib/reports.php');
 
-	$dns_method   = read_config_option('flowview_dns_method', true);
-	$arin_use     = read_config_option('flowview_use_arin', true);
-	$local_domain = read_config_option('flowview_local_domain', true);
+	foreach($flowview_sighup_setttings as $setting) {
+		$$setting = read_config_option($setting, true);
 
-	$_SESSION['sess_flowview_settings'] = array(
-		'dns_method'   => $dns_method,
-		'arin_use'     => $arin_use,
-		'local_domain' => $local_domain
-	);
+		$_SESSION['sess_flowview_settings'][$setting] = $$setting;
+	}
 
 	$formats = reports_get_format_files();
 
@@ -363,6 +352,15 @@ function flowview_config_settings() {
 			'method' => 'textbox',
 			'default' => 'mydomain.net',
 			'description' => __('For host IP addresses that resolve locally without a domain, append this suffix to the resolved hostname.', 'monitor'),
+			'max_length' => 30,
+			'size' => 30
+		),
+		'flowview_local_iprange' => array(
+			'friendly_name' => __('Local IP Range', 'monitor'),
+			'method' => 'textbox',
+			'default' => '192.168.1.0/24',
+			'description' => __('Provide the range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24', 'monitor'),
+			'placeholder' => __('Use CIDR or Non-CIDR', 'flowview'),
 			'max_length' => 30,
 			'size' => 30
 		),

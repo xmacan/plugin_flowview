@@ -1823,7 +1823,7 @@ function check_set(&$data, $index, $quote = false) {
  * @return (void)
  */
 function sig_handler($signo) {
-	global $taskname, $config, $reload;
+	global $taskname, $config, $reload, $flowview_sighup_settings;
 
 	switch ($signo) {
 		case SIGHUP:
@@ -1831,13 +1831,9 @@ function sig_handler($signo) {
 
 			$reload = true;
 
-			$setting = read_config_option('flowview_partition', true);
-			$setting = read_config_option('settings_from_email', true);
-			$setting = read_config_option('settings_from_name', true);
-			$setting = read_user_setting('first_weekdayid', false, true);
-			$setting = read_config_option('settings_dns_primary', true);
-			$setting = read_config_option('flowview_dns_method', true);
-			$setting = read_config_option('flowview_use_arin', true);
+			foreach($flowview_sighup_setttings as $setting) {
+				$rsetting = read_config_option($setting, true);
+			}
 
 			break;
 		case SIGTERM:

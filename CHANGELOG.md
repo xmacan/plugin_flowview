@@ -52,6 +52,7 @@
 * feature#126: Cache ARIN Responses for reference
 * feature#127: Show stream FlowView versions being ingested 
 * feature#143: Support tcp listener
+* feature#144: Allow mapping of a local subnet to a named private domain for home users
 
 --- 3.3 ---
 

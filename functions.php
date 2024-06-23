@@ -3507,6 +3507,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	$dns1    = read_config_option('settings_dns_primary');
 	$dns2    = read_config_option('settings_dns_secondary');
 	$timeout = ceil(read_config_option('settings_dns_timeout')/1000);
+	$ldomain = read_config_option('flowview_local_domain');
 
 	$time = time();
 
@@ -3522,15 +3523,28 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	$dns_name = flowview_check_for_private_network($ip);
 	if ($ip != $dns_name) {
 		$priv_dns_name = gethostbyaddr($ip);
+		$local_range   = flowview_check_local_iprange($ip);
 
 		if ($priv_dns_name == $ip || $priv_dns_name === false) {
-			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-				(ip, host, source, time)
-				VALUES (?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-				array($ip, $dns_name, 'Static Private', $time));
+			if ($local_range) {
+				$dns_name = 'ip-' . $ip . '.' . $ldomain;
 
-			return $dns_name;
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'Local Domain', $time));
+
+				return $dns_name;
+			} else {
+				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
+					(ip, host, source, time)
+					VALUES (?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
+					array($ip, $dns_name, 'Static Private', $time));
+
+				return $dns_name;
+			}
 		} else {
 			if (strpos($priv_dns_name, '.') === false) {
 				$priv_dns_name .= '.' . read_config_option('flowview_local_domain');
@@ -3874,6 +3888,44 @@ function flowview_viewchart() {
 		$chart->set_bg_colour('#F0F0F0');
 		print $chart->toString();
 	}
+}
+
+function flowview_check_local_iprange($ip) {
+    $local_iprange = read_config_option('flowview_local_iprange');
+    $range_parts   = explode('/', $local_iprange);
+
+    if (cacti_sizeof($range_parts) == 1) {
+        /* without a mask we will assume zero's */
+		$ip_parts = explode('.', $local_iprange);
+
+        for ($i = cacti_count($ip_parts) - 1; $i > 0; $i--) {
+            if ($ip_parts[$i] == 0) {
+                unset($ip_parts[$i]);
+            } else {
+                break;
+            }
+        }
+
+		$ip_start = implode('.', $ip_parts);
+		$ip_len   = strlen($ip_start);
+
+		if (substr($ip, 0, $ip_len) == $ip_start) {
+			return true;
+		}
+    } else {
+        $range = $range_parts[0];
+        $cidr  = $range_parts[1];
+
+		$matches = db_fetch_cell_prepared('SELECT
+			INET_ATON(?) & -1 << 32 - ? = INET_ATON(?) & -1 << 32 - ? AS matches',
+			array($ip, $cidr, $range, $cidr));
+
+		if ($matches == 1) {
+			return true;
+		}
+    }
+
+	return false;
 }
 
 function flowview_check_for_private_network($host) {
