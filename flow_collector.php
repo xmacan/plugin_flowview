@@ -1590,19 +1590,11 @@ function flowview_template_supported($template, $tid) {
 //		'octetDeltaCount'             => 1,
 //		'packetDeltaCount'            => 2,
 //		'protocolIdentifier'          => 4,
-//		'ipClassOfService'            => 5,
-//		'tcpControlBits'              => 6,
 //		'sourceTransportPort'         => 7,
 //		'sourceIPv4Address'           => 8,
-//		'sourceIPv4PrefixLength'      => 9,
 //		'ingressInterface'            => 10,
 //		'destinationTransportPort'    => 11,
 //		'destinationIPv4Address'      => 12,
-//		'destinationIPv4PrefixLength' => 13,
-//		'egressInterface'             => 14,
-//		'ipNextHopIPv4Address'        => 15,
-//		'flowEndSysUpTime'            => 21,
-//		'flowStartSysUpTime'          => 22,
 //	);
 
 //	$required_fields_v6 = array(
