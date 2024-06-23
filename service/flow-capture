@@ -185,8 +185,8 @@ function check_processes() {
 		$registered = db_fetch_cell_prepared('SELECT pid 
 			FROM processes 
 			WHERE tasktype = "flowview" 
-			AND taskname = "child_?"', 
-			array($device['id']));
+			AND taskname = ?',
+			array('child_' . $device['id']));
 
 		if ($registered > 0) {
 			/* if true, the process is running */
