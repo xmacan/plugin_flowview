@@ -1281,7 +1281,7 @@ function process_fv9($p, $ex_addr) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime);
+						$result = process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime);
 					}
 
 					if ($result !== false) {
@@ -1344,7 +1344,7 @@ function get_sql_prefix($flowtime) {
 
 	$last_table = $table;
 
-	return 'INSERT IGNORE INTO ' . $table . ' (listener_id, template_id, engine_type, engine_id, sampling_interval, ex_addr, sysuptime, src_addr, src_domain, src_rdomain, src_as, src_if, src_prefix, src_port, src_rport, dst_addr, dst_domain, dst_rdomain, dst_as, dst_if, dst_prefix, dst_port, dst_rport, nexthop, protocol, start_time, end_time, flows, packets, bytes, bytes_ppacket, tos, flags) VALUES ';
+	return 'INSERT INTO ' . $table . ' (listener_id, template_id, engine_type, engine_id, sampling_interval, ex_addr, sysuptime, src_addr, src_domain, src_rdomain, src_as, src_if, src_prefix, src_port, src_rport, dst_addr, dst_domain, dst_rdomain, dst_as, dst_if, dst_prefix, dst_port, dst_rport, nexthop, protocol, start_time, end_time, flows, packets, bytes, bytes_ppacket, tos, flags) VALUES ';
 }
 
 function process_fv10($p, $ex_addr) {
@@ -1540,7 +1540,7 @@ function process_fv10($p, $ex_addr) {
 					$result = false;
 
 					if (cacti_sizeof($data)) {
-						$result = process_v9_v10($data, $ex_addr, $flowtime, $tid);
+						$result = process_v9_v10($data, $ex_addr, $flowtime, $fsid);
 					}
 
 					if ($result !== false) {
@@ -1584,40 +1584,6 @@ function flowview_template_supported($template, $tid) {
 	$fieldspec = array('field_id', 'name', 'pack', 'unpack');
 	$columns   = array();
 
-// These are now global, but leaving here for dev efforts
-//
-//	$required_fields_v4 = array(
-//		'octetDeltaCount'             => 1,
-//		'packetDeltaCount'            => 2,
-//		'protocolIdentifier'          => 4,
-//		'sourceTransportPort'         => 7,
-//		'sourceIPv4Address'           => 8,
-//		'ingressInterface'            => 10,
-//		'destinationTransportPort'    => 11,
-//		'destinationIPv4Address'      => 12,
-//	);
-
-//	$required_fields_v6 = array(
-//		'octetDeltaCount'             => 1,
-//		'packetDeltaCount'            => 2,
-//		'protocolIdentifier'          => 4,
-//		'ipClassOfService'            => 5,
-//		'tcpControlBits'              => 6,
-//		'sourceTransportPort'         => 7,
-//		'ingressInterface'            => 10,
-//		'destinationTransportPort'    => 11,
-//		'egressInterface'             => 14,
-//		'flowEndSysUpTime'            => 21,
-//		'flowStartSysUpTime'          => 22,
-//		'sourceIPv6Address'           => 27,
-//		'destinationIPv6Address'      => 28,
-//		'sourceIPv6PrefixLength'      => 29,
-//		'destinationIPv6PrefixLength' => 30,
-//		'samplingInterval'            => 34,
-//		'ipVersion'                   => 60,
-//		'ipNextHopIPv6Address'        => 62,
-//	);
-
 	foreach($template as $index => $field) {
 		$columns[$field['field_id']] = true;
 	}
@@ -1625,14 +1591,14 @@ function flowview_template_supported($template, $tid) {
 	if (isset($columns['12'])) {
 		foreach($required_fields_v4 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-				cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv4 flow template');
+				cacti_log('Column with field id ' . $field_id . ' does not exist for ipv4 flow template.');
 				return false;
 			}
 		}
 	} elseif (isset($columns['28'])) {
 		foreach($required_fields_v6 as $columnName => $field_id) {
 			if (!isset($columns[$field_id])) {
-				cacti_log('Column with field id ' . $field_id . ' Does not exist for ipv6 flow template');
+				cacti_log('Column with field id ' . $field_id . ' does not exist for ipv6 flow template.');
 				return false;
 			}
 		}
@@ -1643,13 +1609,13 @@ function flowview_template_supported($template, $tid) {
 	return true;
 }
 
-function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
+function process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime = 0) {
 	global $listener_id, $partition, $flow_fields;
 
 	$flows = 1;
 
 	if (isset($data[$flow_fields['src_addr_ipv6']])) {
-		$src_addr   = $data[$flow_fields['src_addr_ipv6']];
+		$src_addr = $data[$flow_fields['src_addr_ipv6']];
 
 		if (isset($data[$flow_fields['src_prefix_ipv6']])) {
 			$src_prefix = $data[$flow_fields['src_prefix_ipv6']];
@@ -1657,7 +1623,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 			$src_prefix = 0;
 		}
 	} elseif (isset($data[$flow_fields['src_addr']])) {
-		$src_addr   = $data[$flow_fields['src_addr']];
+		$src_addr = $data[$flow_fields['src_addr']];
 
 		if (isset($data[$flow_fields['src_prefix']])) {
 			$src_prefix = $data[$flow_fields['src_prefix']];
@@ -1704,8 +1670,8 @@ function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 		$retime = ($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']]) / 1000;
 		$remsec = substr($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']], -3);
 
-		$start_time = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_time   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_date = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . substr("{$rsmsec}000000", 0, 6);
+		$end_date   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . substr("{$remsec}000000", 0, 6);
 		$sysuptime = $data[$flow_fields['sysuptime']];
 	} elseif ($sysuptime > 0) {
 		$rsmsec = $rstime = $remsec = $retime = 0;
@@ -1720,8 +1686,8 @@ function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 			$remsec = substr('000' . ($data[$flow_fields['end_time']] - $sysuptime), -3);
 		}
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . substr("{$rsmsec}000000", 0, 6);
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . substr("{$remsec}000000", 0, 6);
 	} else {
 		if (isset($data[$flow_fields['start_time']]) && isset($data[$flow_fields['end_time']])) {
 			$delta_milli = intval(($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]) / 1000);
@@ -1730,8 +1696,8 @@ function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 			$delta_milli = $delta_sec = 0;
 		}
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . $delta_milli;
-		$end_date   = date('Y-m-d H:i:s.v', intval($flowtime));
+		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . substr("{$delta_milli}000000", 0, 6);
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime)) . '.' . '000000';
 	}
 
 	$src_domain  = flowview_get_dns_from_ip($src_addr, 100);
@@ -1760,7 +1726,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $tid, $sysuptime = 0) {
 
 	$sql = '(' .
 		$listener_id                                        . ', ' .
-		$tid                                                . ', ' .
+		$fsid                                               . ', ' .
 		check_set($data, $flow_fields['engine_type'])       . ', ' .
 		check_set($data, $flow_fields['engine_id'])         . ', ' .
 		check_set($data, $flow_fields['sampling_interval']) . ', ' .

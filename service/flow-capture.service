@@ -31,7 +31,6 @@ KillMode=process
 WorkingDirectory=/tmp
 ExecStart=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture --systemd
 ExecStop=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture stop
-ExecRestart=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture restart
 ExecReload=/usr/bin/php -q /var/www/html/cacti/plugins/flowview/service/flow-capture reload
 Restart=always
 RestartSec=2
