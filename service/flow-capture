@@ -163,6 +163,48 @@ function start($systemd = true) {
 			db_check_reconnect(false, true);
 
 			heartbeat_process('flowview', 'master', $config['poller_id']);
+
+			check_processes();
+		}
+	}
+}
+
+function check_processes() {
+	global $config, $cacti_base;
+
+	print 'NOTE: Checking for new or gone listeners' . PHP_EOL;
+
+	flowview_connect();
+
+	$devices    = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
+	$php_binary = read_config_option('path_php_binary');
+
+	foreach($devices as $device) {
+		$start = false;
+
+		$registered = db_fetch_cell_prepared('SELECT pid 
+			FROM processes 
+			WHERE tasktype = "flowview" 
+			AND taskname = "child_?"', 
+			array($device['id']));
+
+		if ($registered > 0) {
+			/* if true, the process is running */
+			if (!posix_kill($registered, 0)) {
+				$start = true;
+			}
+		} else {
+			$start = true;
+		}
+
+		if ($start) {
+			cacti_log(sprintf("Detecting a new or crashed flow collector with name '%s' with the id:%s.  Relaunching!", $device['name'], $device['id']), false, 'FLOWVIEW');
+
+			$php_binary = read_config_option('path_php_binary');
+
+			print "NOTE: Launching crashed or new cacti-flow-capture as '" . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id'] . "'" . PHP_EOL;
+
+			exec_background($php_binary, ' -q ' . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id']);
 		}
 	}
 }
@@ -258,6 +300,7 @@ function flowview_kill_running_processes() {
 	if (cacti_sizeof($processes)) {
 		foreach($processes as $p) {
 			cacti_log(sprintf('WARNING: Killing FlowView Child: %s PID: %d due to another due to signal or overrun.', ucfirst($p['taskname']), $p['pid']), false, 'FLOWVIEW');
+
 			posix_kill($p['pid'], SIGTERM);
 
 			unregister_process($p['tasktype'], $p['taskname'], $p['taskid'], $p['pid']);

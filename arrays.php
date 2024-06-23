@@ -243,19 +243,6 @@ $flow_fields = array(
 	'end_time'          => 21
 );
 
-$flowview_sighup_settings = array(
-	'flowview_partition',
-	'settings_from_email',
-	'settings_from_name',
-	'flowview_use_arin',
-	'flowview_dns_method',
-	'settings_dns_primary',
-	'settings_dns_secondary',
-	'settings_dns_timeout',
-	'flowview_local_domain',
-	'flowview_local_iprange'
-);
-
 $flow_fieldids = array(
 	1 => array(
 		'column' => 'dOctets',

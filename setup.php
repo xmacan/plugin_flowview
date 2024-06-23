@@ -124,7 +124,7 @@ function plugin_flowview_version() {
 }
 
 function flowview_config_arrays() {
-	global $menu, $menu_glyphs, $messages;
+	global $menu, $menu_glyphs, $messages, $flowview_sighup_settings;
 
 	$messages['flow_deleted'] = array('message' => __('The Filter has been Deleted', 'flowview'), 'type' => 'info');
 	$messages['flow_updated'] = array('message' => __('The Filter has been Updated', 'flowview'), 'type' => 'info');
@@ -147,6 +147,19 @@ function flowview_config_arrays() {
 		auth_augment_roles(__('Normal User'), array('flowview.php'));
 		auth_augment_roles(__('System Administration'), array('flowview_devices.php','flowview_schedules.php','flowview_filters.php'));
 	}
+
+	$flowview_sighup_settings = array(
+		'flowview_partition',
+		'settings_from_email',
+		'settings_from_name',
+		'flowview_use_arin',
+		'flowview_dns_method',
+		'settings_dns_primary',
+		'settings_dns_secondary',
+		'settings_dns_timeout',
+		'flowview_local_domain',
+		'flowview_local_iprange'
+	);
 
 	plugin_flowview_check_upgrade();
 }
@@ -292,7 +305,7 @@ function flowview_page_head() {
 }
 
 function flowview_global_settings_update() {
-	global $flowview_sighup_settings;
+	global $config, $flowview_sighup_settings;
 
 	$hup_process   = false;
 
@@ -322,7 +335,7 @@ function flowview_config_settings() {
 
 	include_once($config['base_path'] . '/lib/reports.php');
 
-	foreach($flowview_sighup_setttings as $setting) {
+	foreach($flowview_sighup_settings as $setting) {
 		$$setting = read_config_option($setting, true);
 
 		$_SESSION['sess_flowview_settings'][$setting] = $$setting;

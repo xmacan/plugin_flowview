@@ -1831,7 +1831,7 @@ function sig_handler($signo) {
 
 			$reload = true;
 
-			foreach($flowview_sighup_setttings as $setting) {
+			foreach($flowview_sighup_settings as $setting) {
 				$rsetting = read_config_option($setting, true);
 			}
 
