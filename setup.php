@@ -364,7 +364,7 @@ function flowview_config_settings() {
 			'friendly_name' => __('Local Domain Name', 'monitor'),
 			'method' => 'textbox',
 			'default' => 'mydomain.net',
-			'description' => __('For host IP addresses that resolve locally without a domain, append this suffix to the resolved hostname.', 'monitor'),
+			'description' => __('For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address.', 'monitor'),
 			'max_length' => 30,
 			'size' => 30
 		),
@@ -372,7 +372,7 @@ function flowview_config_settings() {
 			'friendly_name' => __('Local IP Range', 'monitor'),
 			'method' => 'textbox',
 			'default' => '192.168.1.0/24',
-			'description' => __('Provide the range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24', 'monitor'),
+			'description' => __('Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24', 'monitor'),
 			'placeholder' => __('Use CIDR or Non-CIDR', 'flowview'),
 			'max_length' => 30,
 			'size' => 30
