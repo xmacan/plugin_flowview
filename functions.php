@@ -563,10 +563,13 @@ function flowview_display_filter() {
 						<select id='exclude'>
 							<option value='0'<?php print (get_request_var('exclude') == 0 ? ' selected':'');?>><?php print __('None', 'flowview');?></option>
 							<option value='1'<?php print (get_request_var('exclude') == 1 ? ' selected':'');?>><?php print __('Top Sample', 'flowview');?></option>
-							<option value='2'<?php print (get_request_var('exclude') == 2 ? ' selected':'');?>><?php print __('Top 2 Samples', 'flowview');?></option>
-							<option value='3'<?php print (get_request_var('exclude') == 3 ? ' selected':'');?>><?php print __('Top 3 Samples', 'flowview');?></option>
-							<option value='4'<?php print (get_request_var('exclude') == 4 ? ' selected':'');?>><?php print __('Top 4 Samples', 'flowview');?></option>
-							<option value='5'<?php print (get_request_var('exclude') == 5 ? ' selected':'');?>><?php print __('Top 5 Samples', 'flowview');?></option>
+							<?php
+							$samples = array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+
+							foreach($samples as $s) {
+								print "<option value='$s'" . (get_request_var('exclude') == $s ? ' selected':'') . ">" . __('Top %d Samples', $s, 'flowview') . '</option>';
+							}
+							?>
 						</select>
 					</td>
 					<td class='nowrap' title='<?php print __esc('Show only Domains on Charts Below');?>'>
