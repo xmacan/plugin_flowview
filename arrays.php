@@ -594,7 +594,6 @@ $filter_edit = array(
 		'value' => '|arg1:template_id|',
 		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT template_id AS id, template_id AS name FROM plugin_flowview_device_templates ORDER BY id',
 		'default' => '-1',
-		'none_value' => __('All', 'flowview'),
 	),
 	'ex_addr' => array(
 		'friendly_name' => __('Stream IP Address', 'flowview'),
@@ -603,7 +602,6 @@ $filter_edit = array(
 		'value' => '|arg1:ex_addr|',
 		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT ex_addr AS id, ex_addr AS name FROM plugin_flowview_device_streams ORDER BY id',
 		'default' => '-1',
-		'none_value' => __('All', 'flowview'),
 	),
 	'predefined_timespan' => array(
 		'friendly_name' => __('Presets', 'flowview'),

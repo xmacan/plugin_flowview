@@ -365,6 +365,7 @@ function save_filter() {
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	get_filter_request_var('device_id');
+	get_filter_request_var('template_id');
 	get_filter_request_var('timespan');
 	get_filter_request_var('statistics');
 	get_filter_request_var('printed');
@@ -576,8 +577,11 @@ function flowview_display_filter() {
 						<span>
 							<input type='button' id='go' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Apply Filter', 'flowview');?>'>
 							<input type='button' id='clear' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filter', 'flowview');?>'>
-							<input type='button' id='edit' value='<?php print __esc('Edit', 'flowview');?>' title='<?php print __esc('Edit Current Filter', 'flowview');?>'>
-							<input type='button' id='save' value='<?php print __esc('Save', 'flowview');?>' title='<?php print __esc('Save Overrides to Selected Filter', 'flowview');?>'>
+							<input type='button' id='new' value='<?php print __esc('New', 'flowview');?>' title='<?php print __esc('Create new Flow Filter', 'flowview');?>'>
+							<input type='button' id='edit' value='<?php print __esc('Edit', 'flowview');?>' title='<?php print __esc('Edit the Flow Filter', 'flowview');?>'>
+							<input type='button' id='save' value='<?php print __esc('Save', 'flowview');?>' title='<?php print __esc('Save the Flow Filter', 'flowview');?>'>
+							<input type='button' id='rename' value='<?php print __esc('Rename', 'flowview');?>' title='<?php print __esc('Rename the Flow Filter', 'flowview');?>'>
+							<input type='button' id='delete' value='<?php print __esc('Delete', 'flowview');?>' title='<?php print __esc('Delete the Flow Filter', 'flowview');?>'>
 						</span>
 					</td>
 				</tr>
@@ -799,26 +803,49 @@ function flowview_display_filter() {
 		</form>
 		</td>
 	</tr>
+    <tr>
+		<div id='save_div' style='display:none;' title='<?php print __esc('Save Flow Filter', 'flowview');?>'>
+			<form id='save_form' style='padding:3px;margin:3px;' method='post' action='#'>
+				<label for='snewname' style='margin:5px;'><?php print __esc('New Name', 'flowview');?></label>
+				<input id='snewname' type='text' style='margin:5px;' size='35'>
+				<br>
+				<input id='ssave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Save', 'flowview');?>'>
+				<input id='scancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
+				<input id='snew' type='hidden' value='0'>
+				<input id='srename' type='hidden' value='0'>
+			</form>
+		</div>
+	</tr>
+    <tr>
+		<div id='delete_div' style='display:none;' title='<?php print __esc('Delete Flow Filter', 'flowview');?>'>
+			<form id='delete_form' style='padding:3px;margin:3px;' method='post' action='#'>
+				<p><?php print __('To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked.', 'flowview');?></p>
+				<br>
+				<input id='dsave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Continue', 'flowview');?>'>
+				<input id='dcancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
+			</form>
+		</div>
+	</tr>
 	<script type='text/javascript'>
 
-	var height = $(window).height() - 200;
+	var height    = $(window).height() - 200;
 	var date1Open = false;
 	var date2Open = false;
 	var graphType = '<?php print get_request_var('graph_type');?>';
 
-	var byteLabel      = '<?php print __('Bytes', 'flowview');?>';
-	var byteBarTitle   = '<?php print __('Top %s Distribution Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
-	var bytePieTitle   = '<?php print __('Top %s Pie Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
+	var byteLabel       = '<?php print __('Bytes', 'flowview');?>';
+	var byteBarTitle    = '<?php print __('Top %s Distribution Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
+	var bytePieTitle    = '<?php print __('Top %s Pie Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
 	var byteTreeTitle   = '<?php print __('Top %s Treemap Chart of Bytes', get_request_var('cutofflines'), 'flowview');?>';
 
-	var packetLabel    = '<?php print __('Packets', 'flowview');?>';
-	var packetBarTitle = '<?php print __('Top %s Distribution Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
-	var packetPieTitle = '<?php print __('Top %s Pie Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
+	var packetLabel     = '<?php print __('Packets', 'flowview');?>';
+	var packetBarTitle  = '<?php print __('Top %s Distribution Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
+	var packetPieTitle  = '<?php print __('Top %s Pie Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
 	var packetTreeTitle = '<?php print __('Top %s Treemap Chart of Packets', get_request_var('cutofflines'), 'flowview');?>';
 
-	var flowLabel      = '<?php print __('Flows', 'flowview');?>';
-	var flowBarTitle   = '<?php print __('Top %s Distribution Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
-	var flowPieTitle   = '<?php print __('Top %s Pie Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
+	var flowLabel       = '<?php print __('Flows', 'flowview');?>';
+	var flowBarTitle    = '<?php print __('Top %s Distribution Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
+	var flowPieTitle    = '<?php print __('Top %s Pie Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
 	var flowTreeTitle   = '<?php print __('Top %s Treemap Chart of Flows', get_request_var('cutofflines'), 'flowview');?>';
 
 	var pattern = [
@@ -883,7 +910,7 @@ function flowview_display_filter() {
 			changeQuery(true);
 		});
 
-		$('#domains, #exclude, #graph_type, #graph_height').off('change').on('change', function() {
+		$('#domains, #exclude, #graph_type, #graph_height, #device_id').off('change').on('change', function() {
 			applyFilter(false);
 		});
 
@@ -907,6 +934,84 @@ function flowview_display_filter() {
 
 			loadPageNoHeader(strURL);
 		});
+
+		$('#new').off('click').on('click', function() {
+			strURL = urlPath + '/plugins/flowview/flowview_filters.php' +
+				'?action=edit&header=false' +
+				'&return=flowview.php';
+
+			loadPageNoHeader(strURL);
+		});
+
+		$('#save_div, #delete_div').dialog({
+			autoOpen: false,
+			autoResize: true,
+			modal: true,
+			resizable: false,
+			minHeight: 80,
+			minWidth: 500
+		});
+
+		$('#rename').off('click').on('click', function() {
+			$('#save_div').dialog('option', 'title', '<?php print __('Rename Layout', 'analytics');?>');
+			$('#snewname').attr('value', $('#query option:selected').text());
+			$('#snew').attr('value', '0');
+			$('#srename').attr('value', '1');
+			$('#save_div').dialog('open');
+		});
+
+		$('#delete').off('click').on('click', function() {
+			$('#delete_div').dialog('open');
+		});
+
+		$('#dcancel').off('click').on('click', function() {
+			$('#delete_div').dialog('close');
+		});
+
+		$('#delete_form').off('submit').on('submit', function(event) {
+			event.preventDefault();
+			$('#delete_div').dialog('close');
+			deleteFilter();
+		});
+
+		$('#dsave').off('click').on('click', function() {
+			$('#delete_div').dialog('close');
+			deleteFilter();
+		});
+
+		$('#scancel').off('click').on('click', function() {
+			$('#save_div').dialog('close');
+		});
+
+		$('#save_form').off('submit').on('submit', function(event) {
+			event.preventDefault();
+			$('#save_div').dialog('close');
+			renameFilter();
+		});
+
+		$('#ssave').off('click').on('click', function() {
+			$('#save_div').dialog('close');
+			renameFilter();
+		});
+
+		function renameFilter() {
+			var strURL  = 'flowview.php?action=renamefilter';
+			strURL += '&query='+$('#query').val();
+			strURL += '&sname='+$('#snewname').val();
+			$.get(strURL, function(data) {
+				var strURL  = 'flowview.php?query='+$('#query').val()+'&header=false';
+				loadPageNoHeader(strURL);
+			});
+		}
+
+		function deleteFilter() {
+			var strURL  = 'flowview.php?action=deletefilter';
+			strURL += '&query='+$('#query').val();
+			$.get(strURL, function(data) {
+				var strURL  = 'flowview.php?query=-1&header=false';
+				loadPageNoHeader(strURL);
+			});
+		}
 
 		if ($('#query').val() == -1) {
 			$('#save').prop('disabled', true);
@@ -1384,6 +1489,7 @@ function flowview_display_filter() {
 		loadPageNoHeader(urlPath+'plugins/flowview/flowview.php' +
 			'?action=query'         +
 			'&domains='             + $('#domains').is(':checked') +
+			'&device_id='           + $('#device_id').val() +
 			'&query='               + $('#query').val() +
 			'&predefined_timespan=' + $('#predefined_timespan').val() +
 			'&date1='               + $('#date1').val() +
@@ -2107,7 +2213,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	/* ex_addr filter */
-	if (isset($data['ex_addr']) && $data['ex_addr'] != '') {
+	if (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '') {
 		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
 		$sql_params[] = $data['ex_addr'];
 	}
@@ -2173,12 +2279,14 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	// Handle Report Override
-	if (isset_request_var('report') && trim(get_nfilter_request_var('report'), 'sp') != 0) {
-		if (substr(get_nfilter_request_var('report'), 0, 1) == 's') {
-			$data['statistics'] = trim(get_nfilter_request_var('report'), 'sp');
+	if (isset_request_var('report')) {
+		$report  = get_nfilter_request_var('report');
+		$nreport = trim(get_nfilter_request_var('report'), 'sp');
+		if (strpos($report, 's') !== false && is_numeric($nreport)) {
+			$data['statistics'] = $nreport;
 			$data['printed']    = 0;
-		} else {
-			$data['printed']    = trim(get_nfilter_request_var('report'), 'sp');
+		} elseif(strpos($report, 'p') !== false && is_numeric($nreport)) {
+			$data['printed']    = $nreport;
 			$data['statistics'] = 0;
 		}
 	} elseif (!sizeof($data)) {

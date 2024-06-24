@@ -173,7 +173,7 @@ function flowview_upgrade($current, $old) {
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'template_id')) {
 			cacti_log("Adding template_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
-			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(11) unsigned NOT NULL default "0" AFTER device_id');
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
 		}
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr')) {

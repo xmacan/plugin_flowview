@@ -42,6 +42,14 @@ switch(get_request_var('action')) {
 	case 'savefilter':
 		save_filter_form();
 		break;
+	case 'renamefilter':
+		rename_filter();
+
+		break;
+	case 'deletefilter':
+		delete_filter();
+
+		break;
 	case 'sort_filter':
 		sort_filter();
 		break;
@@ -82,6 +90,37 @@ switch(get_request_var('action')) {
 }
 
 exit;
+
+function rename_filter() {
+	$name  = get_nfilter_request_var('sname');
+	$query = get_nfilter_request_var('query');
+
+	db_execute_prepared('UPDATE plugin_flowview_queries
+		SET name = ?
+		WHERE id = ?',
+		array($name, $query));
+}
+
+function delete_filter() {
+	$query = get_nfilter_request_var('query');
+
+	$exists = db_fetch_cell_prepared('SELECT COUNT(*)
+		FROM plugin_flowview_schedules
+		WHERE query_id = ?',
+		array($query));
+
+	$name = db_fetch_cell_prepared('SELECT name
+		FROM plugin_flowview_queries
+		WHERE id = ?',
+		array($query));
+
+	if ($exists) {
+		raise_message('flow_delete', __esc('Unable to Delete Flow Filter \'%s\' as its in use in a Scheduled Report.', $name, 'flowview'), MESSAGE_LEVEL_WARN);
+	} else {
+		db_execute_prepared('DELETE FROM plugin_flowview_queries WHERE id = ?', array($query));
+		raise_message('flow_delete', __esc('Flow Filter \'%s\' Deleted.', 'flowview'), MESSAGE_LEVEL_INFO);
+	}
+}
 
 function load_session_for_filter() {
 	flowview_connect();
@@ -173,7 +212,9 @@ function load_session_for_filter() {
 
 						break;
 					case 'device_id':
-						set_request_var('device_id', $value);
+						if (!isset_request_var('device_id') || get_nfilter_request_var('device_id') == '-1') {
+							set_request_var('device_id', $value);
+						}
 
 						break;
 					default:

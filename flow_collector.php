@@ -915,22 +915,25 @@ function process_fv5($p, $ex_addr) {
 
 		$data = unpack('C4src_addr/C4dst_addr/C4nexthop/nsrc_if/ndst_if/NdPkts/NdOctets/NFirst/NLast/nsrc_port/ndst_port/Cblank/Cflags/Cprotocol/Ctos/nsrc_as/ndst_as/Csrc_prefix/Cdst_prefix', $flowrec);
 
-		$flowtime = $header['unix_secs'] + ($header['unix_nsecs'] / 1000000);
+		$flowtime    = $header['unix_secs'] + ($header['unix_nsecs'] / 1000000000);
+		$time        = time();
+		$delta_start = $delta_end = 0;
+		$sysuptime   = $header['sysuptime'];
+		$flowtimeus  = ($header['unix_nsecs'] / 1000);
 
 		$src_addr = $data['src_addr1'] . '.' . $data['src_addr2'] . '.' . $data['src_addr3'] . '.' . $data['src_addr4'];
 		$dst_addr = $data['dst_addr1'] . '.' . $data['dst_addr2'] . '.' . $data['dst_addr3'] . '.' . $data['dst_addr4'];
 		$nexthop  = $data['nexthop1']  . '.' . $data['nexthop2']  . '.' . $data['nexthop3']  . '.' . $data['nexthop4'];
 		$ex_addr  = $ex_addr;
 
-		$rstime = ($data['First'] - $header['sysuptime']) / 1000;
-		$rsmsec = substr($data['First'] - $header['sysuptime'], -3);
-		$retime = ($data['Last'] - $header['sysuptime']) / 1000;
-		$remsec = substr($data['Last'] - $header['sysuptime'], -3);
+		$delta_start = ($data['First'] - $sysuptime) / 1000000;
+		$delta_end   = ($data['Last']  - $sysuptime) / 1000000;
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . $rsmsec;
-		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . $remsec;
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $delta_start)) . '.' . intval($flowtimeus + ($delta_start * 1000000));
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $delta_end))   . '.' . intval($flowtimeus + ($delta_end * 1000000));
 
-		//debug("Flow: Case 0 SysUptime:{$header['sysuptime']}, StartTime:{$data['First']}, StartDate:{$start_date}, EndTime:{$data['Last']}, EndDate:{$end_date}");
+		//cacti_log("Time:$time, FlowTime:{$flowtime}, Start Time:{$data['First']}, SysUptime:{$sysuptime}, DeltaTime:$delta_start");
+		//cacti_log("Time:$time, FlowTime:{$flowtime}, End Time:{$data['Last']}, SysUptime:{$sysuptime}, DeltaTime:$delta_end");
 
 		$sql_prefix = get_sql_prefix($flowtime);
 
@@ -1665,38 +1668,50 @@ function process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime = 0) {
 	}
 
 	if (isset($data[$flow_fields['sysuptime']]) && abs($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']]) < 3) {
-		$rstime = ($data[$flow_fields['start_time']] - $data[$flow_fields['sysuptime']]) / 1000;
-		$rsmsec = substr($data[$flow_fields['start_time']] - $data[$flow_fields['sysuptime']], -3);
-		$retime = ($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']]) / 1000;
-		$remsec = substr($data[$flow_fields['end_time']] - $data[$flow_fields['sysuptime']], -3);
-
-		$start_date = date('Y-m-d H:i:s.v', intval($flowtime + $rstime)) . '.' . substr("{$rsmsec}000000", 0, 6);
-		$end_date   = date('Y-m-d H:i:s.v', intval($flowtime + $retime)) . '.' . substr("{$remsec}000000", 0, 6);
-		$sysuptime = $data[$flow_fields['sysuptime']];
-	} elseif ($sysuptime > 0) {
-		$rsmsec = $rstime = $remsec = $retime = 0;
+		$delta_start = $delta_end = 0;
+		$sysuptime   = $data[$flow_fields['sysuptime']];
+		$time = time();
 
 		if (isset($data[$flow_fields['start_time']])) {
-			$rstime = ($data[$flow_fields['start_time']] - $sysuptime) / 1000;
-			$rsmsec = substr('000' . ($data[$flow_fields['start_time']] - $sysuptime), -3);
+			$delta_start = ($data[$flow_fields['start_time']] - $sysuptime) / 1000000;
+			//cacti_log("Time:$time, FlowTime:{$flowtime}, Start Time:{$data[$flow_fields['start_time']]}, SysUptime:{$sysuptime}, DeltaTime:$delta_start");
 		}
 
 		if (isset($data[$flow_fields['end_time']])) {
-			$retime = ($data[$flow_fields['end_time']] - $sysuptime) / 1000;
-			$remsec = substr('000' . ($data[$flow_fields['end_time']] - $sysuptime), -3);
+			$delta_end   = ($data[$flow_fields['end_time']] - $sysuptime) / 1000000;
+			//cacti_log("Time:$time, FlowTime:{$flowtime}, End Time:{$data[$flow_fields['end_time']]}, SysUptime:{$sysuptime}, DeltaTime:$delta_end");
 		}
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime + $rstime)) . '.' . substr("{$rsmsec}000000", 0, 6);
-		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $retime)) . '.' . substr("{$remsec}000000", 0, 6);
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $delta_start)) . '.' . abs(intval($delta_start*1000000));
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $delta_end))   . '.' . abs(intval($delta_end*1000000));
+
+		//cacti_log(sprintf("CurDate:%s, StartDate:%s, EndDate:%s", date('Y-m-d H:i:s'), $start_date, $end_date));
+	} elseif ($sysuptime > 0) {
+		$delta_start = $delta_end = 0;
+		$time   = time();
+
+		if (isset($data[$flow_fields['start_time']])) {
+			$delta_start = ($data[$flow_fields['start_time']] - $sysuptime) / 1000000;
+			//cacti_log("Time:$time, FlowTime:{$flowtime}, Start Time:{$data[$flow_fields['start_time']]}, SysUptime:{$sysuptime}, DeltaTime:$delta_start");
+		}
+
+		if (isset($data[$flow_fields['end_time']])) {
+			$delta_end   = ($data[$flow_fields['end_time']] - $sysuptime) / 1000000;
+			//cacti_log("Time:$time, FlowTime:{$flowtime}, End Time:{$data[$flow_fields['end_time']]}, SysUptime:{$sysuptime}, DeltaTime:$delta_end");
+		}
+
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $delta_start)) . '.' . abs(intval($delta_start*1000000));
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $delta_end))   . '.' . abs(intval($delta_end*1000000));
+		//cacti_log(sprintf("CurDate:%s, StartDate:%s, EndDate:%s", date('Y-m-d H:i:s'), $start_date, $end_date));
 	} else {
 		if (isset($data[$flow_fields['start_time']]) && isset($data[$flow_fields['end_time']])) {
-			$delta_milli = intval(($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]) / 1000);
+			$delta_micro = intval(($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]) / 1000000);
 			$delta_sec   = floor($data[$flow_fields['end_time']] - $data[$flow_fields['start_time']]);
 		} else {
-			$delta_milli = $delta_sec = 0;
+			$delta_micro = $delta_sec = 0;
 		}
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . substr("{$delta_milli}000000", 0, 6);
+		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . substr("{$delta_micro}000000", 0, 6);
 		$end_date   = date('Y-m-d H:i:s', intval($flowtime)) . '.' . '000000';
 	}
 
