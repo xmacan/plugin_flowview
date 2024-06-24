@@ -241,7 +241,7 @@ function flowview_db_table_create($table, $data) {
 
         if (!in_array($table, $tables)) {
                 $c = 0;
-                $sql = 'CREATE TABLE `' . $table . "` (\n";
+                $sql = 'CREATE TABLE IF NOT EXISTS `' . $table . "` (\n";
                 foreach ($data['columns'] as $column) {
                         if (isset($column['name'])) {
                                 if ($c > 0) {
