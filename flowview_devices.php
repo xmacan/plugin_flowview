@@ -329,6 +329,10 @@ function edit_devices() {
 
 			$display_array = array(
 				array(
+					'display' => __('Name', 'flowview'),
+					'align'   => 'left'
+				),
+				array(
 					'display' => __('Address', 'flowview'),
 					'align'   => 'left'
 				),
@@ -368,6 +372,7 @@ function edit_devices() {
 					}
 
 					form_alternate_row('line' . $i, true);
+					form_selectable_cell($row['name'], $i);
 					form_selectable_cell($row['ex_addr'], $i);
 					form_selectable_cell(get_colored_device_status('', $status), $i);
 					form_selectable_cell($row['version'], $i, '', 'right');

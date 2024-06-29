@@ -179,7 +179,7 @@ function edit_filter() {
 
 	html_end_box();
 
-	form_save_button($page);
+	form_save_button($page, 'return');
 
 	?>
 	<script type='text/javascript'>

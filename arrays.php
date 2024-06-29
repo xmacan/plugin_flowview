@@ -596,11 +596,11 @@ $filter_edit = array(
 		'default' => '-1',
 	),
 	'ex_addr' => array(
-		'friendly_name' => __('Stream IP Address', 'flowview'),
-		'description' => __('The Streams IP Address from the list of registered streams.', 'flowview'),
+		'friendly_name' => __('Stream Address', 'flowview'),
+		'description' => __('The Stream IP Address or Hostname from the list of registered streams.', 'flowview'),
 		'method' => 'drop_sql',
 		'value' => '|arg1:ex_addr|',
-		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT ex_addr AS id, ex_addr AS name FROM plugin_flowview_device_streams ORDER BY id',
+		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT ex_addr AS id, name FROM plugin_flowview_device_streams ORDER BY id',
 		'default' => '-1',
 	),
 	'predefined_timespan' => array(
@@ -828,6 +828,10 @@ $filter_edit = array(
 		'value' => '|arg1:destas|',
 		'max_length' => '20',
 		'size' => '14'
+	),
+	'return' => array(
+		'method' => 'hidden',
+		'value' => get_request_var('return')
 	),
 	'id' => array(
 		'method' => 'hidden',

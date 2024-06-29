@@ -817,12 +817,19 @@ function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed,
 
 		$update_time = date('Y-m-d H:i:s');
 
+		$name = gethostbyaddr($ex_addr);
+
+		if ($name == $ex_addr) {
+			$name = sprintf('Stream [%s]', $ex_addr);
+		}
+
 		flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
-			(device_id, ex_addr, version, last_updated) VALUES (?, ?, ?, ?)
+			(device_id, ex_addr, name, version, last_updated) VALUES (?, ?, IF(name = '', ?, name), ?, ?)
 			ON DUPLICATE KEY UPDATE
-				version=VALUES(version),
-				last_updated=VALUES(last_updated)",
-			array($listener_id, $ex_addr, $db_version, $update_time));
+				version = VALUES(version),
+				name = VALUES(name),
+				last_updated = VALUES(last_updated)",
+			array($listener_id, $ex_addr, $name, $db_version, $update_time));
 
 		flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
 			WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
