@@ -71,8 +71,6 @@ function listener_has_templates($id) {
 function sort_filter() {
 	global $config, $filter_edit, $graph_timespans;
 
-	flowview_connect();
-
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
 	if (isset_request_var('printed') && get_filter_request_var('printed') > 0) {
@@ -94,8 +92,6 @@ function edit_filter() {
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	/* ==================================================== */
-
-	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
@@ -313,8 +309,6 @@ function save_filter_form() {
 
 	$report = get_nfilter_request_var('report');
 
-	flowview_connect();
-
 	if (substr($report, 0, 1) == 's') {
 		$report      = intval(trim($report, 's'));
 		$printed     = 0;
@@ -372,8 +366,6 @@ function save_filter() {
 	get_filter_request_var('includeif');
 	get_filter_request_var('sortfield');
 	/* ==================================================== */
-
-	flowview_connect();
 
 	$save['id']              = get_nfilter_request_var('id');
 	$save['name']            = get_nfilter_request_var('name');
@@ -445,8 +437,6 @@ function save_filter() {
 function flowview_delete_filter() {
 	global $config;
 
-	flowview_connect();
-
 	flowview_db_execute_prepared('DELETE FROM plugin_flowview_queries
 		WHERE id = ?',
 		array(get_filter_request_var('query')));
@@ -489,8 +479,6 @@ function flowview_show_summary(&$data) {
 function flowview_display_filter() {
 	global $config, $graph_timeshifts, $graph_timespans, $graph_heights;
 
-	flowview_connect();
-
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
 	$title  = __esc('Undefined Filter [ Select Filter to get Details ]', 'flowview');
@@ -510,19 +498,19 @@ function flowview_display_filter() {
 		}
 	}
 
-	html_start_box($title . '&nbsp;<font id="text"></font>', '100%', '', '3', 'center', '');
+	html_start_box($title . '&nbsp;<span id="text"></span>', '100%', '', '3', 'center', '');
 
 	?>
 	<tr class='even'>
 		<td>
-		<form id='view' action='flowview.php' method='post'>
+		<form id='flowview_filter' action='flowview.php' method='post'>
 			<table class='filterTable'>
 				<tr>
 					<td>
 						<?php print __('Filter', 'flowview');?>
 					</td>
 					<td>
-						<select id='query'>
+						<select id='query' name='query'>
 							<option value='-1'><?php print __('Select a Filter', 'flowview');?></option>
 							<?php
 							$queries = flowview_db_fetch_assoc('SELECT id, name
@@ -541,7 +529,7 @@ function flowview_display_filter() {
 						<?php print __('Listener', 'flowview');?>
 					</td>
 					<td>
-						<select id='device_id'>
+						<select id='device_id' name='device_id'>
 							<option value='-1'><?php print __('Select a Listener', 'flowview');?></option>
 							<?php
 							$listeners = flowview_db_fetch_assoc('SELECT id, name
@@ -560,7 +548,7 @@ function flowview_display_filter() {
 						<?php print __('Exclude', 'flowview');?>
 					</td>
 					<td>
-						<select id='exclude'>
+						<select id='exclude' name='exclude'>
 							<option value='0'<?php print (get_request_var('exclude') == 0 ? ' selected':'');?>><?php print __('None', 'flowview');?></option>
 							<option value='1'<?php print (get_request_var('exclude') == 1 ? ' selected':'');?>><?php print __('Top Sample', 'flowview');?></option>
 							<?php
@@ -573,7 +561,7 @@ function flowview_display_filter() {
 						</select>
 					</td>
 					<td class='nowrap' title='<?php print __esc('Show only Domains on Charts Below');?>'>
-						<input type='checkbox' id='domains' <?php print (get_request_var('domains') == 'true' ? 'checked':'');?>>
+						<input type='checkbox' id='domains' name='domains' <?php print (get_request_var('domains') == 'true' ? 'checked':'');?>>
 						<label for='domains'><?php print __('Domains/Hostnames Only', 'flowview');?></label>
 					</td>
 					<td>
@@ -583,6 +571,7 @@ function flowview_display_filter() {
 							<input type='button' id='new' value='<?php print __esc('New', 'flowview');?>' title='<?php print __esc('Create new Flow Filter', 'flowview');?>'>
 							<input type='button' id='edit' value='<?php print __esc('Edit', 'flowview');?>' title='<?php print __esc('Edit the Flow Filter', 'flowview');?>'>
 							<input type='button' id='save' value='<?php print __esc('Save', 'flowview');?>' title='<?php print __esc('Save the Flow Filter', 'flowview');?>'>
+							<input type='button' id='saveas' value='<?php print __esc('Save As', 'flowview');?>' title='<?php print __esc('Save the existing Flow Filter as new Filter', 'flowview');?>'>
 							<input type='button' id='rename' value='<?php print __esc('Rename', 'flowview');?>' title='<?php print __esc('Rename the Flow Filter', 'flowview');?>'>
 							<input type='button' id='delete' value='<?php print __esc('Delete', 'flowview');?>' title='<?php print __esc('Delete the Flow Filter', 'flowview');?>'>
 						</span>
@@ -595,7 +584,7 @@ function flowview_display_filter() {
 						<?php print __('Report', 'flowview');?>
 					</td>
 					<td>
-						<select id='report' onChange='applyFilter(false)'>
+						<select id='report' name='report' onChange='applyFilter(false)'>
 							<?php
 							$reports = array();
 
@@ -628,7 +617,7 @@ function flowview_display_filter() {
 						<?php print __('Sort Field', 'flowview');?>
 					</td>
 					<td>
-						<select id='sortfield' onChange='applyFilter(false)'>
+						<select id='sortfield' name='sortfield' onChange='applyFilter(false)'>
 							<?php
 							$columns[0] = __('Select a Filter First', 'flowview');
 
@@ -672,7 +661,7 @@ function flowview_display_filter() {
 						<?php print __('Lines', 'flowview');?>
 					</td>
 					<td>
-						<select id='cutofflines' onChange='applyFilter(false)'>
+						<select id='cutofflines' name='cutofflines' onChange='applyFilter(false)'>
 							<?php
 							if (cacti_sizeof($cutoff_lines)) {
 								if (get_request_var('report') != 's99') {
@@ -690,7 +679,7 @@ function flowview_display_filter() {
 						<?php print __('Octets', 'flowview');?>
 					</td>
 					<td>
-						<select id='cutoffoctets' onChange='applyFilter(false)'>
+						<select id='cutoffoctets' name='cutoffoctets' onChange='applyFilter(false)'>
 							<?php
 							if (cacti_sizeof($cutoff_octets)) {
 								foreach($cutoff_octets as $key => $value) {
@@ -708,7 +697,7 @@ function flowview_display_filter() {
 						<?php print __('Timespan', 'flowview');?>
 					</td>
 					<td>
-						<select id='predefined_timespan' onChange='applyTimespan()'>
+						<select id='predefined_timespan' name='predevined_timespan' onChange='applyTimespan()'>
 							<?php
 							if (cacti_sizeof($graph_timespans)) {
 								foreach($graph_timespans as $key => $value) {
@@ -764,7 +753,7 @@ function flowview_display_filter() {
 						<?php print __('Graph', 'flowview');?>
 					</td>
 					<td>
-						<select id='graph_type'>
+						<select id='graph_type' name='graph_type'>
 						<?php print '<option value="bar"' . (get_request_var('graph_type') == 'bar' ? ' selected':'') . '>' . __('Bar', 'flowview') . '</option>'?>
 						<?php print '<option value="pie"' . (get_request_var('graph_type') == 'pie' ? ' selected':'') . '>' . __('Pie', 'flowview') . '</option>'?>
 						<?php print '<option value="treemap"' . (get_request_var('graph_type') == 'treemap' ? ' selected':'') . '>' . __('Treemap', 'flowview') . '</option>'?>
@@ -774,7 +763,7 @@ function flowview_display_filter() {
 						<?php print __('Height', 'flowview');?>
 					</td>
 					<td>
-						<select id='graph_height'>
+						<select id='graph_height' name='graph_height'>
 							<?php
 							foreach($graph_heights as $h => $name) {
 								print "<option value='$h'" . (get_request_var('graph_height') == $h ? ' selected':'') . '>' . html_escape($name) . '</option>';
@@ -786,19 +775,19 @@ function flowview_display_filter() {
 						<?php print __('Show/Hide', 'flowview');?>
 					</td>
 					<td class='nowrap'>
-						<input type='checkbox' id='table' <?php print (get_request_var('table') == 'true' ? 'checked':'');?>>
+						<input type='checkbox' id='table' name='table' <?php print (get_request_var('table') == 'true' ? 'checked':'');?>>
 						<label for='table'><?php print __('Table', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
-						<input type='checkbox' id='bytes' <?php print (get_request_var('bytes') == 'true' ? 'checked':'');?>>
+						<input type='checkbox' id='bytes' name='bytes' <?php print (get_request_var('bytes') == 'true' ? 'checked':'');?>>
 						<label for='bytes'><?php print __('Bytes', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
-						<input type='checkbox' id='packets' <?php print (get_request_var('packets') == 'true' ? 'checked':'');?>>
+						<input type='checkbox' id='packets' name='packets' <?php print (get_request_var('packets') == 'true' ? 'checked':'');?>>
 						<label for='packets'><?php print __('Packets', 'flowview');?></label>
 					</td>
 					<td class='nowrap'>
-						<input type='checkbox' id='flows' <?php print (get_request_var('flows') == 'true' ? 'checked':'');?>>
+						<input type='checkbox' id='flows' name='flows' <?php print (get_request_var('flows') == 'true' ? 'checked':'');?>>
 						<label for='flows'><?php print __('Flows', 'flowview');?></label>
 					</td>
 				</tr>
@@ -807,28 +796,29 @@ function flowview_display_filter() {
 		</td>
 	</tr>
     <tr>
-		<div id='save_div' style='display:none;' title='<?php print __esc('Save Flow Filter', 'flowview');?>'>
-			<form id='save_form' style='padding:3px;margin:3px;' method='post' action='#'>
-				<label for='snewname' style='margin:5px;'><?php print __esc('New Name', 'flowview');?></label>
-				<input id='snewname' type='text' style='margin:5px;' size='35'>
-				<br>
-				<input id='ssave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Save', 'flowview');?>'>
-				<input id='scancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
-				<input id='snew' type='hidden' value='0'>
-				<input id='srename' type='hidden' value='0'>
-			</form>
-		</div>
+		<td>
+			<div id='save_div' style='display:none;' title='<?php print __esc('Save Flow Filter', 'flowview');?>'>
+				<form id='save_form' style='padding:3px;margin:3px;' method='post' action='#'>
+					<label for='snewname' style='margin:5px;'><?php print __esc('New Name', 'flowview');?></label>
+					<input id='snewname' type='text' style='margin:5px;' size='35'>
+					<br>
+					<input id='ssave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Save', 'flowview');?>'>
+					<input id='scancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
+					<input id='snew' type='hidden' value='0'>
+					<input id='srename' type='hidden' value='0'>
+				</form>
+			</div>
+			<div id='delete_div' style='display:none;' title='<?php print __esc('Delete Flow Filter', 'flowview');?>'>
+				<form id='delete_form' style='padding:3px;margin:3px;' method='post' action='#'>
+					<p><?php print __('To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked.', 'flowview');?></p>
+					<br>
+					<input id='dsave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Continue', 'flowview');?>'>
+					<input id='dcancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
+				</form>
+			</div>
+		</td>
 	</tr>
-    <tr>
-		<div id='delete_div' style='display:none;' title='<?php print __esc('Delete Flow Filter', 'flowview');?>'>
-			<form id='delete_form' style='padding:3px;margin:3px;' method='post' action='#'>
-				<p><?php print __('To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked.', 'flowview');?></p>
-				<br>
-				<input id='dsave' type='submit' style='float:right;margin:5px;' value='<?php print __esc('Continue', 'flowview');?>'>
-				<input id='dcancel' type='button' style='float:right;margin:5px;' value='<?php print __esc('Cancel', 'flowview');?>'>
-			</form>
-		</div>
-	</tr>
+	<tr><td>
 	<script type='text/javascript'>
 
 	var height    = $(window).height() - 200;
@@ -963,6 +953,13 @@ function flowview_display_filter() {
 			$('#save_div').dialog('open');
 		});
 
+		$('#saveas').off('click').on('click', function() {
+			$('#snewname').attr('value', $('#query option:selected').text() + '<?php print __(' <new>', 'flowview');?>');
+			$('#snew').attr('value', '1');
+			$('#srename').attr('value', '0');
+			$('#save_div').dialog('open');
+		});
+
 		$('#delete').off('click').on('click', function() {
 			$('#delete_div').dialog('open');
 		});
@@ -989,13 +986,22 @@ function flowview_display_filter() {
 		$('#save_form').off('submit').on('submit', function(event) {
 			event.preventDefault();
 			$('#save_div').dialog('close');
-			renameFilter();
+
+			if ($('#srename').val() == '1') {
+				renameFilter();
+			} else {
+				saveAsFilter();
+			}
 		});
 
-		$('#ssave').off('click').on('click', function() {
-			$('#save_div').dialog('close');
-			renameFilter();
-		});
+		function saveAsFilter() {
+			var strURL  = 'flowview.php?action=saveasfilter';
+			var postData = $('#flowview_filter').serializeForm();
+
+			strURL += '&sname='+$('#snewname').val();
+
+			loadPageUsingPost(strURL, postData);
+		}
 
 		function renameFilter() {
 			var strURL  = 'flowview.php?action=renamefilter';
@@ -1018,13 +1024,31 @@ function flowview_display_filter() {
 
 		if ($('#query').val() == -1) {
 			$('#save').prop('disabled', true);
+			$('#saveas').prop('disabled', true);
+			$('#edit').prop('disabled', true);
+			$('#rename').prop('disabled', true);
+			$('#delete').prop('disabled', true);
+
 			if ($('#save').button('instance') !== undefined) {
 				$('#save').button('disable');
+				$('#saveas').button('disable');
+				$('#edit').button('disable');
+				$('#rename').button('disable');
+				$('#delete').button('disable');
 			}
 		} else {
 			$('#save').prop('disabled', false);
+			$('#saveas').prop('disabled', false);
+			$('#edit').prop('disabled', false);
+			$('#rename').prop('disabled', false);
+			$('#delete').prop('disabled', false);
+
 			if ($('#save').button('instance') !== undefined) {
 				$('#save').button('enable');
+				$('#saveas').button('enable');
+				$('#edit').button('enable');
+				$('#rename').button('enable');
+				$('#delete').button('enable');
 			}
 		}
 
@@ -1546,6 +1570,7 @@ function flowview_display_filter() {
 	});
 
 	</script>
+	</td></tr>
 	<?php
 
 	html_end_box();
@@ -1553,8 +1578,6 @@ function flowview_display_filter() {
 
 function get_port_name($port_num, $port_proto = 6) {
 	global $config, $graph_timespans;
-
-	flowview_connect();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
@@ -1585,8 +1608,6 @@ function get_port_name($port_num, $port_proto = 6) {
 
 function plugin_flowview_run_schedule($id) {
 	global $config;
-
-	flowview_connect();
 
 	$schedule = flowview_db_fetch_row_prepared('SELECT *
 		FROM plugin_flowview_schedules
@@ -1898,8 +1919,6 @@ function get_date_filter($sql_where, &$sql_params, $start, $end, $range_type = 1
 function get_tables_for_query($start, $end = null) {
 	global $config, $graph_timespans;
 
-	flowview_connect();
-
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
 	$part_type  = read_config_option('flowview_partition');
@@ -2143,8 +2162,6 @@ function get_category_columns($statistics, $domain) {
  */
 function run_flow_query($session, $query_id, $start, $end) {
 	global $config, $graph_timespans;
-
-	flowview_connect();
 
 	if (empty($query_id)) {
 		return false;
@@ -3340,8 +3357,6 @@ function flowview_get_rdomain_from_domain($domain) {
 function flowview_translate_port($port, $is_hex, $detail = true) {
 	global $config;
 
-	flowview_connect();
-
 	static $services = array();
 	static $services_detail = array();
 
@@ -3656,8 +3671,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	global $config;
 
 	include_once($config['base_path'] . '/plugins/flowview/Net/DNS2.php');
-
-	flowview_connect();
 
 	// First check to see if its in the cache
 	$cache = flowview_db_fetch_row_prepared('SELECT *
@@ -4319,8 +4332,6 @@ function flowview_autoscale($value) {
 function create_raw_partition($table) {
 	global $config;
 
-	flowview_connect();
-
 	$data = array();
 	// Auto increment sequence
 	$data['columns'][] = array('name' => 'sequence', 'type' => 'bigint(20)', 'unsigned' => true, 'auto_increment' => true);
@@ -4402,8 +4413,6 @@ function flowview_fix_collate_issues() {
 
 	return false;
 
-	flowview_connect();
-
 	$tables = array_rekey(
 		flowview_db_fetch_assoc('SELECT TABLE_NAME
 			FROM information_schema.TABLES
@@ -4421,8 +4430,6 @@ function flowview_fix_collate_issues() {
 
 function import_flows() {
 	global $config;
-
-	flowview_connect();
 
 	$flow_directory = read_config_option('path_flows_dir');
 	$listeners      = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');

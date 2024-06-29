@@ -28,6 +28,8 @@ include_once('./plugins/flowview/functions.php');
 include_once('./plugins/flowview/setup.php');
 include_once('./plugins/flowview/database.php');
 
+flowview_connect();
+
 ini_set('max_execution_time', '0');
 
 /* process calling arguments */

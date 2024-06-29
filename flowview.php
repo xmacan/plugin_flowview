@@ -30,6 +30,8 @@ include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 include_once($config['base_path'] . '/lib/time.php');
 
+flowview_connect();
+
 set_default_action();
 
 ini_set('max_execution_time', 240);
@@ -41,6 +43,10 @@ switch(get_request_var('action')) {
 		break;
 	case 'savefilter':
 		save_filter_form();
+		break;
+	case 'saveasfilter':
+		print "Hello";
+
 		break;
 	case 'renamefilter':
 		rename_filter();
@@ -95,7 +101,7 @@ function rename_filter() {
 	$name  = get_nfilter_request_var('sname');
 	$query = get_nfilter_request_var('query');
 
-	db_execute_prepared('UPDATE plugin_flowview_queries
+	flowview_db_execute_prepared('UPDATE plugin_flowview_queries
 		SET name = ?
 		WHERE id = ?',
 		array($name, $query));
@@ -104,12 +110,12 @@ function rename_filter() {
 function delete_filter() {
 	$query = get_nfilter_request_var('query');
 
-	$exists = db_fetch_cell_prepared('SELECT COUNT(*)
+	$exists = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
 		FROM plugin_flowview_schedules
 		WHERE query_id = ?',
 		array($query));
 
-	$name = db_fetch_cell_prepared('SELECT name
+	$name = flowview_db_fetch_cell_prepared('SELECT name
 		FROM plugin_flowview_queries
 		WHERE id = ?',
 		array($query));
@@ -117,14 +123,12 @@ function delete_filter() {
 	if ($exists) {
 		raise_message('flow_delete', __esc('Unable to Delete Flow Filter \'%s\' as its in use in a Scheduled Report.', $name, 'flowview'), MESSAGE_LEVEL_WARN);
 	} else {
-		db_execute_prepared('DELETE FROM plugin_flowview_queries WHERE id = ?', array($query));
+		flowview_db_execute_prepared('DELETE FROM plugin_flowview_queries WHERE id = ?', array($query));
 		raise_message('flow_delete', __esc('Flow Filter \'%s\' Deleted.', 'flowview'), MESSAGE_LEVEL_INFO);
 	}
 }
 
 function load_session_for_filter() {
-	flowview_connect();
-
 	if (!isset_request_var('query')) {
 		if (isset($_SESSION['sess_last_flowview_filter'])) {
 			$_REQUEST = $_SESSION['sess_last_flowview_filter'];

@@ -28,9 +28,9 @@ include_once($config['base_path'] . '/lib/time.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
-set_default_action();
-
 flowview_connect();
+
+set_default_action();
 
 $sched_actions = array(
 	2 => __('Send Now', 'flowview'),
@@ -144,8 +144,6 @@ switch (get_request_var('action')) {
 
 function actions_schedules () {
 	global $colors, $sched_actions, $config;
-
-	flowview_connect();
 
 	/* ================= input validation ================= */
 	get_filter_request_var('drp_action');
@@ -280,8 +278,6 @@ function save_schedules() {
 	get_filter_request_var('sendinterval');
 	/* ==================================================== */
 
-	flowview_connect();
-
 	$save['title']        = get_nfilter_request_var('title');
 	$save['query_id']     = get_nfilter_request_var('query_id');
 	$save['sendinterval'] = get_nfilter_request_var('sendinterval');
@@ -336,8 +332,6 @@ function edit_schedule() {
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	/* ==================================================== */
-
-	flowview_connect();
 
 	$report = array();
 	if (!isempty_request_var('id')) {
@@ -431,8 +425,6 @@ function show_schedules () {
 
 	validate_store_request_vars($filters, 'sess_fvschd');
 	/* ================= input validation ================= */
-
-	flowview_connect();
 
 	if (get_request_var('rows') == '-1') {
 		$rows = read_config_option('num_rows_table');

@@ -29,14 +29,14 @@ include_once($config['base_path'] . '/lib/time.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
+flowview_connect();
+
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '-1');
 
 $debug = false;
 $maint = false;
 $force = false;
-
-flowview_connect();
 
 $shortopts = 'VvHh';
 $longopts = array(

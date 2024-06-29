@@ -27,6 +27,8 @@ include('./include/auth.php');
 include('./plugins/flowview/functions.php');
 include('./plugins/flowview/database.php');
 
+flowview_connect();
+
 $actions = array(
 	1 => __('Delete'),
 );
@@ -40,7 +42,6 @@ switch (get_request_var('action')) {
 
 		break;
 	case 'purge':
-		flowview_connect();
 		flowview_db_execute('TRUNCATE plugin_flowview_dnscache');
 		raise_message('flowview_dns_purge', __('DNS Cache has been purged.  It will refill as records come in.', 'flowview'), MESSAGE_LEVEL_INFO);
 	default:
@@ -65,7 +66,7 @@ function form_actions() {
 
 		if ($selected_items != false) {
 			if (get_nfilter_request_var('drp_action') == '1') { /* delete */
-				db_execute('DELETE FROM plugin_flowview_dnscache WHERE ' . array_to_sql_or($selected_items, 'id'));
+				flowview_db_execute('DELETE FROM plugin_flowview_dnscache WHERE ' . array_to_sql_or($selected_items, 'id'));
 			}
 		}
 
@@ -84,7 +85,7 @@ function form_actions() {
 			input_validate_input_number($matches[1]);
 			/* ==================================================== */
 
-			$dns_list .= '<li>' . html_escape(db_fetch_cell_prepared('SELECT CONCAT(host, "(", ip, ")") AS name FROM plugin_flowview_dnscache WHERE id = ?', array($matches[1]))) . '</li>';
+			$dns_list .= '<li>' . html_escape(flowview_db_fetch_cell_prepared('SELECT CONCAT(host, "(", ip, ")") AS name FROM plugin_flowview_dnscache WHERE id = ?', array($matches[1]))) . '</li>';
 			$dns_array[] = $matches[1];
 		}
 	}
@@ -195,7 +196,7 @@ function view_dns_cache() {
 							<option value='-1'<?php print (get_request_var('source') == '-1' ? ' selected>':'>') . __('Any');?></option>
 							<?php
 							$sources = array_rekey(
-								db_fetch_assoc('SELECT DISTINCT source
+								flowview_db_fetch_assoc('SELECT DISTINCT source
 									FROM plugin_flowview_dnscache
 									ORDER BY source'),
 								'source', 'source'
@@ -293,14 +294,14 @@ function view_dns_cache() {
 		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . ' source = ' . db_qstr(get_request_var('source'));
 	}
 
-	$total_rows = db_fetch_cell("SELECT COUNT(*)
+	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
 		FROM plugin_flowview_dnscache
 		$sql_where");
 
 	$sql_order = get_order_string();
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$dns_cache = db_fetch_assoc("SELECT *
+	$dns_cache = flowview_db_fetch_assoc("SELECT *
 		FROM plugin_flowview_dnscache
 		$sql_where
 		$sql_order

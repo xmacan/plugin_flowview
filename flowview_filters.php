@@ -30,6 +30,8 @@ include_once($config['base_path'] . '/plugins/flowview/functions.php');
 include_once($config['base_path'] . '/lib/time.php');
 include_once($config['base_path'] . '/lib/timespan_settings.php');
 
+flowview_connect();
+
 set_default_action();
 
 $sched_actions = array(
@@ -70,8 +72,6 @@ switch (get_request_var('action')) {
 
 function actions_filters() {
 	global $sched_actions, $config;
-
-	flowview_connect();
 
 	/* ================= input validation ================= */
 	get_filter_request_var('drp_action');
@@ -176,10 +176,7 @@ function actions_filters() {
 function show_filters() {
 	global $config, $sched_actions, $graph_timespans, $item_rows;
 
-	flowview_connect();
-
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
-
 
     /* ================= input validation and session storage ================= */
     $filters = array(
