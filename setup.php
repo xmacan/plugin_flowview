@@ -417,6 +417,16 @@ function flowview_config_settings() {
 			),
 			'default' => 0
 		),
+		'flowview_engine' => array(
+			'friendly_name' => __('Storage Engine for Raw Tables', 'flowview'),
+			'description' => __('The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick.', 'flowview'),
+			'method' => 'drop_array',
+			'array' => array(
+				'Aria'   => __('Aria (Fast, Crash Safe)', 'flowview'),
+				'InnoDB' => __('InnoDB (Slow, High Concurrency)', 'flowview'),
+			),
+			'default' => 'Aria'
+		),
 		'flowview_parallel_header' => array(
 			'friendly_name' => __('Parallel Queries', 'flowview'),
 			'method' => 'spacer',

@@ -322,10 +322,17 @@ function flowview_upgrade($current, $old) {
 			WHERE plugin='flowview'
 			AND file LIKE '%devices%'");
 
-		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, TABLE_COLLATION
+		$raw_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, TABLE_COLLATION, ENGINE
 			FROM information_schema.TABLES
 			WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"
 			ORDER BY TABLE_NAME DESC');
+
+		$raw_engine = read_config_option('flowview_engine');
+
+		if ($raw_engine == '') {
+			$raw_engine = 'Aria';
+			set_config_option('flowview_engine', $raw_engine);
+		}
 
 		foreach($raw_tables as $t) {
 			$alter = '';
@@ -364,6 +371,10 @@ function flowview_upgrade($current, $old) {
 
 			if (!flowview_db_index_exists($t['TABLE_NAME'], 'ex_addr')) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX ex_addr (ex_addr)';
+			}
+
+			if ($r['ENGINE'] != $raw_engine) {
+				$alter .= " ENGINE=$raw_engine";
 			}
 
 			if ($alter != '') {

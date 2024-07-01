@@ -155,6 +155,26 @@ if (flowview_db_table_exists('parallel_database_query')) {
 	flowview_db_execute('DELETE FROM parallel_database_query WHERE time_to_live < UNIX_TIMESTAMP()');
 }
 
+$raw_engine = read_config_option('flowview_engine');
+if ($raw_engine == '') {
+	$raw_engine = 'Aria';
+	set_config_option('flowview_engine', $raw_engine);
+}
+
+$last_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, ENGINE
+	FROM information_schema.TABLES
+	WHERE TABLE_NAME LIKE "plugin_flowview_raw_%"
+	ORDER BY TABLE_NAME DESC
+	LIMIT 1, 3');
+
+if (cacti_sizeof($last_tables)) {
+	foreach($last_tables as $table) {
+		if ($table['ENGINE'] != $raw_engine) {
+			flowview_db_execute("ALTER TABLE {$table['TABLE_NAME']} ENGINE=$raw_engine");
+		}
+	}
+}
+
 set_config_option('flowview_last_sequence', $sequence);
 set_config_option('flowview_last_table', $nlast_table);
 
