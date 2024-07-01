@@ -151,6 +151,10 @@ foreach($tables as $table) {
 	}
 }
 
+if (flowview_db_table_exists('parallel_database_query')) {
+	flowview_db_execute('DELETE FROM parallel_database_query WHERE time_to_live < UNIX_TIMESTAMP()');
+}
+
 set_config_option('flowview_last_sequence', $sequence);
 set_config_option('flowview_last_table', $nlast_table);
 

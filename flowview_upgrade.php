@@ -284,6 +284,39 @@ function flowview_upgrade($current, $old) {
 				ADD PRIMARY KEY (device_id, ex_addr, template_id)');
 		}
 
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`md5sum` varchar(32) NOT NULL DEFAULT '',
+			`status` varchar(10) NOT NULL DEFAULT 'pending',
+			`user_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`total_shards` int(10) unsigned NOT NULL DEFAULT 0,
+			`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
+			`map_table` varchar(40) NOT NULL DEFAULT '',
+			`map_query` blob NOT NULL DEFAULT '',
+			`reduce_query` blob NOT NULL DEFAULT '',
+			`results` longblob NOT NULL DEFAULT '',
+			`created` timestamp NOT NULL DEFAULT current_timestamp(),
+			`time_to_live` int(10) unsigned NOT NULL DEFAULT 300,
+			PRIMARY KEY (`id`),
+			KEY `user_id` (`user_id`),
+			KEY `md5sum` (`md5sum`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds Parallel Query Requests'");
+
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shards` (
+			`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
+			`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`status` varchar(10) NOT NULL DEFAULT 'pending',
+			`map_query` blob NOT NULL DEFAULT '',
+			`map_params` blob NOT NULL DEFAULT '',
+			`created` timestamp NULL DEFAULT current_timestamp(),
+			`completed` timestamp NULL DEFAULT NULL,
+			PRIMARY KEY (`query_id`,`shard_id`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds Parallel Query Shard Requests'");
+
 		db_execute("UPDATE plugin_realms
 			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
 			WHERE plugin='flowview'

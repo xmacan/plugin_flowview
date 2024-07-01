@@ -62,6 +62,7 @@
 * feature#145: Add the V9/IPFIX Template IDs to the flowview raw tables
 * feature#146: Use prepared statements for Flowview Filters to protect against SQL injections
 * feature#149: Expose the ex_addr as a filter option and resolve it through DNS
+* feature#150: Introduce Parallel Query - Map Reduce to FlowView
 
 --- 3.3 ---
 

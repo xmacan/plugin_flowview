@@ -66,10 +66,10 @@ $print_report_array = array(
 );
 
 $flow_select_array = array(
-	1 => __('Any Part in Range', 'flowview'),
-	2 => __('End Time in Range', 'flowview'),
-	3 => __('Start Time in Range', 'flowview'),
-	4 => __('Entirely in Range', 'flowview')
+	1 => __('Any Part in Range (slow)', 'flowview'),
+	2 => __('End Time in Range (fast)', 'flowview'),
+	3 => __('Start Time in Range (fast)', 'flowview'),
+	4 => __('Entirely in Range (slow)', 'flowview')
 );
 
 $cutoff_lines = array(
@@ -645,7 +645,7 @@ $filter_edit = array(
 		'description' => __('Constrain the Filter Data by these time filter rules.', 'flowview'),
 		'method' => 'drop_array',
 		'value' => '|arg1:includeif|',
-		'default' => '1',
+		'default' => '2',
 		'array' => $flow_select_array
 	),
 	'resolve' => array(

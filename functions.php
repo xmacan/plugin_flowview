@@ -2681,28 +2681,91 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql        = '';
 		$all_params = array();
 		$results    = array();
+		$threads    = read_config_option('flowview_parallel_threads');
+		$requests   = array();
 
 		if (cacti_sizeof($tables)) {
-			foreach($tables as $t) {
-				if (isset($sql_inner1)) {
-					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner1 FROM $t $sql_where $sql_inner_groupby1";
-					$all_params = array_merge($all_params, $sql_params);
+			if (empty($threads) || $threads == 1) {
+				foreach($tables as $t) {
+					if (isset($sql_inner1)) {
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner1 FROM $t $sql_where $sql_inner_groupby1";
+						$all_params = array_merge($all_params, $sql_params);
 
-					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner2 FROM $t $sql_where $sql_inner_groupby2";
-					$all_params = array_merge($all_params, $sql_params);
-				} else {
-					$sql .= ($sql != '' ? ' UNION ':'') . "$sql_inner FROM $t $sql_where $sql_inner_groupby";
-					$all_params = array_merge($all_params, $sql_params);
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner2 FROM $t $sql_where $sql_inner_groupby2";
+						$all_params = array_merge($all_params, $sql_params);
+					} else {
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner FROM $t $sql_where $sql_inner_groupby";
+						$all_params = array_merge($all_params, $sql_params);
+					}
 				}
-			}
 
-			$sql = "$sql_query FROM ($sql) AS rs $sql_groupby $sql_having $sql_order $sql_limit";
+				$sql = "$sql_query FROM ($sql) AS rs $sql_groupby $sql_having $sql_order $sql_limit";
 
-			//cacti_log(str_replace("\n", " ", str_replace("\t", '', $sql)));
-			if ($data['statistics'] == 99) {
-				$results = flowview_db_fetch_row_prepared($sql, $all_params);
+				//cacti_log(str_replace("\n", " ", str_replace("\t", '', $sql)));
+				if ($data['statistics'] == 99) {
+					$results = flowview_db_fetch_row_prepared($sql, $all_params);
+				} else {
+					$results = flowview_db_fetch_assoc_prepared($sql, $all_params);
+				}
 			} else {
-				$results = flowview_db_fetch_assoc_prepared($sql, $all_params);
+				if (isset($sql_inner1)) {
+					$stru_inner1 = array(
+						'sql_query'   => $sql_inner1,
+						'sql_where'   => $sql_where,
+						'sql_groupby' => $sql_inner_groupby1,
+						'sql_having'  => '',
+						'sql_order'   => '',
+						'sql_limit'   => '',
+						'sql_params'  => $sql_params
+					);
+
+					$stru_inner2 = array(
+						'sql_query'   => $sql_inner2,
+						'sql_where'   => $sql_where,
+						'sql_groupby' => $sql_inner_groupby2,
+						'sql_having'  => '',
+						'sql_order'   => '',
+						'sql_limit'   => '',
+						'sql_params'  => $sql_params
+					);
+
+					$stru_outer = array(
+						'sql_query'   => $sql_query,
+						'sql_where'   => '',
+						'sql_groupby' => $sql_groupby,
+						'sql_having'  => $sql_having,
+						'sql_order'   => $sql_order,
+						'sql_limit'   => $sql_limit,
+						'sql_params'  => array()
+					);
+
+					$requests[] = parallel_database_query_request($tables, $stru_inner1, $stru_outer);
+					$requests[] = parallel_database_query_request($tables, $stru_inner2, $stru_outer);
+				} else {
+					$stru_inner = array(
+						'sql_query'   => $sql_inner,
+						'sql_where'   => $sql_where,
+						'sql_having'  => '',
+						'sql_order'   => '',
+						'sql_limit'   => '',
+						'sql_groupby' => $sql_inner_groupby,
+						'sql_params'  => $sql_params
+					);
+
+					$stru_outer = array(
+						'sql_query'   => $sql_query,
+						'sql_where'   => '',
+						'sql_having'  => $sql_having,
+						'sql_groupby' => $sql_groupby,
+						'sql_order'   => $sql_order,
+						'sql_limit'   => $sql_limit,
+						'sql_params'  => array()
+					);
+
+					$requests[] = parallel_database_query_request($tables, $stru_inner, $stru_outer);
+				}
+
+				$results = parallel_database_query_run($requests);
 			}
 		}
 
@@ -3018,6 +3081,190 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	return false;
+}
+
+function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
+	$save = array();
+
+	if (isset($_SESSION['sess_user_id'])) {
+		$user_id = $_SESSION['sess_user_id'];
+	} else {
+		$user_id = 0;
+	}
+
+	$reduce_query = json_encode($stru_outer);
+	$map_query    = json_encode($stru_inner);
+
+	$md5 = md5($map_query);
+
+	$request_id = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($md5));
+	$time_to_live = read_config_option('flowview_parallel_time_to_live');
+
+	if (empty($time_to_live)) {
+		set_config_option('flowview_parallel_time_to_live', 21600);
+		$time_to_live = 21600;
+	}
+
+	if (empty($request_id)) {
+		cacti_log('New Query Being Logged');
+		$save['id']           = 0;
+		$save['md5sum']       = $md5;
+		$save['user_id']      = $user_id;
+		$save['total_shards'] = cacti_sizeof($tables);
+		$save['map_query']    = $map_query;
+		$save['reduce_query'] = $reduce_query;
+		$save['created']      = date('Y-m-d H:i:s');
+		$save['time_to_live'] = time() + $time_to_live;
+
+		$request_id = sql_save($save, 'parallel_database_query');
+
+		$table_name = parellel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $tables[0]);
+
+		db_execute_prepared('UPDATE parallel_database_query SET map_table = ? WHERE id = ?',
+			array($table_name, $request_id));
+
+		foreach($tables as $index => $table) {
+			$map_query  = $stru_inner['sql_query'];
+			$map_query .= " FROM $table";
+			$map_query .= (isset($stru_inner['sql_where'])   ? ' ' . $stru_inner['sql_where']:'');
+			$map_query .= (isset($stru_inner['sql_groupby']) ? ' ' . $stru_inner['sql_groupby']:'');
+			$map_query .= (isset($stru_inner['sql_having'])  ? ' ' . $stru_inner['sql_having']:'');
+			$map_query .= (isset($stru_inner['sql_order'])   ? ' ' . $stru_inner['sql_order']:'');
+			$map_query .= (isset($stru_inner['sql_limit'])   ? ' ' . $stru_inner['sql_limit']:'');
+
+			db_execute_prepared('INSERT INTO parallel_database_query_shards (query_id, shard_id, map_query, map_params)
+				VALUES (?, ?, ?, ?)',
+				array($request_id, $index, $map_query, json_encode($stru_inner['sql_params'])));
+		}
+	}
+
+	return $request_id;
+}
+
+function parallel_database_query_run($requests) {
+	global $config, $debug;
+
+	$php_binary = read_config_option('path_php_binary');
+	$redirect   = '';
+
+	foreach($requests as $query_id) {
+		$pending = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
+			FROM parallel_database_query
+			WHERE id = ?
+			AND status = ?',
+			array($query_id, 'pending'));
+
+		if ($pending > 0) {
+			db_debug('Launching FlowView Database Query Process ' . $query_id);
+			cacti_log('NOTE: Launching FlowView Database Query Process ' . $query_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
+			exec_background($php_binary, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id" . ($debug ? ' --debug':''), $redirect);
+		} else {
+			db_debug('Not Luanching FlowView Database Query Process ' . $query_id . ' as it has already completed or is running.');
+		}
+	}
+
+	$max_time = read_config_option('flowview_parallel_runlimit');
+
+	$start = time();
+	$total_time = 0;
+
+	while (true && $total_time < $max_time) {
+		$running = db_fetch_cell('SELECT COUNT(*)
+			FROM parallel_database_query
+			WHERE ID IN(' . implode(', ', $requests) . ')
+			AND status != "complete"');
+
+		if ($running == 0) {
+			break;
+		}
+
+		usleep(50000);
+
+		$total_time = time() - $start;
+	}
+
+	if ($total_time >= $max_time) {
+		raise_message_javascript('parallel_query_timeout', __('The Parallel Query Timed Out.  Please contact your administrator', 'flowview'), MESSAGE_LEVEL_ERROR);
+		exit;
+	}
+
+	if (cacti_sizeof($requests) == 1) {
+		return json_decode(flowview_db_fetch_cell_prepared('SELECT results
+			FROM parallel_database_query
+			WHERE id = ?', array($query_id)), true);
+	} else {
+		$reduce_query = flowview_db_fetch_cell_prepared('SELECT reduce_query
+			FROM parallel_database_query
+			WHERE id = ?',
+			array($requests[0]));
+
+		$tables = array_rekey(
+			flowview_db_fetch_assoc('SELECT map_table
+				FROM parallel_database_query
+				WHERE id IN(' . implode(', ', $requests) . ')'),
+			'map_table', 'map_table'
+		);
+
+		if ($reduce_query != '' && cacti_sizeof($tables)) {
+			$query = json_decode($reduce_query, true);
+			$sql   = $query['reduce_query'] . ' FROM (';
+
+			$i = 0;
+			foreach($tables as $table) {
+				$sql .= ($i > 0 ? ' UNION ALL ':'') . "SELECT * FROM $table";
+				$i++;
+			}
+
+			$sql .= ') AS rs';
+
+			return flowview_db_fetch_assoc($sql);
+		} else {
+			return array();
+		}
+	}
+}
+
+function parellel_database_query_create_reduce_table($request_id, $sql_query, $table) {
+	$table_name = "parallel_database_query_map_$request_id";
+
+	$sql_create = "CREATE TABLE IF NOT EXISTS $table_name (";
+
+	$columns = array_rekey(
+		flowview_db_fetch_assoc_prepared('SELECT *
+			FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE table_name = ?',
+			array($table)),
+		'COLUMN_NAME', array('DATA_TYPE', 'COLUMN_TYPE', 'IS_NULLABLE', 'COLUMN_DEFAULT')
+	);
+
+	$i = 0;
+	foreach($columns as $column => $attrib) {
+		if (stripos($sql_query, $column) !== false) {
+			$sql_create .= ($i > 0 != '' ? ', ':'') .
+				'`' . $column . '` ' .
+				$attrib['COLUMN_TYPE'] .
+				($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
+				($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
+
+			$i++;
+		}
+	}
+
+	$sql_create .= ') ENGINE=InnoDB COMMENT="Holds Parallel Query Results"';
+
+	//cacti_log($sql_create);
+
+	flowview_db_execute($sql_create);
+
+	return $table_name;
+}
+
+function db_debug($string) {
+	global $debug;
+
+	if ($debug) {
+		cacti_log($string, false, 'FLOWVIEW');
+	}
 }
 
 function display_domain($domain) {

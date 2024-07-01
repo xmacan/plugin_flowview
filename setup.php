@@ -309,7 +309,7 @@ function flowview_global_settings_update() {
 
 	$hup_process   = false;
 
-	foreach($flowview_sighup_setttings as $setting) {
+	foreach($flowview_sighup_settings as $setting) {
 		$$setting = read_config_option($setting, true);
 
 		if ($$setting != $_SESSION['sess_flowview_settings'][$setting]) {
@@ -416,7 +416,67 @@ function flowview_config_settings() {
 				1 => __('Hourly', 'flowview')
 			),
 			'default' => 0
-		)
+		),
+		'flowview_parallel_header' => array(
+			'friendly_name' => __('Parallel Queries', 'flowview'),
+			'method' => 'spacer',
+			'collapsible' => 'true'
+		),
+		'flowview_parallel_threads' => array(
+			'friendly_name' => __('Max Concurrent Threads', 'flowview'),
+			'description' => __('The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running.', 'flowview'),
+			'method' => 'drop_array',
+			'array' => array(
+				1  => __('Disabled', 'flowview'),
+				2  => __('%d Threads', 2, 'flowview'),
+				3  => __('%d Threads', 3, 'flowview'),
+				4  => __('%d Threads', 4, 'flowview'),
+				5  => __('%d Threads', 5, 'flowview'),
+				6  => __('%d Threads', 6, 'flowview'),
+				7  => __('%d Threads', 7, 'flowview'),
+				8  => __('%d Threads', 8, 'flowview'),
+				9  => __('%d Threads', 9, 'flowview'),
+				10 => __('%d Threads', 10, 'flowview'),
+				11 => __('%d Threads', 11, 'flowview'),
+				12 => __('%d Threads', 12, 'flowview'),
+				13 => __('%d Threads', 13, 'flowview'),
+				14 => __('%d Threads', 14, 'flowview'),
+				15 => __('%d Threads', 15, 'flowview'),
+				16 => __('%d Threads', 16, 'flowview'),
+				17 => __('%d Threads', 17, 'flowview'),
+				18 => __('%d Threads', 18, 'flowview'),
+				19 => __('%d Threads', 19, 'flowview'),
+				20 => __('%d Threads', 20, 'flowview'),
+			),
+			'default' => 4
+		),
+		'flowview_parallel_runlimit' => array(
+			'friendly_name' => __('Maximum Run Time', 'flowview'),
+			'description' => __('If the Parallel Query does not finish in this time, exit.', 'flowview'),
+			'method' => 'drop_array',
+			'array' => array(
+				60   => __('%d Minute', 1, 'flowview'),
+				120  => __('%d Minutes', 2, 'flowview'),
+				180  => __('%d Minutes', 3, 'flowview'),
+				240  => __('%d Minutes', 4, 'flowview'),
+				300  => __('%d Minutes', 5, 'flowview'),
+				600  => __('%d Minutes', 10, 'flowview'),
+				900 => __('%d Minutes', 15, 'flowview'),
+			),
+			'default' => 300
+		),
+		'flowview_parallel_time_to_live' => array(
+			'friendly_name' => __('Cached Data Time to Live', 'flowview'),
+			'description' => __('How long should FlowView hold onto Cached Query results before purging them?', 'flowview'),
+			'method' => 'drop_array',
+			'array' => array(
+				21600   => __('%d Hours', 6, 'flowview'),
+				43200   => __('%d Hours', 12, 'flowview'),
+				86400   => __('%d Day', 1, 'flowview'),
+				172800  => __('%d Days', 2, 'flowview'),
+			),
+			'default' => 21600
+		),
 	);
 
 	$tabs['flowview'] = __('Flowview', 'flowview');
@@ -682,6 +742,39 @@ function flowview_setup_table() {
 		ENGINE=InnoDB,
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - Database of well known Ports'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
+		`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		`md5sum` varchar(32) NOT NULL DEFAULT '',
+		`status` varchar(10) NOT NULL DEFAULT 'pending',
+		`user_id` int(10) unsigned NOT NULL DEFAULT 0,
+		`total_shards` int(10) unsigned NOT NULL DEFAULT 0,
+		`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
+		`map_table` varchar(40) NOT NULL DEFAULT '',
+		`map_query` blob NOT NULL DEFAULT '',
+		`reduce_query` blob NOT NULL DEFAULT '',
+		`results` longblob NOT NULL DEFAULT '',
+		`created` timestamp NOT NULL DEFAULT current_timestamp(),
+		`time_to_live` int(10) unsigned NOT NULL DEFAULT 300,
+		PRIMARY KEY (`id`),
+		KEY `user_id` (`user_id`),
+		KEY `md5sum` (`md5sum`))
+		ENGINE=InnoDB
+		ROW_FORMAT=DYNAMIC
+		COMMENT='Holds Parallel Query Requests'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shards` (
+		`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
+		`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
+		`status` varchar(10) NOT NULL DEFAULT 'pending',
+		`map_query` blob NOT NULL DEFAULT '',
+		`map_params` blob NOT NULL DEFAULT '',
+		`created` timestamp NULL DEFAULT current_timestamp(),
+		`completed` timestamp NULL DEFAULT NULL,
+		PRIMARY KEY (`query_id`,`shard_id`))
+		ENGINE=InnoDB
+		ROW_FORMAT=DYNAMIC
+		COMMENT='Holds Parallel Query Shard Requests'");
 
 	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
 
