@@ -3106,7 +3106,6 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	}
 
 	if (empty($request_id)) {
-		cacti_log('New Query Being Logged');
 		$save['id']           = 0;
 		$save['md5sum']       = $md5;
 		$save['user_id']      = $user_id;

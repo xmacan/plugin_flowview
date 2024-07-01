@@ -108,12 +108,14 @@ if (function_exists('pcntl_signal')) {
 $start = microtime(true);
 $start_time = time();
 
-cacti_log(sprintf('Variables Processed for Query ID:%s and Shard ID:%s', $query_id, $shard_id));
+db_debug(sprintf('Variables Processed for Query ID:%s and Shard ID:%s', $query_id, $shard_id));
+
 /* let's give this script lot of time to run for ever */
 ini_set('max_execution_time', '0');
 
 if ($shard_id === false) {
-	cacti_log('About to start parent');
+	db_debug('About to start parent');
+
 	/* we will warn if the process is taking extra long */
 	if (!register_process_start('flowview', "db_query_{$query_id}", 0, 300)) {
 		exit(0);
@@ -127,7 +129,9 @@ if ($shard_id === false) {
 	 */
 	$threads = read_config_option('flowview_parallel_threads');
 	$query   = flowview_db_fetch_row_prepared('SELECT * FROM parallel_database_query WHERE id = ?', array($query_id));
+	$shards  = flowview_db_fetch_cell_prepared('SELECT COUNT(*) FROM parallel_database_query_shards WHERE query_id = ?', array($query_id));
 	$running = 0;
+	$start   = microtime(true);
 
 	if (cacti_sizeof($query)) {
 		$finished = $query['finished_shards'];
@@ -143,7 +147,7 @@ if ($shard_id === false) {
 
 			flowview_launch_workers($query_id, $threads, $running);
 
-			usleep(50000);
+			usleep(5000);
 
 			$notfinished = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
 				FROM parallel_database_query_shards
@@ -182,6 +186,10 @@ if ($shard_id === false) {
 		unregister_process('flowview', "db_query_{$query_id}", 0);
 
 		db_debug("Query $query_id finished");
+
+		$end = microtime(true);
+
+		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d', $end - $start, $threads, $shards), false, 'FLOWVIEW');
 	}
 } else {
 	/* we will warn if the process is taking extra long */
@@ -189,7 +197,7 @@ if ($shard_id === false) {
 		exit(0);
 	}
 
-	cacti_log(sprintf('Starting Shard Query ID:%s and Shard ID:%s', $query_id, $shard_id));
+	db_debug(sprintf('Starting Shard Query ID:%s and Shard ID:%s', $query_id, $shard_id));
 
 	$query = flowview_db_fetch_row_prepared('SELECT *
 		FROM parallel_database_query
@@ -236,7 +244,7 @@ if ($shard_id === false) {
 					$sql[] = '(' . $sql_string . ')';
 				}
 
-				cacti_log($sql_prefix . implode(', ', $sql));
+				//cacti_log($sql_prefix . implode(', ', $sql));
 
 				flowview_db_execute($sql_prefix . implode(', ', $sql));
 			}
@@ -328,7 +336,7 @@ function flowview_launch_workers($query_id, $threads, $running) {
 		}
 	}
 
-	usleep(50000);
+	usleep(5000);
 }
 
 /**
