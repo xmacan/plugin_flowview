@@ -2701,12 +2701,19 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 				$sql = "$sql_query FROM ($sql) AS rs $sql_groupby $sql_having $sql_order $sql_limit";
 
-				//cacti_log(str_replace("\n", " ", str_replace("\t", '', $sql)));
+				$start   = microtime(true);
+				$threads = 1;
+				$shards  = cacti_sizeof($tables);
+
 				if ($data['statistics'] == 99) {
 					$results = flowview_db_fetch_row_prepared($sql, $all_params);
 				} else {
 					$results = flowview_db_fetch_assoc_prepared($sql, $all_params);
 				}
+
+				$end = microtime(true);
+
+				cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d', $end - $start, $threads, $shards), false, 'FLOWVIEW');
 			} else {
 				if (isset($sql_inner1)) {
 					$stru_inner1 = array(
