@@ -487,6 +487,25 @@ function flowview_config_settings() {
 			),
 			'default' => 21600
 		),
+		'flowview_maxscale_header' => array(
+			'friendly_name' => __('MaxScale Sharding', 'flowview'),
+			'method' => 'spacer',
+			'collapsible' => 'true'
+		),
+		'flowview_use_maxscale' => array(
+			'friendly_name' => __('Leverage MaxScale to Distribute Query Shards', 'syslog'),
+			'description' => __('If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers.', 'flowview'),
+			'method' => 'checkbox',
+			'default' => 'on'
+		),
+		'flowview_maxscale_port' => array(
+			'friendly_name' => __('MaxScale Read-Only Port', 'monitor'),
+			'method' => 'textbox',
+			'default' => '3307',
+			'description' => __('This should be the port of the Read-Only-Service (readconnroute) service and router.', 'monitor'),
+			'max_length' => 30,
+			'size' => 30
+		),
 	);
 
 	$tabs['flowview'] = __('Flowview', 'flowview');
@@ -538,8 +557,8 @@ function flowview_determine_config() {
 	}
 }
 
-function flowview_connect() {
-	global $config, $flowview_cnn, $flowviewdb_default, $local_db_cnn_id, $remote_db_cnn_id;
+function flowview_connect($maxscale = false) {
+	global $config, $flowview_cnn, $flowviewdb_default, $local_db_cnn_id, $remote_db_cnn_id, $database_hostname;
 
 	flowview_determine_config();
 
@@ -550,21 +569,48 @@ function flowview_connect() {
 	include_once(dirname(__FILE__) . '/database.php');
 
 	/**
+	 * If connecting to MaxScale, set the port properly
+	 */
+	if ($maxscale) {
+		$maxscale_port = read_config_option('flowview_maxscale_port');
+
+		if ($maxscale_port > 0) {
+			$flowviewdb_port = $maxscale_port;
+		}
+	}
+
+	/**
 	 * Boolean that denotes connecting to a database other
 	 * than the Cacti database.
 	 */
 	$connect_remote = false;
 
 	/* Connect to the Flowview Database */
-	if ($config['poller_id'] == 1) {
-		if ($flowview_use_cacti_db === true) {
-			$flowview_cnn = $local_db_cnn_id;
+	if (!$maxscale) {
+		if ($config['poller_id'] == 1) {
+			if ($flowview_use_cacti_db === true) {
+				$flowview_cnn = $local_db_cnn_id;
+			} else {
+				$connect_remote = true;
+			}
+		} elseif ($flowview_use_cacti_db === true) {
+			$flowview_cnn = $remote_db_cnn_id;
 		} else {
 			$connect_remote = true;
 		}
-	} elseif ($flowview_use_cacti_db === true) {
-		$flowview_cnn = $remote_db_cnn_id;
 	} else {
+		if ($flowview_use_cacti_db === true) {
+			/**
+			 * We assume, maybe falsely that MaxScale is watching
+			 * on the hostname as opposed to 'localhost'.
+			 * so we make this change here.
+			 *
+			 */
+			if ($database_hostname == 'localhost' || $database_hostname == '127.0.0.1') {
+				$flowviewdb_hostname = gethostbyname(gethostname());
+			}
+		}
+
 		$connect_remote = true;
 	}
 
@@ -593,7 +639,7 @@ function flowview_connect() {
 		    $flowviewdb_ssl_ca = '';
 		}
 
-		$flowview_cnn = flowview_db_connect_real(
+		$cnn_id = flowview_db_connect_real(
 			$flowviewdb_hostname,
 			$flowviewdb_username,
 			$flowviewdb_password,
@@ -607,13 +653,19 @@ function flowview_connect() {
 			$flowviewdb_ssl_ca
 		);
 
-		if ($flowview_cnn == false) {
+		if ($cnn_id == false) {
 			cacti_log("FATAL Can not connect to the flowview database", false, 'FLOWVIEW');
 			exit;
 		}
+
+		if (!$maxscale) {
+			$flowview_cnn = $cnn_id;
+		}
+	} else {
+		$cnn_id = $flowview_cnn;
 	}
 
-	return $flowview_cnn !== false;
+	return $cnn_id !== false;
 }
 
 function flowview_setup_table() {

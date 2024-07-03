@@ -197,19 +197,25 @@ if ($shard_id === false) {
 		exit(0);
 	}
 
+	if (read_config_option('flowview_use_maxscale') == 'on') {
+		$max_cnn = flowview_connect(true);
+	} else {
+		$max_cnn = false;
+	}
+
 	db_debug(sprintf('Starting Shard Query ID:%s and Shard ID:%s', $query_id, $shard_id));
 
 	$query = flowview_db_fetch_row_prepared('SELECT *
 		FROM parallel_database_query
 		WHERE id = ?',
-		array($query_id));
+		array($query_id), false, $max_cnn);
 
 	if (cacti_sizeof($query)) {
 		$shard = flowview_db_fetch_row_prepared('SELECT *
 			FROM parallel_database_query_shards
 			WHERE query_id = ?
 			AND shard_id = ?',
-			array($query_id, $shard_id));
+			array($query_id, $shard_id), false, $max_cnn);
 
 		if (cacti_sizeof($shard)) {
 			$table = $query['map_table'];
@@ -220,8 +226,7 @@ if ($shard_id === false) {
 				AND shard_id = ?',
 				array('running', $query_id, $shard_id));
 
-
-			$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']));
+			$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']), false, $max_cnn);
 
 			if (cacti_sizeof($results)) {
 				$sql     = array();

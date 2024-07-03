@@ -63,6 +63,7 @@
 * feature#146: Use prepared statements for Flowview Filters to protect against SQL injections
 * feature#149: Expose the ex_addr as a filter option and resolve it through DNS
 * feature#150: Introduce Parallel Query - Map Reduce to FlowView
+* feature#154: Support Parallel Queries through a MariaDB or MySQL proxy such as MaxScale
 * feature#155: Allow Choosing your Raw Storage Engine Format
 
 --- 3.3 ---

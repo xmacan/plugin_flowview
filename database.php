@@ -27,15 +27,15 @@
  * @param  $host - the hostname of the database server, 'localhost' if the database server is running
  *    on this machine
  *
- * @param  $user - the username to connect to the database server as
- * @param  $pass - the password to connect to the database server with
- * @param  $db_name - the name of the database to connect to
- * @param  $db_type - the type of database server to connect to, only 'mysql' is currently supported
- * @param  $retries - the number a time the server should attempt to connect before failing
- * @param  $db_ssl - true or false, is the database using ssl
- * @param  $db_ssl_key - the path to the ssl key file
- * @param  $db_ssl_cert - the path to the ssl cert file
- * @param  $db_ssl_ca - the path to the ssl ca file
+ * @param  string        Username to connect to the database server as
+ * @param  string        Password to connect to the database server with
+ * @param  string        Name of the database to connect to
+ * @param  string        Type of database server to connect to, only 'mysql' is currently supported
+ * @param  int           Number a time the server should attempt to connect before failing
+ * @param  bool          Either true or false, is the database using ssl
+ * @param  string        Path to the ssl key file
+ * @param  string        Path to the ssl cert file
+ * @param  string        Path to the ssl ca file
  *
  * @return (object) connection_id for success, (bool) '0' for error
  */
@@ -51,34 +51,37 @@ function flowview_db_connect_real($host, $user, $pass, $db_name, $db_type, $port
  *
  * @return the result of the close command
  */
-function flowview_db_close($flowview_cnn = false) {
+function flowview_db_close($flowview_cnn) {
 	return db_close($flowview_cnn);
 }
 
 /**
  * flowview_db_execute - run an sql query and do not return any output
  *
- * @param  $flowview_cnn - the connection object to connect to
- * @param  $sql - the sql query to execute
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return '1' for success, '0' for error
  */
-function flowview_db_execute($sql, $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_execute($sql, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_execute($sql, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_execute_prepared - run an sql query and do not return any output
  *
- * @param  $sql - the sql query to execute
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return '1' for success, '0' for error
  */
-function flowview_db_execute_prepared($sql, $parms = array(), $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_execute_prepared($sql, $parms = array(), $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_execute_prepared($sql, $parms, $log, $flowview_cnn);
 }
 
@@ -86,14 +89,16 @@ function flowview_db_execute_prepared($sql, $parms = array(), $log = TRUE) {
  * flowview_db_fetch_cell - run a 'select' sql query and return the first column of the
  *   first row found
  *
- * @param  $sql - the sql query to execute
- * @param  $log - whether to log error messages, defaults to true
- * @param  $col_name - use this column name instead of the first one
+ * @param  string        The sql query to execute
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  string        Use this column name instead of the first one
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return (bool) the output of the sql query as a single variable
  */
-function flowview_db_fetch_cell($sql, $col_name = '', $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_cell($sql, $col_name = '', $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_cell($sql, $col_name, $log, $flowview_cnn);
 }
 
@@ -101,123 +106,139 @@ function flowview_db_fetch_cell($sql, $col_name = '', $log = TRUE) {
  * flowview_db_fetch_cell_prepared - run a 'select' sql query and return the first column of the
  *   first row found
  *
- * @param  $sql - the sql query to execute
- * @param  $params - an array of parameters
- * @param  $col_name - use this column name instead of the first one
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  array         An array of parameters
+ * @param  string        Use this column name instead of the first one
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return (bool) the output of the sql query as a single variable
  */
-function flowview_db_fetch_cell_prepared($sql, $params = array(), $col_name = '', $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_cell_prepared($sql, $params = array(), $col_name = '', $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_cell_prepared($sql, $params, $col_name, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_fetch_row - run a 'select' sql query and return the first row found
  *
- * @param  $sql - the sql query to execute
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the first row of the result as a hash
  */
-function flowview_db_fetch_row($sql, $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_row($sql, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_row($sql, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_fetch_row_prepared - run a 'select' sql query and return the first row found
  *
- * @param  $sql - the sql query to execute
- * @param  $params - an array of parameters
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  array         An array of parameters
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the first row of the result as a hash
  */
-function flowview_db_fetch_row_prepared($sql, $params = array(), $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_row_prepared($sql, $params = array(), $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_row_prepared($sql, $params, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_fetch_assoc - run a 'select' sql query and return all rows found
  *
- * @param  $sql - the sql query to execute
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the entire result set as a multi-dimensional hash
  */
-function flowview_db_fetch_assoc($sql, $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_assoc($sql, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_assoc($sql, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_fetch_assoc_prepared - run a 'select' sql query and return all rows found
  *
- * @param  $sql - the sql query to execute
- * @param  $params - an array of parameters
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The sql query to execute
+ * @param  array         An array of parameters
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the entire result set as a multi-dimensional hash
  */
-function flowview_db_fetch_assoc_prepared($sql, $params = array(), $log = TRUE) {
-	global $flowview_cnn;
+function flowview_db_fetch_assoc_prepared($sql, $params = array(), $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_fetch_assoc_prepared($sql, $params, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_fetch_insert_id - get the last insert_id or auto incriment
  *
- * @param $flowview_cnn - the connection object to connect to
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the id of the last auto incriment row that was created
  */
-function flowview_db_fetch_insert_id() {
-	global $flowview_cnn;
+function flowview_db_fetch_insert_id($cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return  db_fetch_insert_id($flowview_cnn);
 }
 
 /**
  * flowview_db_replace - replaces the data contained in a particular row
  *
- * @param  $table_name - the name of the table to make the replacement in
- * @param  $array_items - an array containing each column -> value mapping in the row
- * @param  $keyCols - the name of the column containing the primary key
- * @param  $autoQuote - whether to use intelligent quoting or not
+ * @param  string        The name of the table to make the replacement in
+ * @param  array         An array containing each column -> value mapping in the row
+ * @param  string|array  The name of the column containing the primary key
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the auto incriment id column (if applicable)
  */
-function flowview_db_replace($table_name, $array_items, $keyCols) {
-	global $flowview_cnn;
+function flowview_db_replace($table_name, $array_items, $keyCols, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_replace($table_name, $array_items, $keyCols, $flowview_cnn);
 }
 
 /**
  * flowview_sql_save - saves data to an sql table
  *
- * @param  $array_items - an array containing each column -> value mapping in the row
- * @param  $table_name - the name of the table to make the replacement in
- * @param  $key_cols - the primary key(s)
+ * @param  array         An array containing each column -> value mapping in the row
+ * @param  string        The name of the table to make the replacement in
+ * @param  string|array  The primary key(s)
+ * @param  bool          Notify if the table is auto_increment or not
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return the auto incriment id column (if applicable)
  */
-function flowview_sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true) {
-	global $flowview_cnn;
+function flowview_sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true, $cnn_id = true) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return sql_save($array_items, $table_name, $key_cols, $autoinc, $flowview_cnn);
 }
 
 /**
  * flowview_db_table_exists - checks whether a table exists
  *
- * @param  $table - the name of the table
- * @param  $log - whether to log error messages, defaults to true
+ * @param  string        The name of the table
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
  * @return (bool) the output of the sql query as a single variable
  */
-function flowview_db_table_exists($table, $log = true) {
-	global $flowview_cnn;
+function flowview_db_table_exists($table, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
 
 	preg_match("/([`]{0,1}(?<database>[\w_]+)[`]{0,1}\.){0,1}[`]{0,1}(?<table>[\w_]+)[`]{0,1}/", $table, $matches);
 	if ($matches !== false && array_key_exists('table', $matches)) {
@@ -228,141 +249,157 @@ function flowview_db_table_exists($table, $log = true) {
 	return false;
 }
 
-function flowview_db_table_create($table, $data) {
-        global $flowview_cnn;
+function flowview_db_table_create($table, $data, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
 
-        $result = flowview_db_fetch_assoc('SHOW TABLES');
-        $tables = array();
-        foreach($result as $index => $arr) {
-                foreach ($arr as $t) {
-                        $tables[] = $t;
-                }
-        }
+	$result = flowview_db_fetch_assoc('SHOW TABLES');
+	$tables = array();
+	foreach($result as $index => $arr) {
+		foreach ($arr as $t) {
+			$tables[] = $t;
+		}
+	}
 
-        if (!in_array($table, $tables)) {
-                $c = 0;
-                $sql = 'CREATE TABLE IF NOT EXISTS `' . $table . "` (\n";
-                foreach ($data['columns'] as $column) {
-                        if (isset($column['name'])) {
-                                if ($c > 0) {
-                                        $sql .= ",\n";
-                                }
+	if (!in_array($table, $tables)) {
+		$c = 0;
+		$sql = 'CREATE TABLE IF NOT EXISTS `' . $table . "` (\n";
 
-                                $sql .= '`' . $column['name'] . '`';
+		foreach ($data['columns'] as $column) {
+			if (isset($column['name'])) {
+				if ($c > 0) {
+					$sql .= ",\n";
+				}
 
-                                if (isset($column['type'])) {
-                                        $sql .= ' ' . $column['type'];
-                                }
+				$sql .= '`' . $column['name'] . '`';
 
-                                if (isset($column['unsigned'])) {
-                                        $sql .= ' unsigned';
-                                }
+				if (isset($column['type'])) {
+					$sql .= ' ' . $column['type'];
+				}
 
-                                if (isset($column['NULL']) && $column['NULL'] == false) {
-                                        $sql .= ' NOT NULL';
-                                }
+				if (isset($column['unsigned'])) {
+					$sql .= ' unsigned';
+				}
 
-                                if (isset($column['NULL']) && $column['NULL'] == true && !isset($column['default'])) {
-                                        $sql .= ' default NULL';
-                                }
+				if (isset($column['NULL']) && $column['NULL'] == false) {
+					$sql .= ' NOT NULL';
+				}
 
-                                if (isset($column['default'])) {
-                                        if (strtolower($column['type']) == 'timestamp' && $column['default'] === 'CURRENT_TIMESTAMP') {
-                                                $sql .= ' default CURRENT_TIMESTAMP';
-                                        } else {
-                                                $sql .= ' default ' . (is_numeric($column['default']) ? $column['default'] : "'" . $column['default'] . "'");
-                                        }
-                                }
+				if (isset($column['NULL']) && $column['NULL'] == true && !isset($column['default'])) {
+					$sql .= ' default NULL';
+				}
 
-                                if (isset($column['auto_increment'])) {
-                                        $sql .= ' auto_increment';
-                                }
+				if (isset($column['default'])) {
+					if (strtolower($column['type']) == 'timestamp' && $column['default'] === 'CURRENT_TIMESTAMP') {
+						$sql .= ' default CURRENT_TIMESTAMP';
+					} else {
+						$sql .= ' default ' . (is_numeric($column['default']) ? $column['default'] : "'" . $column['default'] . "'");
+					}
+				}
 
-                                $c++;
-                        }
-                }
+				if (isset($column['auto_increment'])) {
+					$sql .= ' auto_increment';
+				}
 
-                if (isset($data['primary'])) {
-                        $sql .= ",\n PRIMARY KEY (`" . $data['primary'] . '`)';
-                }
+				$c++;
+			}
+		}
 
-                if (isset($data['keys']) && cacti_sizeof($data['keys'])) {
-                        foreach ($data['keys'] as $key) {
-                                if (isset($key['name'])) {
-                                        $sql .= ",\n INDEX `" . $key['name'] . '` (' . db_format_index_create($key['columns']) . ')';
-                                }
-                        }
-                }
+		if (isset($data['primary'])) {
+			$sql .= ",\n PRIMARY KEY (`" . $data['primary'] . '`)';
+		}
 
-                if (isset($data['unique_keys'])) {
-                        foreach ($data['unique_keys'] as $key) {
-                                if (isset($key['name'])) {
-                                        $sql .= ",\n UNIQUE INDEX `" . $key['name'] . '` (' . db_format_index_create($key['columns']) . ')';
-                                }
-                        }
-                }
+		if (isset($data['keys']) && cacti_sizeof($data['keys'])) {
+			foreach ($data['keys'] as $key) {
+				if (isset($key['name'])) {
+					$sql .= ",\n INDEX `" . $key['name'] . '` (' . db_format_index_create($key['columns']) . ')';
+				}
+			}
+		}
 
-                $sql .= ') ENGINE = ' . $data['type'];
+		if (isset($data['unique_keys'])) {
+			foreach ($data['unique_keys'] as $key) {
+				if (isset($key['name'])) {
+					$sql .= ",\n UNIQUE INDEX `" . $key['name'] . '` (' . db_format_index_create($key['columns']) . ')';
+				}
+			}
+		}
 
-                if (isset($data['charset'])) {
-                        $sql .= ' DEFAULT CHARSET = ' . $data['charset'];
-                }
+		$sql .= ') ENGINE = ' . $data['type'];
 
-                if (isset($data['row_format']) && strtolower(db_get_global_variable('innodb_file_format')) == 'barracuda') {
-                        $sql .= ' ROW_FORMAT = ' . $data['row_format'];
-                }
+		if (isset($data['charset'])) {
+			$sql .= ' DEFAULT CHARSET = ' . $data['charset'];
+		}
 
-                if (isset($data['comment'])) {
-                        $sql .= " COMMENT = '" . $data['comment'] . "'";
-                }
+		if (isset($data['row_format']) && strtolower(db_get_global_variable('innodb_file_format')) == 'barracuda') {
+			$sql .= ' ROW_FORMAT = ' . $data['row_format'];
+		}
 
-                if (flowview_db_execute($sql)) {
-                        db_execute_prepared("REPLACE INTO plugin_db_changes
-                                (plugin, `table`, `column`, `method`)
-                                VALUES (?, ?, '', 'create')",
-                                array('flowview', $table));
+		if (isset($data['comment'])) {
+			$sql .= " COMMENT = '" . $data['comment'] . "'";
+		}
 
-                        if (isset($data['collate'])) {
-                                flowview_db_execute("ALTER TABLE `$table` COLLATE = " . $data['collate']);
-                        }
-                }
-        }
+		if (flowview_db_execute($sql)) {
+			db_execute_prepared("REPLACE INTO plugin_db_changes
+				(plugin, `table`, `column`, `method`)
+				VALUES (?, ?, '', 'create')",
+				array('flowview', $table));
+
+			if (isset($data['collate'])) {
+				flowview_db_execute("ALTER TABLE `$table` COLLATE = " . $data['collate']);
+			}
+		}
+	}
 }
 
-function flowview_db_column_exists($table, $column, $log = true) {
-	global $flowview_cnn;
+function flowview_db_column_exists($table, $column, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_column_exists($table, $column, $log, $flowview_cnn);
 }
 
-function flowview_db_add_column($table, $column, $log = true) {
-	global $flowview_cnn;
+function flowview_db_add_column($table, $column, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_add_column($table, $column, $log, $flowview_cnn);
 }
 
 /**
  * flowview_db_affected_rows - return the number of rows affected by the last transaction
  *
- * @return (bool|int)      The number of rows affected by the last transaction,
- *                         or false on error
+ * @param  bool|object   Optional connection id in case you are using a proxy
+ *
+ * @return bool|int      The number of rows affected by the last transaction,
+ *                       or false on error
  */
-function flowview_db_affected_rows() {
-	global $flowview_cnn;
+function flowview_db_affected_rows($cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
+
 	return db_affected_rows($flowview_cnn);;
 }
 
 /**
  * flowview_db_index_exists - checks whether an index exists
  *
- * @param  (string)        The name of the table
- * @param  (string)        The name of the index
- * @param  (bool)          Whether to log error messages, defaults to true
- * @param  (bool|resource) The connection to use or false to use the default
+ * @param  string        The name of the table
+ * @param  string        The name of the index
+ * @param  bool          Whether to log error messages, defaults to true
+ * @param  bool|object   Optional connection id in case you are using a proxy
  *
- * @return (bool) The output of the sql query as a single variable
+ * @return bool          The output of the sql query as a single variable
  */
-function flowview_db_index_exists($table, $index, $log = true) {
-	global $flowview_cnn;
+function flowview_db_index_exists($table, $index, $log = true, $cnn_id = false) {
+	$flowview_cnn = flowview_get_connection($cnn_id);;
 
 	return db_index_exists($table, $index, $log, $flowview_cnn);
+}
+
+function flowview_get_connection($cnn_id) {
+	global $flowview_cnn;
+
+	if ($cnn_id === false) {
+		return $flowview_cnn;
+	} else {
+		return $cnn_id;
+	}
 }
 
