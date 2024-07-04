@@ -4,14 +4,33 @@ This plugin allows you to see reports based off the data in your Netflow flows.
 
 # Features
 
-Fully customizable reports
+* Customizable Scheduled Reports.
+* Ability to view Flow Data in Table Form or three Chart Forms.
+* Parallel Query Execution to increase the speed of report generation.
+* Support for Shard Query and Horizontal Scaling through use of technologies 
+  such as MariaDB MaxScale.
+* Tracking of IP addresses that do not resolve through DNS by using ARIN's
+  whois service.
 
 # Installation
+
 To install the plugin, simply copy the plugin_flowview directory to Cacti's plugins
 directory and rename it to simply 'flowview'.
+
 Copy config.php.dist to config.php and set correct db connection.
+
 Once this is complete, go to Cacti's Plugin Management section, and Install 
 and Enable the plugin.
+
+There are a number of settings that are important that you can find under
+Console > Configuration > Settings > Flowview.
+
+The minimum version of Cacti required for this plugin will be Cacti 1.2.27.
+However, you will have to install the patch to Cacti's database API in this
+commit: c11405e584c012f675fb420acf78bcecc7d02d9f.
+
+If you are running an older version of Cacti, you may run Flowview, but you
+will not be able to leverage the MaxScale Shard Query feature.
 
 ## Required:
 
@@ -34,11 +53,11 @@ not already installed.  Netstat will help Cacti determine if the `flow-capture`
 service in question is actually running.
 
 After installing, you should set your partitioning and retention settings from
-Console > Configuration > Settings > Misc.  There is a flowview section there
+Console > Configuration > Settings > Flowview.  There is a flowview section there
 that you can customize.
 
-Next you have to setup your Cacti server as a FlowView sink from your various
-sources.  Then, from FlowView -> Listeners, you must add the various listeners
+Next you have to setup your Cacti server as a Flowview sink from your various
+sources.  Then, from Flowview -> Listeners, you must add the various listeners
 for all your flow-capture sources.  It's critical that you specify the correct
 port, and if there is to be any filtering, having a value other than 0 for the
 allowed devices.
@@ -50,11 +69,12 @@ service.
 
 ## Automatic Flow Version Detection:
 
-The new Cacti based flow-capture script will auto-detect either V5, V9 or V10
+The new Cacti based flow-capture script will auto-detect either V5, V9 or IPFIX
 flows automatically.  So, can dynamically switch these streams versions without
-issue.  However, we recommend you have one receiver per flow source, and that
-you feed multiple streams to the same receiver port.  The flow-capture script
-also detects IPv4 and IPv6 addresses automatically.
+issue and you can have multiple streams coming into the same port at the same
+time.  However, we recommend you have you watch the CPU utilization of the 
+flow collector processes, and if they start consuming near 100% utilization,
+you should add more listeners to spread the load.
 
 ## Automatic Domain Resolution:
 
