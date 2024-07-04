@@ -228,6 +228,12 @@ if ($shard_id === false) {
 
 			$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']), false, $max_cnn);
 
+			if (read_config_option('flowview_use_maxscale') == 'on') {
+				if ($max_cnn !== false) {
+					flowview_db_close($max_cnn);
+				}
+			}
+
 			if (cacti_sizeof($results)) {
 				$sql     = array();
 				$columns = array_keys($results[0]);
@@ -249,11 +255,11 @@ if ($shard_id === false) {
 					$sql[] = '(' . $sql_string . ')';
 				}
 
-				//cacti_log($sql_prefix . implode(', ', $sql));
-
+				/* insert entries into the intermediary table */
 				flowview_db_execute($sql_prefix . implode(', ', $sql));
 			}
 
+			/* mark the worker as finished */
 			flowview_db_execute_prepared('UPDATE parallel_database_query_shards
 				SET status = ?
 				WHERE query_id = ?

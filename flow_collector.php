@@ -708,7 +708,10 @@ if (cacti_sizeof($listener)) {
 		$socket = stream_socket_server($url, $errno, $errstr, STREAM_SERVER_BIND);
 
 		if (!$socket) {
-		    die("$errstr ($errno)");
+			cacti_log("FATAL: Flowview Listener unable to open port! Error: $errstr ($errno)", false, 'FLOWVIEW');
+			unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+
+			exit(1);
 		}
 
 		while (true) {

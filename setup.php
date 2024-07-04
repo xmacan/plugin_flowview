@@ -560,6 +560,8 @@ function flowview_determine_config() {
 function flowview_connect($maxscale = false) {
 	global $config, $flowview_cnn, $flowviewdb_default, $local_db_cnn_id, $remote_db_cnn_id, $database_hostname;
 
+	$cnn_id = false;
+
 	flowview_determine_config();
 
 	// Handle remote flowview processing
@@ -614,7 +616,7 @@ function flowview_connect($maxscale = false) {
 		$connect_remote = true;
 	}
 
-	if ($connect_remote && !is_object($flowview_cnn)) {
+	if ($maxscale || ($connect_remote && !is_object($flowview_cnn))) {
 		if (!isset($flowviewdb_port)) {
 			$flowviewdb_port = '3306';
 		}
@@ -639,7 +641,7 @@ function flowview_connect($maxscale = false) {
 		    $flowviewdb_ssl_ca = '';
 		}
 
-		$cnn_id = flowview_db_connect_real(
+		$flowview_cnn = flowview_db_connect_real(
 			$flowviewdb_hostname,
 			$flowviewdb_username,
 			$flowviewdb_password,
@@ -653,19 +655,17 @@ function flowview_connect($maxscale = false) {
 			$flowviewdb_ssl_ca
 		);
 
-		if ($cnn_id == false) {
+		$cnn_id = $flowview_cnn;
+
+		if ($flowview_cnn === false) {
 			cacti_log("FATAL Can not connect to the flowview database", false, 'FLOWVIEW');
 			exit;
-		}
-
-		if (!$maxscale) {
-			$flowview_cnn = $cnn_id;
 		}
 	} else {
 		$cnn_id = $flowview_cnn;
 	}
 
-	return $cnn_id !== false;
+	return $cnn_id;
 }
 
 function flowview_setup_table() {
