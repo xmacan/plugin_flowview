@@ -17,7 +17,10 @@ This plugin allows you to see reports based off the data in your Netflow flows.
 To install the plugin, simply copy the plugin_flowview directory to Cacti's plugins
 directory and rename it to simply 'flowview'.
 
-Copy config.php.dist to config.php and set correct db connection.
+Copy config.php.dist to config.php and set the correct db connection.  The
+Flowview plugin supports using the Cacti database or a third party database
+as the Flowview database can becomee very large over time and may have
+differing scalability requirements.
 
 Once this is complete, go to Cacti's Plugin Management section, and Install 
 and Enable the plugin.
@@ -31,6 +34,36 @@ commit: c11405e584c012f675fb420acf78bcecc7d02d9f.
 
 If you are running an older version of Cacti, you may run Flowview, but you
 will not be able to leverage the MaxScale Shard Query feature.
+
+If you are wanting to take advantage of the Shard Query implementation of 
+Flowview, you must setup your Database so that it replicates itself to
+from one to many slave servers.  Then,  you must setup MaxScale.  Note that
+MaxScale is under a BSL license.  Therefore, if you wish to scale beyond
+two servers, in a commercial setting, you will need to reach out to MariaDB.com
+to obtain a license.
+
+You can find real good tutorials at the following links.  Some of the information
+may be out-dated in these links.  For example, the backup is super fast when
+using the --parallel=X option, but the location of the file with the GTID of
+the master has changed, and the format has changed slightly in the 11.x version
+of MariaDB.  Additionally, you have to add additional grants for both MaxScale
+and MaxScale Monitoring that the tutorials do not fully call out.
+
+If found that the best way to setup a replica was to use mariabackup using the
+options that they called out in the documentation.  It really simplifies the
+setup.
+
+MariaDB Replication Setup:
+https://mariadb.com/kb/en/setting-up-a-replica-with-mariabackup/
+
+MariaDB Backup and Restore for Replication Setup:
+https://mariadb.com/kb/en/full-backup-and-restore-with-mariabackup/
+
+MaxScale Setup:
+https://mariadb.com/kb/en/maxscale-24-02tutorials/
+
+MariaDB SSL Setup: (No longer required as of MariaDB 11.3)
+https://mariadb.com/resources/blog/mariadb-maxscale-2-1-and-ssl-certificates/
 
 ## Required:
 
