@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /*
  +-------------------------------------------------------------------------+
@@ -221,6 +222,8 @@ function flowview_upgrade($current, $old) {
 				ADD UNIQUE KEY ip(ip),
 				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
 		}
+
+		flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ENGINE=InnoDB');
 
 		if ($bad_titles) {
 			cacti_log("Fixing Bad Titles in the plugin_flowview_schedules table.", true, 'FLOWVIEW');

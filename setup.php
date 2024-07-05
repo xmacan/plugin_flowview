@@ -681,7 +681,7 @@ function flowview_setup_table() {
 		time bigint(20) unsigned NOT NULL default '0',
 		PRIMARY KEY (id),
 		UNIQUE KEY ip (ip))
-		ENGINE=MEMORY,
+		ENGINE=InnoDB,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
