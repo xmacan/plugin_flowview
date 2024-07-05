@@ -20,6 +20,15 @@ to generate Email based reports of the data.
 * Starting with the 4.x version, the DNS cache will be manageable.  Therefore,
   if you have intermittant DNS resolution issues, you will be able to view 
   and manage those entries in the cache.
+* Starting with the 4.x version, you will be able to define a custom unregistered
+  domain for local network IP addresses.  This is intended for home users who
+  are just trying to see what type of activity is going on on their home
+  network.
+* Two partitioning methods for raw tables including Hourly and Daily partitioning.
+  For larger commercial type deployments, using Hourly partitioning is going
+  to be recommended.
+* Starting with the 4.x version, sharding results will be cache to increase
+  subsequent queries by various users under various conditions.
 
 # Installation
 
