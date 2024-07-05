@@ -296,6 +296,8 @@ function flowview_upgrade($current, $old) {
 			`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`map_table` varchar(40) NOT NULL DEFAULT '',
 			`map_query` blob NOT NULL DEFAULT '',
+			`map_range` varchar(128) NOT NULL DEFAULT '',
+			`map_range_params` varchar(128) NOT NULL DEFAULT '',
 			`reduce_query` blob NOT NULL DEFAULT '',
 			`results` longblob NOT NULL DEFAULT '',
 			`created` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -307,7 +309,7 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Parallel Query Requests'");
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shards` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
 			`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 			`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 			`status` varchar(10) NOT NULL DEFAULT 'pending',
@@ -319,6 +321,29 @@ function flowview_upgrade($current, $old) {
 			ENGINE=InnoDB
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Parallel Query Shard Requests'");
+
+		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
+			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
+				ADD COLUMN map_range VARCHAR(128) NOT NULL default '' AFTER map_query,
+				ADD COLUMN map_range_params VARCHAR(128) NOT NULL default '' AFTER map_range");
+		}
+
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (
+			`md5sum` varchar(32) NOT NULL DEFAULT '',
+			`map_table` int(10) unsigned NOT NULL DEFAULT '0',
+			`map_partition` varchar(20) NOT NULL DEFAULT '',
+			`min_date` timestamp(6) NOT NULL default '0000-00-00',
+			`max_date` timestamp(6) NOT NULL default '0000-00-00',
+			`results` longblob NOT NULL DEFAULT '',
+			`date_created` timestamp DEFAULT current_timestamp(),
+			PRIMARY KEY (`md5sum`,`map_table`,`map_partition`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds Parallel Query Shard Results for Partition Full Scans based upon the md5sum of the Map Query'");
+
+		if (flowview_db_table_exists('parallel_database_query_shards')) {
+			flowview_db_execute('RENAME TABLE parallel_database_query_shards TO parallel_database_query_shard');
+		}
 
 		db_execute("UPDATE plugin_realms
 			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
@@ -356,7 +381,11 @@ function flowview_upgrade($current, $old) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX template_id (template_id)';
 			}
 
-			if (!flowview_db_column_exists($t['TABLE_NAME'], 'end_time')) {
+			if (!flowview_db_index_exists($t['TABLE_NAME'], 'start_time')) {
+				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX start_time (start_time)';
+			}
+
+			if (!flowview_db_index_exists($t['TABLE_NAME'], 'end_time')) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX end_time (end_time)';
 			}
 
@@ -376,7 +405,7 @@ function flowview_upgrade($current, $old) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD INDEX ex_addr (ex_addr)';
 			}
 
-			if ($r['ENGINE'] != $raw_engine) {
+			if ($t['ENGINE'] != $raw_engine) {
 				$alter .= " ENGINE=$raw_engine";
 			}
 

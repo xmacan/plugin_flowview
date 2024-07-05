@@ -129,7 +129,7 @@ if ($shard_id === false) {
 	 */
 	$threads = read_config_option('flowview_parallel_threads');
 	$query   = flowview_db_fetch_row_prepared('SELECT * FROM parallel_database_query WHERE id = ?', array($query_id));
-	$shards  = flowview_db_fetch_cell_prepared('SELECT COUNT(*) FROM parallel_database_query_shards WHERE query_id = ?', array($query_id));
+	$shards  = flowview_db_fetch_cell_prepared('SELECT COUNT(*) FROM parallel_database_query_shard WHERE query_id = ?', array($query_id));
 	$running = 0;
 	$start   = microtime(true);
 
@@ -140,7 +140,7 @@ if ($shard_id === false) {
 
 		while(true) {
 			$running = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
-                FROM parallel_database_query_shards
+                FROM parallel_database_query_shard
 				WHERE query_id = ?
 				AND status = "running"',
 				array($query_id));
@@ -150,7 +150,7 @@ if ($shard_id === false) {
 			usleep(5000);
 
 			$notfinished = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
-				FROM parallel_database_query_shards
+				FROM parallel_database_query_shard
 				WHERE query_id = ?
 				AND status != "finished"',
 				array($query_id));
@@ -177,7 +177,7 @@ if ($shard_id === false) {
 			WHERE id = ?',
 			array(json_encode($data), 'complete', $query_id));
 
-		flowview_db_execute_prepared('DELETE FROM parallel_database_query_shards
+		flowview_db_execute_prepared('DELETE FROM parallel_database_query_shard
 			WHERE query_id = ?',
 			array($query_id));
 
@@ -212,7 +212,7 @@ if ($shard_id === false) {
 
 	if (cacti_sizeof($query)) {
 		$shard = flowview_db_fetch_row_prepared('SELECT *
-			FROM parallel_database_query_shards
+			FROM parallel_database_query_shard
 			WHERE query_id = ?
 			AND shard_id = ?',
 			array($query_id, $shard_id), false, $max_cnn);
@@ -220,7 +220,7 @@ if ($shard_id === false) {
 		if (cacti_sizeof($shard)) {
 			$table = $query['map_table'];
 
-			flowview_db_execute_prepared('UPDATE parallel_database_query_shards
+			flowview_db_execute_prepared('UPDATE parallel_database_query_shard
 				SET status = ?
 				WHERE query_id = ?
 				AND shard_id = ?',
@@ -260,7 +260,7 @@ if ($shard_id === false) {
 			}
 
 			/* mark the worker as finished */
-			flowview_db_execute_prepared('UPDATE parallel_database_query_shards
+			flowview_db_execute_prepared('UPDATE parallel_database_query_shard
 				SET status = ?
 				WHERE query_id = ?
 				AND shard_id = ?',
@@ -308,7 +308,7 @@ function flowview_launch_workers($query_id, $threads, $running) {
 	$php_binary = read_config_option('path_php_binary');
 	$launching  = $threads - $running;
 	$pending    = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
-		FROM parallel_database_query_shards
+		FROM parallel_database_query_shard
 		WHERE query_id = ?
 		AND status = ?',
 		array($query_id, 'pending'));
@@ -320,14 +320,14 @@ function flowview_launch_workers($query_id, $threads, $running) {
 
 		while($launching > 0 && $pending > 0) {
 			$shard_id = flowview_db_fetch_cell_prepared('SELECT shard_id
-				FROM parallel_database_query_shards
+				FROM parallel_database_query_shard
 				WHERE query_id = ?
 				AND status = ?
 				LIMIT 1',
 				array($query_id, 'pending'));
 
 			if ($shard_id >= 0 && $shard_id != '') {
-				flowview_db_execute_prepared('UPDATE parallel_database_query_shards
+				flowview_db_execute_prepared('UPDATE parallel_database_query_shard
 					SET status = ?
 					WHERE query_id = ?
 					AND shard_id = ?',

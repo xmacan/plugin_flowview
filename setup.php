@@ -814,6 +814,8 @@ function flowview_setup_table() {
 		`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 		`map_table` varchar(40) NOT NULL DEFAULT '',
 		`map_query` blob NOT NULL DEFAULT '',
+		`map_range` varchar(128) NOT NULL DEFAULT '',
+		`map_range_params` varchar(128) NOT NULL DEFAULT '',
 		`reduce_query` blob NOT NULL DEFAULT '',
 		`results` longblob NOT NULL DEFAULT '',
 		`created` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -825,7 +827,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds Parallel Query Requests'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shards` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
 		`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 		`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 		`status` varchar(10) NOT NULL DEFAULT 'pending',
@@ -837,6 +839,19 @@ function flowview_setup_table() {
 		ENGINE=InnoDB
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds Parallel Query Shard Requests'");
+
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (
+		`md5sum` varchar(32) NOT NULL DEFAULT '',
+		`map_table` int(10) unsigned NOT NULL DEFAULT '0',
+		`map_partition` varchar(20) NOT NULL DEFAULT '',
+		`min_date` timestamp(6) NOT NULL default '0000-00-00',
+		`max_date` timestamp(6) NOT NULL default '0000-00-00',
+		`results` longblob NOT NULL DEFAULT '',
+		`date_created` timestamp DEFAULT current_timestamp(),
+		PRIMARY KEY (`md5sum`,`map_table`,`map_partition`))
+		ENGINE=InnoDB
+		ROW_FORMAT=DYNAMIC
+		COMMENT='Holds Parallel Query Shard Results for Partition Full Scans based upon the md5sum of the Map Query'");
 
 	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
 

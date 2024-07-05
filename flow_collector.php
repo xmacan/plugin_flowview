@@ -876,10 +876,12 @@ function database_check_connect() {
 	$connection_good = flowview_db_fetch_cell('SELECT 1');
 
 	if (empty($connection_good)) {
-		flowview_db_close();
+		$cnn_id = flowview_get_connection(false);
+
+		flowview_db_close($cnn_id);
 
 		while(true) {
-			$db_conn = flowview_db_connect_real(
+			$cnn_id = flowview_db_connect_real(
 				$database_hostname,
 				$database_username,
 				$database_password,
@@ -893,7 +895,7 @@ function database_check_connect() {
 				$database_ssl_ca
 			);
 
-			if (!is_object($db_conn)) {
+			if (!is_object($cnn_id)) {
 				sleep(1);
 			} else {
 				break;

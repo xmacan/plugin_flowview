@@ -3138,7 +3138,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 			$map_query .= (isset($stru_inner['sql_order'])   ? ' ' . $stru_inner['sql_order']:'');
 			$map_query .= (isset($stru_inner['sql_limit'])   ? ' ' . $stru_inner['sql_limit']:'');
 
-			db_execute_prepared('INSERT INTO parallel_database_query_shards (query_id, shard_id, map_query, map_params)
+			db_execute_prepared('INSERT INTO parallel_database_query_shard (query_id, shard_id, map_query, map_params)
 				VALUES (?, ?, ?, ?)',
 				array($request_id, $index, $map_query, json_encode($stru_inner['sql_params'])));
 		}
@@ -4647,6 +4647,7 @@ function create_raw_partition($table) {
 	$data['primary']   = 'sequence';
 	$data['keys'][]    = array('name' => 'listener_id', 'columns' => 'listener_id');
 	$data['keys'][]    = array('name' => 'ex_addr', 'columns' => 'ex_addr');
+	$data['keys'][]    = array('name' => 'start_time', 'columns' => 'start_time');
 	$data['keys'][]    = array('name' => 'end_time', 'columns' => 'end_time');
 
 	$data['type']       = 'InnoDB';

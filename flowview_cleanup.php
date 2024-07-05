@@ -110,7 +110,7 @@ if (cacti_sizeof($parallel_tables)) {
 
 print "NOTE: Purging Parallel Query Cache and Orphaned Shards" . PHP_EOL;
 db_execute_prepared('TRUNCATE TABLE parallel_database_query');
-db_execute_prepared('TRUNCATE TABLE parallel_database_query_shards');
+db_execute_prepared('TRUNCATE TABLE parallel_database_query_shard');
 
 exit(0);
 
