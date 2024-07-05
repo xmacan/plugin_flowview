@@ -1,16 +1,25 @@
 # flowview
 
-This plugin allows you to see reports based off the data in your Netflow flows.
+This plugin allows you to view NetFlow data from inside of Cacti and 
+to generate Email based reports of the data.
 
 # Features
 
-* Customizable Scheduled Reports.
 * Ability to view Flow Data in Table Form or three Chart Forms.
 * Parallel Query Execution to increase the speed of report generation.
 * Support for Shard Query and Horizontal Scaling through use of technologies 
   such as MariaDB MaxScale.
 * Tracking of IP addresses that do not resolve through DNS by using ARIN's
   whois service.
+* Customizable Scheduled Reports.
+* Starting with the 4.x version, the ARIA database format will be the default
+  for historical raw tables.  The ARIA format is crash safe, and almost
+  5x faster than InnoDB.  The live raw table will always be InnoDB to support
+  multiple concurrent inserts, but once that table ages out, it will be
+  converted to the ARIA engine by default.
+* Starting with the 4.x version, the DNS cache will be manageable.  Therefore,
+  if you have intermittant DNS resolution issues, you will be able to view 
+  and manage those entries in the cache.
 
 # Installation
 
