@@ -222,7 +222,7 @@ function flowview_db_replace($table_name, $array_items, $keyCols, $cnn_id = fals
  *
  * @return the auto incriment id column (if applicable)
  */
-function flowview_sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true, $cnn_id = true) {
+function flowview_sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true, $cnn_id = false) {
 	$flowview_cnn = flowview_get_connection($cnn_id);;
 
 	return sql_save($array_items, $table_name, $key_cols, $autoinc, $flowview_cnn);

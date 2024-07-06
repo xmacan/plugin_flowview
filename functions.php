@@ -416,7 +416,7 @@ function save_filter() {
 	if (is_error_message()) {
 		raise_message(2);
 
-		if (!isset_request_var('return')) {
+		if (!isset_request_var('return') || get_request_var('return') == '') {
 			header('Location: flowview_filters.php?tab=sched&header=false&action=edit&id=' . (empty($id) ? get_filter_request_var('id') : $id));
 		} else {
 			header('Location: ' . html_escape(get_nfilter_request_var('return') . '?query=' . (empty($id) ? get_filter_request_var('id') : $id)));
@@ -426,8 +426,8 @@ function save_filter() {
 
 	raise_message(1);
 
-	if (!isset_request_var('return')) {
-		header('Location: flowview_filters.php?id=' . $id . '&header=false');
+	if (!isset_request_var('return') || get_request_var('return') == '') {
+		header('Location: flowview_filters.php?action=edit&id=' . $id . '&header=false');
 	} else {
 		header('Location: ' . html_escape(get_nfilter_request_var('return') . '?query=' . (empty($id) ? get_filter_request_var('id') : $id)));
 	}
