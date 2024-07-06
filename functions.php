@@ -4130,6 +4130,8 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 	if ($ip != $dns_name) {
 		$priv_dns_name = gethostbyaddr($ip);
 		$local_range   = flowview_check_local_iprange($ip);
+		$arin_ver      = 1;
+		$arin_id       = 0;
 
 		if ($priv_dns_name == $ip || $priv_dns_name === false) {
 			if ($local_range) {
@@ -4137,17 +4139,27 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Local Domain', $time));
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $dns_name, 'Local Domain', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			} else {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'Static Private', $time));
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $dns_name, 'Static Private', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			}
@@ -4158,10 +4170,15 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			/* good dns_name */
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-				(ip, host, source, time)
-				VALUES (?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-				array($ip, $priv_dns_name, 'Local DNS', $time));
+				(ip, host, source, arin_verified, arin_id, time)
+				VALUES (?, ?, ?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE
+					time = VALUES(time),
+					source = VALUES(source),
+					host = VALUES(host),
+					arin_verified = VALUES(arin_verified),
+					arin_id = VALUES(arin_id)',
+				array($ip, $priv_dns_name, 'Local DNS', $arin_ver, $arin_id, $time));
 
 			return $priv_dns_name;
 		}
@@ -4190,13 +4207,29 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			if (isset($resp->answer[0])) {
 				if (property_exists($resp->answer[0], 'ptrdname')) {
 					$dns_name = $resp->answer[0]->ptrdname;
+					$arin_id  = 0;
+					$arin_ver = 0;
+
+					if (read_config_option('flowview_use_arin') == 'on') {
+						$data = flowview_get_owner_from_arin($ip);
+
+						if ($data !== false) {
+							$arin_id  = $data['arin_id'];
+							$arin_ver = 1;
+						}
+					}
 
 					/* return the hostname, without the trailing '.' */
 					flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-						(ip, host, source, time)
-						VALUES (?, ?, ?, ?)
-						ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-						array($ip, $dns_name, 'Specified DNS', $time));
+						(ip, host, source, arin_verified, arin_id, time)
+						VALUES (?, ?, ?, ?, ?, ?)
+						ON DUPLICATE KEY UPDATE
+							time = VALUES(time),
+							source = VALUES(source),
+							host = VALUES(host),
+							arin_verified = VALUES(arin_verified),
+							arin_id = VALUES(arin_id)',
+						array($ip, $dns_name, 'Specified DNS', $arin_ver, $arin_id, $time));
 
 					return $dns_name . $suffix;
 				}
@@ -4212,18 +4245,43 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 		if ($dns_name === false || $dns_name == $ip) {
 			if (read_config_option('flowview_use_arin') == 'on') {
-				$dns_name = flowview_get_owner_from_arin($ip);
+				$data = flowview_get_owner_from_arin($ip);
+
+				if ($data !== false) {
+					$dns_name = $data['dns_name'];
+					$arin_id  = $data['arin_id'];
+				} else {
+					$dns_name = false;
+					$arin_id  = 0;
+				}
 			} else {
 				$dns_name = $ip;
 			}
 
 			if ($ip != $dns_name && $dns_name !== false) {
 				/* good dns_name */
+				$arin_id  = 0;
+				$arin_ver = 0;
+
+				if (read_config_option('flowview_use_arin') == 'on') {
+					$data = flowview_get_owner_from_arin($ip);
+
+					if ($data !== false) {
+						$arin_id  = $data['arin_id'];
+						$arin_ver = 1;
+					}
+				}
+
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN', $time));
+					(ip, host, source, arin_verified, arin_id, time)
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $dns_name, 'ARIN', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			} else {
@@ -4231,10 +4289,15 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN Error', $time));
+					(ip, host, source, arin_verified, arin_id, time)
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $dns_name, 'ARIN Error', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			}
@@ -4245,10 +4308,15 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 
 			/* return the hostname, without the trailing '.' */
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-				(ip, host, source, time)
-				VALUES (?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-				array($ip, $dns_name, 'Local DNS', $time));
+				(ip, host, source, arin_verified, arin_id, time)
+				VALUES (?, ?, ?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE
+					time = VALUES(time),
+					source = VALUES(source),
+					host = VALUES(host),
+					arin_verified = VALUES(arin_verified),
+					arin_id = VALUES(arin_id)',
+				array($ip, $dns_name, 'Local DNS', 1, 0, $time));
 
 			return $dns_name . $suffix;
 		}
@@ -4266,25 +4334,43 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			}
 
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-				(ip, host, source, time)
-				VALUES (?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-				array($ip, $dns_name, 'Local DNS', $time));
+				(ip, host, source, arin_verified, arin_id, time)
+				VALUES (?, ?, ?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE
+					time = VALUES(time),
+					source = VALUES(source),
+					host = VALUES(host),
+					arin_verified = VALUES(arin_verified),
+					arin_id = VALUES(arin_id)',
+				array($ip, $dns_name, 'Local DNS', 1, 0, $time));
 
 			return $dns_name;
 		} else {
 			if (read_config_option('flowview_use_arin') == 'on') {
-				$dns_name = flowview_get_owner_from_arin($ip);
+				$data = flowview_get_owner_from_arin($ip);
+
+				if ($data !== false) {
+					$dns_name = $data['dns_name'];
+					$arin_id  = $data['arin_id'];
+				} else {
+					$dns_name = false;
+					$arin_id  = 0;
+				}
 			} else {
 				$dns_name = $ip;
 			}
 
 			if ($dns_name != $ip && $dns_name !== false) {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $dns_name, 'ARIN', $time));
+					(ip, host, source, arin_verified, arin_id, time)
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $dns_name, 'ARIN', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			} else {
@@ -4293,9 +4379,14 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
 					(ip, host, source, time)
-					VALUES (?, ?, ?, ?)
-					ON DUPLICATE KEY UPDATE time=VALUES(time), source=VALUES(source), host=VALUES(host)',
-					array($ip, $ip, 'ARIN Error', $time));
+					VALUES (?, ?, ?, ?, ?, ?)
+					ON DUPLICATE KEY UPDATE
+						time = VALUES(time),
+						source = VALUES(source),
+						host = VALUES(host),
+						arin_verified = VALUES(arin_verified),
+						arin_id = VALUES(arin_id)',
+					array($ip, $ip, 'ARIN Error', $arin_ver, $arin_id, $time));
 
 				return $dns_name;
 			}
@@ -4702,8 +4793,15 @@ function flowview_get_owner_from_arin($host) {
 				)
 			);
 
+			$arin_id = flowview_db_fetch_cell_prepared('SELECT id
+				FROM plugin_flowview_arin_information
+				WHERE cidr = ?',
+				array($cidr));
+
 			if (isset($json['net']['name']['$'])) {
-				return 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+				$dns_name = 'ip-' . str_replace('.', '-', $host) . '.' . strtolower($json['net']['name']['$']) . '.net';
+
+				return array('dns_name' => $dns_name, 'arin_id' => $arin_id);
 			} else {
 				return false;
 			}

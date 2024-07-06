@@ -76,42 +76,44 @@ if ($proceed == false) {
 	exit(1);
 }
 
-print "NOTE: Check for Lingering Processes" . PHP_EOL;
-
-$processes = db_fetch_assoc_prepared('SELECT * FROM processes
-	WHERE tasktype = ?
-	AND taskname LIKE "db_%"
-	ORDER BY taskname',
-	array('flowview'));
-
-if (cacti_sizeof($processes)) {
-	foreach($processes as $p) {
-		print "WARNING: Cleaning Process with Task Name:{$p['taskname']} and PID:{$p['pid']}" . PHP_EOL;
-
-		posix_kill($p['pid'], SIGINT);
-
-		db_execute_prepared('DELETE FROM processes WHERE id = ?', array($p['id']));
-	}
+if (read_config_option('flowview_use_arin') == 'on') {
+	print "NOTE: Check for Unverified Arin Addresses" . PHP_EOL;
+} else {
+	print "WARNING: Arin Address Verification Disabled." . PHP_EOL;
+	exit(1);
 }
 
-print "NOTE: Check for Lingering Map Tables" . PHP_EOL;
+$time = time();
+$ips  = flowview_db_fetch_assoc('SELECT *
+	FROM plugin_flowview_dnscache
+	WHERE arin_verified = 0');
 
-$parallel_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, TABLE_COLLATION
-	FROM information_schema.TABLES
-	WHERE TABLE_NAME LIKE "parallel_database_query_map%"
-	ORDER BY TABLE_NAME DESC');
+if (cacti_sizeof($ips)) {
+	foreach($ips as $p) {
+		print "NOTE: Verifying Arin for IP Address:{$p['ip']} and DNS Name:{$p['host']}" . PHP_EOL;
 
-if (cacti_sizeof($parallel_tables)) {
-	foreach($parallel_tables as $t) {
-		print "WARNING: Dropping Table {$t['TABLE_NAME']}" . PHP_EOL;
-		flowview_db_execute("DROP TABLE {$t['TABLE_NAME']}");
+		$arin_id  = 0;
+		$arin_ver = 0;
+
+		$data = flowview_get_owner_from_arin($p['ip']);
+
+		if ($data !== false) {
+			$arin_id  = $data['arin_id'];
+			$arin_ver = 1;
+		}
+
+		if ($arin_ver == 1) {
+			print "NOTE: Arin Verified for IP Address:{$p['ip']} and DNS Name:{$p['host']}" . PHP_EOL;
+			/* return the hostname, without the trailing '.' */
+			flowview_db_execute_prepared('UPDATE plugin_flowview_dnscache
+				SET `arin_verified` = ?, `arin_id` = ?, `time` = ?
+				WHERE `ip` = ?',
+				array($arin_ver, $arin_id, $time, $p['ip']));
+		} else {
+			print "WARNING: Arin Not Verified for IP Address:{$p['ip']} and DNS Name:{$p['host']}" . PHP_EOL;
+		}
 	}
 }
-
-print "NOTE: Purging Parallel Query Cache and Orphaned Shards" . PHP_EOL;
-flowview_db_execute_prepared('TRUNCATE TABLE parallel_database_query');
-flowview_db_execute_prepared('TRUNCATE TABLE parallel_database_query_shard');
-flowview_db_execute_prepared('TRUNCATE TABLE parallel_database_query_shard_cache');
 
 exit(0);
 
@@ -120,16 +122,15 @@ function display_version() {
 	$info    = plugin_flowview_version();
 	$version = $info['version'];
 
-	print "Cacti Flowview Cleanup Parallel Queries, Version $version, " . COPYRIGHT_YEARS . PHP_EOL;
+	print "Cacti Flowview Arin Bulk Loader, Version $version, " . COPYRIGHT_YEARS . PHP_EOL;
 }
 
 /*  display_help - displays the usage of the function */
 function display_help () {
 	display_version();
 
-	print PHP_EOL . 'usage: flowview_cleanup.php [--proceed]' . PHP_EOL . PHP_EOL;
-	print 'A command line version of the Cacti Flowview parallel query cleanup.  You must execute' . PHP_EOL;
-	print 'this command as a super user to execute the cleanup.' . PHP_EOL;
-	print 'You must use the --proceed option.' . PHP_EOL . PHP_EOL;
-	print 'This tool is to be used by developers who wish to reset their database.' . PHP_EOL;
+	print PHP_EOL . 'usage: flowview_bulkarin.php [--proceed]' . PHP_EOL . PHP_EOL;
+	print 'A command line version of the Cacti Flowview Arin bulk loader.' . PHP_EOL;
+	print 'To perform a bulk resolution of unverified Arin details,.' . PHP_EOL;
+	print 'use the --proceed option.' . PHP_EOL . PHP_EOL;
 }
