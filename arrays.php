@@ -616,7 +616,7 @@ $filter_edit = array(
 		'description' => __('The Stream IP Address or Hostname from the list of registered streams.', 'flowview'),
 		'method' => 'drop_array',
 		'value' => '|arg1:ex_addr|',
-		'array' => $ex_adddrs,
+		'array' => $ex_addrs,
 		'default' => '-1',
 	),
 	'predefined_timespan' => array(
