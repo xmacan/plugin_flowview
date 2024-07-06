@@ -524,7 +524,14 @@ function flowview_poller_bottom() {
 
 	flowview_connect();
 
-	$time = time() - 86400;
+	$retention_days = read_config_option('flowview_retention');
+
+	if (empty($retention_days)) {
+		$retention_days = 30;
+		set_config_option('flowview_retention', $retention_days);
+	}
+
+	$time = time() - ($retention_days * 86400);
 
 	flowview_db_execute("DELETE FROM plugin_flowview_dnscache
 		WHERE time > 0
