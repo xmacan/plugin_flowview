@@ -1879,8 +1879,7 @@ function get_date_filter($sql_range, &$sql_range_params, $start, $end, $range_ty
 
 	switch($range_type) {
 		case 1: // Any part in specified time span
-			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') .
-				'(`start_time` BETWEEN ? AND ? OR `end_time` BETWEEN ? AND ?)';
+			$sql_range = '(`start_time` BETWEEN ? AND ? OR `end_time` BETWEEN ? AND ?)';
 
 			$sql_range_params[] = $date1;
 			$sql_range_params[] = $date2;
@@ -1889,22 +1888,21 @@ function get_date_filter($sql_range, &$sql_range_params, $start, $end, $range_ty
 
 			break;
 		case 2: // End Time in Specified Time Span
-			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') . '(`end_time` BETWEEN ? AND ?)';
+			$sql_range = '(`end_time` BETWEEN ? AND ?)';
 
 			$sql_range_params[] = $date1;
 			$sql_range_params[] = $date2;
 
 			break;
 		case 3: // Start Time in Specified Time Span
-			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') . '(`start_time` BETWEEN ? AND ?)';
+			$sql_range = '(`start_time` BETWEEN ? AND ?)';
 
 			$sql_range_params[] = $date1;
 			$sql_range_params[] = $date2;
 
 			break;
 		case 4: // Entirety in Specitifed Time Span
-			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') .
-				'(`start_time` BETWEEN ? AND ? AND `end_time` BETWEEN ? AND ?)';
+			$sql_range = '(`start_time` BETWEEN ? AND ? AND `end_time` BETWEEN ? AND ?)';
 
 			$sql_range_params[] = $date1;
 			$sql_range_params[] = $date2;
@@ -3153,8 +3151,14 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 		$user_id = 0;
 	}
 
+	$map_range        = $stru_inner['sql_range'];
+	$map_range_params = $stru_inner['sql_range_params'];
+	$map_query        = $stru_inner;
+	unset($map_query['sql_range']);
+	unset($map_query['sql_range_params']);
+
 	$reduce_query = json_encode($stru_outer);
-	$map_query    = json_encode($stru_inner);
+	$map_query    = json_encode($map_query);
 
 	$md5 = md5($map_query);
 
@@ -3167,14 +3171,16 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	}
 
 	if (empty($request_id)) {
-		$save['id']           = 0;
-		$save['md5sum']       = $md5;
-		$save['user_id']      = $user_id;
-		$save['total_shards'] = cacti_sizeof($tables);
-		$save['map_query']    = $map_query;
-		$save['reduce_query'] = $reduce_query;
-		$save['created']      = date('Y-m-d H:i:s');
-		$save['time_to_live'] = time() + $time_to_live;
+		$save['id']               = 0;
+		$save['md5sum']           = $md5;
+		$save['user_id']          = $user_id;
+		$save['total_shards']     = cacti_sizeof($tables);
+		$save['map_query']        = $map_query;
+		$save['map_range']        = $stru_inner['sql_range'];
+		$save['map_range_params'] = json_encode($stru_inner['sql_range_params']);
+		$save['reduce_query']     = $reduce_query;
+		$save['created']          = date('Y-m-d H:i:s');
+		$save['time_to_live']     = time() + $time_to_live;
 
 		$request_id = flowview_sql_save($save, 'parallel_database_query');
 
