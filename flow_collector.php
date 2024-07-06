@@ -941,8 +941,8 @@ function process_fv5($p, $ex_addr) {
 		$delta_start = ($data['First'] - $sysuptime) / 1000000;
 		$delta_end   = ($data['Last']  - $sysuptime) / 1000000;
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime + $delta_start)) . '.' . intval($flowtimeus + ($delta_start * 1000000));
-		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $delta_end))   . '.' . intval($flowtimeus + ($delta_end * 1000000));
+		$start_date = date('Y-m-d H:i:s', intval($flowtime + $delta_start)) . '.' . abs(intval($flowtimeus + ($delta_start * 1000000)));
+		$end_date   = date('Y-m-d H:i:s', intval($flowtime + $delta_end))   . '.' . abs(intval($flowtimeus + ($delta_end * 1000000)));
 
 		//cacti_log("Time:$time, FlowTime:{$flowtime}, Start Time:{$data['First']}, SysUptime:{$sysuptime}, DeltaTime:$delta_start");
 		//cacti_log("Time:$time, FlowTime:{$flowtime}, End Time:{$data['Last']}, SysUptime:{$sysuptime}, DeltaTime:$delta_end");
@@ -1723,7 +1723,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime = 0) {
 			$delta_micro = $delta_sec = 0;
 		}
 
-		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . substr("{$delta_micro}000000", 0, 6);
+		$start_date = date('Y-m-d H:i:s', intval($flowtime - $delta_sec)) . '.' . abs(substr("{$delta_micro}000000", 0, 6));
 		$end_date   = date('Y-m-d H:i:s', intval($flowtime)) . '.' . '000000';
 	}
 
