@@ -181,6 +181,11 @@ if ($shard_id === false) {
 			WHERE query_id = ?',
 			array($query_id));
 
+		$cached = flowview_db_fetch_cell_prepared('SELECT cached_shards
+			FROM parallel_database_query
+			WHERE id = ?',
+			array($query_id));
+
 		flowview_db_execute("DROP TABLE $table");
 
 		unregister_process('flowview', "db_query_{$query_id}", 0);
@@ -189,7 +194,7 @@ if ($shard_id === false) {
 
 		$end = microtime(true);
 
-		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d', $end - $start, $threads, $shards), false, 'FLOWVIEW');
+		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d Cached:%d', $end - $start, $threads, $shards, $cached), false, 'FLOWVIEW');
 	}
 } else {
 	/* we will warn if the process is taking extra long */
@@ -226,7 +231,55 @@ if ($shard_id === false) {
 				AND shard_id = ?',
 				array('running', $query_id, $shard_id));
 
-			$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']), false, $max_cnn);
+			if ($shard['full_scan']) {
+				$exists = flowview_db_fetch_row_prepared('SELECT *
+					FROM parallel_database_query_shard_cache
+					WHERE md5sum = ?
+					AND map_table = ?
+					AND map_partition = ?',
+					array(
+						$query['md5sum_tables'],
+						$shard['map_table'],
+						$shard['map_partition']
+					)
+				);
+			} else {
+				$exists = array();
+			}
+
+			if (!sizeof($exists)) {
+				//cacti_log("The table is {$shard['map_query']}, the params are: {$shard['map_params']}");
+				$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']), false, $max_cnn);
+			} else {
+				flowview_db_execute_prepared('UPDATE parallel_database_query
+					SET cached_shards = cached_shards + 1
+					WHERE id = ?',
+					array($query_id));
+
+				$results = json_decode($exists['results'], true);
+			}
+
+			if ($shard['full_scan'] == 1 && !cacti_sizeof($exists)) {
+				$details = flowview_db_fetch_row("SELECT MIN(start_time) AS min_date, MAX(end_time) AS max_date
+					FROM {$shard['map_table']}");
+
+				if (!cacti_sizeof($details)) {
+					$details = array('min_date' => date('Y-m-d 00:00:00'), 'max_date' => date('Y-m-d 00:00:00'));
+				}
+
+				flowview_db_execute_prepared('INSERT INTO parallel_database_query_shard_cache
+					(md5sum, map_table, map_partition, min_date, max_date, results)
+					VALUES (?, ?, ?, ?, ?, ?)',
+					array(
+						$query['md5sum_tables'],
+						$shard['map_table'],
+						$shard['map_partition'],
+						$details['min_date'],
+						$details['max_date'],
+						json_encode($results)
+					)
+				);
+			}
 
 			if (read_config_option('flowview_use_maxscale') == 'on') {
 				if ($max_cnn !== false) {
@@ -335,7 +388,7 @@ function flowview_launch_workers($query_id, $threads, $running) {
 
 				db_debug('Launching FlowView Database Shard Process ' . $shard_id);
 
-				cacti_log('NOTE: Launching FlowView Database Shard Process ' . $shard_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
+				//cacti_log('NOTE: Launching FlowView Database Shard Process ' . $shard_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
 
 				exec_background($php_binary, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id --shard-id=$shard_id" . ($debug ? ' --debug':''), $redirect);
 			} else {
