@@ -808,11 +808,9 @@ function flowview_setup_table() {
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
 		`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		`md5sum` varchar(32) NOT NULL DEFAULT '',
-		`md5sum_tables` varchar(32) NOT NULL DEFAULT '',
 		`status` varchar(10) NOT NULL DEFAULT 'pending',
 		`user_id` int(10) unsigned NOT NULL DEFAULT 0,
 		`total_shards` int(10) unsigned NOT NULL DEFAULT 0,
-		`cached_shards` int(10) unsigned NOT NULL DEFAULT 0,
 		`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 		`map_table` varchar(40) NOT NULL DEFAULT '',
 		`map_query` blob NOT NULL DEFAULT '',
@@ -832,7 +830,6 @@ function flowview_setup_table() {
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
 		`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 		`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
-		`full_scan` tinyint(3) unsigned DEFAULT 1,
 		`status` varchar(10) NOT NULL DEFAULT 'pending',
 		`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
 		`map_partition` varchar(20) NOT NULL DEFAULT '',

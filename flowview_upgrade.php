@@ -290,11 +290,9 @@ function flowview_upgrade($current, $old) {
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
 			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			`md5sum` varchar(32) NOT NULL DEFAULT '',
-			`md5sum_tables` varchar(32) NOT NULL DEFAULT '',
 			`status` varchar(10) NOT NULL DEFAULT 'pending',
 			`user_id` int(10) unsigned NOT NULL DEFAULT 0,
 			`total_shards` int(10) unsigned NOT NULL DEFAULT 0,
-			`cached_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`map_table` varchar(40) NOT NULL DEFAULT '',
 			`map_query` blob NOT NULL DEFAULT '',
@@ -314,7 +312,6 @@ function flowview_upgrade($current, $old) {
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
 			`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 			`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
-			`full_scan` tinyint(3) unsigned DEFAULT 1,
 			`status` varchar(10) NOT NULL DEFAULT 'pending',
 			`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
 			`map_partition` varchar(20) NOT NULL DEFAULT '',
@@ -331,21 +328,6 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
 				ADD COLUMN map_range VARCHAR(128) NOT NULL default '' AFTER map_query,
 				ADD COLUMN map_range_params VARCHAR(128) NOT NULL default '' AFTER map_range");
-		}
-
-		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
-				ADD COLUMN md5sum_tables VARCHAR(32) NOT NULL default '' AFTER md5sum");,
-		}
-
-		if (flowview_db_column_exists('parallel_database_query', 'cached_shards')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
-				ADD COLUMN cached_shards int(10) unsigned NOT NULL DEFAULT 0 AFTER total_shards");
-		}
-
-		if (flowview_db_column_exists('parallel_database_query_shard', 'full_scan')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query_shard`
-				ADD COLUMN full_scan tinyint(3) unsigned NOT NULL DEFAULT 1 AFTER shard_id");
 		}
 
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (

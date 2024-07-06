@@ -232,28 +232,6 @@ if ($maint) {
 	}
 
 	flowview_debug('Total number of partition tables dropped is ' . $dropped);
-
-	$cache = flowview_db_fetch_assoc('SELECT * FROM parallel_database_query_shard_cache');
-
-	$dropped = 0;
-
-	if (cacti_sizeof($cache)) {
-		foreach($cache as $entry) {
-			if ($partition == '') {
-				if (!flowview_db_table_exists($entry['map_table'])) {
-					flowview_db_execute_prepared('DELETE FROM parallel_database_query_shard_cache
-						WHERE md5sum = ?
-						AND map_table = ?
-						AND map_partition = ?',
-						array($entry['md5sum'], $entry['map_table'], $entry['map_partition']));
-
-					$dropped++;
-				}
-			}
-		}
-	}
-
-	flowview_debug('Total number of cached shards dropped is ' . $dropped);
 }
 
 $end = microtime(true);

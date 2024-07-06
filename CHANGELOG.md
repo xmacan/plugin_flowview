@@ -65,7 +65,6 @@
 * feature#150: Introduce Parallel Query - Map Reduce to FlowView
 * feature#154: Support Parallel Queries through a MariaDB or MySQL proxy such as MaxScale
 * feature#155: Allow Choosing your Raw Storage Engine Format
-* feature#156: Create Persistent Shard Result Cache
 
 --- 3.3 ---
 

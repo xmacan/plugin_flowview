@@ -1962,10 +1962,6 @@ function get_tables_for_query($start, $end = null) {
 				if (!isset($_SESSION['sess_flowview_table_details'][$t['table']])) {
 					$details = flowview_db_fetch_row("SELECT MIN(start_time) AS min_date, MAX(end_time) AS max_date, '' AS table_partition FROM {$t['table']}");
 
-					if (!cacti_sizeof($details)) {
-						cacti_log("WARNING: Not Deatils for {$t['table']} returned");
-					}
-
 					$_SESSION['sess_flowview_table_details'][$t['table']] = $details;
 				} else {
 					$details = $_SESSION['sess_flowview_table_details'][$t['table']];
@@ -3155,33 +3151,18 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 		$user_id = 0;
 	}
 
-	/**
-	 * Prepare the inner SQL for md5sum calculations.  We have two
-	 * md5's, one for the query itself, and another for the tables
-	 * that match the query criterial without the time range.
-	 *
-	 * This ensures that if there is a time range that is in scope
-	 * and the data has already been cached, for that exact query
-	 * we don't have to re-cache the data.
-	 */
 	$map_range        = $stru_inner['sql_range'];
 	$map_range_params = $stru_inner['sql_range_params'];
 	$map_query        = $stru_inner;
-	$sql_start_time   = $stru_inner['sql_start_time'];
-	$sql_end_time     = $stru_inner['sql_end_time'];
-	$query_md5        = md5(json_encode(array_merge($stru_inner, $stru_outer)));
-
 	unset($map_query['sql_range']);
 	unset($map_query['sql_range_params']);
-	unset($map_query['sql_start_time']);
-	unset($map_query['sql_end_time']);
 
 	$reduce_query = json_encode($stru_outer);
 	$map_query    = json_encode($map_query);
 
-	$table_md5 = md5($map_query);
+	$md5 = md5($map_query);
 
-	$request_id   = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($query_md5));
+	$request_id   = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($md5));
 	$time_to_live = read_config_option('flowview_parallel_time_to_live');
 
 	if (empty($time_to_live)) {
@@ -3191,8 +3172,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 	if (empty($request_id)) {
 		$save['id']               = 0;
-		$save['md5sum']           = $query_md5;
-		$save['md5sum_tables']    = $table_md5;
+		$save['md5sum']           = $md5;
 		$save['user_id']          = $user_id;
 		$save['total_shards']     = cacti_sizeof($tables);
 		$save['map_query']        = $map_query;
@@ -3214,8 +3194,8 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 		db_execute_prepared('UPDATE parallel_database_query SET map_table = ? WHERE id = ?',
 			array($table_name, $request_id));
 
-		$start = $sql_start_time;
-		$end   = $sql_end_time;
+		$start = $stru_inner['sql_start_time'];
+		$end   = $stru_inner['sql_end_time'];
 		$index = 0;
 
 		foreach($tables as $table => $details) {
@@ -3231,7 +3211,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 			}
 
 			if (!$full_scan) {
-				$fsql_where  = $stru_inner['sql_where'] . ($stru_inner['sql_where'] != '' ? ' AND ':'WHERE ') . $stru_inner['sql_range'];
+				$fsql_where .= ($stru_inner['sql_where'] != '' ? ' AND ':'WHERE ') . $stru_inner['sql_range'];
 				$fsql_params = array_merge($stru_inner['sql_params'], $stru_inner['sql_range_params']);
 			} else {
 				$fsql_where  = $stru_inner['sql_where'];
@@ -3246,19 +3226,10 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 			$map_query .= (isset($stru_inner['sql_order'])   ? ' ' . $stru_inner['sql_order']:'');
 			$map_query .= (isset($stru_inner['sql_limit'])   ? ' ' . $stru_inner['sql_limit']:'');
 
-			flowview_db_execute_prepared('INSERT INTO parallel_database_query_shard
-				(query_id, shard_id, full_scan, map_table, map_partition, map_query, map_params)
-				VALUES (?, ?, ?, ?, ?, ?, ?)',
-				array(
-					$request_id,
-					$index,
-					$full_scan ? '1':'0',
-					$details['table_name'],
-					$details['table_partition'],
-					$map_query,
-					json_encode($fsql_params)
-				)
-			);
+			db_execute_prepared('INSERT INTO parallel_database_query_shard
+				(query_id, shard_id, map_table, map_partition, map_query, map_params)
+				VALUES (?, ?, ?, ?, ?, ?)',
+				array($request_id, $index, $details['table_name'], $details['table_partition'], $map_query, json_encode($fsql_params)));
 
 			$index++;
 		}
