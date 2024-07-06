@@ -3122,7 +3122,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 		$save['created']      = date('Y-m-d H:i:s');
 		$save['time_to_live'] = time() + $time_to_live;
 
-		$request_id = sql_save($save, 'parallel_database_query');
+		$request_id = flowview_sql_save($save, 'parallel_database_query');
 
 		$table_name = parellel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $tables[0]);
 
