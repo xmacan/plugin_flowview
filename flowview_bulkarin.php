@@ -90,8 +90,6 @@ $ips  = flowview_db_fetch_assoc('SELECT *
 
 if (cacti_sizeof($ips)) {
 	foreach($ips as $p) {
-		print "NOTE: Verifying Arin for IP Address:{$p['ip']} and DNS Name:{$p['host']}" . PHP_EOL;
-
 		$arin_id  = 0;
 		$arin_ver = 0;
 

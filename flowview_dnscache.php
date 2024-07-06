@@ -30,7 +30,7 @@ include('./plugins/flowview/database.php');
 flowview_connect();
 
 $actions = array(
-	1 => __('Delete'),
+	1 => __('Delete', 'flowview'),
 );
 
 /* set default action */
@@ -100,12 +100,12 @@ function form_actions() {
 		if (get_nfilter_request_var('drp_action') == '1') { /* delete */
 			print "<tr>
 				<td class='textArea'>
-					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entriy.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($dns_array)) . "</p>
+					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entriy.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($dns_array), 'flowview') . "</p>
 					<div class='itemlist'><ul>$dns_list</ul></div>
 				</td>
 			</tr>\n";
 
-			$save_html = "<input type='button' class='ui-button ui-corner-all ui-widget' value='" . __esc('Cancel') . "' onClick='cactiReturnTo()'>&nbsp;<input type='submit' class='ui-button ui-corner-all ui-widget' value='" . __esc('Continue') . "' title='" . __n('Delete DNS Entry', 'Delete DNS Entries', cacti_sizeof($dns_array)) . "'>";
+			$save_html = "<input type='button' class='ui-button ui-corner-all ui-widget' value='" . __esc('Cancel', 'flowview') . "' onClick='cactiReturnTo()'>&nbsp;<input type='submit' class='ui-button ui-corner-all ui-widget' value='" . __esc('Continue', 'flowview') . "' title='" . __n('Delete DNS Entry', 'Delete DNS Entries', cacti_sizeof($dns_array), 'flowview') . "'>";
 		}
 	} else {
 		raise_message(40);
@@ -153,6 +153,11 @@ function view_dns_cache() {
 			'pageset' => true,
 			'default' => '-1'
 		),
+		'verified' => array(
+			'filter' => FILTER_DEFAULT,
+			'pageset' => true,
+			'default' => '-1'
+		),
 		'sort_column' => array(
 			'filter' => FILTER_CALLBACK,
 			'default' => 'host',
@@ -174,7 +179,7 @@ function view_dns_cache() {
 		$rows = get_request_var('rows');
 	}
 
-	html_start_box(__('Flowview DNS Cache Entries'), '100%', '', '3', 'center', '');
+	html_start_box(__('Flowview DNS Cache Entries', 'flowview'), '100%', '', '3', 'center', '');
 
 	?>
 	<tr class='even'>
@@ -183,17 +188,27 @@ function view_dns_cache() {
 			<table class='filterTable'>
 				<tr>
 					<td>
-						<?php print __('Search');?>
+						<?php print __('Search', 'flowview');?>
 					</td>
 					<td>
 						<input type='text' class='ui-state-default ui-corner-all' id='filter' name='filter' size='25' value='<?php print html_escape_request_var('filter');?>'>
 					</td>
 					<td>
-						<?php print __('Source');?>
+						<?php print __('Verified', 'flowview');?>
+					</td>
+					<td>
+						<select id='verified' name='verified' onChange='applyFilter()'>
+							<option value='-1'<?php print (get_request_var('verified') == '-1' ? ' selected>':'>') . __('Any', 'flowview');?></option>
+							<option value='0'<?php print (get_request_var('verified') == '0' ? ' selected>':'>') . __('Unverified', 'flowview');?></option>
+							<option value='1'<?php print (get_request_var('verified') == '1' ? ' selected>':'>') . __('Verified', 'flowview');?></option>
+						</select>
+					</td>
+					<td>
+						<?php print __('Source', 'flowview');?>
 					</td>
 					<td>
 						<select id='source' name='source' onChange='applyFilter()'>
-							<option value='-1'<?php print (get_request_var('source') == '-1' ? ' selected>':'>') . __('Any');?></option>
+							<option value='-1'<?php print (get_request_var('source') == '-1' ? ' selected>':'>') . __('Any', 'flowview');?></option>
 							<?php
 							$sources = array_rekey(
 								flowview_db_fetch_assoc('SELECT DISTINCT source
@@ -211,11 +226,11 @@ function view_dns_cache() {
 						</select>
 					</td>
 					<td>
-						<?php print __('Entries');?>
+						<?php print __('Entries', 'flowview');?>
 					</td>
 					<td>
 						<select id='rows' name='rows' onChange='applyFilter()'>
-							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default');?></option>
+							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'flowview');?></option>
 							<?php
 							if (cacti_sizeof($item_rows) > 0) {
 								foreach ($item_rows as $key => $value) {
@@ -227,9 +242,9 @@ function view_dns_cache() {
 					</td>
 					<td>
 						<span>
-							<input type='button' class='ui-button ui-corner-all ui-widget' id='refresh' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters');?>'>
-							<input type='button' class='ui-button ui-corner-all ui-widget' id='clear' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters');?>'>
-							<input type='button' class='ui-button ui-corner-all ui-widget' id='purge' value='<?php print __esc('Purge', 'flowview');?>' title='<?php print __esc('Purge the DNS Cache');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='refresh' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters', 'flowview');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='clear' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters', 'flowview');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='purge' value='<?php print __esc('Purge', 'flowview');?>' title='<?php print __esc('Purge the DNS Cache', 'flowview');?>'>
 						</span>
 					</td>
 				</tr>
@@ -241,6 +256,7 @@ function view_dns_cache() {
 				strURL  = 'flowview_dnscache.php?header=false';
 				strURL += '&filter='+$('#filter').val();
 				strURL += '&source='+$('#source').val();
+				strURL += '&verified='+$('#verified').val();
 				strURL += '&rows='+$('#rows').val();
 				loadPageNoHeader(strURL);
 			}
@@ -294,20 +310,34 @@ function view_dns_cache() {
 		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . ' source = ' . db_qstr(get_request_var('source'));
 	}
 
+	if (get_request_var('verified') != '-1') {
+		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . ' arin_verified = ' . db_qstr(get_request_var('verified'));
+	}
+
 	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
-		FROM plugin_flowview_dnscache
+		FROM plugin_flowview_dnscache AS dc
+		LEFT JOIN plugin_flowview_arin_information AS ai
+		ON dc.arin_id = ai.id
 		$sql_where");
 
 	$sql_order = get_order_string();
+
+	/* sort naturally if the IP is in the sort */
+	if (strpos($sql_order, 'ip ') !== false) {
+		$sql_order = str_replace('ip ', 'NATURAL_SORT_KEY(ip) ', $sql_order);
+	}
+
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$dns_cache = flowview_db_fetch_assoc("SELECT *
-		FROM plugin_flowview_dnscache
+	$dns_cache = flowview_db_fetch_assoc("SELECT dc.*, ai.origin_as
+		FROM plugin_flowview_dnscache AS dc
+		LEFT JOIN plugin_flowview_arin_information AS ai
+		ON dc.arin_id = ai.id
 		$sql_where
 		$sql_order
 		$sql_limit");
 
-	$nav = html_nav_bar('flowview_dnscache.php?filter=' . get_request_var('filter'), MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, 5, __('Entries'), 'page', 'main');
+	$nav = html_nav_bar('flowview_dnscache.php?filter=' . get_request_var('filter'), MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, 8, __('Entries', 'flowview'), 'page', 'main');
 
 	form_start('flowview_dnscache.php', 'chk');
 
@@ -317,27 +347,45 @@ function view_dns_cache() {
 
 	$display_text = array(
 		'ip' => array(
-			'display' => __('IP Address'),
-			'align' => 'left',
-			'tip'  => __('This is the IP Address of the Cache entry.')
+			'display' => __('IP Address', 'flowview'),
+			'align'   => 'left',
+			'tip'     => __('This is the IP Address of the Cache entry.', 'flowview')
 		),
 		'host' => array(
-			'display' => __('DNS Hostname'),
-			'align' => 'left',
-			'sort' => 'ASC',
-			'tip' => __('The DNS Name assigned to the IP Address.')
+			'display' => __('DNS Hostname', 'flowview'),
+			'align'   => 'left',
+			'sort'    => 'ASC',
+			'tip'     => __('The DNS Name assigned to the IP Address.', 'flowview')
 		),
 		'source' => array(
-			'display' => __('Source'),
-			'align' => 'left',
-			'sort' => 'DESC',
-			'tip' => __('The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN.')
+			'display' => __('Source', 'flowview'),
+			'align'   => 'left',
+			'sort'    => 'DESC',
+			'tip'     => __('The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN.', 'flowview')
+		),
+		'arin_verified' => array(
+			'display' => __('Arin Verified', 'flowview'),
+			'align'   => 'left',
+			'sort'    => 'DESC',
+			'tip'     => __('The Arin information for this IP Address is verified, or it\'s a Local Domain IP Address.', 'flowview')
+		),
+		'arin_id' => array(
+			'display' => __('Arin ID', 'flowview'),
+			'align'   => 'right',
+			'sort'    => 'DESC',
+			'tip'     => __('The Arin primary key.  This is not official Arin information.', 'flowview')
+		),
+		'origin_as' => array(
+			'display' => __('Autonomous System ID', 'flowview'),
+			'align'   => 'right',
+			'sort'    => 'DESC',
+			'tip'     => __('The Arin Origin AS.  This is official Arin AS information.', 'flowview')
 		),
 		'time' => array(
-			'display' => __('Time Inserted'),
-			'align' => 'right',
-			'sort' => 'DESC',
-			'tip' => __('This is the time that the DNS cache was entered or last updated.')
+			'display' => __('Updated Time', 'flowview'),
+			'align'   => 'right',
+			'sort'    => 'DESC',
+			'tip'     => __('This is the time that the DNS cache was entered or last updated.', 'flowview')
 		)
 	);
 
@@ -350,12 +398,15 @@ function view_dns_cache() {
 			form_selectable_cell(filter_value($l['ip'], get_request_var('filter')), $l['id']);
 			form_selectable_cell(filter_value($l['host'], get_request_var('filter')), $l['id']);
 			form_selectable_cell($l['source'], $l['id']);
+			form_selectable_cell($l['arin_verified'] == 1 ? __('Verified', 'flowview'):__('Unverified', 'flowview'), $l['id']);
+			form_selectable_cell($l['arin_id'], $l['id'], '', 'right');
+			form_selectable_cell($l['origin_as'], $l['id'], '', 'right');
 			form_selectable_cell(date('Y-m-d H:i:s', $l['time']), $l['id'], '', 'right');
 			form_checkbox_cell($l['host'], $l['id']);
 			form_end_row();
 		}
 	} else {
-		print "<tr class='tableRow'><td colspan='" . (cacti_sizeof($display_text)+1) . "'><em>" . __('No DNS Cache Entries Found') . "</em></td></tr>\n";
+		print "<tr class='tableRow'><td colspan='" . (cacti_sizeof($display_text)+1) . "'><em>" . __('No DNS Cache Entries Found', 'flowview') . "</em></td></tr>\n";
 	}
 
 	html_end_box(false);
