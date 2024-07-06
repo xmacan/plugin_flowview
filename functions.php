@@ -3146,6 +3146,49 @@ function run_flow_query($session, $query_id, $start, $end) {
 	return false;
 }
 
+function flowview_table_name_to_time($table, $type) {
+	$suffix = str_replace('plugin_flowview_raw_', '', $table);
+
+	$year = substr($suffix, 0, 4);
+	$day  = substr($suffix, 4, 3);
+
+	if (strlen($suffix) == 7) {
+		$gran = 'days';
+		$hour = 0;
+	} else {
+		$gran = 'hours';
+		$hour = substr($suffix, 8, 2);
+	}
+
+	$dates = flowview_convert_yeardayhour_to_date($gran, $year, $day, $hour);
+
+	return $dates[$type];
+}
+
+function flowview_convert_yeardayhour_to_date($range, $year, $day, $hour = 0){
+    $datetime = new DateTime();
+
+	if ($range == 'days') {
+    	$datetime->setTimestamp(mktime(0, 0, 0, 0, 0, $year) + ($day * 86400));
+		$start_date = $datetime->format('Y-m-d 00:00:00');
+		$end_date   = date('Y-m-d 00:00:00', strtotime($start_date)+86400);
+	} else {
+    	$datetime->setTimestamp(mktime(0, 0, 0, 0, 0, $year) + ($day * 86400) + ($hour * 3600));
+		$start_date = $datetime->format('Y-m-d H:00:00');
+		$end_date   = date('Y-m-d H:00:00', strtotime($start_date) + ($hour * 3600));
+	}
+
+	$start_time = strtotime($start_date);
+	$end_time   = strtotime($end_date);
+
+	return array(
+		'start_date' => $start_date,
+		'start_time' => $start_time,
+		'end_date'   => $end_date,
+		'end_time'   => $end_time
+	);
+}
+
 function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	$save = array();
 
@@ -3211,7 +3254,9 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 		$table_name = parallel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $base_table);
 
-		db_execute_prepared('UPDATE parallel_database_query SET map_table = ? WHERE id = ?',
+		db_execute_prepared('UPDATE parallel_database_query
+			SET map_table = ?
+			WHERE id = ?',
 			array($table_name, $request_id));
 
 		$start = $sql_start_time;
@@ -3219,8 +3264,18 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 		$index = 0;
 
 		foreach($tables as $table => $details) {
-			$start_time  = strtotime($details['min_date']);
-			$end_time    = strtotime($details['max_date']);
+			if (!empty($details['min_date'])) {
+				$start_time = strtotime($details['min_date']);
+			} else {
+				$start_time = flowview_table_name_to_time($table, 'start_time');
+			}
+
+			if (!empty($details['min_date'])) {
+				$end_time = strtotime($details['max_date']);
+			} else {
+				$end_time = flowview_table_name_to_time($table, 'end_time');
+			}
+
 			$fsql_where  = '';
 			$fsql_params = array();
 
