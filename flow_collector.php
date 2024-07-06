@@ -973,7 +973,7 @@ function process_fv5($p, $ex_addr) {
 			db_qstr($ex_addr)               . ', ' .
 			db_qstr($header['sysuptime'])   . ', ' .
 
-			'INET6_ATON("' . db_qstr($src_addr) . '")' . ', ' .
+			'INET6_ATON(' . db_qstr($src_addr) . ')' . ', ' .
 
 			db_qstr($src_domain)            . ', ' .
 			db_qstr($src_rdomain)           . ', ' .
@@ -983,7 +983,7 @@ function process_fv5($p, $ex_addr) {
 			db_qstr($data['src_port'])      . ', ' .
 			db_qstr($src_rport)             . ', ' .
 
-			'INET6_ATON("' . db_qstr($dst_addr) . '")' . ', ' .
+			'INET6_ATON(' . db_qstr($dst_addr) . ')' . ', ' .
 
 			db_qstr($dst_domain)            . ', ' .
 			db_qstr($dst_rdomain)           . ', ' .
@@ -1760,7 +1760,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime = 0) {
 		db_qstr($ex_addr)                                   . ', ' .
 		$sysuptime                                          . ', ' .
 
-		'INET6_ATON("' . $src_addr . '")'                   . ', ' .
+		'INET6_ATON(' . db_qstr($src_addr) . ')'            . ', ' .
 		db_qstr($src_domain)                                . ', ' .
 		db_qstr($src_rdomain)                               . ', ' .
 		check_set($data, $flow_fields['src_as'])            . ', ' .
@@ -1769,7 +1769,7 @@ function process_v9_v10($data, $ex_addr, $flowtime, $fsid, $sysuptime = 0) {
 		check_set($data, $flow_fields['src_port'])          . ', ' .
 		db_qstr($src_rport)                                 . ', ' .
 
-		'INET6_ATON("' . $dst_addr . '")'                   . ', ' .
+		'INET6_ATON(' . db_qstr($dst_addr) . ')'            . ', ' .
 		db_qstr($dst_domain)                                . ', ' .
 		db_qstr($dst_rdomain)                               . ', ' .
 		check_set($data, $flow_fields['dst_as'])            . ', ' .
