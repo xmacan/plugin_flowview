@@ -273,7 +273,7 @@ function save_devices () {
 		}
 	}
 
-	header('Location: flowview_devices.php?header=false');
+	header("Location: flowview_devices.php?header=false&action=edit&id=$id");
 	exit;
 }
 
@@ -309,7 +309,7 @@ function edit_devices() {
 
 		html_end_box();
 
-		form_save_button('flowview_devices.php');
+		form_save_button('flowview_devices.php', 'return');
 
 		if (cacti_sizeof($device)) {
 			$streams = flowview_db_fetch_assoc_prepared('SELECT ds.*, SUM(dt.templates) AS templates
