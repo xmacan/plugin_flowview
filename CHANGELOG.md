@@ -1,6 +1,6 @@
 # Changelog
 
---- 3.4 ---
+--- 4.0 ---
 
 * issue#66: Cacti flowview collector errors
 * issue#71: Flowview no data were displayed

@@ -674,13 +674,16 @@ function flowview_setup_table() {
 	flowview_connect();
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
-		id int(11) unsigned NOT NULL AUTO_INCREMENT,
-		ip varchar(45) NOT NULL default '',
-		host varchar(255) NOT NULL default '',
-		source varchar(40) NOT NULL default '',
-		time bigint(20) unsigned NOT NULL default '0',
-		PRIMARY KEY (id),
-		UNIQUE KEY ip (ip))
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`ip` varchar(45) NOT NULL DEFAULT '',
+		`host` varchar(255) NOT NULL DEFAULT '',
+		`source` varchar(40) NOT NULL DEFAULT '',
+		`arin_verified` tinyint(3) unsigned NOT NULL DEFAULT 0,
+		`arin_id` int(10) unsigned NOT NULL DEFAULT 0,
+		`time` bigint(20) unsigned NOT NULL DEFAULT 0,
+		PRIMARY KEY (`id`),
+		KEY `arin_id` (`arin_id`),
+		UNIQUE KEY `ip` (`ip`)
 		ENGINE=InnoDB,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 

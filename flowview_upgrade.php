@@ -216,11 +216,19 @@ function flowview_upgrade($current, $old) {
 		}
 
 		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id')) {
-			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
+			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache
+				ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
 				DROP PRIMARY KEY,
 				ADD PRIMARY KEY(id),
 				ADD UNIQUE KEY ip(ip),
 				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'arin_verified')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache
+				ADD COLUMN arin_verified tinyint(3) unsigned DEFAULT 0 AFTER source,
+				ADD COLUMN arin_id int(11) unsigned DEFAULT 0 AFTER arin_verified,
+				ADD KEY `arin_id` (`arin_id`)');
 		}
 
 		flowview_db_execute('ALTER TABLE plugin_flowview_dnscache ENGINE=InnoDB');
