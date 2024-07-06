@@ -563,6 +563,22 @@ $devices = array_rekey(
 	'id', 'name'
 );
 
+$templates = array_rekey(
+	flowview_db_fetch_assoc('SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION
+		SELECT DISTINCT template_id AS id, template_id AS name
+		FROM plugin_flowview_device_templates
+		ORDER BY id'),
+	'id', 'name'
+);
+
+$ex_addrs = array_rekey(
+	flowview_db_fetch_assoc('SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION
+		SELECT DISTINCT ex_addr AS id, name
+		FROM plugin_flowview_device_streams
+		ORDER BY id'),
+	'id', 'name'
+);
+
 $filter_edit = array(
 	'spacer0' => array(
 		'method' => 'spacer',
@@ -590,17 +606,17 @@ $filter_edit = array(
 	'template_id' => array(
 		'friendly_name' => __('Flow Template ID', 'flowview'),
 		'description' => __('The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID\'s may differ from manufacturer to manufacturer.', 'flowview'),
-		'method' => 'drop_sql',
+		'method' => 'drop_array',
 		'value' => '|arg1:template_id|',
-		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT template_id AS id, template_id AS name FROM plugin_flowview_device_templates ORDER BY id',
+		'array' => $templates,
 		'default' => '-1',
 	),
 	'ex_addr' => array(
 		'friendly_name' => __('Stream Address', 'flowview'),
 		'description' => __('The Stream IP Address or Hostname from the list of registered streams.', 'flowview'),
-		'method' => 'drop_sql',
+		'method' => 'drop_array',
 		'value' => '|arg1:ex_addr|',
-		'sql' => 'SELECT -1 AS id, "' . __esc('All', 'flowview') . '" AS name UNION SELECT DISTINCT ex_addr AS id, name FROM plugin_flowview_device_streams ORDER BY id',
+		'array' => $ex_adddrs,
 		'default' => '-1',
 	),
 	'predefined_timespan' => array(
