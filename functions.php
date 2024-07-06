@@ -1858,57 +1858,65 @@ function get_ip_filter($sql_where, &$sql_params, $value, $column) {
 	return $sql_where;
 }
 
-/** get_date_filter($sql_where, $value, $column)
+/**
+ * get_date_filter - given the dates and the range type
+ * return a well formed sql_range value and it's params.
  *
- *  This function constructs a $sql_where a date range and range type
+ * @param  string      A sql_range clause to be appended to the $sql_where
+ * @param  array       Array of parameters.
+ * @param  int         Start date from the filter
+ * @param  int         End date from the filter
+ * @param  int         The range type defined by the filter
+ *
+ * @return string      The modified sql_range
  *
  */
-function get_date_filter($sql_where, &$sql_params, $start, $end, $range_type = 1) {
-	$sql_where = trim($sql_where);
+function get_date_filter($sql_range, &$sql_range_params, $start, $end, $range_type = 1) {
+	$sql_range = trim($sql_range);
 
 	$date1 = date('Y-m-d H:i:s', $start);
 	$date2 = date('Y-m-d H:i:s', $end);
 
 	switch($range_type) {
 		case 1: // Any part in specified time span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') .
+			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') .
 				'(`start_time` BETWEEN ? AND ? OR `end_time` BETWEEN ? AND ?)';
 
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
 
 			break;
 		case 2: // End Time in Specified Time Span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`end_time` BETWEEN ? AND ?)';
+			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') . '(`end_time` BETWEEN ? AND ?)';
 
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
 
 			break;
 		case 3: // Start Time in Specified Time Span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . '(`start_time` BETWEEN ? AND ?)';
+			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') . '(`start_time` BETWEEN ? AND ?)';
 
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
 
 			break;
 		case 4: // Entirety in Specitifed Time Span
-			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') .
+			$sql_range .= ($sql_range != '' ? ' AND ':'WHERE ') .
 				'(`start_time` BETWEEN ? AND ? AND `end_time` BETWEEN ? AND ?)';
 
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
-			$sql_params[] = $date1;
-			$sql_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
+			$sql_range_params[] = $date1;
+			$sql_range_params[] = $date2;
 
 			break;
 		default:
 			break;
 	}
 
-	return $sql_where;
+	return $sql_range;
 }
 
 /** get_tables_for_query($start, $end)
@@ -1951,7 +1959,19 @@ function get_tables_for_query($start, $end = null) {
 			}
 
 			if ($partition >= $start_part && $partition <= $end_part) {
-				$inc_tables[] = $t['table'];
+				$inc_tables[$t['table']]['table_name'] = $t['table'];
+
+				if (!isset($_SESSION['sess_flowview_table_details'][$t['table']])) {
+					$details = flowview_db_fetch_row("SELECT MIN(start_time) AS min_date, MAX(end_time) AS max_date, '' AS table_partition FROM {$t['table']}");
+
+					$_SESSION['sess_flowview_table_details'][$t['table']] = $details;
+				} else {
+					$details = $_SESSION['sess_flowview_table_details'][$t['table']];
+				}
+
+				$inc_tables[$t['table']]['table_partition'] = $details['table_partition'];
+				$inc_tables[$t['table']]['min_date']        = $details['min_date'];
+				$inc_tables[$t['table']]['max_date']        = $details['max_date'];
 			}
 		}
 	}
@@ -2167,10 +2187,13 @@ function run_flow_query($session, $query_id, $start, $end) {
 		return false;
 	}
 
-	$key        = get_flowview_session_key($query_id, $start, $end);
-	$time       = time();
-	$sql_where  = '';
-	$sql_params = array();
+	$key  = get_flowview_session_key($query_id, $start, $end);
+	$time = time();
+
+	$sql_where        = '';
+	$sql_params       = array();
+	$sql_range        = '';
+	$sql_range_params = array();
 
 	if ($session && isset($_SESSION['sess_flowdata'][$key])) {
 		return $_SESSION['sess_flowdata'][$key]['data'];
@@ -2192,11 +2215,11 @@ function run_flow_query($session, $query_id, $start, $end) {
 		array($query_id));
 
 	if (isset_request_var('includeif') && get_request_var('includeif') > 0) {
-		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end, get_request_var('includeif'));
+		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end, get_request_var('includeif'));
 	} elseif ($data['includeif'] > 0) {
-		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end, $data['includeif']);
+		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end, $data['includeif']);
 	} else {
-		$sql_where = get_date_filter($sql_where, $sql_params, $start, $end);
+		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end);
 	}
 
 	// Handle Limit Override
@@ -2686,16 +2709,35 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 		if (cacti_sizeof($tables)) {
 			if (empty($threads) || $threads == 1) {
-				foreach($tables as $t) {
-					if (isset($sql_inner1)) {
-						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner1 FROM $t $sql_where $sql_inner_groupby1";
-						$all_params = array_merge($all_params, $sql_params);
+				foreach($tables as $table_name => $details) {
+					$start_time  = strtotime($details['min_date']);
+					$end_time    = strtotime($details['max_date']);
+					$fsql_where  = '';
+					$fsql_params = array();
 
-						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner2 FROM $t $sql_where $sql_inner_groupby2";
-						$all_params = array_merge($all_params, $sql_params);
+					if ($start < $start_time && $end > $end_time) {
+						$full_scan = true;
 					} else {
-						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner FROM $t $sql_where $sql_inner_groupby";
-						$all_params = array_merge($all_params, $sql_params);
+						$full_scan = false;
+					}
+
+					if (isset($sql_inner1)) {
+						if (!$full_scan) {
+							$fsql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . $sql_range;
+							$fsql_params = array_merge($sql_params, $sql_range_params);
+						} else {
+							$fsql_where  = $sql_where;
+							$fsql_params = $sql_params;
+						}
+
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner1 FROM $t $fsql_where $sql_inner_groupby1";
+						$all_params = array_merge($all_params, $fsql_params);
+
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner2 FROM $t $fsql_where $sql_inner_groupby2";
+						$all_params = array_merge($all_params, $fsql_params);
+					} else {
+						$sql .= ($sql != '' ? ' UNION ALL ':'') . "$sql_inner FROM $t $fsql_where $sql_inner_groupby";
+						$all_params = array_merge($all_params, $fsql_params);
 					}
 				}
 
@@ -2717,23 +2759,31 @@ function run_flow_query($session, $query_id, $start, $end) {
 			} else {
 				if (isset($sql_inner1)) {
 					$stru_inner1 = array(
-						'sql_query'   => $sql_inner1,
-						'sql_where'   => $sql_where,
-						'sql_groupby' => $sql_inner_groupby1,
-						'sql_having'  => '',
-						'sql_order'   => '',
-						'sql_limit'   => '',
-						'sql_params'  => $sql_params
+						'sql_query'        => $sql_inner1,
+						'sql_where'        => $sql_where,
+						'sql_range'        => $sql_range,
+						'sql_groupby'      => $sql_inner_groupby1,
+						'sql_having'       => '',
+						'sql_order'        => '',
+						'sql_limit'        => '',
+						'sql_params'       => $sql_params,
+						'sql_range_params' => $sql_range_params,
+						'sql_start_time'   => $start,
+						'sql_end_time'     => $end
 					);
 
 					$stru_inner2 = array(
-						'sql_query'   => $sql_inner2,
-						'sql_where'   => $sql_where,
-						'sql_groupby' => $sql_inner_groupby2,
-						'sql_having'  => '',
-						'sql_order'   => '',
-						'sql_limit'   => '',
-						'sql_params'  => $sql_params
+						'sql_query'        => $sql_inner2,
+						'sql_where'        => $sql_where,
+						'sql_range'        => $sql_range,
+						'sql_groupby'      => $sql_inner_groupby2,
+						'sql_having'       => '',
+						'sql_order'        => '',
+						'sql_limit'        => '',
+						'sql_params'       => $sql_params,
+						'sql_range_params' => $sql_range_params,
+						'sql_start_time'   => $start,
+						'sql_end_time'     => $end
 					);
 
 					$stru_outer = array(
@@ -2750,23 +2800,27 @@ function run_flow_query($session, $query_id, $start, $end) {
 					$requests[] = parallel_database_query_request($tables, $stru_inner2, $stru_outer);
 				} else {
 					$stru_inner = array(
-						'sql_query'   => $sql_inner,
-						'sql_where'   => $sql_where,
-						'sql_having'  => '',
-						'sql_order'   => '',
-						'sql_limit'   => '',
-						'sql_groupby' => $sql_inner_groupby,
-						'sql_params'  => $sql_params
+						'sql_query'        => $sql_inner,
+						'sql_where'        => $sql_where,
+						'sql_range'        => $sql_range,
+						'sql_having'       => '',
+						'sql_order'        => '',
+						'sql_limit'        => '',
+						'sql_groupby'      => $sql_inner_groupby,
+						'sql_params'       => $sql_params,
+						'sql_range_params' => $sql_range_params,
+						'sql_start_time'   => $start,
+						'sql_end_time'     => $end
 					);
 
 					$stru_outer = array(
-						'sql_query'   => $sql_query,
-						'sql_where'   => '',
-						'sql_having'  => $sql_having,
-						'sql_groupby' => $sql_groupby,
-						'sql_order'   => $sql_order,
-						'sql_limit'   => $sql_limit,
-						'sql_params'  => array()
+						'sql_query'        => $sql_query,
+						'sql_where'        => '',
+						'sql_having'       => $sql_having,
+						'sql_groupby'      => $sql_groupby,
+						'sql_order'        => $sql_order,
+						'sql_limit'        => $sql_limit,
+						'sql_params'       => array()
 					);
 
 					$requests[] = parallel_database_query_request($tables, $stru_inner, $stru_outer);
@@ -3104,7 +3158,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 	$md5 = md5($map_query);
 
-	$request_id = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($md5));
+	$request_id   = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($md5));
 	$time_to_live = read_config_option('flowview_parallel_time_to_live');
 
 	if (empty($time_to_live)) {
@@ -3124,23 +3178,54 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 		$request_id = flowview_sql_save($save, 'parallel_database_query');
 
-		$table_name = parellel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $tables[0]);
+		foreach($tables as $table => $details) {
+			$base_table = $table;
+			break;
+		}
+
+		$table_name = parallel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $base_table);
 
 		db_execute_prepared('UPDATE parallel_database_query SET map_table = ? WHERE id = ?',
 			array($table_name, $request_id));
 
-		foreach($tables as $index => $table) {
+		$start = $stru_inner['sql_start_time'];
+		$end   = $stru_inner['sql_end_time'];
+		$index = 0;
+
+		foreach($tables as $table => $details) {
+			$start_time  = strtotime($details['min_date']);
+			$end_time    = strtotime($details['max_date']);
+			$fsql_where  = '';
+			$fsql_params = array();
+
+			if ($start < $start_time && $end > $end_time) {
+				$full_scan = true;
+			} else {
+				$full_scan = false;
+			}
+
+			if (!$full_scan) {
+				$fsql_where .= ($stru_inner['sql_where'] != '' ? ' AND ':'WHERE ') . $stru_inner['sql_range'];
+				$fsql_params = array_merge($stru_inner['sql_params'], $stru_inner['sql_range_params']);
+			} else {
+				$fsql_where  = $stru_inner['sql_where'];
+				$fsql_params = $stru_inner['sql_params'];
+			}
+
 			$map_query  = $stru_inner['sql_query'];
 			$map_query .= " FROM $table";
-			$map_query .= (isset($stru_inner['sql_where'])   ? ' ' . $stru_inner['sql_where']:'');
+			$map_query .= ($fsql_where != '' ? ' ' . $fsql_where:'');
 			$map_query .= (isset($stru_inner['sql_groupby']) ? ' ' . $stru_inner['sql_groupby']:'');
 			$map_query .= (isset($stru_inner['sql_having'])  ? ' ' . $stru_inner['sql_having']:'');
 			$map_query .= (isset($stru_inner['sql_order'])   ? ' ' . $stru_inner['sql_order']:'');
 			$map_query .= (isset($stru_inner['sql_limit'])   ? ' ' . $stru_inner['sql_limit']:'');
 
-			db_execute_prepared('INSERT INTO parallel_database_query_shard (query_id, shard_id, map_query, map_params)
-				VALUES (?, ?, ?, ?)',
-				array($request_id, $index, $map_query, json_encode($stru_inner['sql_params'])));
+			db_execute_prepared('INSERT INTO parallel_database_query_shard
+				(query_id, shard_id, map_table, map_partition, map_query, map_params)
+				VALUES (?, ?, ?, ?, ?, ?)',
+				array($request_id, $index, $details['table_name'], $details['table_partition'], $map_query, json_encode($fsql_params)));
+
+			$index++;
 		}
 	}
 
@@ -3230,7 +3315,7 @@ function parallel_database_query_run($requests) {
 	}
 }
 
-function parellel_database_query_create_reduce_table($request_id, $sql_query, $table) {
+function parallel_database_query_create_reduce_table($request_id, $sql_query, $table) {
 	$table_name = "parallel_database_query_map_$request_id";
 
 	$sql_create = "CREATE TABLE IF NOT EXISTS $table_name (";

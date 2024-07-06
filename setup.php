@@ -831,6 +831,8 @@ function flowview_setup_table() {
 		`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 		`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 		`status` varchar(10) NOT NULL DEFAULT 'pending',
+		`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
+		`map_partition` varchar(20) NOT NULL DEFAULT '',
 		`map_query` blob NOT NULL DEFAULT '',
 		`map_params` blob NOT NULL DEFAULT '',
 		`created` timestamp NULL DEFAULT current_timestamp(),
@@ -842,7 +844,7 @@ function flowview_setup_table() {
 
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (
 		`md5sum` varchar(32) NOT NULL DEFAULT '',
-		`map_table` int(10) unsigned NOT NULL DEFAULT '0',
+		`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
 		`map_partition` varchar(20) NOT NULL DEFAULT '',
 		`min_date` timestamp(6) NOT NULL default '0000-00-00',
 		`max_date` timestamp(6) NOT NULL default '0000-00-00',
