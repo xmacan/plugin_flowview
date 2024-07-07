@@ -117,29 +117,41 @@ if (cacti_sizeof($cidrs)) {
 
 		$return_var = 0;
 		$output = array();
-		$origin_as = '';
+		$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
+			FROM plugin_flowview_radb_routes
+			WHERE route = ?',
+			array($cidr));
 
-		if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
-			$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
+		if ($origin_as == '') {
+			if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
+				$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
 
-			/* attempt to prevent rate limiting */
-			sleep(1);
+				/* attempt to prevent rate limiting */
+				sleep(1);
 
-			if (cacti_sizeof($output)) {
-				$origin_as = trim($output[0]);
+				if (cacti_sizeof($output)) {
+					$origin_as = trim($output[0]);
 
-				print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
+					print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
 
-				flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
-					SET origin_as = ?
-					WHERE id = ?',
-					array($origin_as, $arin_id));
+					flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
+						SET origin_as = ?
+						WHERE id = ?',
+						array($origin_as, $arin_id));
+				} else {
+					print "WARNING: Origin AS Not Verified for CIDR Address:$cidr." . PHP_EOL;
+				}
 			} else {
-				print "WARNING: Origin AS Not Verified for CIDR Address:$cidr." . PHP_EOL;
+				print "FATAL: Whois binary path not provided or no whois provider specified." . PHP_EOL;
+				exit(1);
 			}
 		} else {
-			print "FATAL: Whois binary path not provided or no whois provider specified." . PHP_EOL;
-			exit(1);
+			print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
+
+			flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
+				SET origin_as = ?
+				WHERE id = ?',
+				array($origin_as, $arin_id));
 		}
 	}
 }

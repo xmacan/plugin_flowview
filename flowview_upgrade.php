@@ -175,6 +175,10 @@ function flowview_upgrade($current, $old) {
 			cacti_log("Adding template_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
+		} else {
+			cacti_log("Updating template_id column to plugin_flowview_queries table to signed.", true, 'FLOWVIEW');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
 		}
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr')) {
@@ -202,6 +206,53 @@ function flowview_upgrade($current, $old) {
 			ENGINE=InnoDB
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds ARIN Records Downloaded for Caching'");
+
+		/*
+		Array (
+			[route] => route
+			[remarks] => remarks
+			[descr] => descr
+			[origin_as] => origin_as
+			[mnt_by] => mnt_by
+			[changed] => changed
+			[source] => source
+			[last_modified] => last_modified
+			[notify] => notify
+			[tech_c] => tech_c
+			[member_of] => member_of
+			[admin_c] => admin_c
+			[geoidx] => geoidx
+			[components] => components
+			[roa_uri] => roa_uri
+			[status] => status
+			[export_comps] => export_comps
+			[country] => country
+			[netname] => netname
+		)
+		*/
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_radb_routes` (
+			`route` varchar(40) NOT NULL DEFAULT '',
+			`descr` varchar(128) NOT NULL DEFAULT '',
+			`remarks` text NOT NULL DEFAULT '',
+			`origin_as` varchar(20) NOT NULL DEFAULT '',
+			`mnt_by` varchar(40) NOT NULL DEFAULT '',
+			`status` varchar(20) NOT NULL DEFAULT '',
+			`country` varchar(20) NOT NULL DEFAULT '',
+			`admin_c` varchar(30) NOT NULL DEFAULT '',
+			`tech_c` varchar(30) NOT NULL DEFAULT '',
+			`member_of` varchar(30) NOT NULL DEFAULT '',
+			`notify` varchar(64) NOT NULL DEFAULT '',
+			`geoidx` varchar(20) NOT NULL DEFAULT '',
+			`roa_uri` varchar(128) NOT NULL DEFAULT '',
+			`export_comps` varchar(30) NOT NULL DEFAULT '',
+			`components` varchar(30) NOT NULL DEFAULT '',
+			`changed` varchar(128) NOT NULL DEFAULT '',
+			`source` varchar(20) NOT NULL DEFAULT '',
+			`present` tinyint(3) unsigned not null default '1',
+			`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			PRIMARY KEY (`route`))
+			ENGINE=InnoDB
+			COMMENT='Holds the basic whois database from RADB'");
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
@@ -259,7 +310,7 @@ function flowview_upgrade($current, $old) {
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 			device_id int(11) unsigned NOT NULL default '0',
 			ex_addr varchar(46) NOT NULL default '',
-			template_id int(11) unsigned NOT NULL default '0',
+			template_id int(10) NOT NULL default '0',
 			supported tinyint unsigned NOT NULL default '0',
 			column_spec blob default '',
 			last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

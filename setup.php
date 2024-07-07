@@ -737,6 +737,30 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds ARIN Records Downloaded for Caching'");
 
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_radb_routes` (
+		`route` varchar(40) NOT NULL DEFAULT '',
+		`descr` varchar(128) NOT NULL DEFAULT '',
+		`remarks` text NOT NULL DEFAULT '',
+		`origin_as` varchar(20) NOT NULL DEFAULT '',
+		`mnt_by` varchar(40) NOT NULL DEFAULT '',
+		`status` varchar(20) NOT NULL DEFAULT '',
+		`country` varchar(20) NOT NULL DEFAULT '',
+		`admin_c` varchar(30) NOT NULL DEFAULT '',
+		`tech_c` varchar(30) NOT NULL DEFAULT '',
+		`member_of` varchar(30) NOT NULL DEFAULT '',
+		`notify` varchar(64) NOT NULL DEFAULT '',
+		`geoidx` varchar(20) NOT NULL DEFAULT '',
+		`roa_uri` varchar(128) NOT NULL DEFAULT '',
+		`export_comps` varchar(30) NOT NULL DEFAULT '',
+		`components` varchar(30) NOT NULL DEFAULT '',
+		`changed` varchar(128) NOT NULL DEFAULT '',
+		`source` varchar(20) NOT NULL DEFAULT '',
+		`present` tinyint(3) unsigned not null default '1',
+		`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		PRIMARY KEY (`route`))
+		ENGINE=InnoDB
+		COMMENT='Holds the basic whois database from RADB'");
+
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(64) NOT NULL,
@@ -764,7 +788,7 @@ function flowview_setup_table() {
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ex_addr varchar(46) NOT NULL default '',
-		template_id int(11) unsigned NOT NULL default '0',
+		template_id int(11) NOT NULL default '0',
 		supported tinyint unsigned NOT NULL default '0',
 		column_spec blob default '',
 		last_updated timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -777,7 +801,7 @@ function flowview_setup_table() {
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(255) NOT NULL,
 		device_id int(11) unsigned NOT NULL,
-		template_id int(11) unsigned NOT NULL DEFAULT '0',
+		template_id int(11) NOT NULL DEFAULT '0',
 		ex_addr varchar(46) NOT NULL DEFAULT '',
 		timespan int(11) unsigned NOT NULL DEFAULT '0',
 		startdate varchar(32) NOT NULL,

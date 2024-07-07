@@ -4625,6 +4625,253 @@ function flowview_check_local_iprange($ip) {
 	return false;
 }
 
+function flowview_update_radb_database() {
+	$directory = sys_get_temp_dir();
+	$radb_file = "$directory/radb.db.gz";
+
+	/* remove the previous file if found */
+	unlink($radb_file);
+
+	if (!file_exists($radb_file)) {
+		$return_var = 0;
+		$output     = array();
+		$last_line  = exec("wget --output-document='$radb_file' --output-file=/dev/null ftp://ftp.radb.net/radb/dbase/radb.db.gz", $output, $return_var);
+	}
+
+	$record_start = false;
+
+	if ($return_var == 0) {
+		$file   = gzopen($radb_file, 'r');
+		$record = array();
+		$column = '';
+		$skip   = false;
+		$inrem  = false;
+		$indesc = false;
+		$intec  = false;
+
+		db_execute('UPDATE plugin_flowview_radb_routes SET present = 0');
+
+		$i = 0;
+
+		while (!feof($file) !== false) {
+			$line = fgets($file);
+
+			if (strpos($line, '                ') !== false) {
+				if ($indesc) {
+					$records[$i]['descr']   .= ', ' . trim(str_replace('descr:', '', $line));
+				} elseif ($inrem) {
+					$line = str_replace('remarks:', '', $line);
+					$line = trim($line);
+
+					if ($line[0] == '+') {
+						$records[$i]['remarks'] .= PHP_EOL;
+					} else {
+						$records[$i]['remarks'] .= PHP_EOL . trim($line);
+					}
+				} elseif ($intec) {
+					$records[$i]['tech_c'] .= ', ' . trim($line);
+				} else {
+					print $line;
+				}
+
+				continue;
+			} else {
+				$line = trim($line);
+
+				if ($line == '') {
+					continue;
+				}
+
+				$line = explode(':', $line, 2);
+			}
+
+			switch($line[0]) {
+				case 'inet6num':
+				case 'inetnum':
+					$inrem = $indesc = $intec = false;
+
+					$skip   = true;
+
+					break;
+				case 'route':
+				case 'route6':
+					$inrem = $indesc = $intec = false;
+
+					$skip   = false;
+
+					$record_start = true;
+					$records[$i]['route']         = trim($line[1]);
+					$records[$i]['descr']         = '';
+					$records[$i]['remarks']       = '';
+					$records[$i]['origin_as']     = '';
+					$records[$i]['mnt_by']        = '';
+					$records[$i]['status']        = '';
+					$records[$i]['country']       = '';
+					$records[$i]['admin_c']       = '';
+					$records[$i]['tech_c']        = '';
+					$records[$i]['member_of']     = '';
+					$records[$i]['notify']        = '';
+					$records[$i]['geoidx']        = '';
+					$records[$i]['roa_uri']       = '';
+					$records[$i]['export_comps']  = '';
+					$records[$i]['components']    = '';
+					$records[$i]['changed']       = '';
+					$records[$i]['source']        = '';
+					$records[$i]['present']       = 1;
+					$records[$i]['last_modified'] = '';
+
+					break;
+				case 'descr':
+					if (!$skip) {
+						$records[$i]['descr'] = trim($line[1]);
+					}
+
+					$column = 'descr';
+					$indesc = true;
+
+					break;
+				case 'origin':
+					$inrem = $indesc = $intec = false;
+
+					if (!$skip) {
+						$records[$i]['origin_as'] = trim($line[1]);
+					}
+
+					break;
+				case 'tech-c':
+					if (!$skip) {
+						$records[$i]['tech_c'] = trim($line[1]);
+					}
+
+					$intec = true;
+
+					break;
+				case 'remarks':
+					if (!$skip) {
+						$remarks = str_replace('&amp;', '&', $line[1]);
+						$records[$i]['remarks'] .= ' ' . trim($remarks);
+					}
+
+					$column = 'remarks';
+					$inrem  = true;
+
+					break;
+				case 'changed':
+					$inrem = $indesc = $intec = false;
+
+					if (!$skip) {
+						$changed = explode(' ', trim($line[1]), 2);
+						$records[$i]['changed'] = trim($changed[0]);
+					}
+
+					break;
+				case 'last-modified':
+					$inrem = $indesc = $intec = false;
+
+					if (!$skip) {
+						$records[$i]['last_modified'] = date('Y-m-d H:i:s', strtotime(trim($line[1])));
+						$i++;
+					}
+
+					$column = '';
+
+					break;
+				case 'source':
+				case 'notify':
+				case 'mnt-by':
+				case 'admin-c':
+				case 'geoidx':
+				case 'member-of':
+				case 'netname':
+				case 'roa-uri':
+				case 'export-comps':
+				case 'components':
+				case 'export-comps':
+				case 'country':
+				case 'status':
+					$inrem = $indesc = $intec = false;
+
+					if (!$skip) {
+						$col = str_replace('-', '_', $line[0]);
+						$records[$i][$col] = trim($line[1]);
+					}
+
+					break;
+				case 'aut-num':
+					/* right now, we don't go past route and route6 */
+					break 2;
+				default:
+					if ($column == 'descr') {
+						$records[$i]['descr'] .= ' ' . trim($line[0]);
+					} elseif ($column == 'remarks') {
+						if ($line[0] == '+') {
+							$records[$i]['remarks'] .= PHP_EOL;
+						} else {
+							$records[$i]['remarks'] .= PHP_EOL . trim($line[0]);
+						}
+					} else {
+						print "Unknown object type {$line[0]}" . PHP_EOL;
+					}
+
+					break;
+			}
+		}
+
+		/*
+		$columns = array();
+		foreach($record as $r) {
+			$keys = array_keys($r);
+			foreach($keys as $c) {
+				$columns[$c] = $c;
+			}
+		}
+		print_r($columns);
+		print_r($record);
+		*/
+
+		gzclose($file);
+
+		unlink($radb_file);
+
+		if (cacti_sizeof($records)) {
+			$sql_params = array();
+			$sql = array();
+			$sql_prefix = "REPLACE INTO plugin_flowview_radb_routes
+				(route, descr, remarks, origin_as, mnt_by, status, country,
+				admin_c, tech_c, member_of, notify, geoidx, roa_uri, export_comps,
+				components, changed, source, present, last_modified) VALUES";
+
+			foreach($records as $index => $r) {
+				$sql[$index]  = '(';
+				$i = 0;
+
+				foreach($r as $column => $value) {
+					$sql[$index] .= ($i == 0 ? '':', ') . '?';
+					$sql_params[] = $value;
+					$i++;
+				}
+				$sql[$index] .= ')';
+
+				if ($index % 100 == 0) {
+					flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
+					$sql_params = array();
+					$sql = array();
+				}
+			}
+
+			if (cacti_sizeof($sql)) {
+				flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
+				$sql_params = array();
+				$sql = array();
+			}
+
+			db_execute('DELETE FROM plugin_flowview_radb_routes WHERE present = 0');
+		}
+	} else {
+		cacti_log('WARNING: Unable to download the RADB database from radb.net');
+	}
+}
+
 function flowview_check_for_private_network($host) {
 	if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 		$parts = explode('.', $host);
@@ -4752,15 +4999,22 @@ function flowview_get_owner_from_arin($host) {
 			if (isset($json['net']['originASes']['originAS']['$'])) {
 				$origin_as = $json['net']['originASes']['originAS']['$'];
 			} else {
-				$return_var = 0;
-				$output = array();
-				$origin_as = '';
+				$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
+					FROM plugin_flowview_radb_routes
+					WHERE route = ?',
+					array($cidr));
 
-				if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
-					$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
+				if ($origin_as == '') {
+					$return_var = 0;
+					$output = array();
+					$origin_as = '';
 
-					if (cacti_sizeof($output)) {
-						$origin_as = trim($output[0]);
+					if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
+						$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
+
+						if (cacti_sizeof($output)) {
+							$origin_as = trim($output[0]);
+						}
 					}
 				}
 			}
