@@ -345,7 +345,7 @@ function flowview_config_settings() {
 
 	$temp = array(
 		'flowview_header' => array(
-			'friendly_name' => __('Flow Viewer', 'flowview'),
+			'friendly_name' => __('Name Resolution', 'flowview'),
 			'method' => 'spacer',
 			'collapsible' => 'true'
 		),
@@ -378,10 +378,33 @@ function flowview_config_settings() {
 			'size' => 30
 		),
 		'flowview_use_arin' => array(
-			'friendly_name' => __('Use Arin to Find Unregistered Domains and AS Numbers', 'syslog'),
+			'friendly_name' => __('Use Arin to find Domains and AS Numbers', 'syslog'),
 			'description' => __('Many Big Tech data collection services like to mask their ownership of domains to obfuscate the fact that they are collecting your personal information.  If you are concerned with this and your Cacti install has access to the Internet, you can use Arin to remove the mask from those Big Tech companies.', 'flowview'),
 			'method' => 'checkbox',
 			'default' => 'on'
+		),
+		'flowview_whois_provider' => array(
+			'friendly_name' => __('Whois Provider Host', 'monitor'),
+			'method' => 'textbox',
+			'default' => 'whois.radb.net',
+			'description' => __('Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path.', 'monitor'),
+			'placeholder' => __('whois.radb.net', 'flowview'),
+			'max_length' => 30,
+			'size' => 30
+		),
+		'flowview_path_whois' => array(
+			'friendly_name' => __('Whois Binary Path', 'monitor'),
+			'method' => 'filepath',
+			'default' => '/usr/bin/whois',
+			'description' => __('Please provide the pathname for the \'whois\' binary.  The \'whois\' binary will be used to find AS information supplementing Arin.', 'monitor'),
+			'placeholder' => __('Enter binary path', 'flowview'),
+			'max_length' => 30,
+			'size' => 30
+		),
+		'flowview_data_header' => array(
+			'friendly_name' => __('Data Retention and Report Generation', 'flowview'),
+			'method' => 'spacer',
+			'collapsible' => 'true'
 		),
 		'flowview_format_file' => array(
 			'friendly_name' => __('Format File to Use', 'monitor'),

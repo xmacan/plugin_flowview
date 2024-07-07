@@ -4676,6 +4676,9 @@ function flowview_get_owner_from_arin($host) {
 		return false;
 	}
 
+	$whois_provider = read_config_option('flowview_whois_provider');
+	$whois_path     = read_config_option('flowview_path_whois');
+
 	if (function_exists('curl_init')) {
 		$ch = curl_init();
 	} else {
@@ -4732,7 +4735,7 @@ function flowview_get_owner_from_arin($host) {
 				$net_type = $json['net']['netBlocks']['netBlock'][0]['description']['$'];
 			}
 
-			$name         = $json['net']['name']['$'];
+			$name = $json['net']['name']['$'];
 
 			if (isset($json['net']['registrationDate']['$'])) {
 				$registration = strtotime($json['net']['registrationDate']['$']);
@@ -4749,7 +4752,17 @@ function flowview_get_owner_from_arin($host) {
 			if (isset($json['net']['originASes']['originAS']['$'])) {
 				$origin_as = $json['net']['originASes']['originAS']['$'];
 			} else {
+				$return_var = 0;
+				$output = array();
 				$origin_as = '';
+
+				if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
+					$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
+
+					if (cacti_sizeof($output)) {
+						$origin_as = trim($output[0]);
+					}
+				}
 			}
 
 			$last_changed = strtotime($json['net']['updateDate']['$']);

@@ -38,6 +38,8 @@ $parms = $_SERVER['argv'];
 array_shift($parms);
 
 $proceed = false;
+$origins = false;
+$ips     = false;
 
 if (cacti_sizeof($parms)) {
 	foreach($parms as $parameter) {
@@ -51,20 +53,32 @@ if (cacti_sizeof($parms)) {
 		switch ($arg) {
 			case '--proceed':
 				$proceed = true;
+
+				break;
+			case '--origins':
+				$origins = true;
+
+				break;
+			case '--origins':
+				$ips = true;
+
 				break;
 			case '--version':
 			case '-V':
 			case '-v':
 				display_version();
+
 				exit(0);
 			case '--help':
 			case '-H':
 			case '-h':
 				display_help();
+
 				exit(0);
 			default:
 				print 'ERROR: Invalid Parameter ' . $parameter . PHP_EOL . PHP_EOL;
 				display_help();
+
 				exit(1);
 		}
 	}
@@ -83,10 +97,58 @@ if (read_config_option('flowview_use_arin') == 'on') {
 	exit(1);
 }
 
-$time = time();
-$ips  = flowview_db_fetch_assoc('SELECT *
-	FROM plugin_flowview_dnscache
-	WHERE arin_verified = 0');
+$time      = time();
+$addressed = array();
+$cidrs     = array();
+
+$whois_provider = read_config_option('flowview_whois_provider');
+$whois_path     = read_config_option('flowview_path_whois');
+
+if ($origins) {
+	$cidrs = flowview_db_fetch_assoc('SELECT *
+		FROM plugin_flowview_arin_information
+		WHERE origin_as = ""');
+}
+
+if (cacti_sizeof($cidrs)) {
+	foreach($cidrs as $row) {
+		$cidr    = $row['cidr'];
+		$arin_id = $row['id'];
+
+		$return_var = 0;
+		$output = array();
+		$origin_as = '';
+
+		if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
+			$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
+
+			/* attempt to prevent rate limiting */
+			sleep(1);
+
+			if (cacti_sizeof($output)) {
+				$origin_as = trim($output[0]);
+
+				print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
+
+				flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
+					SET origin_as = ?
+					WHERE id = ?',
+					array($origin_as, $arin_id));
+			} else {
+				print "WARNING: Origin AS Not Verified for CIDR Address:$cidr." . PHP_EOL;
+			}
+		} else {
+			print "FATAL: Whois binary path not provided or no whois provider specified." . PHP_EOL;
+			exit(1);
+		}
+	}
+}
+
+if ($ips) {
+	$addresses = flowview_db_fetch_assoc('SELECT *
+		FROM plugin_flowview_dnscache
+		WHERE arin_verified = 0');
+}
 
 if (cacti_sizeof($ips)) {
 	foreach($ips as $p) {
@@ -127,8 +189,9 @@ function display_version() {
 function display_help () {
 	display_version();
 
-	print PHP_EOL . 'usage: flowview_bulkarin.php [--proceed]' . PHP_EOL . PHP_EOL;
+	print PHP_EOL . 'usage: flowview_bulkarin.php [--proceed] [--ips] [--origins]' . PHP_EOL . PHP_EOL;
 	print 'A command line version of the Cacti Flowview Arin bulk loader.' . PHP_EOL;
-	print 'To perform a bulk resolution of unverified Arin details,.' . PHP_EOL;
-	print 'use the --proceed option.' . PHP_EOL . PHP_EOL;
+	print 'To perform a bulk resolution of unverified Arin details and to' . PHP_EOL;
+	print 'locate Origin AS via whois when Arin does not do this directly.' . PHP_EOL;
+	print 'You must use the --proceed option to actually run the script.' . PHP_EOL . PHP_EOL;
 }

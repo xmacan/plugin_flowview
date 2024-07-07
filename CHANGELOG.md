@@ -66,6 +66,7 @@
 * feature#154: Support Parallel Queries through a MariaDB or MySQL proxy such as MaxScale
 * feature#155: Allow Choosing your Raw Storage Engine Format
 * feature#156: Create Persistent Shard Result Cache
+* feature#160: Use whois providers such as radb.net to find origin AS when Arin does not provide it
 
 --- 3.3 ---
 
