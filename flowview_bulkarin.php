@@ -59,7 +59,7 @@ if (cacti_sizeof($parms)) {
 				$origins = true;
 
 				break;
-			case '--origins':
+			case '--ips':
 				$ips = true;
 
 				break;
