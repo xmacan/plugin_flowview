@@ -4655,64 +4655,115 @@ function flowview_check_local_iprange($ip) {
 	return false;
 }
 
-function flowview_check_radb_databases() {
+function flowview_check_radb_databases($import_only = false, $force = false) {
 	$databases = array(
+		'afrinic' => array(
+			'serial' => 'AFRINIC.CURRENTSERIAL',
+			'file'   => 'afrinic.db.gz',
+			'ftp'    => 'ftp://ftp.afrinic.net/pub/dbase/'
+		),
 		'altdb' => array(
 			'serial' => 'ALTDB.CURRENTSERIAL',
 			'file'   => 'altdb.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+		),
+		'apnic' => array(
+			'serial' => 'APNIC.CURRENTSERIAL',
+			'file'   => 'apnic.db.gz',
+			'ftp'    => 'ftp://ftp.apnic.net/apnic/whois/'
 		),
 		'arin' => array(
 			'serial' => 'ARIN.CURRENTSERIAL',
 			'file'   => 'arin.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'bboi' => array(
 			'serial' => 'BBOI.CURRENTSERIAL',
 			'file'   => 'bboi.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'bell' => array(
 			'serial' => 'BELL.CURRENTSERIAL',
 			'file'   => 'bell.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'canarie' => array(
 			'serial' => 'CANARIE.CURRENTSERIAL',
 			'file'   => 'canarie.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+		),
+		'idnic' => array(
+			'serial' => 'IDNIC.CURRENTSERIAL',
+			'file'   => 'idnic.db.gz',
+			'ftp'    => 'ftp://irr-mirror-idnic.net/'
 		),
 		'jpirr' => array(
 			'serial' => 'JPIRR.CURRENTSERIAL',
 			'file'   => 'jpirr.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+		),
+		'lacnic' => array(
+			'serial' => 'LACNIC.CURRENTSERIAL',
+			'file'   => 'lacnic.db.gz',
+			'ftp'    => 'https://irr.lacnic.net/'
+		),
+		'level3' => array(
+			'serial' => 'LEVEL3.CURRENTSERIAL',
+			'file'   => 'level3.db.gz',
+			'ftp'    => 'ftp://rr.level3.net/'
+		),
+		'wcgdb' => array(
+			'serial' => 'WCGDB.CURRENTSERIAL',
+			'file'   => 'wcgdb.db.gz',
+			'ftp'    => 'ftp://rr.level3.net/'
 		),
 		'netegg' => array(
 			'serial' => 'NETEGG.CURRENTSERIAL',
 			'file'   => 'netegg.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'nttcom' => array(
 			'serial' => 'NTTCOM.CURRENTSERIAL',
 			'file'   => 'nttcom.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'radb' => array(
 			'serial' => 'RADB.CURRENTSERIAL',
 			'file'   => 'radb.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'reach' => array(
 			'serial' => 'REACH.CURRENTSERIAL',
 			'file'   => 'reach.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+		),
+		'ripe' => array(
+			'serial' => 'RIPE.CURRENTSERIAL',
+			'file'   => 'ripe.db.gz',
+			'ftp'    => 'ftp://ftp.ripe.net/ripe/dbase/'
 		),
 		'tc' => array(
 			'serial' => 'TC.CURRENTSERIAL',
 			'file'   => 'tc.db.gz',
+			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
 		)
 	);
 
 	$directory = sys_get_temp_dir();
-	$ftp_base  = 'ftp://ftp.radb.net/radb/dbase/';
 
 	foreach($databases as $source => $details) {
+		$ftp_base  = $details['ftp'];
+
+		if ($import_only !== false && $import_only != $source) {
+			continue;
+		}
+
 		$curr_serial = trim(file_get_contents("$ftp_base/{$details['serial']}"));
 		$last_serial = trim(read_config_option("flowview_{$source}_serial"));
 
 		cacti_log("Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", false, 'FLOWVIEW');
 
-		if (($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
+		if ($force || $import_only !== false || ($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
 			cacti_log("Downloading {$details['file']}", true, 'FLOWVIEW');
 
 			$local_file  = "$directory/{$details['file']}";
@@ -4724,7 +4775,7 @@ function flowview_check_radb_databases() {
 
 			$return_var = 0;
 			$output     = array();
-			$last_line  = exec("wget --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
+			$last_line  = exec("wget --timeout=5 --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
 
 			if ($return_var == 0) {
 				cacti_log("Importing Database {$details['file']}", true, 'FLOWVIEW');
@@ -4768,6 +4819,10 @@ function flowview_update_radb_database($source, $radb_file = false) {
 	while (!feof($file) !== false) {
 		$j++;
 		$line = fgets($file);
+
+		if (substr($line, 0, 1) == '#') {
+			continue;
+		}
 
 		if (strpos($line, '                ') !== false) {
 			if ($indesc) {
@@ -4910,10 +4965,17 @@ function flowview_update_radb_database($source, $radb_file = false) {
 				break;
 			case 'created':
 			case 'org':
+			case 'aggr-mtd': // altdb.db.gz
 				// Skipping this for now.
 
 				break;
 			case 'source':
+				if (!$skip) {
+					$source_parts = explode('#', $line[1]);
+					$records[$i]['source'] = trim($source_parts[0]);
+				}
+
+				break;
 			case 'notify':
 			case 'mnt-by':
 			case 'admin-c':
@@ -4934,6 +4996,8 @@ function flowview_update_radb_database($source, $radb_file = false) {
 
 				break;
 			case 'aut-num':
+			case 'as-set':
+			case 'as-block':
 				/* right now, we don't go past route and route6 */
 				cacti_log('Hitting Autonomous Numbers, exiting', true, 'FLOWVIEW');
 
