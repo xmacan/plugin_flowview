@@ -105,7 +105,7 @@ switch (get_request_var('action')) {
 		break;
 	default:
 		top_header();
-		show_devices ();
+		show_devices();
 		bottom_footer();
 
 		break;
@@ -663,8 +663,13 @@ function show_devices () {
 	validate_store_request_vars($filters, 'sess_fvd');
 	/* ================= input validation ================= */
 
+	if (get_request_var('rows') == '-1') {
+		$rows = read_config_option('num_rows_table');
+	} else {
+		$rows = get_request_var('rows');
+	}
+
 	$sql_where = (get_request_var('filter') != '' ? 'WHERE name LIKE ' . db_qstr('%' . get_request_var('filter') . '%'):'');
-	$rows      = read_config_option('num_rows_table');
 
 	$sql_order = get_order_string();
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
@@ -697,10 +702,10 @@ function show_devices () {
 						<input type='text' id='filter' size='25' value='<?php print html_escape_request_var('filter');?>'>
 					</td>
 					<td>
-						<input id='refresh' type='submit' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters', 'flowview');?>'>
-					</td>
-					<td>
-						<input id='clear' type='button' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters', 'flowview');?>'>
+						<span>
+							<input id='refresh' type='submit' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters', 'flowview');?>'>
+							<input id='clear' type='button' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters', 'flowview');?>'>
+						</span>
 					</td>
 				</tr>
 			</table>
@@ -734,7 +739,7 @@ function show_devices () {
 
 	html_end_box();
 
-	$nav = html_nav_bar('flowview_devices.php', MAX_DISPLAY_PAGES, get_request_var('page'), $total_rows, $total_rows, 10, __('Listeners', 'flowview'), 'page', 'main');
+	$nav = html_nav_bar('flowview_devices.php', MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, 10, __('Listeners', 'flowview'), 'page', 'main');
 
 	form_start('flowview_devices.php', 'chk');
 
