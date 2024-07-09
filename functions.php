@@ -58,6 +58,36 @@ function display_tabs($id) {
 	print "</ul></nav></div>";
 }
 
+function display_db_tabs() {
+	global $config;
+
+	/* present a tabbed interface */
+	$tabs['dns_cache']   = array('url' => 'flowview_databases.php', 'name' => __('DNS Cache', 'flowview'));
+	$tabs['routes']      = array('url' => 'flowview_databases.php', 'name' => __('Routes', 'flowview'));
+	$tabs['asn']         = array('url' => 'flowview_databases.php', 'name' => __('ASN\'s', 'flowview'));
+
+	/* if they were redirected to the page, let's set that up */
+	if (!isset_request_var('tab')) {
+		$current_tab = 'general';
+	} else {
+		$current_tab = get_request_var('tab');
+	}
+
+	/* draw the tabs */
+	print "<div class='tabs'><nav><ul>";
+
+	if (cacti_sizeof($tabs)) {
+		foreach ($tabs as $shortname => $tab) {
+			print '<li><a class="tab ' . (($shortname == $current_tab) ? 'selected"':'"') . " href='" . html_escape($config['url_path'] .
+				'plugins/flowview/' . $tab['url'] .
+				'?tab=' . $shortname) .
+				"'>" . html_escape($tab['name']) . "</a></li>";
+		}
+	}
+
+	print "</ul></nav></div>";
+}
+
 function listener_has_templates($id) {
 	$streams = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
 		FROM plugin_flowview_device_streams
@@ -4625,251 +4655,359 @@ function flowview_check_local_iprange($ip) {
 	return false;
 }
 
-function flowview_update_radb_database() {
+function flowview_check_radb_databases() {
+	$databases = array(
+		'altdb' => array(
+			'serial' => 'ALTDB.CURRENTSERIAL',
+			'file'   => 'altdb.db.gz',
+		),
+		'arin' => array(
+			'serial' => 'ARIN.CURRENTSERIAL',
+			'file'   => 'arin.db.gz',
+		),
+		'bboi' => array(
+			'serial' => 'BBOI.CURRENTSERIAL',
+			'file'   => 'bboi.db.gz',
+		),
+		'bell' => array(
+			'serial' => 'BELL.CURRENTSERIAL',
+			'file'   => 'bell.db.gz',
+		),
+		'canarie' => array(
+			'serial' => 'CANARIE.CURRENTSERIAL',
+			'file'   => 'canarie.db.gz',
+		),
+		'jpirr' => array(
+			'serial' => 'JPIRR.CURRENTSERIAL',
+			'file'   => 'jpirr.db.gz',
+		),
+		'netegg' => array(
+			'serial' => 'NETEGG.CURRENTSERIAL',
+			'file'   => 'netegg.db.gz',
+		),
+		'nttcom' => array(
+			'serial' => 'NTTCOM.CURRENTSERIAL',
+			'file'   => 'nttcom.db.gz',
+		),
+		'radb' => array(
+			'serial' => 'RADB.CURRENTSERIAL',
+			'file'   => 'radb.db.gz',
+		),
+		'reach' => array(
+			'serial' => 'REACH.CURRENTSERIAL',
+			'file'   => 'reach.db.gz',
+		),
+		'tc' => array(
+			'serial' => 'TC.CURRENTSERIAL',
+			'file'   => 'tc.db.gz',
+		)
+	);
+
 	$directory = sys_get_temp_dir();
-	$radb_file = "$directory/radb.db.gz";
+	$ftp_base  = 'ftp://ftp.radb.net/radb/dbase/';
 
-	/* remove the previous file if found */
-	unlink($radb_file);
+	foreach($databases as $source => $details) {
+		$curr_serial = trim(file_get_contents("$ftp_base/{$details['serial']}"));
+		$last_serial = trim(read_config_option("flowview_{$source}_serial"));
 
-	if (!file_exists($radb_file)) {
-		$return_var = 0;
-		$output     = array();
-		$last_line  = exec("wget --output-document='$radb_file' --output-file=/dev/null ftp://ftp.radb.net/radb/dbase/radb.db.gz", $output, $return_var);
+		cacti_log("Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", false, 'FLOWVIEW');
+
+		if (($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
+			cacti_log("Downloading {$details['file']}", true, 'FLOWVIEW');
+
+			$local_file  = "$directory/{$details['file']}";
+			$remote_file = "$ftp_base/{$details['file']}";
+
+			if (file_exists($local_file) && is_writable($local_file)) {
+				unlink($local_file);
+			}
+
+			$return_var = 0;
+			$output     = array();
+			$last_line  = exec("wget --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
+
+			if ($return_var == 0) {
+				cacti_log("Importing Database {$details['file']}", true, 'FLOWVIEW');
+
+				set_config_option("flowview_{$source}_serial", $curr_serial);
+
+				flowview_update_radb_database($source, $local_file);
+
+				if (file_exists($local_file) && is_writable($local_file)) {
+					unlink($local_file);
+				}
+			}
+		}
+	}
+}
+
+function flowview_update_radb_database($source, $radb_file = false) {
+	if ($radb_file === false) {
+		cacti_log('WARNING: Unable to open RADB database file as it was not specified', false, 'FLOWVIEW');
+		return false;
 	}
 
-	$record_start = false;
+	$file   = gzopen($radb_file, 'r');
+	$record = array();
+	$column = '';
+	$skip   = false;
+	$inrem  = false;
+	$indesc = false;
+	$intec  = false;
+	$ingeo  = false;
+	$source = strtoupper($source);
 
-	if ($return_var == 0) {
-		$file   = gzopen($radb_file, 'r');
-		$record = array();
-		$column = '';
-		$skip   = false;
-		$inrem  = false;
-		$indesc = false;
-		$intec  = false;
+	flowview_db_execute_prepared('UPDATE plugin_flowview_routes
+		SET present = 0
+		WHERE source = ?',
+		array($source));
 
-		db_execute('UPDATE plugin_flowview_radb_routes SET present = 0');
+	$i = 0;
+	$j = 0;
 
-		$i = 0;
+	while (!feof($file) !== false) {
+		$j++;
+		$line = fgets($file);
 
-		while (!feof($file) !== false) {
-			$line = fgets($file);
+		if (strpos($line, '                ') !== false) {
+			if ($indesc) {
+				$records[$i]['descr']   .= ', ' . trim(str_replace('descr:', '', $line));
+			} elseif ($inrem) {
+				$line = str_replace('remarks:', '', $line);
+				$line = trim($line);
 
-			if (strpos($line, '                ') !== false) {
-				if ($indesc) {
-					$records[$i]['descr']   .= ', ' . trim(str_replace('descr:', '', $line));
-				} elseif ($inrem) {
-					$line = str_replace('remarks:', '', $line);
-					$line = trim($line);
+				if ($line[0] == '+') {
+					$records[$i]['remarks'] .= PHP_EOL;
+				} else {
+					$records[$i]['remarks'] .= PHP_EOL . trim($line);
+				}
+			} elseif ($intec) {
+				$records[$i]['tech_c'] .= ', ' . trim($line);
+			} elseif ($ingeo) {
+				$records[$i]['geoidx'] .= ', ' . trim(str_replace('geoidx:', '', $line));
+			} else {
+				print $line;
+			}
 
+			continue;
+		} else {
+			$line   = trim($line);
+
+			if ($line == '') {
+				// New section
+				$column = '';
+				$i++;
+
+				continue;
+			}
+
+			$line = explode(':', $line, 2);
+		}
+
+		switch($line[0]) {
+			case 'inet6num':
+			case 'inetnum':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				$skip   = true;
+
+				break;
+			case 'route':
+			case 'route6':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				$skip   = false;
+
+				$record_start = true;
+				$records[$i]['route']         = trim($line[1]);
+				$records[$i]['descr']         = '';
+				$records[$i]['remarks']       = '';
+				$records[$i]['origin_as']     = '';
+				$records[$i]['mnt_by']        = '';
+				$records[$i]['status']        = '';
+				$records[$i]['country']       = '';
+				$records[$i]['admin_c']       = '';
+				$records[$i]['tech_c']        = '';
+				$records[$i]['member_of']     = '';
+				$records[$i]['notify']        = '';
+				$records[$i]['geoidx']        = '';
+				$records[$i]['roa_uri']       = '';
+				$records[$i]['export_comps']  = '';
+				$records[$i]['components']    = '';
+				$records[$i]['changed']       = '';
+				$records[$i]['source']        = $source;
+				$records[$i]['present']       = 1;
+				$records[$i]['last_modified'] = '';
+
+				break;
+			case 'descr':
+				if (!$skip) {
+					$records[$i]['descr'] = trim($line[1]);
+				}
+
+				$column = 'descr';
+				$indesc = true;
+
+				break;
+			case 'origin':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				if (!$skip) {
+					$records[$i]['origin_as'] = trim($line[1]);
+				}
+
+				break;
+			case 'tech-c':
+				if (!$skip) {
+					$records[$i]['tech_c'] = trim($line[1]);
+				}
+
+				$intec = true;
+
+				break;
+			case 'remarks':
+				if (!$skip) {
+					$remarks = str_replace('&amp;', '&', $line[1]);
+
+					if (!isset($records[$i]['remarks'])) {
+						cacti_log("Line: $j, Error:$remarks", true, 'FLOWVIEW');
+						$records[$i]['remarks'] = trim($remarks);
+					} else {
+						$records[$i]['remarks'] .= ' ' . trim($remarks);
+					}
+				}
+
+				$column = 'remarks';
+				$inrem  = true;
+
+				break;
+			case 'changed':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				if (!$skip) {
+					$changed = explode(' ', trim($line[1]), 2);
+					$records[$i]['changed'] = trim($changed[0]);
+				}
+
+				break;
+			case 'last-modified':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				if (!$skip) {
+					$records[$i]['last_modified'] = date('Y-m-d H:i:s', strtotime(trim($line[1])));
+				}
+
+				$column = '';
+
+				break;
+			case 'geoidx':
+				if (!$skip) {
+					$records[$i]['geoidx'] = trim($line[1]);
+				}
+
+				$ingeo = true;
+
+				break;
+			case 'created':
+			case 'org':
+				// Skipping this for now.
+
+				break;
+			case 'source':
+			case 'notify':
+			case 'mnt-by':
+			case 'admin-c':
+			case 'member-of':
+			case 'netname':
+			case 'roa-uri':
+			case 'export-comps':
+			case 'components':
+			case 'export-comps':
+			case 'country':
+			case 'status':
+				$inrem = $indesc = $intec = $ingeo = false;
+
+				if (!$skip) {
+					$col = str_replace('-', '_', $line[0]);
+					$records[$i][$col] = trim($line[1]);
+				}
+
+				break;
+			case 'aut-num':
+				/* right now, we don't go past route and route6 */
+				cacti_log('Hitting Autonomous Numbers, exiting', true, 'FLOWVIEW');
+
+				break 2;
+			default:
+				if ($column == 'descr') {
+					$records[$i]['descr'] .= ' ' . trim($line[0]);
+				} elseif ($column == 'remarks') {
 					if ($line[0] == '+') {
 						$records[$i]['remarks'] .= PHP_EOL;
 					} else {
-						$records[$i]['remarks'] .= PHP_EOL . trim($line);
+						$records[$i]['remarks'] .= PHP_EOL . trim($line[0]);
 					}
-				} elseif ($intec) {
-					$records[$i]['tech_c'] .= ', ' . trim($line);
 				} else {
-					print $line;
+					print "Unknown object type {$line[0]}" . PHP_EOL;
 				}
 
-				continue;
-			} else {
-				$line = trim($line);
-
-				if ($line == '') {
-					continue;
-				}
-
-				$line = explode(':', $line, 2);
-			}
-
-			switch($line[0]) {
-				case 'inet6num':
-				case 'inetnum':
-					$inrem = $indesc = $intec = false;
-
-					$skip   = true;
-
-					break;
-				case 'route':
-				case 'route6':
-					$inrem = $indesc = $intec = false;
-
-					$skip   = false;
-
-					$record_start = true;
-					$records[$i]['route']         = trim($line[1]);
-					$records[$i]['descr']         = '';
-					$records[$i]['remarks']       = '';
-					$records[$i]['origin_as']     = '';
-					$records[$i]['mnt_by']        = '';
-					$records[$i]['status']        = '';
-					$records[$i]['country']       = '';
-					$records[$i]['admin_c']       = '';
-					$records[$i]['tech_c']        = '';
-					$records[$i]['member_of']     = '';
-					$records[$i]['notify']        = '';
-					$records[$i]['geoidx']        = '';
-					$records[$i]['roa_uri']       = '';
-					$records[$i]['export_comps']  = '';
-					$records[$i]['components']    = '';
-					$records[$i]['changed']       = '';
-					$records[$i]['source']        = '';
-					$records[$i]['present']       = 1;
-					$records[$i]['last_modified'] = '';
-
-					break;
-				case 'descr':
-					if (!$skip) {
-						$records[$i]['descr'] = trim($line[1]);
-					}
-
-					$column = 'descr';
-					$indesc = true;
-
-					break;
-				case 'origin':
-					$inrem = $indesc = $intec = false;
-
-					if (!$skip) {
-						$records[$i]['origin_as'] = trim($line[1]);
-					}
-
-					break;
-				case 'tech-c':
-					if (!$skip) {
-						$records[$i]['tech_c'] = trim($line[1]);
-					}
-
-					$intec = true;
-
-					break;
-				case 'remarks':
-					if (!$skip) {
-						$remarks = str_replace('&amp;', '&', $line[1]);
-						$records[$i]['remarks'] .= ' ' . trim($remarks);
-					}
-
-					$column = 'remarks';
-					$inrem  = true;
-
-					break;
-				case 'changed':
-					$inrem = $indesc = $intec = false;
-
-					if (!$skip) {
-						$changed = explode(' ', trim($line[1]), 2);
-						$records[$i]['changed'] = trim($changed[0]);
-					}
-
-					break;
-				case 'last-modified':
-					$inrem = $indesc = $intec = false;
-
-					if (!$skip) {
-						$records[$i]['last_modified'] = date('Y-m-d H:i:s', strtotime(trim($line[1])));
-						$i++;
-					}
-
-					$column = '';
-
-					break;
-				case 'source':
-				case 'notify':
-				case 'mnt-by':
-				case 'admin-c':
-				case 'geoidx':
-				case 'member-of':
-				case 'netname':
-				case 'roa-uri':
-				case 'export-comps':
-				case 'components':
-				case 'export-comps':
-				case 'country':
-				case 'status':
-					$inrem = $indesc = $intec = false;
-
-					if (!$skip) {
-						$col = str_replace('-', '_', $line[0]);
-						$records[$i][$col] = trim($line[1]);
-					}
-
-					break;
-				case 'aut-num':
-					/* right now, we don't go past route and route6 */
-					break 2;
-				default:
-					if ($column == 'descr') {
-						$records[$i]['descr'] .= ' ' . trim($line[0]);
-					} elseif ($column == 'remarks') {
-						if ($line[0] == '+') {
-							$records[$i]['remarks'] .= PHP_EOL;
-						} else {
-							$records[$i]['remarks'] .= PHP_EOL . trim($line[0]);
-						}
-					} else {
-						print "Unknown object type {$line[0]}" . PHP_EOL;
-					}
-
-					break;
-			}
+				break;
 		}
+	}
 
-		/*
-		$columns = array();
-		foreach($record as $r) {
-			$keys = array_keys($r);
-			foreach($keys as $c) {
-				$columns[$c] = $c;
-			}
+	/*
+	$columns = array();
+	foreach($record as $r) {
+		$keys = array_keys($r);
+		foreach($keys as $c) {
+			$columns[$c] = $c;
 		}
-		print_r($columns);
-		print_r($record);
-		*/
+	}
+	print_r($columns);
+	print_r($record);
+	*/
 
-		gzclose($file);
+	gzclose($file);
 
-		unlink($radb_file);
+	if (cacti_sizeof($records)) {
+		$sql_params = array();
+		$sql = array();
+		$sql_prefix = "REPLACE INTO plugin_flowview_routes
+			(route, descr, remarks, origin_as, mnt_by, status, country,
+			admin_c, tech_c, member_of, notify, geoidx, roa_uri, export_comps,
+			components, changed, source, present, last_modified) VALUES";
 
-		if (cacti_sizeof($records)) {
-			$sql_params = array();
-			$sql = array();
-			$sql_prefix = "REPLACE INTO plugin_flowview_radb_routes
-				(route, descr, remarks, origin_as, mnt_by, status, country,
-				admin_c, tech_c, member_of, notify, geoidx, roa_uri, export_comps,
-				components, changed, source, present, last_modified) VALUES";
+		foreach($records as $index => $r) {
+			$sql[$index]  = '(';
+			$i = 0;
 
-			foreach($records as $index => $r) {
-				$sql[$index]  = '(';
-				$i = 0;
-
-				foreach($r as $column => $value) {
-					$sql[$index] .= ($i == 0 ? '':', ') . '?';
-					$sql_params[] = $value;
-					$i++;
-				}
-				$sql[$index] .= ')';
-
-				if ($index % 100 == 0) {
-					flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
-					$sql_params = array();
-					$sql = array();
-				}
+			foreach($r as $column => $value) {
+				$sql[$index] .= ($i == 0 ? '':', ') . '?';
+				$sql_params[] = $value;
+				$i++;
 			}
+			$sql[$index] .= ')';
 
-			if (cacti_sizeof($sql)) {
+			if ($index % 100 == 0) {
 				flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
 				$sql_params = array();
 				$sql = array();
 			}
-
-			db_execute('DELETE FROM plugin_flowview_radb_routes WHERE present = 0');
 		}
-	} else {
-		cacti_log('WARNING: Unable to download the RADB database from radb.net');
+
+		if (cacti_sizeof($sql)) {
+			flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
+			$sql_params = array();
+			$sql = array();
+		}
+
+		flowview_db_execute_prepared('DELETE FROM plugin_flowview_routes
+			WHERE present = 0
+			AND source = ?',
+			array($source));
 	}
+
+	return true;
 }
 
 function flowview_check_for_private_network($host) {
@@ -5000,7 +5138,7 @@ function flowview_get_owner_from_arin($host) {
 				$origin_as = $json['net']['originASes']['originAS']['$'];
 			} else {
 				$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
-					FROM plugin_flowview_radb_routes
+					FROM plugin_flowview_routes
 					WHERE route = ?',
 					array($cidr));
 

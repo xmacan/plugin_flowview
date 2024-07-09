@@ -230,7 +230,7 @@ function flowview_upgrade($current, $old) {
 			[netname] => netname
 		)
 		*/
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_radb_routes` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_routes` (
 			`route` varchar(40) NOT NULL DEFAULT '',
 			`descr` varchar(128) NOT NULL DEFAULT '',
 			`remarks` text NOT NULL DEFAULT '',
@@ -250,7 +250,9 @@ function flowview_upgrade($current, $old) {
 			`source` varchar(20) NOT NULL DEFAULT '',
 			`present` tinyint(3) unsigned not null default '1',
 			`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-			PRIMARY KEY (`route`))
+			PRIMARY KEY (`route`),
+			KEY `source` (`source`),
+			KEY `origin_as` (`origin_as`))
 			ENGINE=InnoDB
 			COMMENT='Holds the basic whois database from RADB'");
 
@@ -424,8 +426,14 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('RENAME TABLE parallel_database_query_shards TO parallel_database_query_shard');
 		}
 
+		if (flowview_db_table_exists('plugin_flowivew_radb_routes')) {
+			flowview_db_execute('RENAME TABLE plugin_flowivew_radb_routes TO plugin_flowivew_routes');
+			flowview_db_execute('ALTER TABLE plugin_flowview_routes
+				ADD INDEX `source` (`source`), ADD INDEX `origin_as` (`origin_as`)');
+		}
+
 		db_execute("UPDATE plugin_realms
-			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php'
+			SET file='flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_databases.php'
 			WHERE plugin='flowview'
 			AND file LIKE '%devices%'");
 

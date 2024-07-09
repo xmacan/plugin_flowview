@@ -118,7 +118,7 @@ if (cacti_sizeof($cidrs)) {
 		$return_var = 0;
 		$output = array();
 		$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
-			FROM plugin_flowview_radb_routes
+			FROM plugin_flowview_routes
 			WHERE route = ?',
 			array($cidr));
 

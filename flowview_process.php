@@ -256,7 +256,7 @@ if ($maint) {
 	flowview_debug('Total number of cached shards dropped is ' . $dropped);
 
 	/* download a fresh copy of the radb.db.gz and load it */
-	flowview_update_radb_database();
+	flowview_check_radb_databases();
 }
 
 $end = microtime(true);

@@ -33,7 +33,7 @@ function plugin_flowview_install() {
 	api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php');
 
 	api_plugin_register_realm('flowview', 'flowview.php', __('Plugin -> Flow Viewer', 'flowview'), 1);
-	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_dnscache.php', __('Plugin -> Flow Admin', 'flowview'), 1);
+	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_databases.php', __('Plugin -> Flow Admin', 'flowview'), 1);
 
 	flowview_determine_config();
 
@@ -50,12 +50,19 @@ function plugin_flowview_install() {
 
 function plugin_flowview_uninstall() {
 	// Do any extra Uninstall stuff here
-	flowview_drop_table(
+	$tables = array(
+		'plugin_flowview_arin_information',
+		'plugin_flowview_device_streams',
+		'plugin_flowview_device_templates',
 		'plugin_flowview_devices',
 		'plugin_flowview_dnscache',
 		'plugin_flowview_ports',
-		'plugin_flowview_queries'
+		'plugin_flowview_queries',
+		'plugin_flowview_routes',
+		'plugin_flowview_schedules'
 	);
+
+	flowview_drop_table($tables);
 }
 
 function plugin_flowview_check_config() {
@@ -136,7 +143,7 @@ function flowview_config_arrays() {
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_devices.php']   = __('Listeners', 'flowview');
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_filters.php']   = __('Filters', 'flowview');
 			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_schedules.php'] = __('Schedules', 'flowview');
-			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_dnscache.php']  = __('DNS Cache', 'flowview');
+			$menu2[__('FlowView', 'flowview')]['plugins/flowview/flowview_databases.php'] = __('Databases', 'flowview');
 		}
 	}
 	$menu = $menu2;
@@ -737,7 +744,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds ARIN Records Downloaded for Caching'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_radb_routes` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_routes` (
 		`route` varchar(40) NOT NULL DEFAULT '',
 		`descr` varchar(128) NOT NULL DEFAULT '',
 		`remarks` text NOT NULL DEFAULT '',
@@ -757,7 +764,9 @@ function flowview_setup_table() {
 		`source` varchar(20) NOT NULL DEFAULT '',
 		`present` tinyint(3) unsigned not null default '1',
 		`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-		PRIMARY KEY (`route`))
+		PRIMARY KEY (`route`),
+		KEY `source` (`source`),
+		KEY `origin_as` (`origin_as`))
 		ENGINE=InnoDB
 		COMMENT='Holds the basic whois database from RADB'");
 
