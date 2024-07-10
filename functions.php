@@ -4762,8 +4762,8 @@ function flowview_check_radb_databases($import_only = false, $force = false) {
 			continue;
 		}
 
+		$last_serial = read_config_option("flowview_{$source}_serial");
 		$curr_serial = trim(file_get_contents("$ftp_base/{$details['serial']}"));
-		$last_serial = trim(read_config_option("flowview_{$source}_serial"));
 
 		cacti_log("Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", false, 'FLOWVIEW');
 
