@@ -4168,7 +4168,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				$dns_name = 'ip-' . $ip . '.' . $ldomain;
 
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
+					(ip, host, source, arin_verified, arin_id, time)
 					VALUES (?, ?, ?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE
 						time = VALUES(time),
@@ -4181,7 +4181,7 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				return $dns_name;
 			} else {
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
-					(ip, host, source, time)
+					(ip, host, source, ariv_verified, arin_id, time)
 					VALUES (?, ?, ?, ?, ?, ?)
 					ON DUPLICATE KEY UPDATE
 						time = VALUES(time),
@@ -4316,6 +4316,10 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				return $dns_name;
 			} else {
 				$dns_name = 'ip-' . str_replace('.', '-', $ip) . '.arin-error.net';
+
+				/* bad dns_name */
+				$arin_id  = 0;
+				$arin_ver = 0;
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
@@ -4695,7 +4699,7 @@ function flowview_check_radb_databases($import_only = false, $force = false) {
 		'idnic' => array(
 			'serial' => 'IDNIC.CURRENTSERIAL',
 			'file'   => 'idnic.db.gz',
-			'ftp'    => 'ftp://irr-mirror-idnic.net/'
+			'ftp'    => 'ftp://irr-mirror.idnic.net/'
 		),
 		'jpirr' => array(
 			'serial' => 'JPIRR.CURRENTSERIAL',
