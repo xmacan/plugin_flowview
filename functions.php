@@ -4883,6 +4883,8 @@ function flowview_check_databases($import_only = false, $force = false) {
 }
 
 function flowview_update_database($source, $irr_file = false) {
+	global $debug;
+
 	if ($irr_file === false) {
 		cacti_log(sprintf('IRR UPDATE: WARNING: Unable to open RADB database file %s as it was not specified', $irr_file), true, 'FLOWVIEW');
 		return false;
@@ -5092,7 +5094,9 @@ function flowview_update_database($source, $irr_file = false) {
 		if ($line_no % 1000000 == 0) {
 			$total_count++;
 
-			print "Processed {$total_count}M lines" . PHP_EOL;
+			if ($debug) {
+				print "Processed {$total_count}M lines" . PHP_EOL;
+			}
 		}
 	}
 
@@ -5108,7 +5112,11 @@ function flowview_update_database($source, $irr_file = false) {
 }
 
 function flowview_insert_irr_sections(&$records, &$prefixes, &$supported_sections) {
-	print "Writing Database Records" . PHP_EOL;
+	global $debug;
+
+	if ($debug) {
+		print "Writing Database Records" . PHP_EOL;
+	}
 
 	/* do the table inserts now */
 	foreach($supported_sections as $section) {
