@@ -4847,7 +4847,7 @@ function flowview_check_databases($import_only = false, $force = false) {
 				$remote_file = "$ftp_base/$file";
 
 				if (file_exists($local_file) && is_writable($local_file)) {
-					//unlink($local_file);
+					unlink($local_file);
 				}
 
 				$return_var = 0;
@@ -4868,7 +4868,7 @@ function flowview_check_databases($import_only = false, $force = false) {
 					}
 
 					if (file_exists($local_file) && is_writable($local_file)) {
-						//unlink($local_file);
+						unlink($local_file);
 					}
 				}
 			}
