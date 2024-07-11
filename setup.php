@@ -58,7 +58,7 @@ function plugin_flowview_uninstall() {
 		'plugin_flowview_dnscache',
 		'plugin_flowview_ports',
 		'plugin_flowview_queries',
-		'plugin_flowview_routes',
+		'plugin_flowview_irr_route',
 		'plugin_flowview_schedules'
 	);
 
@@ -710,7 +710,7 @@ function flowview_setup_table() {
 
 	flowview_connect();
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_dnscache` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_dnscache` (
 		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 		`ip` varchar(45) NOT NULL DEFAULT '',
 		`host` varchar(255) NOT NULL DEFAULT '',
@@ -724,14 +724,14 @@ function flowview_setup_table() {
 		ENGINE=InnoDB,
 		COMMENT='Plugin Flowview - DNS Cache to help speed things up'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_arin_information` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 		`cidr` varchar(20) NOT NULL DEFAULT '',
 		`net_range` varchar(64) NOT NULL DEFAULT '',
 		`name` varchar(64) NOT NULL DEFAULT '',
 		`parent` varchar(64) NOT NULL DEFAULT '',
 		`net_type` varchar(64) NOT NULL DEFAULT '',
-		`origin_as` varchar(64) NOT NULL DEFAULT '',
+		`origin` varchar(20) NOT NULL DEFAULT '',
 		`registration` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 		`last_changed` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 		`comments` varchar(128) NOT NULL DEFAULT '',
@@ -744,33 +744,9 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds ARIN Records Downloaded for Caching'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_routes` (
-		`route` varchar(40) NOT NULL DEFAULT '',
-		`descr` varchar(128) NOT NULL DEFAULT '',
-		`remarks` text NOT NULL DEFAULT '',
-		`origin_as` varchar(20) NOT NULL DEFAULT '',
-		`mnt_by` varchar(40) NOT NULL DEFAULT '',
-		`status` varchar(20) NOT NULL DEFAULT '',
-		`country` varchar(20) NOT NULL DEFAULT '',
-		`admin_c` varchar(30) NOT NULL DEFAULT '',
-		`tech_c` varchar(30) NOT NULL DEFAULT '',
-		`member_of` varchar(30) NOT NULL DEFAULT '',
-		`notify` varchar(64) NOT NULL DEFAULT '',
-		`geoidx` varchar(20) NOT NULL DEFAULT '',
-		`roa_uri` varchar(128) NOT NULL DEFAULT '',
-		`export_comps` varchar(30) NOT NULL DEFAULT '',
-		`components` varchar(30) NOT NULL DEFAULT '',
-		`changed` varchar(128) NOT NULL DEFAULT '',
-		`source` varchar(20) NOT NULL DEFAULT '',
-		`present` tinyint(3) unsigned not null default '1',
-		`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-		PRIMARY KEY (`route`),
-		KEY `source` (`source`),
-		KEY `origin_as` (`origin_as`))
-		ENGINE=InnoDB
-		COMMENT='Holds the basic whois database from RADB'");
+	include_once($config['base_path'] . '/plugins/flowview/irr_tables.php');
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_devices` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_devices` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(64) NOT NULL,
 		cmethod int(11) unsigned NOT NULL default '0',
@@ -783,7 +759,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Devices to collect flows from'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_streams` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ex_addr varchar(46) NOT NULL default '',
 		name varchar(64) NOT NULL default '',
@@ -794,7 +770,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_templates` (
 		device_id int(11) unsigned NOT NULL default '0',
 		ex_addr varchar(46) NOT NULL default '',
 		template_id int(11) NOT NULL default '0',
@@ -806,7 +782,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_queries` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_queries` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(255) NOT NULL,
 		device_id int(11) unsigned NOT NULL,
@@ -844,7 +820,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - List of Saved Flow Queries'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_schedules` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_schedules` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		title varchar(128) NOT NULL default '',
 		enabled varchar(3) NOT NULL default 'on',
@@ -860,7 +836,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - Scheduling for running and emails of saved queries'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_ports` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_ports` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		service varchar(20) NOT NULL default '',
 		port int(11) unsigned NOT NULL,
@@ -871,7 +847,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC,
 		COMMENT='Plugin Flowview - Database of well known Ports'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query` (
 		`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		`md5sum` varchar(32) NOT NULL DEFAULT '',
 		`md5sum_tables` varchar(32) NOT NULL DEFAULT '',
@@ -895,7 +871,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds Parallel Query Requests'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query_shard` (
 		`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 		`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 		`full_scan` tinyint(3) unsigned DEFAULT 1,
@@ -911,7 +887,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds Parallel Query Shard Requests'");
 
-	flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (
+	flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query_shard_cache` (
 		`md5sum` varchar(32) NOT NULL DEFAULT '',
 		`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
 		`map_partition` varchar(20) NOT NULL DEFAULT '',
@@ -941,7 +917,7 @@ function flowview_drop_table($tables) {
 
 	if (cacti_sizeof($tables)) {
 		foreach($tables as $table) {
-			flowview_db_execute("DROP TABLE IF EXISTS `" . $flowviewdb_default . "`.$table");
+			flowview_db_execute("DROP TABLE IF EXISTS $table");
 		}
 	}
 }

@@ -2360,7 +2360,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 		if (strpos($report, 's') !== false && is_numeric($nreport)) {
 			$data['statistics'] = $nreport;
 			$data['printed']    = 0;
-		} elseif(strpos($report, 'p') !== false && is_numeric($nreport)) {
+		} elseif (strpos($report, 'p') !== false && is_numeric($nreport)) {
 			$data['printed']    = $nreport;
 			$data['statistics'] = 0;
 		}
@@ -3195,7 +3195,7 @@ function flowview_table_name_to_time($table, $type) {
 	return $dates[$type];
 }
 
-function flowview_convert_yeardayhour_to_date($range, $year, $day, $hour = 0){
+function flowview_convert_yeardayhour_to_date($range, $year, $day, $hour = 0) {
     $datetime = new DateTime();
 
 	if ($range == 'days') {
@@ -3897,7 +3897,9 @@ function flowview_check_fields() {
 					if (!preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $subnet)) {
 						return __('Invalid subnet for the Source Address!<br>(Must be in the form of \'192.168.0.1/255.255.255.0\' or \'192.168.0.1/24\')', 'flowview');
 					}
+
 					$subs = explode('.', $subnet);
+
 					if ((!isset($subs[0]) || $subs[0] > 255) || (!isset($subs[1]) || $subs[1] > 255) || (!isset($subs[2]) || $subs[2] > 255) || (!isset($subs[3]) || $subs[3] > 255)) {
 						return __('Invalid subnet for the Source Address!<br>(Must be in the form of \'192.168.0.1/255.255.255.0\' or \'192.168.0.1/24\')', 'flowview');
 					}
@@ -4659,98 +4661,154 @@ function flowview_check_local_iprange($ip) {
 	return false;
 }
 
-function flowview_check_radb_databases($import_only = false, $force = false) {
+
+function flowview_check_databases($import_only = false, $force = false) {
 	$databases = array(
 		'afrinic' => array(
-			'serial' => 'AFRINIC.CURRENTSERIAL',
-			'file'   => 'afrinic.db.gz',
-			'ftp'    => 'ftp://ftp.afrinic.net/pub/dbase/'
+			'serial'  => 'AFRINIC.CURRENTSERIAL',
+			'files'   => 'afrinic.db.gz',
+			'ftp'     => 'ftp://ftp.afrinic.net/pub/dbase/'
 		),
 		'altdb' => array(
-			'serial' => 'ALTDB.CURRENTSERIAL',
-			'file'   => 'altdb.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'ALTDB.CURRENTSERIAL',
+			'files'   => 'altdb.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'apnic' => array(
-			'serial' => 'APNIC.CURRENTSERIAL',
-			'file'   => 'apnic.db.gz',
-			'ftp'    => 'ftp://ftp.apnic.net/apnic/whois/'
+			'serial'  => 'APNIC.CURRENTSERIAL',
+			'files' => array(
+				'apnic.db.as-block.gz',
+				'apnic.db.as-set.gz',
+				'apnic.db.aut-num.gz',
+				'apnic.db.domain.gz',
+				'apnic.db.filter-set.gz',
+				'apnic.db.inet-rtr.gz',
+				'apnic.db.inet6num.gz',
+				'apnic.db.inetnum.gz',
+				'apnic.db.irt.gz',
+				'apnic.db.key-cert.gz',
+				'apnic.db.mntner.gz',
+				'apnic.db.organisation.gz',
+				'apnic.db.peering-set.gz',
+				'apnic.db.role.gz',
+				'apnic.db.route-set.gz',
+				'apnic.db.route.gz',
+				'apnic.db.route6.gz',
+				'apnic.db.rtr-set.gz'
+			),
+			'ftp'     => 'ftp://ftp.apnic.net/apnic/whois/'
 		),
 		'arin' => array(
-			'serial' => 'ARIN.CURRENTSERIAL',
-			'file'   => 'arin.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'ARIN.CURRENTSERIAL',
+			'files'   => 'arin.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'bboi' => array(
-			'serial' => 'BBOI.CURRENTSERIAL',
-			'file'   => 'bboi.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'BBOI.CURRENTSERIAL',
+			'files'   => 'bboi.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'bell' => array(
-			'serial' => 'BELL.CURRENTSERIAL',
-			'file'   => 'bell.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'BELL.CURRENTSERIAL',
+			'files'   => 'bell.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'canarie' => array(
-			'serial' => 'CANARIE.CURRENTSERIAL',
-			'file'   => 'canarie.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'CANARIE.CURRENTSERIAL',
+			'files'   => 'canarie.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'idnic' => array(
-			'serial' => 'IDNIC.CURRENTSERIAL',
-			'file'   => 'idnic.db.gz',
-			'ftp'    => 'ftp://irr-mirror.idnic.net/'
+			'serial'  => 'IDNIC.CURRENTSERIAL',
+			'files'   => 'idnic.db.gz',
+			'ftp'     => 'ftp://irr-mirror.idnic.net/'
 		),
 		'jpirr' => array(
-			'serial' => 'JPIRR.CURRENTSERIAL',
-			'file'   => 'jpirr.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'JPIRR.CURRENTSERIAL',
+			'files'   => 'jpirr.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
+		),
+		'jpnic' => array(
+			'serial'  => 'JPNIC.CURRENTSERIAL',
+			'files'   => 'jpnic.db.gz',
+			'ftp'     => 'ftp://ftp.apnic.net/public/apnic/dbase/data/'
+		),
+		'krnic' => array(
+			'serial'  => 'KRNIC.CURRENTSERIAL',
+			'files'   => 'krnic.db.gz',
+			'ftp'     => 'ftp://ftp.apnic.net/public/apnic/dbase/data/'
+		),
+		'twnic' => array(
+			'serial'  => 'TWNIC.CURRENTSERIAL',
+			'files'   => 'twnic.db.gz',
+			'ftp'     => 'ftp://ftp.apnic.net/public/apnic/dbase/data/'
 		),
 		'lacnic' => array(
-			'serial' => 'LACNIC.CURRENTSERIAL',
-			'file'   => 'lacnic.db.gz',
-			'ftp'    => 'https://irr.lacnic.net/'
+			'serial'  => 'LACNIC.CURRENTSERIAL',
+			'files'   => 'lacnic.db.gz',
+			'ftp'     => 'https://irr.lacnic.net/'
 		),
 		'level3' => array(
-			'serial' => 'LEVEL3.CURRENTSERIAL',
-			'file'   => 'level3.db.gz',
-			'ftp'    => 'ftp://rr.level3.net/'
+			'serial'  => 'LEVEL3.CURRENTSERIAL',
+			'files'   => 'level3.db.gz',
+			'ftp'     => 'ftp://rr.level3.net/'
 		),
 		'wcgdb' => array(
-			'serial' => 'WCGDB.CURRENTSERIAL',
-			'file'   => 'wcgdb.db.gz',
-			'ftp'    => 'ftp://rr.level3.net/'
+			'serial'  => 'WCGDB.CURRENTSERIAL',
+			'files'   => 'wcgdb.db.gz',
+			'ftp'     => 'ftp://rr.level3.net/'
 		),
 		'netegg' => array(
-			'serial' => 'NETEGG.CURRENTSERIAL',
-			'file'   => 'netegg.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'NETEGG.CURRENTSERIAL',
+			'files'   => array('netegg.db.gz', 'nestegg.db.gz'),
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'nttcom' => array(
-			'serial' => 'NTTCOM.CURRENTSERIAL',
-			'file'   => 'nttcom.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'NTTCOM.CURRENTSERIAL',
+			'files'   => 'nttcom.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'radb' => array(
-			'serial' => 'RADB.CURRENTSERIAL',
-			'file'   => 'radb.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'RADB.CURRENTSERIAL',
+			'files'   => 'radb.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'reach' => array(
-			'serial' => 'REACH.CURRENTSERIAL',
-			'file'   => 'reach.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'REACH.CURRENTSERIAL',
+			'files'   => 'reach.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		),
 		'ripe' => array(
-			'serial' => 'RIPE.CURRENTSERIAL',
-			'file'   => 'ripe.db.gz',
-			'ftp'    => 'ftp://ftp.ripe.net/ripe/dbase/'
+			'serial'  => 'RIPE.CURRENTSERIAL',
+			'files'   => 'ripe.db.gz',
+			'ftp'     => 'ftp://ftp.ripe.net/ripe/dbase/'
 		),
 		'tc' => array(
-			'serial' => 'TC.CURRENTSERIAL',
-			'file'   => 'tc.db.gz',
-			'ftp'    => 'ftp://ftp.radb.net/radb/dbase/'
+			'serial'  => 'TC.CURRENTSERIAL',
+			'files'   => 'tc.db.gz',
+			'ftp'     => 'ftp://ftp.radb.net/radb/dbase/'
 		)
+	);
+
+	$supported_tables = array(
+		'as_block',
+		'as_set',
+		'aut_num',
+		'domain',
+		'filter_set',
+		'inetnum',
+		'inet_rtr',
+		'irt',
+		'mntner',
+		'organisation',
+		'peering_set',
+		'person',
+		'poem',
+		'poetic_form',
+		'role',
+		'route',
+		'route_set',
+		'rtr_set'
 	);
 
 	$directory = sys_get_temp_dir();
@@ -4765,317 +4823,321 @@ function flowview_check_radb_databases($import_only = false, $force = false) {
 		$last_serial = read_config_option("flowview_{$source}_serial");
 		$curr_serial = trim(file_get_contents("$ftp_base/{$details['serial']}"));
 
-		cacti_log("Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", false, 'FLOWVIEW');
+		if ($force) {
+			cacti_log("IRR UPDATE: Forced Run, IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW');
+		} else {
+			cacti_log("IRR UPDATE: IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW');
+		}
 
 		if ($force || $import_only !== false || ($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
-			cacti_log("Downloading {$details['file']}", true, 'FLOWVIEW');
-
-			$local_file  = "$directory/{$details['file']}";
-			$remote_file = "$ftp_base/{$details['file']}";
-
-			if (file_exists($local_file) && is_writable($local_file)) {
-				unlink($local_file);
+			if (!is_array($details['files'])) {
+				$details['files'] = array($details['files']);
 			}
 
-			$return_var = 0;
-			$output     = array();
-			$last_line  = exec("wget --timeout=5 --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
+			foreach($supported_tables as $table) {
+				flowview_db_execute_prepared("UPDATE plugin_flowview_irr_$table SET present = 0 WHERE source = ?", array($source));
+			}
 
-			if ($return_var == 0) {
-				cacti_log("Importing Database {$details['file']}", true, 'FLOWVIEW');
+			$files_broken = false;
 
-				set_config_option("flowview_{$source}_serial", $curr_serial);
+			foreach($details['files'] as $file) {
+				cacti_log("IRR UPDATE: Downloading {$file}", true, 'FLOWVIEW');
 
-				flowview_update_radb_database($source, $local_file);
+				$local_file  = "$directory/$file";
+				$remote_file = "$ftp_base/$file";
 
 				if (file_exists($local_file) && is_writable($local_file)) {
-					unlink($local_file);
+					//unlink($local_file);
+				}
+
+				$return_var = 0;
+				$output     = array();
+				if (!file_exists($local_file)) {
+					$last_line  = exec("wget --timeout=5 --output-document='$local_file' --output-file=/dev/null $remote_file", $output, $return_var);
+				}
+
+				if ($return_var == 0) {
+					cacti_log("IRR UPDATE: Importing Database File: $file", true, 'FLOWVIEW');
+
+					set_config_option("flowview_{$source}_serial", $curr_serial);
+
+					if (filesize($local_file) > 0) {
+						flowview_update_database($source, $local_file);
+					} else {
+						cacti_log("IRR UPDATE: WARNING: File: $local_file is empty", true, 'FLOWVIEW');
+					}
+
+					if (file_exists($local_file) && is_writable($local_file)) {
+						//unlink($local_file);
+					}
+				}
+			}
+
+			if (!$files_broken) {
+				foreach($supported_tables as $table) {
+					flowview_db_execute_prepared("DELETE FROM plugin_flowview_irr_$table WHERE present = 0 AND source = ?", array($source));
 				}
 			}
 		}
 	}
 }
 
-function flowview_update_radb_database($source, $radb_file = false) {
-	if ($radb_file === false) {
-		cacti_log('WARNING: Unable to open RADB database file as it was not specified', false, 'FLOWVIEW');
+function flowview_update_database($source, $irr_file = false) {
+	if ($irr_file === false) {
+		cacti_log(sprintf('IRR UPDATE: WARNING: Unable to open RADB database file %s as it was not specified', $irr_file), true, 'FLOWVIEW');
 		return false;
 	}
 
-	$file   = gzopen($radb_file, 'r');
-	$record = array();
-	$column = '';
-	$skip   = false;
-	$inrem  = false;
-	$indesc = false;
-	$intec  = false;
-	$ingeo  = false;
-	$source = strtoupper($source);
+	$file         = gzopen($irr_file, 'r');
+	$record       = array();
+	$prefixes     = array();
+	$column       = '';
+	$skip         = false;
+	$source       = strtoupper($source);
+	$records      = array();
+	$record_nums  = array();
+	$prevc        = '';
+	$section      = '';
+	$curr_section = '';
+	$start        = microtime(true);
 
-	flowview_db_execute_prepared('UPDATE plugin_flowview_routes
-		SET present = 0
-		WHERE source = ?',
-		array($source));
+	$supported_sections = array(
+		'as-block',
+		'as-set',
+		'aut-num',
+		'domain',
+		'filter-set',
+		'inetnum',
+		'inet6num',
+		'inet-rtr',
+		'irt',
+		'mntner',
+		'organisation',
+		'peering-set',
+		'person',
+		'poem',
+		'poetic-form',
+		'role',
+		'route',
+		'route6',
+		'route-set',
+		'rtr-set',
+	);
+
+	$unsupported_sections = array(
+		'key-cert',
+	);
+
+	/* prime the template records with base columns */
+	foreach($supported_sections as $section) {
+		$section    = str_replace('6', '', $section);
+		$db_section = str_replace('-', '_', $section);
+		$db_table   = "plugin_flowview_irr_$db_section";
+		$columns    = flowview_db_get_table_column_types($db_table);
+		$i          = 0;
+
+		$prefixes[$section] = '(';
+
+		foreach($columns as $name => $details) {
+			$prefixes[$section] .= ($i > 0 ? ', ':'') . "`{$name}`";
+
+			if ($name == 'source') {
+				$record[$section][$name] = strtoupper($source);
+			} else {
+				$record[$section][$name] = '';
+			}
+
+			$i++;
+		}
+
+		$prefixes[$section] .= ')';
+	}
 
 	$i = 0;
 	$j = 0;
 
+	$warnings        = 0;
+	$section_clue    = '';
+	$line_no         = 1;
+	$total_count     = 0;
+	$skip            = false;
+	$prev_section    = '';
+	$prev_db_column  = '';
+	$prev_irr_column = '';
+	$name_remove_ct  = 1;
+	$sections_done   = 0;
+
 	while (!feof($file) !== false) {
-		$j++;
 		$line = fgets($file);
 
 		if (substr($line, 0, 1) == '#') {
+			// Ignore comment
+			$line_no++;
 			continue;
 		}
 
-		if (strpos($line, '                ') !== false) {
-			if ($indesc) {
-				$records[$i]['descr']   .= ', ' . trim(str_replace('descr:', '', $line));
-			} elseif ($inrem) {
-				$line = str_replace('remarks:', '', $line);
-				$line = trim($line);
+		$col_parts = explode(':', $line, 2);
 
-				if ($line[0] == '+') {
-					$records[$i]['remarks'] .= PHP_EOL;
-				} else {
-					$records[$i]['remarks'] .= PHP_EOL . trim($line);
-				}
-			} elseif ($intec) {
-				$records[$i]['tech_c'] .= ', ' . trim($line);
-			} elseif ($ingeo) {
-				$records[$i]['geoidx'] .= ', ' . trim(str_replace('geoidx:', '', $line));
-			} else {
-				print $line;
+		// Skip section breaks, we are smart enough to handle
+		if (trim($line) == '') {
+			$line_no++;
+			continue;
+		}
+
+		if (trim(substr($line, 0, 16)) == '' || substr($line, 0, 1) == '+') {
+			if (substr($line, 0, 1) == '+') {
+				$line[0] = ' ';
 			}
 
-			continue;
+			$irr_column = $prev_irr_column;
+
+			$db_column = $prev_db_column;
+			$col_value = trim($line);
 		} else {
-			$line   = trim($line);
+			if (cacti_sizeof($col_parts) == 2) {
+				$irr_column = $col_parts[0];
+				$irr_column = str_replace('6', '', $irr_column);
 
-			if ($line == '') {
-				// New section
-				$column = '';
-				$i++;
+				// We keep IPv4 and IPv6 together
+				$db_column  = str_replace('-', '_', $irr_column);
 
-				continue;
+				$col_value  = trim($col_parts[1]);
+			} else {
+				$irr_column = $prev_irr_column;
+
+				$db_column = $prev_db_column;
+				$col_value = trim($line);
 			}
-
-			$line = explode(':', $line, 2);
 		}
 
-		switch($line[0]) {
-			case 'inet6num':
-			case 'inetnum':
-				$inrem = $indesc = $intec = $ingeo = false;
+		if ($irr_column != '') {
+			if ($irr_column != '' && in_array($irr_column, $supported_sections, true)) {
+				$prev_section = $section;
 
-				$skip   = true;
+				// Let's not eat too much memory
+				if ($sections_done > 10000) {
+					$sections_done = 0;
 
-				break;
-			case 'route':
-			case 'route6':
-				$inrem = $indesc = $intec = $ingeo = false;
+					flowview_insert_irr_sections($records, $prefixes, $supported_sections);
 
-				$skip   = false;
-
-				$record_start = true;
-				$records[$i]['route']         = trim($line[1]);
-				$records[$i]['descr']         = '';
-				$records[$i]['remarks']       = '';
-				$records[$i]['origin_as']     = '';
-				$records[$i]['mnt_by']        = '';
-				$records[$i]['status']        = '';
-				$records[$i]['country']       = '';
-				$records[$i]['admin_c']       = '';
-				$records[$i]['tech_c']        = '';
-				$records[$i]['member_of']     = '';
-				$records[$i]['notify']        = '';
-				$records[$i]['geoidx']        = '';
-				$records[$i]['roa_uri']       = '';
-				$records[$i]['export_comps']  = '';
-				$records[$i]['components']    = '';
-				$records[$i]['changed']       = '';
-				$records[$i]['source']        = $source;
-				$records[$i]['present']       = 1;
-				$records[$i]['last_modified'] = '';
-
-				break;
-			case 'descr':
-				if (!$skip) {
-					$records[$i]['descr'] = trim($line[1]);
-				}
-
-				$column = 'descr';
-				$indesc = true;
-
-				break;
-			case 'origin':
-				$inrem = $indesc = $intec = $ingeo = false;
-
-				if (!$skip) {
-					$records[$i]['origin_as'] = trim($line[1]);
-				}
-
-				break;
-			case 'tech-c':
-				if (!$skip) {
-					$records[$i]['tech_c'] = trim($line[1]);
-				}
-
-				$intec = true;
-
-				break;
-			case 'remarks':
-				if (!$skip) {
-					$remarks = str_replace('&amp;', '&', $line[1]);
-
-					if (!isset($records[$i]['remarks'])) {
-						cacti_log("Line: $j, Error:$remarks", true, 'FLOWVIEW');
-						$records[$i]['remarks'] = trim($remarks);
-					} else {
-						$records[$i]['remarks'] .= ' ' . trim($remarks);
-					}
-				}
-
-				$column = 'remarks';
-				$inrem  = true;
-
-				break;
-			case 'changed':
-				$inrem = $indesc = $intec = $ingeo = false;
-
-				if (!$skip) {
-					$changed = explode(' ', trim($line[1]), 2);
-					$records[$i]['changed'] = trim($changed[0]);
-				}
-
-				break;
-			case 'last-modified':
-				$inrem = $indesc = $intec = $ingeo = false;
-
-				if (!$skip) {
-					$records[$i]['last_modified'] = date('Y-m-d H:i:s', strtotime(trim($line[1])));
-				}
-
-				$column = '';
-
-				break;
-			case 'geoidx':
-				if (!$skip) {
-					$records[$i]['geoidx'] = trim($line[1]);
-				}
-
-				$ingeo = true;
-
-				break;
-			case 'created':
-			case 'org':
-			case 'aggr-mtd': // altdb.db.gz
-				// Skipping this for now.
-
-				break;
-			case 'source':
-				if (!$skip) {
-					$source_parts = explode('#', $line[1]);
-					$records[$i]['source'] = trim($source_parts[0]);
-				}
-
-				break;
-			case 'notify':
-			case 'mnt-by':
-			case 'admin-c':
-			case 'member-of':
-			case 'netname':
-			case 'roa-uri':
-			case 'export-comps':
-			case 'components':
-			case 'export-comps':
-			case 'country':
-			case 'status':
-				$inrem = $indesc = $intec = $ingeo = false;
-
-				if (!$skip) {
-					$col = str_replace('-', '_', $line[0]);
-					$records[$i][$col] = trim($line[1]);
-				}
-
-				break;
-			case 'aut-num':
-			case 'as-set':
-			case 'as-block':
-				/* right now, we don't go past route and route6 */
-				cacti_log('Hitting Autonomous Numbers, exiting', true, 'FLOWVIEW');
-
-				break 2;
-			default:
-				if ($column == 'descr') {
-					$records[$i]['descr'] .= ' ' . trim($line[0]);
-				} elseif ($column == 'remarks') {
-					if ($line[0] == '+') {
-						$records[$i]['remarks'] .= PHP_EOL;
-					} else {
-						$records[$i]['remarks'] .= PHP_EOL . trim($line[0]);
-					}
+					$records    = array();
+					$record_num = array();
 				} else {
-					print "Unknown object type {$line[0]}" . PHP_EOL;
+					$sections_done++;
 				}
 
-				break;
-		}
-	}
+				$skip    = false;
+				$section = $irr_column;
 
-	/*
-	$columns = array();
-	foreach($record as $r) {
-		$keys = array_keys($r);
-		foreach($keys as $c) {
-			$columns[$c] = $c;
+				if (!isset($record_num[$section])) {
+					$record_num[$section] = 1;
+				} else {
+					$record_num[$section]++;
+				}
+
+				if ($section == 'person') {
+					if ($col_value == 'Name Removed') {
+						$col_value = "Name Removed ($name_remove_ct)";
+						$name_remove_ct++;
+					}
+				}
+
+				$records[$section][$record_num[$section]] = $record[$section];
+
+				$records[$section][$record_num[$section]][$db_column] = $col_value;
+				$records[$section][$record_num[$section]]['present']  = 1;
+
+				$cur_section  = $section;
+			} elseif (in_array($irr_column, $unsupported_sections, true)) {
+				$skip = true;
+			} elseif (!$skip) {
+				if (trim(substr($line, 0, 16)) == '') {
+					if ($records[$section][$record_num[$section]][$db_column] != '') {
+						$records[$section][$record_num[$section]][$db_column] .= PHP_EOL . $col_value;
+					} else {
+						$records[$section][$record_num[$section]][$db_column]  = $col_value;
+					}
+				} elseif (substr($line, 0, 1) == '+') {
+					if ($records[$section][$record_num[$section]][$db_column] != '') {
+						$records[$section][$record_num[$section]][$db_column] .= PHP_EOL . trim(str_replace('+', '', $col_value));
+					}
+				} elseif (trim($line) == '') {
+					// Unreached, or should be
+				} else {
+					if ($db_column != 'source') {
+						if ($db_column == 'last_modified' || $db_column == 'created') {
+							$col_value = date('Y-m-d H:i:s', strtotime($col_value));
+						}
+
+						if (!isset($records[$section][$record_num[$section]][$db_column])) {
+							cacti_log("WARNING: Table Schema Issues, Line: $line_no, Previous Section: $prev_section, Section: $section, Column: $db_column", true, 'FLOWVIEW');
+						} elseif ($records[$section][$record_num[$section]][$db_column] != '') {
+							$records[$section][$record_num[$section]][$db_column] .= PHP_EOL . $col_value;
+						} else {
+							$records[$section][$record_num[$section]][$db_column]  = $col_value;
+						}
+					}
+
+					$prev_db_column = $db_column;
+				}
+
+				if ($irr_column != '') {
+					$prev_irr_column = $irr_column;
+				}
+			}
+		}
+
+		$line_no++;
+
+		if ($line_no % 1000000 == 0) {
+			$total_count++;
+
+			print "Processed {$total_count}M lines" . PHP_EOL;
 		}
 	}
-	print_r($columns);
-	print_r($record);
-	*/
 
 	gzclose($file);
 
-	if (cacti_sizeof($records)) {
-		$sql_params = array();
-		$sql = array();
-		$sql_prefix = "REPLACE INTO plugin_flowview_routes
-			(route, descr, remarks, origin_as, mnt_by, status, country,
-			admin_c, tech_c, member_of, notify, geoidx, roa_uri, export_comps,
-			components, changed, source, present, last_modified) VALUES";
+	flowview_insert_irr_sections($records, $prefixes, $supported_sections);
 
-		foreach($records as $index => $r) {
-			$sql[$index]  = '(';
-			$i = 0;
+	$end = microtime(true);
 
-			foreach($r as $column => $value) {
-				$sql[$index] .= ($i == 0 ? '':', ') . '?';
-				$sql_params[] = $value;
-				$i++;
-			}
-			$sql[$index] .= ')';
-
-			if ($index % 100 == 0) {
-				flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
-				$sql_params = array();
-				$sql = array();
-			}
-		}
-
-		if (cacti_sizeof($sql)) {
-			flowview_db_execute_prepared($sql_prefix . implode(', ', $sql), $sql_params);
-			$sql_params = array();
-			$sql = array();
-		}
-
-		flowview_db_execute_prepared('DELETE FROM plugin_flowview_routes
-			WHERE present = 0
-			AND source = ?',
-			array($source));
-	}
+	cacti_log(sprintf('STATS IRR UPDATE: Time:%0.2f File:%s Source:%s', $end - $start, basename($irr_file), strtolower($source)), true, 'SYSTEM');
 
 	return true;
+}
+
+function flowview_insert_irr_sections(&$records, &$prefixes, &$supported_sections) {
+	print "Writing Database Records" . PHP_EOL;
+
+	/* do the table inserts now */
+	foreach($supported_sections as $section) {
+		if (isset($records[$section])) {
+			$db_section   = str_replace('-', '_', $section);
+			$db_table     = "plugin_flowview_irr_$db_section";
+			$sql_prefix   = "REPLACE INTO $db_table {$prefixes[$section]} VALUES ";
+			$section_rows = $records[$section];
+
+			$section_chunks = array_chunk($section_rows, 100);
+
+			foreach($section_chunks as $section_chunk) {
+				$sql_params  = array();
+				$sql_replace = $sql_prefix;
+
+				foreach($section_chunk as $index => $row) {
+					$columns      = cacti_sizeof($row);
+					$sql_replace .= ($index > 0 ? ', ':'') . ' (' . trim(str_repeat('?, ', $columns), ', ') . ')';
+
+					foreach($row as $column) {
+						$sql_params[] = $column;
+					}
+				}
+
+				flowview_db_execute_prepared($sql_replace, $sql_params);
+			}
+
+		}
+	}
 }
 
 function flowview_check_for_private_network($host) {
@@ -5203,23 +5265,23 @@ function flowview_get_owner_from_arin($host) {
 			}
 
 			if (isset($json['net']['originASes']['originAS']['$'])) {
-				$origin_as = $json['net']['originASes']['originAS']['$'];
+				$origin = $json['net']['originASes']['originAS']['$'];
 			} else {
-				$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
-					FROM plugin_flowview_routes
+				$origin = flowview_db_fetch_cell_prepared('SELECT origin
+					FROM plugin_flowview_irr_route
 					WHERE route = ?',
 					array($cidr));
 
-				if ($origin_as == '') {
+				if ($origin == '') {
 					$return_var = 0;
 					$output = array();
-					$origin_as = '';
+					$origin = '';
 
 					if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
 						$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
 
 						if (cacti_sizeof($output)) {
-							$origin_as = trim($output[0]);
+							$origin = trim($output[0]);
 						}
 					}
 				}
@@ -5241,7 +5303,7 @@ function flowview_get_owner_from_arin($host) {
 			$alternate    = $json['net']['ref']['$'];
 
 			flowview_db_execute_prepared('INSERT INTO plugin_flowview_arin_information
-				(cidr, net_range, name, parent, net_type, origin_as, registration, last_changed, comments, self, alternate, json_data)
+				(cidr, net_range, name, parent, net_type, origin, registration, last_changed, comments, self, alternate, json_data)
 				VALUES (?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?, ?, ?, ?)
 				ON DUPLICATE KEY UPDATE
 					name = VALUES(name),
@@ -5256,7 +5318,7 @@ function flowview_get_owner_from_arin($host) {
 					$name,
 					$parent,
 					$net_type,
-					$origin_as,
+					$origin,
 					$registration,
 					$last_changed,
 					$comments,

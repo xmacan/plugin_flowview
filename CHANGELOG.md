@@ -41,6 +41,7 @@
 * feature: Allow DNS Cache to be purged with a single button press.
 * feature: Append local domain to locally resolved addresses from the system DNS
 * feature: Show supported or not supported status when viewing Flow Templates
+* feature: Import all Internet Route Registry databases when they change
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#111: Add a Template Export Button to make sharing Template information with the Cacti Group Easy

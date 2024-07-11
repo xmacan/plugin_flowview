@@ -187,14 +187,14 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN ex_addr varchar(46) NOT NULL default "" AFTER template_id');
 		}
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_arin_information` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_arin_information` (
 			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			`cidr` varchar(20) NOT NULL DEFAULT '',
 			`net_range` varchar(64) NOT NULL DEFAULT '',
 			`name` varchar(64) NOT NULL DEFAULT '',
 			`parent` varchar(64) NOT NULL DEFAULT '',
 			`net_type` varchar(64) NOT NULL DEFAULT '',
-			`origin_as` varchar(64) NOT NULL DEFAULT '',
+			`origin` varchar(64) NOT NULL DEFAULT '',
 			`registration` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 			`last_changed` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 			`comments` varchar(128) NOT NULL DEFAULT '',
@@ -206,55 +206,6 @@ function flowview_upgrade($current, $old) {
 			ENGINE=InnoDB
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds ARIN Records Downloaded for Caching'");
-
-		/*
-		Array (
-			[route] => route
-			[remarks] => remarks
-			[descr] => descr
-			[origin_as] => origin_as
-			[mnt_by] => mnt_by
-			[changed] => changed
-			[source] => source
-			[last_modified] => last_modified
-			[notify] => notify
-			[tech_c] => tech_c
-			[member_of] => member_of
-			[admin_c] => admin_c
-			[geoidx] => geoidx
-			[components] => components
-			[roa_uri] => roa_uri
-			[status] => status
-			[export_comps] => export_comps
-			[country] => country
-			[netname] => netname
-		)
-		*/
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_routes` (
-			`route` varchar(40) NOT NULL DEFAULT '',
-			`descr` varchar(128) NOT NULL DEFAULT '',
-			`remarks` text NOT NULL DEFAULT '',
-			`origin_as` varchar(20) NOT NULL DEFAULT '',
-			`mnt_by` varchar(40) NOT NULL DEFAULT '',
-			`status` varchar(20) NOT NULL DEFAULT '',
-			`country` varchar(20) NOT NULL DEFAULT '',
-			`admin_c` varchar(30) NOT NULL DEFAULT '',
-			`tech_c` varchar(30) NOT NULL DEFAULT '',
-			`member_of` varchar(30) NOT NULL DEFAULT '',
-			`notify` varchar(64) NOT NULL DEFAULT '',
-			`geoidx` varchar(20) NOT NULL DEFAULT '',
-			`roa_uri` varchar(128) NOT NULL DEFAULT '',
-			`export_comps` varchar(30) NOT NULL DEFAULT '',
-			`components` varchar(30) NOT NULL DEFAULT '',
-			`changed` varchar(128) NOT NULL DEFAULT '',
-			`source` varchar(20) NOT NULL DEFAULT '',
-			`present` tinyint(3) unsigned not null default '1',
-			`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-			PRIMARY KEY (`route`),
-			KEY `source` (`source`),
-			KEY `origin_as` (`origin_as`))
-			ENGINE=InnoDB
-			COMMENT='Holds the basic whois database from RADB'");
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
@@ -298,7 +249,7 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ENGINE=InnoDB');
 		}
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_streams` (
 			device_id int(11) unsigned NOT NULL default '0',
 			ex_addr varchar(46) NOT NULL default '',
 			name varchar(64) NOT NULL default '',
@@ -309,7 +260,7 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC,
 			COMMENT='Plugin Flowview - List of Streams coming into each of the listeners'");
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_templates` (
 			device_id int(11) unsigned NOT NULL default '0',
 			ex_addr varchar(46) NOT NULL default '',
 			template_id int(10) NOT NULL default '0',
@@ -348,7 +299,7 @@ function flowview_upgrade($current, $old) {
 				ADD PRIMARY KEY (device_id, ex_addr, template_id)');
 		}
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query` (
 			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			`md5sum` varchar(32) NOT NULL DEFAULT '',
 			`md5sum_tables` varchar(32) NOT NULL DEFAULT '',
@@ -372,7 +323,7 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Parallel Query Requests'");
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query_shard` (
 			`query_id` bigint(20) unsigned NOT NULL DEFAULT 0,
 			`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 			`full_scan` tinyint(3) unsigned DEFAULT 1,
@@ -389,27 +340,27 @@ function flowview_upgrade($current, $old) {
 			COMMENT='Holds Parallel Query Shard Requests'");
 
 		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
+			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN map_range VARCHAR(128) NOT NULL default '' AFTER map_query,
 				ADD COLUMN map_range_params VARCHAR(128) NOT NULL default '' AFTER map_range");
 		}
 
 		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
+			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN md5sum_tables VARCHAR(32) NOT NULL default '' AFTER md5sum");
 		}
 
 		if (flowview_db_column_exists('parallel_database_query', 'cached_shards')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query`
+			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN cached_shards int(10) unsigned NOT NULL DEFAULT 0 AFTER total_shards");
 		}
 
 		if (flowview_db_column_exists('parallel_database_query_shard', 'full_scan')) {
-			flowview_db_execute("ALTER TABLE `" . $flowviewdb_default . "`.`parallel_database_query_shard`
+			flowview_db_execute("ALTER TABLE `parallel_database_query_shard`
 				ADD COLUMN full_scan tinyint(3) unsigned NOT NULL DEFAULT 1 AFTER shard_id");
 		}
 
-		flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`parallel_database_query_shard_cache` (
+		flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query_shard_cache` (
 			`md5sum` varchar(32) NOT NULL DEFAULT '',
 			`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
 			`map_partition` varchar(20) NOT NULL DEFAULT '',
@@ -426,10 +377,23 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('RENAME TABLE parallel_database_query_shards TO parallel_database_query_shard');
 		}
 
+		/* going through a learning curve here */
 		if (flowview_db_table_exists('plugin_flowivew_radb_routes')) {
-			flowview_db_execute('RENAME TABLE plugin_flowivew_radb_routes TO plugin_flowivew_routes');
-			flowview_db_execute('ALTER TABLE plugin_flowview_routes
-				ADD INDEX `source` (`source`), ADD INDEX `origin_as` (`origin_as`)');
+			flowview_db_execute('DROP TABLE IF EXISTS plugin_flowivew_radb_routes');
+		}
+
+		if (flowview_db_table_exists('plugin_flowivew_routes')) {
+			flowview_db_execute('DROP TABLE IF EXISTS plugin_flowivew_routes');
+		}
+
+		if (!flowview_db_column_exists('plugin_flowview_irr_route', 'country')) {
+			flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_irr_route');
+		}
+
+		include_once($config['base_path'] . '/plugins/flowview/irr_tables.php');
+
+		if (!flowview_db_column_exists('plugin_flowview_arin_information', 'origin_as')) {
+			flowview_db_execute("ALTER TABLE plugin_flowview_arin_information CHANGE COLUMN origin_as origin varchar(20) NOT NULL DEFAULT ''");
 		}
 
 		db_execute("UPDATE plugin_realms

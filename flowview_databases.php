@@ -354,7 +354,7 @@ function view_dns_cache() {
 
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$dns_cache = flowview_db_fetch_assoc("SELECT dc.*, ai.origin_as
+	$dns_cache = flowview_db_fetch_assoc("SELECT dc.*, ai.origin
 		FROM plugin_flowview_dnscache AS dc
 		LEFT JOIN plugin_flowview_arin_information AS ai
 		ON dc.arin_id = ai.id
@@ -400,7 +400,7 @@ function view_dns_cache() {
 			'sort'    => 'DESC',
 			'tip'     => __('The Arin primary key.  This is not official Arin information.', 'flowview')
 		),
-		'origin_as' => array(
+		'origin' => array(
 			'display' => __('Autonomous System ID', 'flowview'),
 			'align'   => 'right',
 			'sort'    => 'DESC',
@@ -425,7 +425,7 @@ function view_dns_cache() {
 			form_selectable_cell($l['source'], $l['id']);
 			form_selectable_cell($l['arin_verified'] == 1 ? __('Verified', 'flowview'):__('Unverified', 'flowview'), $l['id']);
 			form_selectable_cell($l['arin_id'], $l['id'], '', 'right');
-			form_selectable_cell($l['origin_as'], $l['id'], '', 'right');
+			form_selectable_cell($l['origin'], $l['id'], '', 'right');
 			form_selectable_cell(date('Y-m-d H:i:s', $l['time']), $l['id'], '', 'right');
 			form_checkbox_cell($l['host'], $l['id']);
 			form_end_row();
@@ -528,7 +528,7 @@ function view_routes() {
 							<?php
 							$sources = array_rekey(
 								flowview_db_fetch_assoc('SELECT DISTINCT source
-									FROM plugin_flowview_routes
+									FROM plugin_flowview_irr_route
 									ORDER BY source'),
 								'source', 'source'
 							);
@@ -623,7 +623,7 @@ function view_routes() {
 			' OR admin_c LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR tech_c LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR member_of LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
-			' OR origin_as LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
+			' OR origin LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR status LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR route LIKE ' . db_qstr('%' . get_request_var('filter') . '%') .
 			' OR descr LIKE ' . db_qstr('%' . get_request_var('filter') . '%') . ')';
@@ -640,14 +640,14 @@ function view_routes() {
 	}
 
 	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
-		FROM plugin_flowview_routes AS dc
+		FROM plugin_flowview_irr_route AS dc
 		$sql_where");
 
 	$sql_order = get_order_string();
 
-	/* sort naturally if the orgin_as is in the sort */
-	if (strpos($sql_order, 'origin_as ') !== false) {
-		$sql_order = str_replace('origin_as ', 'NATURAL_SORT_KEY(origin_as) ', $sql_order);
+	/* sort naturally if the orgin is in the sort */
+	if (strpos($sql_order, 'origin ') !== false) {
+		$sql_order = str_replace('`origin` ', 'NATURAL_SORT_KEY(`origin`) ', $sql_order);
 	}
 
 	/* sort naturally if the route is in the sort */
@@ -658,7 +658,7 @@ function view_routes() {
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
 	$dns_cache = flowview_db_fetch_assoc("SELECT routes.*
-		FROM plugin_flowview_routes AS routes
+		FROM plugin_flowview_irr_route AS routes
 		$sql_where
 		$sql_order
 		$sql_limit");
@@ -677,7 +677,7 @@ function view_routes() {
 			'align'   => 'left',
 			'tip'     => __('This is the published Internet Route.', 'flowview')
 		),
-		'origin_as' => array(
+		'origin' => array(
 			'display' => __('AS Number', 'flowview'),
 			'align'   => 'left',
 			'sort'    => 'ASC',
@@ -716,7 +716,7 @@ function view_routes() {
 		foreach ($dns_cache as $l) {
 			form_alternate_row('line' . $i, false);
 			form_selectable_cell(filter_value($l['route'], get_request_var('filter')), $i);
-			form_selectable_cell(filter_value($l['origin_as'], get_request_var('filter')), $i);
+			form_selectable_cell(filter_value($l['origin'], get_request_var('filter')), $i);
 			form_selectable_cell(filter_value($l['descr'], get_request_var('filter')), $i);
 			form_selectable_cell(filter_value($l['source'], get_request_var('filter')), $i);
 			form_selectable_cell(filter_value($l['mnt_by'], get_request_var('filter')), $i);

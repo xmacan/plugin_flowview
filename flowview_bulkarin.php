@@ -107,7 +107,7 @@ $whois_path     = read_config_option('flowview_path_whois');
 if ($origins) {
 	$cidrs = flowview_db_fetch_assoc('SELECT *
 		FROM plugin_flowview_arin_information
-		WHERE origin_as = ""');
+		WHERE origin = ""');
 }
 
 if (cacti_sizeof($cidrs)) {
@@ -117,12 +117,12 @@ if (cacti_sizeof($cidrs)) {
 
 		$return_var = 0;
 		$output = array();
-		$origin_as = flowview_db_fetch_cell_prepared('SELECT origin_as
-			FROM plugin_flowview_routes
+		$origin = flowview_db_fetch_cell_prepared('SELECT origin
+			FROM plugin_flowview_irr_route
 			WHERE route = ?',
 			array($cidr));
 
-		if ($origin_as == '') {
+		if ($origin == '') {
 			if (file_exists($whois_path) && is_executable($whois_path) && $whois_provider != '') {
 				$last_line = exec("$whois_path -h $whois_provider $cidr | grep 'origin:' | head -1 | awk -F':' '{print \$2}'", $output, $return_var);
 
@@ -130,14 +130,14 @@ if (cacti_sizeof($cidrs)) {
 				sleep(1);
 
 				if (cacti_sizeof($output)) {
-					$origin_as = trim($output[0]);
+					$origin = trim($output[0]);
 
-					print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
+					print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin." . PHP_EOL;
 
 					flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
-						SET origin_as = ?
+						SET origin = ?
 						WHERE id = ?',
-						array($origin_as, $arin_id));
+						array($origin, $arin_id));
 				} else {
 					print "WARNING: Origin AS Not Verified for CIDR Address:$cidr." . PHP_EOL;
 				}
@@ -146,12 +146,12 @@ if (cacti_sizeof($cidrs)) {
 				exit(1);
 			}
 		} else {
-			print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin_as." . PHP_EOL;
+			print "NOTE: Origin AS Verified for CIDR Address:$cidr and Origin AS:$origin." . PHP_EOL;
 
 			flowview_db_execute_prepared('UPDATE plugin_flowview_arin_information
-				SET origin_as = ?
+				SET origin = ?
 				WHERE id = ?',
-				array($origin_as, $arin_id));
+				array($origin, $arin_id));
 		}
 	}
 }
