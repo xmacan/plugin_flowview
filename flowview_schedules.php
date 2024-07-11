@@ -426,7 +426,7 @@ function show_schedules () {
 	validate_store_request_vars($filters, 'sess_fvschd');
 	/* ================= input validation ================= */
 
-	if (get_request_var('rows') == '-1') {
+	if (get_request_var('rows') == '-1' || isempty_request_var('rows')) {
 		$rows = read_config_option('num_rows_table');
 	} else {
 		$rows = get_request_var('rows');
