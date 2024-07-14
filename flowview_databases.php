@@ -41,6 +41,10 @@ switch (get_request_var('action')) {
 		form_actions();
 
 		break;
+	case 'database_details':
+		flowview_get_item_details();
+
+		break;
 	case 'purge':
 		flowview_db_execute('TRUNCATE plugin_flowview_dnscache');
 		raise_message('flowview_dns_purge', __('DNS Cache has been purged.  It will refill as records come in.', 'flowview'), MESSAGE_LEVEL_INFO);
@@ -51,6 +55,119 @@ switch (get_request_var('action')) {
 
 		bottom_footer();
 		break;
+}
+
+function flowview_get_item_details() {
+	global $config, $db_tabs;
+	global $graph_timeshifts, $graph_timespans, $graph_heights;
+
+	include($config['base_path'] . '/plugins/flowview/arrays.php');
+
+	$cols  = get_all_columns($db_tabs);
+	$tab   = get_request_var('tab');
+	$ids   = json_decode(base64_decode(str_replace('line_', '', get_request_var('id'))), true);
+	$table = "plugin_flowview_irr_$tab";
+
+	$sql_where  = '';
+	$sql_params = array();
+
+	if (cacti_sizeof($ids)) {
+		foreach($ids as $col => $value) {
+			$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . "$col = ?";
+			$sql_params[] = $value;
+		}
+	} else {
+		return false;
+	}
+
+	$details = flowview_db_fetch_row_prepared("SELECT *
+		FROM $table
+		$sql_where
+		LIMIT 1", $sql_params);
+
+	ob_start();
+
+	$mnt_by_present = false;
+
+	html_start_box(__('Internet Route Registry Details', 'flowview'), '100%', '', '3', 'center', '');
+
+	$response = flowview_print_details($cols, $details);
+
+	html_end_box();
+
+	if ($response['mnt_by_present'] == true) {
+		html_start_box(__('Object Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
+
+		$sql_params   = array();
+		$sql_params[] = $response['mnt_by'];
+		$sql_params[] = $response['mnt_by_source'];
+
+		$details = flowview_db_fetch_row_prepared("SELECT *
+			FROM plugin_flowview_irr_mntner
+			WHERE mntner = ?
+			AND source = ?
+			LIMIT 1", $sql_params);
+
+		if (cacti_sizeof($details)) {
+			flowview_print_details($cols, $details);
+		}
+
+		html_end_box();
+	}
+
+	ob_get_flush();
+}
+
+function flowview_print_details(&$cols, &$details) {
+	$mnt_by_present = false;
+	$mnt_by         = '';
+	$mnt_by_source  = '';
+
+	if (cacti_sizeof($details)) {
+		foreach($details as $column => $value) {
+			if ($column == 'mnt_by' && $value != '') {
+				$mnt_by_present = true;
+				$mnt_by = $value;
+			}
+
+			if ($column == 'source') {
+				$mnt_by_source = $value;
+			}
+
+			/* get rid of some nagging hypens */
+			$value = str_replace("------------------------------------------\n", '', $value);
+
+			if ($value != '' && $value != '0000-00-00 00:00:00' && $column != 'present') {
+				print '<tr>';
+
+				if ($column == 'as_set') {
+					$value = strtoupper($value);
+				}
+
+				if (isset($cols[$column])) {
+					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . $cols[$column]['display'] . ':</td>';
+				} else {
+					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . ucfirst(str_replace('_', ' ', $column)) . ':</td>';
+				}
+
+				if ($column == 'remarks' ||
+					$column == 'import' ||
+					$column == 'export' ||
+					$column == 'mp_import' ||
+					$column == 'mp_export') {
+					print '<td style="width:82%">' . str_replace("\n", '<br>', html_escape($value)) . '</td>';
+				} else {
+					print '<td style="width:82%;white-space:pre-wrap">' . str_replace("\n", ', ', html_escape($value)) . '</td>';
+				}
+
+				print '</tr>';
+			}
+		}
+	} else {
+		print "<tr><td><em>No Details Found</em></td></tr>";
+	}
+
+	return array('mnt_by_present' => $mnt_by_present, 'mnt_by' => $mnt_by, 'mnt_by_source' => $mnt_by_source);
 }
 
 function view_databases() {
@@ -80,17 +197,14 @@ function view_databases() {
 	}
 }
 
-
-function view_db_table($tab, &$tabs) {
-	global $item_rows;
-
+function get_all_columns($tabs) {
 	$display_text = array();
 
 	// Be consistent with the Tab Name
 	foreach($tabs as $tabname => $details) {
 		$text = array(
 			$tabname => array(
-				'display' => $details['name'],
+				'display' => rtrim($details['name'], "s \n"),
 				'align'   => 'left',
 				'sort'    => 'ASC'
 			)
@@ -117,7 +231,7 @@ function view_db_table($tab, &$tabs) {
 		),
 		'created' => array(
 			'display' => __esc('Registration Date', 'flowview'),
-			'align'   => 'left',
+			'align'   => 'right',
 			'order'   => 'ASC'
 		),
 		'mnt_by' => array(
@@ -529,12 +643,22 @@ function view_db_table($tab, &$tabs) {
 
 	$display_text = array_merge($display_text, $columns);
 
+	return $display_text;
+}
+
+
+function view_db_table($tab, &$tabs) {
+	global $item_rows;
+
+	$display_text = get_all_columns($tabs);
+
 	//print '<pre>';print_r($display_text);print '</pre>';exit;
 
 	$table_det     = $tabs[$tab];
 	$columns       = array_map('trim', explode(',', $table_det['columns']));
 	$search        = array_map('trim', explode(',', $table_det['search']));
 	$filter        = array_map('trim', explode(',', $table_det['filter']));
+	$rowid         = array_map('trim', explode(',', $table_det['rowid']));
 	$table_name    = "plugin_flowview_irr_$tab";
 	$odisplay_text = array();
 
@@ -647,7 +771,7 @@ function view_db_table($tab, &$tabs) {
 		}
 	}
 
-	$results = flowview_db_fetch_assoc_prepared("SELECT {$table_det['columns']}
+	$results = flowview_db_fetch_assoc_prepared("SELECT *
 		FROM $table_name
 		$sql_where
 		$sql_order
@@ -721,9 +845,19 @@ function view_db_table($tab, &$tabs) {
 				</tr>
 			</table>
 			</form>
+			<style>
+			div.ui-tooltip {
+				max-width: 800px !important;
+				width: 800px !important;
+				max-height:500px !important;
+				height:400px !important;
+				overflow-y:scroll !important;
+			}
+			</style>
 			<script type='text/javascript'>
 
 			var tab='<?php print $tab;?>';
+			var myTimer;
 
 			function applyFilter() {
 				strURL  = 'flowview_databases.php?header=false';
@@ -744,6 +878,53 @@ function view_db_table($tab, &$tabs) {
 				loadPageNoHeader(strURL);
 			}
 
+			function closeTip() {
+				$(document).tooltip('close');
+			}
+
+			function initializeTips() {
+				// Servers need tooltips
+				$('table[id^="flowview_databases_"]').tooltip({
+					items: 'tr.selectable',
+					open: function(event, ui) {
+						if (typeof(event.originalEvent) == 'undefined') {
+							return false;
+						}
+
+						var id = $(ui.tooltip).attr('id');
+
+						$('div.ui-tooltip').not('#'+ id).remove();
+
+						$('#'+id).tooltip();
+
+						ui.tooltip.position({
+							my: 'left+20 top',
+							at: 'right+15 center',
+							of: event
+						});
+					},
+					close: function(event, ui) {
+						ui.tooltip.hover(
+							function () {
+								$(this).stop(true).fadeTo(400, 1);
+							},
+							function() {
+								$(this).fadeOut('400', function() {
+								$(this).remove();
+							});
+						});
+					},
+					position: {my: "left:15 top", at: "right center", of:self},
+					content: function(callback) {
+						var id = $(this).attr('id');
+
+						$.get('flowview_databases.php?action=database_details&tab='+tab+'&id='+id, function(data) {
+							callback(data);
+						});
+					}
+				});
+			}
+
 			$(function() {
 				$('#refresh').click(function() {
 					applyFilter();
@@ -761,6 +942,8 @@ function view_db_table($tab, &$tabs) {
 					event.preventDefault();
 					applyFilter();
 				});
+
+				initializeTips();
 			});
 
 			</script>
@@ -781,17 +964,28 @@ function view_db_table($tab, &$tabs) {
 	$i = 0;
 	if (cacti_sizeof($results)) {
 		foreach($results as $result) {
-			form_alternate_row('line' . $i, false);
+			$id = array();
+			foreach($rowid as $col) {
+				$id[$col] = $result[$col];
+			}
+
+			$rid = base64_encode(json_encode($id));
+
+			form_alternate_row('line_' . $rid, false);
 
 			foreach($columns as $c) {
 				$align = $odisplay_text[$c]['align'];
 
-				if ($c == 'descr' || $c == 'remarks' || $c == 'members' || $c == 'filter' || $c == 'netname') {
+				if ($c == 'descr' ||
+					$c == 'remarks' ||
+					$c == 'members' ||
+					$c == 'filter' ||
+					$c == 'netname') {
 					$align = 'white-space:pre-wrap;text-align:left';
 					$result[$c] = str_replace("\n", ', ', $result[$c]);
 				}
 
-				if ($c == 'as_set' || $c == 'mnt_by') {
+				if ($c == 'as_set' || $c == 'mnt_by' || $c == 'local_as') {
 					$result[$c] = strtoupper($result[$c]);
 				}
 
@@ -824,6 +1018,9 @@ function view_db_table($tab, &$tabs) {
 	if (cacti_sizeof($results)) {
 		print $nav;
 	}
+
+	/* location for tooltips */
+	print "<div class='database' style='width:1024px></div>";
 }
 
 function form_actions() {

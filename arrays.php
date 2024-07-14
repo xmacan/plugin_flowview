@@ -869,98 +869,112 @@ $db_tabs = array(
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'aut_num, as_name, source, mnt_by, descr, created, last_modified',
-		'search'   => 'aut_num, as_name, descr, mnt_by, admin_c, tech_c, remarks'
+		'search'   => 'aut_num, as_name, descr, mnt_by, admin_c, tech_c, remarks',
+		'rowid'    => 'aut_num, source'
 	),
 	'as_block'     => array(
 		'name' => __esc('AS Blocks', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'as_block, type, source, mnt_by, descr, created, last_modified',
-		'search'   => 'as_block, type, descr, remarks, org, admin_c, tech_c, mnt_by, mnt_lower'
+		'search'   => 'as_block, type, descr, remarks, org, admin_c, tech_c, mnt_by, mnt_lower',
+		'rowid'    => 'as_block, source'
 	),
 	'as_set'       => array(
 		'name' => __esc('AS Sets', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'as_set, source, descr, members, created, last_modified',
-		'search'   => 'as_set, descr, members, tech_c, admin_c'
+		'search'   => 'as_set, descr, members, tech_c, admin_c',
+		'rowid'    => 'as_set, source'
 	),
 	'route_set'    => array(
 		'name' => __esc('Route Sets', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'route_set, source, mnt_by, descr, created, last_modified',
-		'search'   => 'route_set, descr, tech_c, admin_c, members, mnt_by'
+		'search'   => 'route_set, descr, tech_c, admin_c, members, mnt_by',
+		'rowid'    => 'route_set, source'
 	),
 	'domain'       => array(
 		'name' => __esc('Domains', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'domain, source, mnt_by, descr, created, last_modified',
-		'search'   => 'domain, descr, nserver, mnt_by, admin_c, tech_c, zone_c, remarks'
+		'search'   => 'domain, descr, nserver, mnt_by, admin_c, tech_c, zone_c, remarks',
+		'rowid'    => 'domain, source'
 	),
 	'filter_set'   => array(
 		'name' => __esc('Filter Sets', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'filter_set, source, mnt_by, descr, created, last_modified',
-		'search'   => 'filter_set, descr, tech_c, filter, admin_c, mnt_by, remarks, notify'
+		'search'   => 'filter_set, descr, tech_c, filter, admin_c, mnt_by, remarks, notify',
+		'rowid'    => 'filter_set, source'
 	),
 	'peering_set'  => array(
 		'name' => __esc('Peering Sets', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'peering_set, source, mnt_by, descr, created, last_modified',
-		'search'   => 'peering_set, descr, mnt_by, remarks, admin_c, tech_c, peering'
+		'search'   => 'peering_set, descr, mnt_by, remarks, admin_c, tech_c, peering',
+		'rowid'    => 'peering_set, source'
 	),
 	'inetnum'      => array(
 		'name' => __esc('Network', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'inetnum, source, mnt_by, status, netname, descr, created, last_modified',
-		'search'   => 'inetnum, netname, status, mnt_by, descr, admin_c, tech_c, remarks, mnt_lower'
+		'search'   => 'inetnum, netname, status, mnt_by, descr, admin_c, tech_c, remarks, mnt_lower',
+		'rowid'    => 'inetnum, source'
 	),
 	'inet_rtr'     => array(
 		'name' => __esc('Internet Routers', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'inet_rtr, local_as, source, mnt_by, descr, ifaddr, created, last_modified',
-		'search'   => 'inet_rtr, local_ad, descr, mnt_by, ifaddr, admin_c, tech_c, alias'
+		'search'   => 'inet_rtr, local_ad, descr, mnt_by, ifaddr, admin_c, tech_c, alias',
+		'rowid'    => 'inet_rtr, source'
 	),
 	'irt'          => array(
 		'name' => __esc('Incident Response Teams', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
-		'columns'  => 'irt, address, source, mnt_by, created, last_modified',
-		'search'   => 'irt, address, remarks, admin_c, tech_c, mnt_by'
+		'columns'  => 'irt, source, mnt_by, address, created, last_modified',
+		'search'   => 'irt, address, remarks, admin_c, tech_c, mnt_by',
+		'rowid'    => 'irt, source'
 	),
 	'mntner'       => array(
 		'name' => __esc('Auth Agents', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
-		'columns'  => 'mntner, descr, source, mnt_by, created, last_modified',
-		'search'   => 'mntner, descr, admin_c, tech_c, mnt_nfy, mnt_by, remarks'
+		'columns'  => 'mntner, source, mnt_by, descr, created, last_modified',
+		'search'   => 'mntner, descr, admin_c, tech_c, mnt_nfy, mnt_by, remarks',
+		'rowid'    => 'mntner, source'
 	),
 	'organisation' => array(
 		'name' => __esc('Organizations', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
-		'columns'  => 'organisation, org_name, org_type, country, source, created, last_modified',
-		'search'   => 'organisation, org_name, org_type, country, remarks, mnt_ref, mnt_by'
+		'columns'  => 'organisation, source, org_name, org_type, country, created, last_modified',
+		'search'   => 'organisation, org_name, org_type, country, remarks, mnt_ref, mnt_by',
+		'rowid'    => 'organisation, source'
 	),
 	'role'         => array(
 		'name' => __esc('Roles', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'role, nic_hdl, source, mnt_by, created, last_modified',
-		'search'   => 'role, nic_hdl, mnt_by, remarks, tech_c, admin_c, address'
+		'search'   => 'role, nic_hdl, mnt_by, remarks, tech_c, admin_c',
+		'rowid'    => 'role, source, nic_hdl, address'
 	),
 	'person'       => array(
 		'name' => __esc('Persons', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
 		'columns'  => 'person, nic_hdl, source, mnt_by, created, last_modified',
-		'search'   => 'person, nic_hdl, mnt_by, remarks, email, address'
+		'search'   => 'person, nic_hdl, mnt_by, remarks, email, address',
+		'rowid'    => 'person, source, nic_hdl'
 	)
 );
 

@@ -75,7 +75,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_block` (
 	`created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-	PRIMARY KEY (as_block,`source`),
+	PRIMARY KEY (`as_block`,`source`),
 	KEY `source` (`source`))
 	ENGINE=Aria
 	ROW_FORMAT=Dynamic
