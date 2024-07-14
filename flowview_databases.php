@@ -1446,7 +1446,7 @@ function view_routes() {
 	?>
 	<tr class='even'>
 		<td>
-			<form id='form' action='flowview_databases.php?tab=routes'>
+			<form id='form' action='flowview_databases.php?tab=route'>
 			<table class='filterTable'>
 				<tr>
 					<td>
@@ -1515,7 +1515,7 @@ function view_routes() {
 
 			function applyFilter() {
 				strURL  = 'flowview_databases.php?header=false';
-				strURL += '&tab=routes';
+				strURL += '&tab=route';
 				strURL += '&filter='+$('#filter').val();
 				strURL += '&version='+$('#version').val();
 				strURL += '&source='+$('#source').val();
@@ -1525,12 +1525,12 @@ function view_routes() {
 			}
 
 			function clearFilter() {
-				strURL = 'flowview_databases.php?tab=routes&clear=1&header=false';
+				strURL = 'flowview_databases.php?tab=route&clear=1&header=false';
 				loadPageNoHeader(strURL);
 			}
 
 			function purgeFilter() {
-				strURL = 'flowview_databases.php?tab=routes&action=purge&header=false';
+				strURL = 'flowview_databases.php?tab=route&action=purge&header=false';
 				loadPageNoHeader(strURL);
 			}
 
@@ -1609,9 +1609,9 @@ function view_routes() {
 		$sql_order
 		$sql_limit");
 
-	$nav = html_nav_bar('flowview_databases.php?tab=routes&filter=' . get_request_var('filter'), MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, 8, __('Entries', 'flowview'), 'page', 'main');
+	$nav = html_nav_bar('flowview_databases.php?tab=route&filter=' . get_request_var('filter'), MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, 8, __('Entries', 'flowview'), 'page', 'main');
 
-	form_start('flowview_databases.php?tab=routes', 'chk');
+	form_start('flowview_databases.php?tab=route', 'chk');
 
 	print $nav;
 
@@ -1655,7 +1655,7 @@ function view_routes() {
 		)
 	);
 
-	html_header_sort($display_text, get_request_var('sort_column'), get_request_var('sort_direction'), false, 'flowview_databases.php?tab=routes');
+	html_header_sort($display_text, get_request_var('sort_column'), get_request_var('sort_direction'), false, 'flowview_databases.php?tab=route');
 
 	$i = 0;
 	if (cacti_sizeof($dns_cache)) {
