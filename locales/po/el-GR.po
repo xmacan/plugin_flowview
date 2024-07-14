@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 15:10-0400\n"
-"PO-Revision-Date: 2024-06-07 22:24-0400\n"
+"PO-Revision-Date: 2024-07-14 15:39-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: el_GR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.4\n"
 
 #: arrays.php:26 arrays.php:60 functions.php:619
@@ -349,7 +350,7 @@ msgstr "ID προτύπου"
 
 #: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
-msgstr ""
+msgstr "Το αναγνωριστικό προτύπου ροής μόνο για ροές v9 και IPFIX.  Λάβετε υπόψη ότι τα αναγνωριστικά προτύπου ενδέχεται να διαφέρουν από κατασκευαστή σε κατασκευαστή."
 
 #: arrays.php:615
 #, fuzzy
@@ -359,7 +360,7 @@ msgstr "IP Address"
 
 #: arrays.php:616
 msgid "The Stream IP Address or Hostname from the list of registered streams."
-msgstr ""
+msgstr "Η διεύθυνση IP ροής ή το όνομα κεντρικού υπολογιστή από τη λίστα καταχωρημένων ροών."
 
 #: arrays.php:623
 msgid "Presets"
@@ -599,11 +600,11 @@ msgstr "Φιλτράρετε στο επιλέξτε Destination AS για στ�
 
 #: arrays.php:860
 msgid "DNS Cache"
-msgstr ""
+msgstr "Προσωρινή μνήμη DNS"
 
 #: arrays.php:864
 msgid "CIDR/Routes"
-msgstr ""
+msgstr "CIDR/Διαδρομές"
 
 #: arrays.php:868
 #, fuzzy
@@ -613,34 +614,31 @@ msgstr "Αριθμοί"
 
 #: arrays.php:876
 msgid "AS Blocks"
-msgstr ""
+msgstr "Μπλοκ AS"
 
 #: arrays.php:884
 msgid "AS Sets"
-msgstr ""
+msgstr "Σετ AS"
 
 #: arrays.php:892
 msgid "Route Sets"
-msgstr ""
+msgstr "Σύνολα διαδρομών"
 
 #: arrays.php:900
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Domains"
-msgstr "Πηγή (ες) θύρας"
+msgstr "Domains"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
-msgstr "Το φίλτρο αποθηκεύτηκε"
+msgstr "Σετ Φίλτρων"
 
 #: arrays.php:916
 msgid "Peering Sets"
-msgstr ""
+msgstr "Σύνολα ανταλλαγής κίνησης"
 
 #: arrays.php:924 flowview_databases.php:438
 msgid "Network"
-msgstr ""
+msgstr "Δίκτυο"
 
 #: arrays.php:932
 #, fuzzy
@@ -650,28 +648,28 @@ msgstr "Έλεγχος Διαδικτύου"
 
 #: arrays.php:940
 msgid "Incident Response Teams"
-msgstr ""
+msgstr "Ομάδες αντιμετώπισης περιστατικών"
 
 #: arrays.php:948
 msgid "Auth Agents"
-msgstr ""
+msgstr "Πράκτορες ΑΠΘ"
 
 #: arrays.php:956
 msgid "Organizations"
-msgstr ""
+msgstr "Οργανισμούς"
 
 #: arrays.php:964
 msgid "Roles"
-msgstr ""
+msgstr "Ρόλοι"
 
 #: arrays.php:972
 msgid "Persons"
-msgstr ""
+msgstr "Άτομα"
 
 #: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
-msgstr ""
+msgstr "Δεν είναι δυνατή η διαγραφή του φίλτρου ροής '%s' όπως χρησιμοποιείται σε μια προγραμματισμένη αναφορά."
 
 #: flowview.php:127
 #, fuzzy, php-format
@@ -686,69 +684,63 @@ msgstr "Διαγραφή"
 
 #: flowview_databases.php:50
 msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
+msgstr "Η προσωρινή μνήμη DNS έχει εκκαθαριστεί.  Θα ξαναγεμίσει καθώς εισέρχονται εγγραφές."
 
 #: flowview_databases.php:92
 msgid "Internet Route Registry Details"
-msgstr ""
+msgstr "Λεπτομέρειες μητρώου διαδρομής Internet"
 
 #: flowview_databases.php:99
 msgid "Authorized Agent Details"
-msgstr ""
+msgstr "Στοιχεία εξουσιοδοτημένου αντιπροσώπου"
 
 #: flowview_databases.php:218
 msgid "Remarks"
-msgstr ""
+msgstr "Προβλεπόμενη ώρα άφιξης"
 
 #: flowview_databases.php:223 flowview_databases.php:1651
-#, fuzzy
-#| msgid "Last Updated"
 msgid "Last Modified"
-msgstr "Τελευταία ενημέρωση"
+msgstr "Τελευταία τροποποίηση"
 
 #: flowview_databases.php:233
-#, fuzzy
-#| msgid "Destination Domain"
 msgid "Registration Date"
-msgstr "Προορισμός IP"
+msgstr "Ημερομηνία Εγγραφής"
 
 #: flowview_databases.php:238
 msgid "MNT By"
-msgstr ""
+msgstr "MNT Από"
 
 #: flowview_databases.php:243
 msgid "Admin Contact"
-msgstr ""
+msgstr "Επικοινωνία διαχειριστή"
 
 #: flowview_databases.php:248
 msgid "Organization"
-msgstr ""
+msgstr "Οργανισμός"
 
 #: flowview_databases.php:253
 msgid "Changes"
-msgstr ""
+msgstr "Αλλαγές"
 
 #: flowview_databases.php:258
 msgid "Notify"
-msgstr ""
+msgstr "Κοινοποιώ"
 
 #: flowview_databases.php:263
-#, fuzzy
-#| msgid "Destination"
 msgid "Description"
-msgstr "Προορισμός"
+msgstr "Περιγραφή"
 
 #: flowview_databases.php:268
 msgid "Tech Contact"
-msgstr ""
+msgstr "Tech Επικοινωνία"
 
 #: flowview_databases.php:273
 msgid "MNT Lower"
-msgstr ""
+msgstr "MNT Κάτω"
 
 #: flowview_databases.php:278
 msgid "Country"
-msgstr ""
+msgstr "Χώρα"
 
 #: flowview_databases.php:283
 #, fuzzy
@@ -757,14 +749,12 @@ msgid "Abuse Email"
 msgstr "Email"
 
 #: flowview_databases.php:288
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Fax Number"
-msgstr "Αριθμοί"
+msgstr "Αριθμός φαξ"
 
 #: flowview_databases.php:293
 msgid "Phone"
-msgstr ""
+msgstr "Τηλέφωνο"
 
 #: flowview_databases.php:298 flowview_schedules.php:559
 msgid "Email"
@@ -780,35 +770,36 @@ msgstr "Κατάσταση"
 
 #: flowview_databases.php:313
 msgid "Members By Fef"
-msgstr ""
+msgstr "Μέλη Από Fef"
 
 #: flowview_databases.php:318
 msgid "Abuse Contacts"
-msgstr ""
+msgstr "Κατάχρηση επαφών"
 
 #: flowview_databases.php:323
 msgid "MNT Reference"
-msgstr ""
+msgstr "Αναφορά MNT"
 
 #: flowview_databases.php:328
 msgid "Members"
-msgstr ""
+msgstr "Μέλη"
 
 #: flowview_databases.php:333
 msgid "MNT Notify"
-msgstr ""
+msgstr "MNT Ειδοποίηση"
 
 #: flowview_databases.php:338
 msgid "Authorization"
-msgstr ""
+msgstr "Εξουσιοδότηση"
 
 #: flowview_databases.php:343
 msgid "MNT Routes"
-msgstr ""
+msgstr "MNT Δρομολόγια"
 
 #: flowview_databases.php:348
+#, fuzzy
 msgid "Member of"
-msgstr ""
+msgstr "Μέλος"
 
 #: flowview_databases.php:353
 #, fuzzy
@@ -817,15 +808,15 @@ msgstr "Ενημέρωση"
 
 #: flowview_databases.php:358
 msgid "NOC Handle"
-msgstr ""
+msgstr "Λαβή NOC"
 
 #: flowview_databases.php:363
 msgid "Sponsor Org"
-msgstr ""
+msgstr "Χορηγός Οργανισμός"
 
 #: flowview_databases.php:368
 msgid "MNT Irt"
-msgstr ""
+msgstr "MNT Irt"
 
 #: flowview_databases.php:373
 #, fuzzy
@@ -847,7 +838,7 @@ msgstr "Ενεργοποίηση"
 
 #: flowview_databases.php:388
 msgid "Alias"
-msgstr ""
+msgstr "Ψευδώνυμο"
 
 #: flowview_databases.php:393
 #, fuzzy
@@ -857,21 +848,19 @@ msgstr "Τύπος γραφήματος"
 
 #: flowview_databases.php:398
 msgid "Refer To"
-msgstr ""
+msgstr "Ανατρέξτε στο"
 
 #: flowview_databases.php:403
 msgid "MP Peering"
-msgstr ""
+msgstr "MP Peering"
 
 #: flowview_databases.php:408 flowview_devices.php:490
-#, fuzzy
-#| msgid "Report"
 msgid "Export"
-msgstr "Αναφορά"
+msgstr "Εξαγωγή"
 
 #: flowview_databases.php:413
 msgid "Holes"
-msgstr ""
+msgstr "Τρύπες"
 
 #: flowview_databases.php:418
 #, fuzzy
@@ -881,37 +870,37 @@ msgstr "Προεπιλογή"
 
 #: flowview_databases.php:423
 msgid "Components"
-msgstr ""
+msgstr "Στοιχεία"
 
 #: flowview_databases.php:428
 msgid "RS Out"
-msgstr ""
+msgstr "RS έξω"
 
 #: flowview_databases.php:433
 msgid "Organization Name"
-msgstr ""
+msgstr "Όνομα οργανισμού"
 
 #: flowview_databases.php:443
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
-msgstr "Όνομα"
+msgstr "Όνομα: "
 
 #: flowview_databases.php:448
 msgid "Author"
-msgstr ""
+msgstr "Συντάκτης"
 
 #: flowview_databases.php:453
 msgid "IRT Notify"
-msgstr ""
+msgstr "Κοινοποίηση IRT"
 
 #: flowview_databases.php:458
 msgid "Aggr MTD"
-msgstr ""
+msgstr "Aggr MTD"
 
 #: flowview_databases.php:463
 msgid "AS Type"
-msgstr ""
+msgstr "Τύπος AS"
 
 #: flowview_databases.php:468
 #, fuzzy
@@ -927,7 +916,7 @@ msgstr "Προεπιλογή"
 
 #: flowview_databases.php:478
 msgid "Assignment Size"
-msgstr ""
+msgstr "Μέγεθος ανάθεσης"
 
 #: flowview_databases.php:483
 #, fuzzy
@@ -937,7 +926,7 @@ msgstr "Αναφορά"
 
 #: flowview_databases.php:488
 msgid "RS In"
-msgstr ""
+msgstr "RS σε"
 
 #: flowview_databases.php:493
 #, fuzzy
@@ -947,55 +936,55 @@ msgstr "Όνομα Πεδίου"
 
 #: flowview_databases.php:498
 msgid "DS Rdata"
-msgstr ""
+msgstr "DS Rdata"
 
 #: flowview_databases.php:503
 msgid "Aggr Boundary"
-msgstr ""
+msgstr "Όριο Aggr"
 
 #: flowview_databases.php:513
 msgid "MP Import"
-msgstr ""
+msgstr "Εισαγωγή MP"
 
 #: flowview_databases.php:518
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 #: flowview_databases.php:523
 msgid "RESFful Link"
-msgstr ""
+msgstr "Σύνδεσμος RESFful"
 
 #: flowview_databases.php:528
 msgid "Peer"
-msgstr ""
+msgstr "Ομότιμος"
 
 #: flowview_databases.php:533
 msgid "Zone Contact"
-msgstr ""
+msgstr "Ζώνη Επικοινωνία"
 
 #: flowview_databases.php:538
 msgid "Inject"
-msgstr ""
+msgstr "Εμβάλλω"
 
 #: flowview_databases.php:543
 msgid "MP Peer"
-msgstr ""
+msgstr "MP Peer"
 
 #: flowview_databases.php:548
 msgid "Referral By"
-msgstr ""
+msgstr "Παραπομπή από"
 
 #: flowview_databases.php:553
 msgid "Form"
-msgstr ""
+msgstr "Φόρμα"
 
 #: flowview_databases.php:558
 msgid "MNT Domains"
-msgstr ""
+msgstr "Τομείς MNT"
 
 #: flowview_databases.php:563
 msgid "Origin AS"
-msgstr ""
+msgstr "Προέλευση AS"
 
 #: flowview_databases.php:568
 #, fuzzy
@@ -1010,11 +999,11 @@ msgstr "Λήξη"
 
 #: flowview_databases.php:578
 msgid "Geo Feed"
-msgstr ""
+msgstr "Γεωγραφική τροφοδοσία"
 
 #: flowview_databases.php:583
 msgid "Geo Index"
-msgstr ""
+msgstr "Δείκτης Geo"
 
 #: flowview_databases.php:588
 #, fuzzy
@@ -1029,48 +1018,45 @@ msgstr "Αναφορά"
 
 #: flowview_databases.php:598
 msgid "Trouble"
-msgstr ""
+msgstr "Ενοχλώ"
 
 #: flowview_databases.php:603
 msgid "Name Servers"
-msgstr ""
+msgstr "Διακομιστές ονομάτων"
 
 #: flowview_databases.php:608
 msgid "Ping Handle"
-msgstr ""
+msgstr "Λαβή Ping"
 
 #: flowview_databases.php:613
-#, fuzzy
 msgid "Interface"
 msgstr "Διεπαφή"
 
 #: flowview_databases.php:618
-#, fuzzy
-#| msgid "Report"
 msgid "Import"
-msgstr "Αναφορά"
+msgstr "Εισαγωγή"
 
 #: flowview_databases.php:623
 msgid "Signature"
-msgstr ""
+msgstr "Υπογραφή"
 
 #: flowview_databases.php:628
-#, fuzzy
 msgid "Geo Location"
-msgstr "Περιστροφή"
+msgstr "Γεω τοποθεσία"
 
 #: flowview_databases.php:633
+#, fuzzy
 msgid "Local AS"
-msgstr ""
+msgstr "Τοπικό"
 
 #: flowview_databases.php:638
 msgid "Import Via"
-msgstr ""
+msgstr "Εισαγωγή μέσω"
 
 #: flowview_databases.php:683
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
-msgstr ""
+msgstr "FATAL: Άγνωστος πίνακας βάσης δεδομένων %s"
 
 #: flowview_databases.php:796 flowview_databases.php:1161
 #: flowview_databases.php:1453 flowview_devices.php:699
@@ -1082,13 +1068,13 @@ msgstr "Αναζήτηση"
 #: flowview_databases.php:1181 flowview_databases.php:1463
 #: flowview_databases.php:1473
 msgid "Any"
-msgstr ""
+msgstr "Οποιοδήποτε"
 
 #: flowview_databases.php:824 flowview_databases.php:956
 #: flowview_databases.php:1199 flowview_databases.php:1311
 #: flowview_databases.php:1491 flowview_databases.php:1612
 msgid "Entries"
-msgstr ""
+msgstr "Εγγραφές"
 
 #: flowview_databases.php:828 flowview_databases.php:1203
 #: flowview_databases.php:1495 flowview_filters.php:243
@@ -1123,19 +1109,19 @@ msgstr "Καθαρισμός Φίλτρων"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge"
-msgstr ""
+msgstr "Διαγραφή"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge the DNS Cache"
-msgstr ""
+msgstr "Εκκαθάριση της προσωρινής μνήμης DNS"
 
 #: flowview_databases.php:997
 msgid "Not Specified"
-msgstr ""
+msgstr "Δεν προσδιορίζεται"
 
 #: flowview_databases.php:1013
 msgid "No Matching Entries Found"
-msgstr ""
+msgstr "Δεν βρέθηκαν αντίστοιχες καταχωρήσεις"
 
 #: flowview_databases.php:1073
 #, fuzzy
@@ -1158,8 +1144,8 @@ msgstr "Συνέχεια"
 #: flowview_databases.php:1078
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Διαγραφή καταχώρησης DNS"
+msgstr[1] "Διαγραφή καταχωρήσεων DNS"
 
 #: flowview_databases.php:1152
 #, fuzzy
@@ -1169,51 +1155,51 @@ msgstr "FlowView Schedules"
 #: flowview_databases.php:1167 flowview_databases.php:1173
 #: flowview_databases.php:1372
 msgid "Verified"
-msgstr ""
+msgstr "Επαληθεύτηκε"
 
 #: flowview_databases.php:1172 flowview_databases.php:1372
 msgid "Unverified"
-msgstr ""
+msgstr "Ανεπιβεβαίωτη"
 
 #: flowview_databases.php:1323
 msgid "This is the IP Address of the Cache entry."
-msgstr ""
+msgstr "Αυτή είναι η διεύθυνση IP της καταχώρησης προσωρινής μνήμης."
 
 #: flowview_databases.php:1326
 msgid "DNS Hostname"
-msgstr ""
+msgstr "Όνομα κεντρικού υπολογιστή DNS"
 
 #: flowview_databases.php:1329
 msgid "The DNS Name assigned to the IP Address."
-msgstr ""
+msgstr "Το όνομα DNS που έχει εκχωρηθεί στη διεύθυνση IP."
 
 #: flowview_databases.php:1335
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
+msgstr "Η προέλευση του ονόματος κεντρικού υπολογιστή DNS.  Μπορεί να είναι είτε DNS, Static Lookup ή ARIN."
 
 #: flowview_databases.php:1338
 msgid "Arin Verified"
-msgstr ""
+msgstr "Arin Επαληθεύτηκε"
 
 #: flowview_databases.php:1341
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
-msgstr ""
+msgstr "Οι πληροφορίες Arin για αυτήν τη διεύθυνση IP επαληθεύονται ή είναι μια διεύθυνση IP τοπικού τομέα."
 
 #: flowview_databases.php:1344
 msgid "CIDR ID"
-msgstr ""
+msgstr "Αναγνωριστικό CIDR"
 
 #: flowview_databases.php:1347
 msgid "The Arin primary key.  This is not official Arin information."
-msgstr ""
+msgstr "Το πρωτεύον κλειδί Arin.  Αυτές δεν είναι επίσημες πληροφορίες Arin."
 
 #: flowview_databases.php:1350
 msgid "Autonomous System ID"
-msgstr ""
+msgstr "Αυτόνομο αναγνωριστικό συστήματος"
 
 #: flowview_databases.php:1353
 msgid "The Arin Origin AS.  This is official Arin AS information."
-msgstr ""
+msgstr "Η προέλευση Arin AS.  Αυτές είναι επίσημες πληροφορίες Arin AS."
 
 #: flowview_databases.php:1356
 #, fuzzy
@@ -1222,11 +1208,11 @@ msgstr "Ενημέρωση"
 
 #: flowview_databases.php:1359
 msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
+msgstr "Αυτή είναι η ώρα που εισήχθη ή ενημερώθηκε τελευταία φορά η προσωρινή μνήμη DNS."
 
 #: flowview_databases.php:1380
 msgid "No DNS Cache Entries Found"
-msgstr ""
+msgstr "Δεν βρέθηκαν καταχωρήσεις προσωρινής μνήμης DNS"
 
 #: flowview_databases.php:1444
 #, fuzzy
@@ -1241,7 +1227,7 @@ msgstr "Έκδοση"
 
 #: flowview_databases.php:1464
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: flowview_databases.php:1465
 #, fuzzy
@@ -1249,52 +1235,50 @@ msgid "IPv6"
 msgstr "IPv6"
 
 #: flowview_databases.php:1622
-#, fuzzy
-#| msgid "Routine"
 msgid "Route"
-msgstr "Ρουτίνα"
+msgstr "Δρομολόγιο (Route)"
 
 #: flowview_databases.php:1624
 msgid "This is the published Internet Route."
-msgstr ""
+msgstr "Αυτή είναι η δημοσιευμένη διαδρομή του Διαδικτύου."
 
 #: flowview_databases.php:1627
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
-msgstr "Αριθμοί"
+msgstr "Αριθμός θύρας"
 
 #: flowview_databases.php:1630
 msgid "The Autonomous System Number for the route."
-msgstr ""
+msgstr "Ο Αριθμός Αυτόνομου Συστήματος για τη διαδρομή."
 
 #: flowview_databases.php:1633
 msgid "Route Description"
-msgstr ""
+msgstr "Περιγραφή Διαδρομής"
 
 #: flowview_databases.php:1636
 msgid "The Descrption logged by the Route Maintainer."
-msgstr ""
+msgstr "Η περιγραφή που καταγράφεται από τον συντηρητή διαδρομής."
 
 #: flowview_databases.php:1642
 msgid "The source database used to publish the route."
-msgstr ""
+msgstr "Η βάση δεδομένων προέλευσης που χρησιμοποιήθηκε για τη δημοσίευση της διαδρομής."
 
 #: flowview_databases.php:1645
 msgid "Maintained By"
-msgstr ""
+msgstr "Συντηρείται από"
 
 #: flowview_databases.php:1648
 msgid "The Internet Carrier who is maintaining the route for the customer."
-msgstr ""
+msgstr "Ο Internet Carrier που διατηρεί τη διαδρομή για τον πελάτη."
 
 #: flowview_databases.php:1654
 msgid "The last time the information on this route was modified."
-msgstr ""
+msgstr "Την τελευταία φορά που τροποποιήθηκαν οι πληροφορίες σχετικά με αυτήν τη διαδρομή."
 
 #: flowview_databases.php:1675
 msgid "No Matching Routes Found"
-msgstr ""
+msgstr "Δεν βρέθηκαν αντίστοιχες διαδρομές"
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -1345,7 +1329,7 @@ msgstr "IP Protocol"
 #: flowview_devices.php:152
 #, php-format
 msgid "No Flow Template was found for Device ID:%s and Template ID:%s"
-msgstr ""
+msgstr "Δεν βρέθηκε πρότυπο ροής για το αναγνωριστικό συσκευής:%s και το αναγνωριστικό προτύπου:%s"
 
 #: flowview_devices.php:204
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
@@ -1357,11 +1341,11 @@ msgstr "Πρέπει να επιλέξετε τουλάχιστον μία συ�
 
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
-msgstr ""
+msgstr "Αποθήκευση με επιτυχία.  Το πρόγραμμα ακρόασης Flowview αποθηκεύτηκε και έγινε επανεκκίνηση της υπηρεσίας."
 
 #: flowview_devices.php:272
 msgid "Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running."
-msgstr ""
+msgstr "Αποθήκευση με επιτυχία.  Το πρόγραμμα ακρόασης Flowview έχει αποθηκευτεί.  Ωστόσο, η καταγραφή ροής υπηρεσίας δεν εκτελείται."
 
 #: flowview_devices.php:291
 #, php-format
@@ -1377,7 +1361,6 @@ msgid "Name"
 msgstr "Όνομα"
 
 #: flowview_devices.php:344
-#, fuzzy
 msgid "Version"
 msgstr "Έκδοση"
 
@@ -1403,7 +1386,7 @@ msgstr "Πρότυπα που εντοπίστηκαν από ακροατή"
 
 #: flowview_devices.php:460
 msgid "Ex Addr"
-msgstr ""
+msgstr "Πρώην Addr"
 
 #: flowview_devices.php:474
 msgid "Template"
@@ -1419,7 +1402,7 @@ msgstr "Όνομα Πεδίου"
 
 #: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
-msgstr ""
+msgstr "Υποστηρίζεται"
 
 #: flowview_devices.php:567
 msgid "Field ID"
@@ -1480,7 +1463,7 @@ msgstr "Έκδοση"
 
 #: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
-msgstr ""
+msgstr "Οι εκδόσεις Traffic Flow που παρατηρούνται."
 
 #: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
@@ -1778,7 +1761,7 @@ msgstr "Πόσο συχνά δημιουργείτε ένα νέο αρχείο 
 
 #: functions.php:598
 msgid "New"
-msgstr ""
+msgstr "Νέο"
 
 #: functions.php:599
 msgid "Edit"
@@ -1801,9 +1784,8 @@ msgid "Save the Flow Filter"
 msgstr "Εκτύπωση αναφορών"
 
 #: functions.php:601
-#, fuzzy
 msgid "Save As"
-msgstr "Αποθήκευση ως"
+msgstr "Αποθήκευση Ως"
 
 #: functions.php:601
 #, fuzzy
@@ -1813,11 +1795,11 @@ msgstr "Εκτύπωση αναφορών"
 
 #: functions.php:602
 msgid "Rename"
-msgstr ""
+msgstr "Μετονομασία"
 
 #: functions.php:602
 msgid "Rename the Flow Filter"
-msgstr ""
+msgstr "Μετονομασία του φίλτρου ροής"
 
 #: functions.php:603
 #, fuzzy
@@ -1918,10 +1900,8 @@ msgid "Save Flow Filter"
 msgstr "Φίλτρο"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
-msgstr "Όνομα Πεδίου"
+msgstr "Νέο Όνομα"
 
 #: functions.php:838
 #, fuzzy
@@ -1931,7 +1911,7 @@ msgstr "Εκτύπωση αναφορών"
 
 #: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
-msgstr ""
+msgstr "Για να διαγράψετε αυτό το φίλτρο ροής, πατήστε Συνέχεια.  Εάν το φίλτρο ροής χρησιμοποιείται σε μια προγραμματισμένη αναφορά, η λειτουργία θα αποκλειστεί."
 
 #: functions.php:857
 #, php-format
@@ -1980,11 +1960,11 @@ msgstr "Επάνω %s γράφημα ροών Treemap"
 
 #: functions.php:976
 msgid "Rename Layout"
-msgstr ""
+msgstr "Μετονομασία διάταξης"
 
 #: functions.php:984
 msgid " <new>"
-msgstr ""
+msgstr " <new>"
 
 #: functions.php:1502
 msgid "Filter Settings Saved"
@@ -2085,7 +2065,7 @@ msgstr "Πακέτα"
 
 #: functions.php:3395
 msgid "The Parallel Query Timed Out.  Please contact your administrator"
-msgstr ""
+msgstr "Έληξε το χρονικό όριο του παράλληλου ερωτήματος.  Επικοινωνήστε με το διαχειριστή σας"
 
 #: functions.php:3588
 #, php-format
@@ -2243,7 +2223,7 @@ msgstr "Ο χάρτης FlowView για τον τύπο %s είναι %s"
 
 #: functions.php:4459
 msgid "Not Supported"
-msgstr ""
+msgstr "Δεν υποστηρίζεται"
 
 #: functions.php:4534
 msgid "Total Flows"
@@ -2271,7 +2251,7 @@ msgstr "Μετονομάστε τα αρχεία config.php.dist ή config_local
 
 #: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
-msgstr ""
+msgstr "Λάβετε υπόψη ότι οι πίνακες προσθηκών Flowview αναβαθμίζονται στο παρασκήνιο.  Αυτό μπορεί να διαρκέσει λίγο. Ελέγξτε το αρχείο καταγραφής κάκτων για περισσότερες πληροφορίες"
 
 #: setup.php:136
 msgid "The Filter has been Deleted"
@@ -2292,7 +2272,7 @@ msgstr "FlowView"
 
 #: setup.php:146
 msgid "Databases"
-msgstr ""
+msgstr "Βάσεις Δεδομένων"
 
 #: setup.php:154
 msgid "Normal User"
@@ -2357,19 +2337,19 @@ msgstr "Διαγραφή ονομάτων τομέα"
 
 #: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
-msgstr ""
+msgstr "Για διευθύνσεις IPv4 στο τοπικό δίκτυο που δεν επιλύονται τοπικά, προσαρτήστε αυτό το επίθημα στη διεύθυνση IP που προκύπτει."
 
 #: setup.php:381
 msgid "Local IP Range"
-msgstr ""
+msgstr "Τοπικό εύρος IP"
 
 #: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
-msgstr ""
+msgstr "Δώστε το εύρος διευθύνσεων IP IPv4 για το τοπικό σας δίκτυο για κεντρικούς υπολογιστές που ενδέχεται να μην έχουν καταχωρηθεί στο DNS.  Αυτοί οι κεντρικοί υπολογιστές θα αντιστοιχιστούν στο τοπικό όνομα τομέα παραπάνω.  Αυτό περισσότερο για οικιακούς χρήστες.  Μπορείτε να χρησιμοποιήσετε μορφές CIDR ή μη CIDR.  Για εξετάσεις: 192.168.11.0 ή 192.168.11.0/24"
 
 #: setup.php:385
 msgid "Use CIDR or Non-CIDR"
-msgstr ""
+msgstr "Χρήση CIDR ή μη CIDR"
 
 #: setup.php:390
 #, fuzzy
@@ -2383,15 +2363,15 @@ msgstr "Πολλές υπηρεσίες συλλογής δεδομένων Big 
 
 #: setup.php:396
 msgid "Whois Provider Host"
-msgstr ""
+msgstr "Ποιος είναι ο οικοδεσπότης παρόχου"
 
 #: setup.php:399
 msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
-msgstr ""
+msgstr "Δώστε το όνομα κεντρικού υπολογιστή για την επίλυση κλήσεων whois.  Εάν δεν είναι null, πρέπει να έχετε το δυαδικό αρχείο whois στη διαδρομή του συστήματός σας."
 
 #: setup.php:400
 msgid "whois.radb.net"
-msgstr ""
+msgstr "whois.radb.net"
 
 #: setup.php:405
 #, fuzzy
@@ -2400,15 +2380,15 @@ msgstr "Εργαλεία ροής Δυαδική διαδρομή"
 
 #: setup.php:408
 msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
-msgstr ""
+msgstr "Καταχωρίστε το όνομα διαδρομής για το δυαδικό αρχείο 'whois'.  Το δυαδικό αρχείο «whois» θα χρησιμοποιηθεί για την εύρεση πληροφοριών AS που συμπληρώνουν τον Arin."
 
 #: setup.php:409
 msgid "Enter binary path"
-msgstr ""
+msgstr "Εισαγωγή δυαδικής διαδρομής"
 
 #: setup.php:414
 msgid "Data Retention and Report Generation"
-msgstr ""
+msgstr "Διατήρηση δεδομένων και δημιουργία αναφορών"
 
 #: setup.php:426
 msgid "Data Retention Policy"
@@ -2461,37 +2441,35 @@ msgstr "Aνά ώρα"
 
 #: setup.php:453
 msgid "Storage Engine for Raw Tables"
-msgstr ""
+msgstr "Μηχανή αποθήκευσης για ακατέργαστα τραπέζια"
 
 #: setup.php:454
 msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
-msgstr ""
+msgstr "Το Aria Engine είναι ιδανικό για όλους εκτός από το τραπέζι Live raw.  Ο πίνακας Live raw θα είναι πάντα InnoDB.  Πάρτε την επιλογή σας."
 
 #: setup.php:457
 msgid "Aria (Fast, Crash Safe)"
-msgstr ""
+msgstr "Aria (Γρήγορη, ασφαλής σύγκρουση)"
 
 #: setup.php:458
 msgid "InnoDB (Slow, High Concurrency)"
-msgstr ""
+msgstr "InnoDB (αργή, υψηλή ταυτοχρονισμός)"
 
 #: setup.php:463
 msgid "Parallel Queries"
-msgstr ""
+msgstr "Παράλληλα ερωτήματα"
 
 #: setup.php:468
 msgid "Max Concurrent Threads"
-msgstr ""
+msgstr "Μέγιστα ταυτόχρονα νήματα"
 
 #: setup.php:469
 msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
-msgstr ""
+msgstr "Ο μέγιστος αριθμός νημάτων που θα αποσταλούν για την εκτέλεση των ερωτημάτων FlowView.  Σημειώστε ότι μπορείτε να έχετε το πολύ 1 νήμα ανά διαμέρισμα βάσης δεδομένων και θα πρέπει να είστε προσεκτικοί ώστε να μην υπερφορτώσετε το διακομιστή βάσης δεδομένων σας με την εκτέλεση πάρα πολλών ταυτόχρονων νημάτων."
 
 #: setup.php:472
-#, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
-msgstr "Απενεργοποίηση"
+msgstr "Απενεργοποιημένο"
 
 #: setup.php:473 setup.php:474 setup.php:475 setup.php:476 setup.php:477
 #: setup.php:478 setup.php:479 setup.php:480 setup.php:481 setup.php:482
@@ -2499,7 +2477,7 @@ msgstr "Απενεργοποίηση"
 #: setup.php:488 setup.php:489 setup.php:490 setup.php:491
 #, php-format
 msgid "%d Threads"
-msgstr ""
+msgstr "%d Θέματα"
 
 #: setup.php:496
 #, fuzzy
@@ -2509,7 +2487,7 @@ msgstr "Μέγιστος Αριθμός Σειρών"
 
 #: setup.php:497
 msgid "If the Parallel Query does not finish in this time, exit."
-msgstr ""
+msgstr "Εάν το παράλληλο ερώτημα δεν ολοκληρωθεί σε αυτό το χρονικό διάστημα, τερματίστε."
 
 #: setup.php:500
 #, fuzzy, php-format
@@ -2524,17 +2502,17 @@ msgstr "%d λεπτά"
 
 #: setup.php:511
 msgid "Cached Data Time to Live"
-msgstr ""
+msgstr "Προσωρινά αποθηκευμένα δεδομένα Time to Live"
 
 #: setup.php:512
 msgid "How long should FlowView hold onto Cached Query results before purging them?"
-msgstr ""
+msgstr "Πόσο καιρό πρέπει το FlowView να διατηρεί τα προσωρινά αποθηκευμένα αποτελέσματα ερωτήματος πριν από την εκκαθάριση τους;"
 
 #: setup.php:515 setup.php:516
 #, fuzzy, php-format
 #| msgid "Every %d Hours"
 msgid "%d Hours"
-msgstr "Κάθε% d Ώρες"
+msgstr "%d ώρες"
 
 #: setup.php:517
 #, fuzzy, php-format
@@ -2542,29 +2520,29 @@ msgid "%d Day"
 msgstr "%d Ημέρες"
 
 #: setup.php:518
-#, fuzzy, php-format
+#, php-format
 msgid "%d Days"
 msgstr "%d Ημέρες"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
-msgstr ""
+msgstr "Αποκοπή MaxScale"
 
 #: setup.php:528
 msgid "Leverage MaxScale to Distribute Query Shards"
-msgstr ""
+msgstr "Αξιοποιήστε το MaxScale για να διανείμετε θραύσματα ερωτημάτων"
 
 #: setup.php:529
 msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
-msgstr ""
+msgstr "Εάν έχετε πολλές υπηρεσίες που λειτουργούν ως σκλάβοι για το MaxScale, μπορείτε να αυξήσετε την ταχύτητα υποβολής ερωτημάτων διανέμοντας τα παράλληλα ερωτήματα σε πολλούς διακομιστές υποστήριξης MariaDB."
 
 #: setup.php:534
 msgid "MaxScale Read-Only Port"
-msgstr ""
+msgstr "Θύρα μόνο για ανάγνωση MaxScale"
 
 #: setup.php:537
 msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
-msgstr ""
+msgstr "Αυτή θα πρέπει να είναι η θύρα της υπηρεσίας μόνο για ανάγνωση (readconnroute) και του δρομολογητή."
 
 #: setup.php:543
 #, fuzzy

@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 15:10-0400\n"
-"PO-Revision-Date: 2024-06-07 22:16-0400\n"
+"PO-Revision-Date: 2024-07-14 15:47-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.4\n"
 
 #: arrays.php:26 arrays.php:60 functions.php:619
@@ -349,7 +350,7 @@ msgstr "ID de Template"
 
 #: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
-msgstr ""
+msgstr "O ID do modelo de fluxo apenas para fluxos v9 e IPFIX.  Observe que as IDs do modelo podem diferir de fabricante para fabricante."
 
 #: arrays.php:615
 #, fuzzy
@@ -359,7 +360,7 @@ msgstr "Endereço de IP"
 
 #: arrays.php:616
 msgid "The Stream IP Address or Hostname from the list of registered streams."
-msgstr ""
+msgstr "O endereço IP do fluxo ou nome do host da lista de fluxos registrados."
 
 #: arrays.php:623
 msgid "Presets"
@@ -599,11 +600,11 @@ msgstr "Filtre no destino AS selecionado no Filtro. Esta pode ser uma lista deli
 
 #: arrays.php:860
 msgid "DNS Cache"
-msgstr ""
+msgstr "DNS Cache"
 
 #: arrays.php:864
 msgid "CIDR/Routes"
-msgstr ""
+msgstr "CIDR/Rotas"
 
 #: arrays.php:868
 #, fuzzy
@@ -613,21 +614,19 @@ msgstr "Números"
 
 #: arrays.php:876
 msgid "AS Blocks"
-msgstr ""
+msgstr "Blocos AS"
 
 #: arrays.php:884
 msgid "AS Sets"
-msgstr ""
+msgstr "Conjuntos AS"
 
 #: arrays.php:892
 msgid "Route Sets"
-msgstr ""
+msgstr "Conjuntos de rotas"
 
 #: arrays.php:900
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Domains"
-msgstr "Porta(s) de origem"
+msgstr "Domínios"
 
 #: arrays.php:908
 #, fuzzy
@@ -636,11 +635,12 @@ msgstr "Filtro Salvo"
 
 #: arrays.php:916
 msgid "Peering Sets"
-msgstr ""
+msgstr "Conjuntos de emparelhamento"
 
 #: arrays.php:924 flowview_databases.php:438
+#, fuzzy
 msgid "Network"
-msgstr ""
+msgstr "Rede"
 
 #: arrays.php:932
 #, fuzzy
@@ -650,28 +650,28 @@ msgstr "Controle de Internet"
 
 #: arrays.php:940
 msgid "Incident Response Teams"
-msgstr ""
+msgstr "Equipas de Resposta a Incidentes"
 
 #: arrays.php:948
 msgid "Auth Agents"
-msgstr ""
+msgstr "Agentes de autenticação"
 
 #: arrays.php:956
 msgid "Organizations"
-msgstr ""
+msgstr "Oraganizações"
 
 #: arrays.php:964
 msgid "Roles"
-msgstr ""
+msgstr "Funções"
 
 #: arrays.php:972
 msgid "Persons"
-msgstr ""
+msgstr "Pessoas"
 
 #: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
-msgstr ""
+msgstr "Não é possível excluir o filtro de fluxo '%s' como está em uso em um relatório agendado."
 
 #: flowview.php:127
 #, fuzzy, php-format
@@ -686,69 +686,63 @@ msgstr "Apagar"
 
 #: flowview_databases.php:50
 msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
+msgstr "O cache DNS foi limpo.  Ele será recarregado à medida que os registros forem chegando."
 
 #: flowview_databases.php:92
 msgid "Internet Route Registry Details"
-msgstr ""
+msgstr "Detalhes do Registro de Rota da Internet"
 
 #: flowview_databases.php:99
 msgid "Authorized Agent Details"
-msgstr ""
+msgstr "Detalhes do agente autorizado"
 
 #: flowview_databases.php:218
 msgid "Remarks"
-msgstr ""
+msgstr "Observações"
 
 #: flowview_databases.php:223 flowview_databases.php:1651
-#, fuzzy
-#| msgid "Last Updated"
 msgid "Last Modified"
-msgstr "Actualizado"
+msgstr "A data da última modificação do objecto, no fuso horário do site."
 
 #: flowview_databases.php:233
-#, fuzzy
-#| msgid "Destination Domain"
 msgid "Registration Date"
-msgstr "IP de Destino"
+msgstr "Data de Registo"
 
 #: flowview_databases.php:238
 msgid "MNT By"
-msgstr ""
+msgstr "MNT Por"
 
 #: flowview_databases.php:243
 msgid "Admin Contact"
-msgstr ""
+msgstr "Contato do administrador"
 
 #: flowview_databases.php:248
 msgid "Organization"
-msgstr ""
+msgstr "Organização"
 
 #: flowview_databases.php:253
 msgid "Changes"
-msgstr ""
+msgstr "Alterações"
 
 #: flowview_databases.php:258
 msgid "Notify"
-msgstr ""
+msgstr "Notificar"
 
 #: flowview_databases.php:263
-#, fuzzy
-#| msgid "Destination"
 msgid "Description"
-msgstr "Destino"
+msgstr "Descrição"
 
 #: flowview_databases.php:268
 msgid "Tech Contact"
-msgstr ""
+msgstr "Contato técnico"
 
 #: flowview_databases.php:273
 msgid "MNT Lower"
-msgstr ""
+msgstr "MNT Inferior"
 
 #: flowview_databases.php:278
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: flowview_databases.php:283
 #, fuzzy
@@ -757,14 +751,12 @@ msgid "Abuse Email"
 msgstr "Email"
 
 #: flowview_databases.php:288
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Fax Number"
-msgstr "Números"
+msgstr "Número do Fax"
 
 #: flowview_databases.php:293
 msgid "Phone"
-msgstr ""
+msgstr "Telefone"
 
 #: flowview_databases.php:298 flowview_schedules.php:559
 msgid "Email"
@@ -780,35 +772,36 @@ msgstr "Estado"
 
 #: flowview_databases.php:313
 msgid "Members By Fef"
-msgstr ""
+msgstr "Membros Por Fef"
 
 #: flowview_databases.php:318
 msgid "Abuse Contacts"
-msgstr ""
+msgstr "Contatos de abuso"
 
 #: flowview_databases.php:323
 msgid "MNT Reference"
-msgstr ""
+msgstr "Referência MNT"
 
 #: flowview_databases.php:328
 msgid "Members"
-msgstr ""
+msgstr "Membros"
 
 #: flowview_databases.php:333
 msgid "MNT Notify"
-msgstr ""
+msgstr "MNT Notificar"
 
 #: flowview_databases.php:338
 msgid "Authorization"
-msgstr ""
+msgstr "Autorização"
 
 #: flowview_databases.php:343
 msgid "MNT Routes"
-msgstr ""
+msgstr "Rotas MNT"
 
 #: flowview_databases.php:348
+#, fuzzy
 msgid "Member of"
-msgstr ""
+msgstr "Membro"
 
 #: flowview_databases.php:353
 #, fuzzy
@@ -817,15 +810,15 @@ msgstr "Atualizar"
 
 #: flowview_databases.php:358
 msgid "NOC Handle"
-msgstr ""
+msgstr "Punho NOC"
 
 #: flowview_databases.php:363
 msgid "Sponsor Org"
-msgstr ""
+msgstr "Organização patrocinadora"
 
 #: flowview_databases.php:368
 msgid "MNT Irt"
-msgstr ""
+msgstr "MNT Irt"
 
 #: flowview_databases.php:373
 #, fuzzy
@@ -847,7 +840,7 @@ msgstr "Ativar"
 
 #: flowview_databases.php:388
 msgid "Alias"
-msgstr ""
+msgstr "Acrescentar o subdomínio alias gratuitamente"
 
 #: flowview_databases.php:393
 #, fuzzy
@@ -857,21 +850,19 @@ msgstr "Tipo de Gráfico"
 
 #: flowview_databases.php:398
 msgid "Refer To"
-msgstr ""
+msgstr "Consulte"
 
 #: flowview_databases.php:403
 msgid "MP Peering"
-msgstr ""
+msgstr "Emparelhamento MP"
 
 #: flowview_databases.php:408 flowview_devices.php:490
-#, fuzzy
-#| msgid "Report"
 msgid "Export"
-msgstr "Reportar"
+msgstr "Exportar"
 
 #: flowview_databases.php:413
 msgid "Holes"
-msgstr ""
+msgstr "Furos"
 
 #: flowview_databases.php:418
 #, fuzzy
@@ -881,37 +872,37 @@ msgstr "Padrão"
 
 #: flowview_databases.php:423
 msgid "Components"
-msgstr ""
+msgstr "Componentes"
 
 #: flowview_databases.php:428
 msgid "RS Out"
-msgstr ""
+msgstr "Saída RS"
 
 #: flowview_databases.php:433
 msgid "Organization Name"
-msgstr ""
+msgstr "Nome da Organização"
 
 #: flowview_databases.php:443
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
-msgstr "Nome"
+msgstr "Nome:"
 
 #: flowview_databases.php:448
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
 #: flowview_databases.php:453
 msgid "IRT Notify"
-msgstr ""
+msgstr "Notificação IRT"
 
 #: flowview_databases.php:458
 msgid "Aggr MTD"
-msgstr ""
+msgstr "Aggr MTD"
 
 #: flowview_databases.php:463
 msgid "AS Type"
-msgstr ""
+msgstr "Tipo AS"
 
 #: flowview_databases.php:468
 #, fuzzy
@@ -927,7 +918,7 @@ msgstr "Padrão"
 
 #: flowview_databases.php:478
 msgid "Assignment Size"
-msgstr ""
+msgstr "Tamanho da Atribuição"
 
 #: flowview_databases.php:483
 #, fuzzy
@@ -937,7 +928,7 @@ msgstr "Reportar"
 
 #: flowview_databases.php:488
 msgid "RS In"
-msgstr ""
+msgstr "RS em"
 
 #: flowview_databases.php:493
 #, fuzzy
@@ -947,55 +938,55 @@ msgstr "O valor do campo obrigatório. (String, Boolean, Integer ou Array)"
 
 #: flowview_databases.php:498
 msgid "DS Rdata"
-msgstr ""
+msgstr "DS Rdata"
 
 #: flowview_databases.php:503
 msgid "Aggr Boundary"
-msgstr ""
+msgstr "Limite Aggr"
 
 #: flowview_databases.php:513
 msgid "MP Import"
-msgstr ""
+msgstr "MP Importação"
 
 #: flowview_databases.php:518
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: flowview_databases.php:523
 msgid "RESFful Link"
-msgstr ""
+msgstr "RESFful Link"
 
 #: flowview_databases.php:528
 msgid "Peer"
-msgstr ""
+msgstr "Par"
 
 #: flowview_databases.php:533
 msgid "Zone Contact"
-msgstr ""
+msgstr "Zona de Contacto"
 
 #: flowview_databases.php:538
 msgid "Inject"
-msgstr ""
+msgstr "Injetar"
 
 #: flowview_databases.php:543
 msgid "MP Peer"
-msgstr ""
+msgstr "MP Peer"
 
 #: flowview_databases.php:548
 msgid "Referral By"
-msgstr ""
+msgstr "Encaminhamento por"
 
 #: flowview_databases.php:553
 msgid "Form"
-msgstr ""
+msgstr "Formulário"
 
 #: flowview_databases.php:558
 msgid "MNT Domains"
-msgstr ""
+msgstr "Domínios MNT"
 
 #: flowview_databases.php:563
 msgid "Origin AS"
-msgstr ""
+msgstr "Origem AS"
 
 #: flowview_databases.php:568
 #, fuzzy
@@ -1010,11 +1001,11 @@ msgstr "Data de Validade"
 
 #: flowview_databases.php:578
 msgid "Geo Feed"
-msgstr ""
+msgstr "Alimentação geográfica"
 
 #: flowview_databases.php:583
 msgid "Geo Index"
-msgstr ""
+msgstr "Índice geográfico"
 
 #: flowview_databases.php:588
 #, fuzzy
@@ -1029,48 +1020,45 @@ msgstr "Reportar"
 
 #: flowview_databases.php:598
 msgid "Trouble"
-msgstr ""
+msgstr "Problemas"
 
 #: flowview_databases.php:603
 msgid "Name Servers"
-msgstr ""
+msgstr "Servidores de nomes"
 
 #: flowview_databases.php:608
 msgid "Ping Handle"
-msgstr ""
+msgstr "Alça de ping"
 
 #: flowview_databases.php:613
-#, fuzzy
 msgid "Interface"
 msgstr "Interface"
 
 #: flowview_databases.php:618
-#, fuzzy
-#| msgid "Report"
 msgid "Import"
-msgstr "Reportar"
+msgstr "Importar"
 
 #: flowview_databases.php:623
 msgid "Signature"
-msgstr ""
+msgstr "Assinatura"
 
 #: flowview_databases.php:628
-#, fuzzy
 msgid "Geo Location"
-msgstr "Rotação"
+msgstr "Localização geográfica"
 
 #: flowview_databases.php:633
+#, fuzzy
 msgid "Local AS"
-msgstr ""
+msgstr "Local"
 
 #: flowview_databases.php:638
 msgid "Import Via"
-msgstr ""
+msgstr "Via Importação"
 
 #: flowview_databases.php:683
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
-msgstr ""
+msgstr "FATAL: Tabela de banco de dados desconhecido %s"
 
 #: flowview_databases.php:796 flowview_databases.php:1161
 #: flowview_databases.php:1453 flowview_devices.php:699
@@ -1082,13 +1070,13 @@ msgstr "Pesquisar"
 #: flowview_databases.php:1181 flowview_databases.php:1463
 #: flowview_databases.php:1473
 msgid "Any"
-msgstr ""
+msgstr "Qualquer"
 
 #: flowview_databases.php:824 flowview_databases.php:956
 #: flowview_databases.php:1199 flowview_databases.php:1311
 #: flowview_databases.php:1491 flowview_databases.php:1612
 msgid "Entries"
-msgstr ""
+msgstr "Registos"
 
 #: flowview_databases.php:828 flowview_databases.php:1203
 #: flowview_databases.php:1495 flowview_filters.php:243
@@ -1122,20 +1110,21 @@ msgid "Clear Filters"
 msgstr "Limpar Filtros"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
+#, fuzzy
 msgid "Purge"
-msgstr ""
+msgstr "Limpar"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge the DNS Cache"
-msgstr ""
+msgstr "Limpar o cache DNS"
 
 #: flowview_databases.php:997
 msgid "Not Specified"
-msgstr ""
+msgstr "Não especificado"
 
 #: flowview_databases.php:1013
 msgid "No Matching Entries Found"
-msgstr ""
+msgstr "Nenhuma entrada correspondente encontrada"
 
 #: flowview_databases.php:1073
 #, fuzzy
@@ -1158,8 +1147,8 @@ msgstr "Continuar"
 #: flowview_databases.php:1078
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Excluir entrada DNS"
+msgstr[1] "Excluir entradas DNS"
 
 #: flowview_databases.php:1152
 #, fuzzy
@@ -1169,51 +1158,51 @@ msgstr "Horários FlowView"
 #: flowview_databases.php:1167 flowview_databases.php:1173
 #: flowview_databases.php:1372
 msgid "Verified"
-msgstr ""
+msgstr "Verificado"
 
 #: flowview_databases.php:1172 flowview_databases.php:1372
 msgid "Unverified"
-msgstr ""
+msgstr "Não verificado"
 
 #: flowview_databases.php:1323
 msgid "This is the IP Address of the Cache entry."
-msgstr ""
+msgstr "Este é o endereço IP da entrada de cache."
 
 #: flowview_databases.php:1326
 msgid "DNS Hostname"
-msgstr ""
+msgstr "Nome do host DNS"
 
 #: flowview_databases.php:1329
 msgid "The DNS Name assigned to the IP Address."
-msgstr ""
+msgstr "O Nome DNS atribuído ao Endereço IP."
 
 #: flowview_databases.php:1335
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
+msgstr "A origem do nome de host DNS.  Pode ser DNS, Pesquisa Estática ou ARIN."
 
 #: flowview_databases.php:1338
 msgid "Arin Verified"
-msgstr ""
+msgstr "Arin Verificado"
 
 #: flowview_databases.php:1341
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
-msgstr ""
+msgstr "As informações do Arin para este endereço IP são verificadas ou é um endereço IP de domínio local."
 
 #: flowview_databases.php:1344
 msgid "CIDR ID"
-msgstr ""
+msgstr "CIDR ID"
 
 #: flowview_databases.php:1347
 msgid "The Arin primary key.  This is not official Arin information."
-msgstr ""
+msgstr "A chave primária Arin.  Esta não é uma informação oficial de Arin."
 
 #: flowview_databases.php:1350
 msgid "Autonomous System ID"
-msgstr ""
+msgstr "ID do Sistema Autónomo"
 
 #: flowview_databases.php:1353
 msgid "The Arin Origin AS.  This is official Arin AS information."
-msgstr ""
+msgstr "A Origem Arin AS.  Esta é a informação oficial da Arin AS."
 
 #: flowview_databases.php:1356
 #, fuzzy
@@ -1222,11 +1211,11 @@ msgstr "Atualizar"
 
 #: flowview_databases.php:1359
 msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
+msgstr "Esta é a hora em que o cache DNS foi inserido ou atualizado pela última vez."
 
 #: flowview_databases.php:1380
 msgid "No DNS Cache Entries Found"
-msgstr ""
+msgstr "Nenhuma entrada de cache DNS encontrada"
 
 #: flowview_databases.php:1444
 #, fuzzy
@@ -1241,7 +1230,7 @@ msgstr "Versão"
 
 #: flowview_databases.php:1464
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: flowview_databases.php:1465
 #, fuzzy
@@ -1249,52 +1238,50 @@ msgid "IPv6"
 msgstr "IPv6"
 
 #: flowview_databases.php:1622
-#, fuzzy
-#| msgid "Routine"
 msgid "Route"
-msgstr "Rotina"
+msgstr "Rota"
 
 #: flowview_databases.php:1624
 msgid "This is the published Internet Route."
-msgstr ""
+msgstr "Esta é a Rota da Internet publicada."
 
 #: flowview_databases.php:1627
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
-msgstr "Números"
+msgstr "Número da porta"
 
 #: flowview_databases.php:1630
 msgid "The Autonomous System Number for the route."
-msgstr ""
+msgstr "O número do sistema autônomo para a rota."
 
 #: flowview_databases.php:1633
 msgid "Route Description"
-msgstr ""
+msgstr "Descrição da Rota"
 
 #: flowview_databases.php:1636
 msgid "The Descrption logged by the Route Maintainer."
-msgstr ""
+msgstr "A descrição registrada pelo Mantenedor de rotas."
 
 #: flowview_databases.php:1642
 msgid "The source database used to publish the route."
-msgstr ""
+msgstr "O banco de dados de origem usado para publicar a rota."
 
 #: flowview_databases.php:1645
 msgid "Maintained By"
-msgstr ""
+msgstr "Mantido por"
 
 #: flowview_databases.php:1648
 msgid "The Internet Carrier who is maintaining the route for the customer."
-msgstr ""
+msgstr "A operadora de Internet que está mantendo a rota para o cliente."
 
 #: flowview_databases.php:1654
 msgid "The last time the information on this route was modified."
-msgstr ""
+msgstr "A última vez que a informação sobre esta rota foi modificada."
 
 #: flowview_databases.php:1675
 msgid "No Matching Routes Found"
-msgstr ""
+msgstr "Nenhuma rota correspondente encontrada"
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -1345,7 +1332,7 @@ msgstr "Protocolo IP"
 #: flowview_devices.php:152
 #, php-format
 msgid "No Flow Template was found for Device ID:%s and Template ID:%s"
-msgstr ""
+msgstr "Nenhum modelo de fluxo foi encontrado para ID do dispositivo:%s e ID do modelo:%s"
 
 #: flowview_devices.php:204
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
@@ -1357,11 +1344,11 @@ msgstr "Você deve selecionar pelo menos um dispositivo."
 
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
-msgstr ""
+msgstr "Salvar bem-sucedido.  O Flowview Listener foi salvo e o serviço reiniciado."
 
 #: flowview_devices.php:272
 msgid "Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running."
-msgstr ""
+msgstr "Salvar bem-sucedido.  O Flowview Listener foi salvo.  No entanto, a captura de fluxo de serviço não está em execução."
 
 #: flowview_devices.php:291
 #, php-format
@@ -1377,7 +1364,6 @@ msgid "Name"
 msgstr "Nome"
 
 #: flowview_devices.php:344
-#, fuzzy
 msgid "Version"
 msgstr "Versão"
 
@@ -1403,7 +1389,7 @@ msgstr "Modelos detetados pelo ouvinte"
 
 #: flowview_devices.php:460
 msgid "Ex Addr"
-msgstr ""
+msgstr "Ex Addr"
 
 #: flowview_devices.php:474
 msgid "Template"
@@ -1419,7 +1405,7 @@ msgstr "O valor do campo obrigatório. (String, Boolean, Integer ou Array)"
 
 #: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
-msgstr ""
+msgstr "Suportado"
 
 #: flowview_devices.php:567
 msgid "Field ID"
@@ -1480,7 +1466,7 @@ msgstr "Versão"
 
 #: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
-msgstr ""
+msgstr "As versões do Traffic Flow que estão sendo observadas."
 
 #: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
@@ -1778,7 +1764,7 @@ msgstr "Com que frequência criar um novo ficheiro de fluxo."
 
 #: functions.php:598
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: functions.php:599
 msgid "Edit"
@@ -1801,7 +1787,6 @@ msgid "Save the Flow Filter"
 msgstr "Imprimir relatórios"
 
 #: functions.php:601
-#, fuzzy
 msgid "Save As"
 msgstr "Salvar como"
 
@@ -1813,11 +1798,11 @@ msgstr "Imprimir relatórios"
 
 #: functions.php:602
 msgid "Rename"
-msgstr ""
+msgstr "Renomear"
 
 #: functions.php:602
 msgid "Rename the Flow Filter"
-msgstr ""
+msgstr "Renomear o filtro de fluxo"
 
 #: functions.php:603
 #, fuzzy
@@ -1931,7 +1916,7 @@ msgstr "Imprimir relatórios"
 
 #: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
-msgstr ""
+msgstr "Para Excluir este Filtro de Fluxo, pressione Continuar.  Se o Filtro de Fluxo estiver em uso em um Relatório Agendado, a operação será bloqueada."
 
 #: functions.php:857
 #, php-format
@@ -1980,11 +1965,11 @@ msgstr "Top %s Treemap Gráfico de Fluxos"
 
 #: functions.php:976
 msgid "Rename Layout"
-msgstr ""
+msgstr "Renomear layout"
 
 #: functions.php:984
 msgid " <new>"
-msgstr ""
+msgstr " <new>"
 
 #: functions.php:1502
 msgid "Filter Settings Saved"
@@ -2085,7 +2070,7 @@ msgstr "Pacotes"
 
 #: functions.php:3395
 msgid "The Parallel Query Timed Out.  Please contact your administrator"
-msgstr ""
+msgstr "A consulta paralela atingiu o tempo limite.  Entre em contato com o administrador"
 
 #: functions.php:3588
 #, php-format
@@ -2243,7 +2228,7 @@ msgstr "Gráfico FlowView para %s Tipo é %s"
 
 #: functions.php:4459
 msgid "Not Supported"
-msgstr ""
+msgstr "Não suportado"
 
 #: functions.php:4534
 msgid "Total Flows"
@@ -2271,7 +2256,7 @@ msgstr "Renomeie seus arquivos config.php.dist ou config_local.php.dist no diret
 
 #: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
-msgstr ""
+msgstr "Por favor, esteja ciente de que as tabelas de plugins do Flowview estão sendo atualizadas em segundo plano.  Isto pode levar algum tempo. Verifique o log de cactos para obter mais informações"
 
 #: setup.php:136
 msgid "The Filter has been Deleted"
@@ -2292,7 +2277,7 @@ msgstr "FlowView"
 
 #: setup.php:146
 msgid "Databases"
-msgstr ""
+msgstr "Bases de dados"
 
 #: setup.php:154
 msgid "Normal User"
@@ -2357,19 +2342,19 @@ msgstr "Nomes de Domínio Strip"
 
 #: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
-msgstr ""
+msgstr "Para endereços IPv4 na rede local que não resolvem localmente, acrescente este sufixo ao endereço IP resultante."
 
 #: setup.php:381
 msgid "Local IP Range"
-msgstr ""
+msgstr "Intervalo de IP local"
 
 #: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
-msgstr ""
+msgstr "Forneça o intervalo de endereços IP IPv4 para sua rede local para hosts que podem não estar registrados no DNS.  Esses hosts serão mapeados para o Nome de Domínio Local acima.  Isso mais para usuários domésticos.  Você pode usar os formatos CIDR ou não-CIDR.  Para exame: 192.168.11.0 ou 192.168.11.0/24"
 
 #: setup.php:385
 msgid "Use CIDR or Non-CIDR"
-msgstr ""
+msgstr "Usar CIDR ou não-CIDR"
 
 #: setup.php:390
 #, fuzzy
@@ -2383,15 +2368,15 @@ msgstr "Muitos serviços de coleta de dados de Big Tech gostam de mascarar sua p
 
 #: setup.php:396
 msgid "Whois Provider Host"
-msgstr ""
+msgstr "Host do provedor Whois"
 
 #: setup.php:399
 msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
-msgstr ""
+msgstr "Por favor, forneça o nome do host para resolver chamadas whois.  Se não for null, você deve ter o binário whois no caminho do sistema."
 
 #: setup.php:400
 msgid "whois.radb.net"
-msgstr ""
+msgstr "whois.radb.net"
 
 #: setup.php:405
 #, fuzzy
@@ -2400,15 +2385,15 @@ msgstr "Ferramentas de Fluxo Caminho Binário"
 
 #: setup.php:408
 msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
-msgstr ""
+msgstr "Forneça o nome do caminho para o binário 'whois'.  O binário 'whois' será usado para encontrar informações AS complementando Arin."
 
 #: setup.php:409
 msgid "Enter binary path"
-msgstr ""
+msgstr "Insira o caminho binário"
 
 #: setup.php:414
 msgid "Data Retention and Report Generation"
-msgstr ""
+msgstr "Retenção de dados e geração de relatórios"
 
 #: setup.php:426
 msgid "Data Retention Policy"
@@ -2461,37 +2446,35 @@ msgstr "Por hora"
 
 #: setup.php:453
 msgid "Storage Engine for Raw Tables"
-msgstr ""
+msgstr "Mecanismo de armazenamento para tabelas brutas"
 
 #: setup.php:454
 msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
-msgstr ""
+msgstr "O Aria Engine é perfeito para todos, exceto para a mesa crua ao vivo.  A tabela Live raw será sempre InnoDB.  Faça a sua escolha."
 
 #: setup.php:457
 msgid "Aria (Fast, Crash Safe)"
-msgstr ""
+msgstr "Aria (Rápido, Crash Safe)"
 
 #: setup.php:458
 msgid "InnoDB (Slow, High Concurrency)"
-msgstr ""
+msgstr "InnoDB (Lenta, Alta Simultaneidade)"
 
 #: setup.php:463
 msgid "Parallel Queries"
-msgstr ""
+msgstr "Consultas paralelas"
 
 #: setup.php:468
 msgid "Max Concurrent Threads"
-msgstr ""
+msgstr "Threads simultâneos máximos"
 
 #: setup.php:469
 msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
-msgstr ""
+msgstr "O número máximo de threads que serão despachados para executar as consultas FlowView.  Observe que você pode ter no máximo 1 thread por partição de banco de dados e deve ter cuidado para não sobrecarregar o servidor de banco de dados com muitos threads simultâneos em execução."
 
 #: setup.php:472
-#, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
-msgstr "Desativar"
+msgstr "Desativado"
 
 #: setup.php:473 setup.php:474 setup.php:475 setup.php:476 setup.php:477
 #: setup.php:478 setup.php:479 setup.php:480 setup.php:481 setup.php:482
@@ -2499,7 +2482,7 @@ msgstr "Desativar"
 #: setup.php:488 setup.php:489 setup.php:490 setup.php:491
 #, php-format
 msgid "%d Threads"
-msgstr ""
+msgstr "%d Tópicos"
 
 #: setup.php:496
 #, fuzzy
@@ -2509,32 +2492,31 @@ msgstr "Máximo de linhas"
 
 #: setup.php:497
 msgid "If the Parallel Query does not finish in this time, exit."
-msgstr ""
+msgstr "Se a Consulta Paralela não for concluída nesse período, saia."
 
 #: setup.php:500
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minute"
-msgstr "%d Minuto"
+msgstr "Minuto %d"
 
 #: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
 #: setup.php:506
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minutes"
-msgstr "A cada %d minutos"
+msgstr "Minutos %d"
 
 #: setup.php:511
 msgid "Cached Data Time to Live"
-msgstr ""
+msgstr "Tempo de vida dos dados armazenados em cache"
 
 #: setup.php:512
 msgid "How long should FlowView hold onto Cached Query results before purging them?"
-msgstr ""
+msgstr "Por quanto tempo o FlowView deve manter os resultados da Consulta em Cache antes de limpá-los?"
 
 #: setup.php:515 setup.php:516
-#, fuzzy, php-format
-#| msgid "Every %d Hours"
+#, php-format
 msgid "%d Hours"
-msgstr "Cada %d Horas"
+msgstr "horas %d"
 
 #: setup.php:517
 #, fuzzy, php-format
@@ -2548,23 +2530,23 @@ msgstr "%d Dias"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
-msgstr ""
+msgstr "MaxScale Sharding"
 
 #: setup.php:528
 msgid "Leverage MaxScale to Distribute Query Shards"
-msgstr ""
+msgstr "Aproveite o MaxScale para distribuir fragmentos de consulta"
 
 #: setup.php:529
 msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
-msgstr ""
+msgstr "Se você tiver vários serviços atuando como escravos para MaxScale, poderá aumentar a velocidade de consulta distribuindo as consultas paralelas para vários servidores de back-end MariaDB."
 
 #: setup.php:534
 msgid "MaxScale Read-Only Port"
-msgstr ""
+msgstr "Porta somente leitura MaxScale"
 
 #: setup.php:537
 msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
-msgstr ""
+msgstr "Esta deve ser a porta do serviço Somente Leitura (readconnroute) e do roteador."
 
 #: setup.php:543
 #, fuzzy

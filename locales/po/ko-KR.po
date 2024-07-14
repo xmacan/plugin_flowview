@@ -8,13 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 15:10-0400\n"
-"PO-Revision-Date: 2024-06-07 22:28-0400\n"
+"PO-Revision-Date: 2024-07-14 15:45-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko_KR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.4.4\n"
 
 #: arrays.php:26 arrays.php:60 functions.php:619
@@ -349,7 +350,7 @@ msgstr "템플릿 ID"
 
 #: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
-msgstr ""
+msgstr "v9 및 IPFIX 플로우에만 대한 플로우 템플릿 ID입니다.  템플릿 ID는 제조업체마다 다를 수 있습니다."
 
 #: arrays.php:615
 #, fuzzy
@@ -359,7 +360,7 @@ msgstr "IP 주소"
 
 #: arrays.php:616
 msgid "The Stream IP Address or Hostname from the list of registered streams."
-msgstr ""
+msgstr "등록된 스트림 목록의 스트림 IP 주소 또는 호스트 이름입니다."
 
 #: arrays.php:623
 msgid "Presets"
@@ -599,11 +600,11 @@ msgstr "필터에서 대상 AS를 선택하여 필터링합니다. Destimation A
 
 #: arrays.php:860
 msgid "DNS Cache"
-msgstr ""
+msgstr "DNS 캐시"
 
 #: arrays.php:864
 msgid "CIDR/Routes"
-msgstr ""
+msgstr "CIDR/경로"
 
 #: arrays.php:868
 #, fuzzy
@@ -613,21 +614,19 @@ msgstr "번호"
 
 #: arrays.php:876
 msgid "AS Blocks"
-msgstr ""
+msgstr "AS 블록"
 
 #: arrays.php:884
 msgid "AS Sets"
-msgstr ""
+msgstr "AS 세트"
 
 #: arrays.php:892
 msgid "Route Sets"
-msgstr ""
+msgstr "경로 집합"
 
 #: arrays.php:900
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Domains"
-msgstr "소스 포트"
+msgstr "WooCommerce 다국어는 쿠키를 사용하여 도메인의 언어를 사용할 때 바구니 정보를 이해하고 도메인 간에 데이터를 전송합니다."
 
 #: arrays.php:908
 #, fuzzy
@@ -636,11 +635,11 @@ msgstr "저장된 필터"
 
 #: arrays.php:916
 msgid "Peering Sets"
-msgstr ""
+msgstr "피어링 세트"
 
 #: arrays.php:924 flowview_databases.php:438
 msgid "Network"
-msgstr ""
+msgstr "네트워크"
 
 #: arrays.php:932
 #, fuzzy
@@ -650,28 +649,28 @@ msgstr "인터넷 제어"
 
 #: arrays.php:940
 msgid "Incident Response Teams"
-msgstr ""
+msgstr "인시던트 대응 팀"
 
 #: arrays.php:948
 msgid "Auth Agents"
-msgstr ""
+msgstr "인증 에이전트"
 
 #: arrays.php:956
 msgid "Organizations"
-msgstr ""
+msgstr "조직"
 
 #: arrays.php:964
 msgid "Roles"
-msgstr ""
+msgstr "역할"
 
 #: arrays.php:972
 msgid "Persons"
-msgstr ""
+msgstr "인원"
 
 #: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
-msgstr ""
+msgstr "예약된 보고서에서 사용 중인 흐름 필터 '%s'를 삭제할 수 없습니다."
 
 #: flowview.php:127
 #, fuzzy, php-format
@@ -686,69 +685,63 @@ msgstr "삭제"
 
 #: flowview_databases.php:50
 msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
+msgstr "DNS 캐시가 제거되었습니다.  레코드가 들어오면 다시 채워집니다."
 
 #: flowview_databases.php:92
 msgid "Internet Route Registry Details"
-msgstr ""
+msgstr "인터넷 경로 레지스트리 세부 정보"
 
 #: flowview_databases.php:99
 msgid "Authorized Agent Details"
-msgstr ""
+msgstr "공인 대리인 세부 정보"
 
 #: flowview_databases.php:218
 msgid "Remarks"
-msgstr ""
+msgstr "비고"
 
 #: flowview_databases.php:223 flowview_databases.php:1651
-#, fuzzy
-#| msgid "Last Updated"
 msgid "Last Modified"
-msgstr "수정일"
+msgstr "마지막으로 수정된"
 
 #: flowview_databases.php:233
-#, fuzzy
-#| msgid "Destination Domain"
 msgid "Registration Date"
-msgstr "목적지 도메인"
+msgstr "등록 날짜"
 
 #: flowview_databases.php:238
 msgid "MNT By"
-msgstr ""
+msgstr "MNT 기준"
 
 #: flowview_databases.php:243
 msgid "Admin Contact"
-msgstr ""
+msgstr "관리자 연락처"
 
 #: flowview_databases.php:248
 msgid "Organization"
-msgstr ""
+msgstr "조직"
 
 #: flowview_databases.php:253
 msgid "Changes"
-msgstr ""
+msgstr "변경"
 
 #: flowview_databases.php:258
 msgid "Notify"
-msgstr ""
+msgstr "알림"
 
 #: flowview_databases.php:263
-#, fuzzy
-#| msgid "Destination"
 msgid "Description"
-msgstr "목적지"
+msgstr "설명"
 
 #: flowview_databases.php:268
 msgid "Tech Contact"
-msgstr ""
+msgstr "기술 연락처"
 
 #: flowview_databases.php:273
 msgid "MNT Lower"
-msgstr ""
+msgstr "MNT 하강"
 
 #: flowview_databases.php:278
 msgid "Country"
-msgstr ""
+msgstr "국가"
 
 #: flowview_databases.php:283
 #, fuzzy
@@ -757,14 +750,12 @@ msgid "Abuse Email"
 msgstr "이메일"
 
 #: flowview_databases.php:288
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Fax Number"
-msgstr "번호"
+msgstr "팩스번호"
 
 #: flowview_databases.php:293
 msgid "Phone"
-msgstr ""
+msgstr "전화"
 
 #: flowview_databases.php:298 flowview_schedules.php:559
 msgid "Email"
@@ -780,35 +771,36 @@ msgstr "상태"
 
 #: flowview_databases.php:313
 msgid "Members By Fef"
-msgstr ""
+msgstr "Fef로 회원"
 
 #: flowview_databases.php:318
 msgid "Abuse Contacts"
-msgstr ""
+msgstr "악용사례 연락처"
 
 #: flowview_databases.php:323
 msgid "MNT Reference"
-msgstr ""
+msgstr "MNT 참조"
 
 #: flowview_databases.php:328
 msgid "Members"
-msgstr ""
+msgstr "회원"
 
 #: flowview_databases.php:333
 msgid "MNT Notify"
-msgstr ""
+msgstr "MNT 알림"
 
 #: flowview_databases.php:338
 msgid "Authorization"
-msgstr ""
+msgstr "권한"
 
 #: flowview_databases.php:343
 msgid "MNT Routes"
-msgstr ""
+msgstr "MNT 노선"
 
 #: flowview_databases.php:348
+#, fuzzy
 msgid "Member of"
-msgstr ""
+msgstr "회원"
 
 #: flowview_databases.php:353
 #, fuzzy
@@ -817,15 +809,15 @@ msgstr "업데이트"
 
 #: flowview_databases.php:358
 msgid "NOC Handle"
-msgstr ""
+msgstr "NOC 핸들"
 
 #: flowview_databases.php:363
 msgid "Sponsor Org"
-msgstr ""
+msgstr "스폰서 조직"
 
 #: flowview_databases.php:368
 msgid "MNT Irt"
-msgstr ""
+msgstr "MNT Irt"
 
 #: flowview_databases.php:373
 #, fuzzy
@@ -847,7 +839,7 @@ msgstr "활성화"
 
 #: flowview_databases.php:388
 msgid "Alias"
-msgstr ""
+msgstr "별칭"
 
 #: flowview_databases.php:393
 #, fuzzy
@@ -857,21 +849,19 @@ msgstr "그래프 유형"
 
 #: flowview_databases.php:398
 msgid "Refer To"
-msgstr ""
+msgstr "참조"
 
 #: flowview_databases.php:403
 msgid "MP Peering"
-msgstr ""
+msgstr "MP 피어링"
 
 #: flowview_databases.php:408 flowview_devices.php:490
-#, fuzzy
-#| msgid "Report"
 msgid "Export"
-msgstr "보고서"
+msgstr "내보내기"
 
 #: flowview_databases.php:413
 msgid "Holes"
-msgstr ""
+msgstr "구멍"
 
 #: flowview_databases.php:418
 #, fuzzy
@@ -881,37 +871,38 @@ msgstr "기본값"
 
 #: flowview_databases.php:423
 msgid "Components"
-msgstr ""
+msgstr "구성 요소"
 
 #: flowview_databases.php:428
 msgid "RS Out"
-msgstr ""
+msgstr "RS 출력"
 
 #: flowview_databases.php:433
 msgid "Organization Name"
-msgstr ""
+msgstr "기업명"
 
 #: flowview_databases.php:443
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
-msgstr "이름"
+msgstr "이름:"
 
 #: flowview_databases.php:448
 msgid "Author"
-msgstr ""
+msgstr "작성자"
 
 #: flowview_databases.php:453
 msgid "IRT Notify"
-msgstr ""
+msgstr "IRT 알림"
 
 #: flowview_databases.php:458
 msgid "Aggr MTD"
-msgstr ""
+msgstr "어그르 MTD"
 
 #: flowview_databases.php:463
+#, fuzzy
 msgid "AS Type"
-msgstr ""
+msgstr "유형"
 
 #: flowview_databases.php:468
 #, fuzzy
@@ -927,7 +918,7 @@ msgstr "기본값"
 
 #: flowview_databases.php:478
 msgid "Assignment Size"
-msgstr ""
+msgstr "할당 크기"
 
 #: flowview_databases.php:483
 #, fuzzy
@@ -937,65 +928,63 @@ msgstr "보고서"
 
 #: flowview_databases.php:488
 msgid "RS In"
-msgstr ""
+msgstr "RS 입력"
 
 #: flowview_databases.php:493
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
-msgstr "Field Name"
+msgstr "Net 이름"
 
 #: flowview_databases.php:498
 msgid "DS Rdata"
-msgstr ""
+msgstr "DS 알데이타"
 
 #: flowview_databases.php:503
 msgid "Aggr Boundary"
-msgstr ""
+msgstr "어그르 경계"
 
 #: flowview_databases.php:513
 msgid "MP Import"
-msgstr ""
+msgstr "MP 가져오기"
 
 #: flowview_databases.php:518
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 #: flowview_databases.php:523
 msgid "RESFful Link"
-msgstr ""
+msgstr "RESFful 링크"
 
 #: flowview_databases.php:528
 msgid "Peer"
-msgstr ""
+msgstr "동료"
 
 #: flowview_databases.php:533
 msgid "Zone Contact"
-msgstr ""
+msgstr "영역 연락처"
 
 #: flowview_databases.php:538
 msgid "Inject"
-msgstr ""
+msgstr "삽입"
 
 #: flowview_databases.php:543
 msgid "MP Peer"
-msgstr ""
+msgstr "MP 피어"
 
 #: flowview_databases.php:548
 msgid "Referral By"
-msgstr ""
+msgstr "추천 작성자"
 
 #: flowview_databases.php:553
 msgid "Form"
-msgstr ""
+msgstr "폼"
 
 #: flowview_databases.php:558
 msgid "MNT Domains"
-msgstr ""
+msgstr "MNT 도메인"
 
 #: flowview_databases.php:563
 msgid "Origin AS"
-msgstr ""
+msgstr "오리진 AS"
 
 #: flowview_databases.php:568
 #, fuzzy
@@ -1010,11 +999,11 @@ msgstr "만료"
 
 #: flowview_databases.php:578
 msgid "Geo Feed"
-msgstr ""
+msgstr "지오 피드"
 
 #: flowview_databases.php:583
 msgid "Geo Index"
-msgstr ""
+msgstr "지역 색인"
 
 #: flowview_databases.php:588
 #, fuzzy
@@ -1029,48 +1018,45 @@ msgstr "보고서"
 
 #: flowview_databases.php:598
 msgid "Trouble"
-msgstr ""
+msgstr "문제"
 
 #: flowview_databases.php:603
 msgid "Name Servers"
-msgstr ""
+msgstr "네임 서버"
 
 #: flowview_databases.php:608
 msgid "Ping Handle"
-msgstr ""
+msgstr "핑 핸들"
 
 #: flowview_databases.php:613
-#, fuzzy
 msgid "Interface"
 msgstr "인터페이스"
 
 #: flowview_databases.php:618
-#, fuzzy
-#| msgid "Report"
 msgid "Import"
-msgstr "보고서"
+msgstr "가져오기"
 
 #: flowview_databases.php:623
 msgid "Signature"
-msgstr ""
+msgstr "서명"
 
 #: flowview_databases.php:628
-#, fuzzy
 msgid "Geo Location"
-msgstr "회전"
+msgstr "지리적 위치"
 
 #: flowview_databases.php:633
+#, fuzzy
 msgid "Local AS"
-msgstr ""
+msgstr "로컬"
 
 #: flowview_databases.php:638
 msgid "Import Via"
-msgstr ""
+msgstr "다음을 통해 가져오기"
 
 #: flowview_databases.php:683
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
-msgstr ""
+msgstr "치명적: 알 수 없는 데이터베이스 테이블 %s"
 
 #: flowview_databases.php:796 flowview_databases.php:1161
 #: flowview_databases.php:1453 flowview_devices.php:699
@@ -1082,13 +1068,13 @@ msgstr "검색"
 #: flowview_databases.php:1181 flowview_databases.php:1463
 #: flowview_databases.php:1473
 msgid "Any"
-msgstr ""
+msgstr "일부"
 
 #: flowview_databases.php:824 flowview_databases.php:956
 #: flowview_databases.php:1199 flowview_databases.php:1311
 #: flowview_databases.php:1491 flowview_databases.php:1612
 msgid "Entries"
-msgstr ""
+msgstr "입력 항목"
 
 #: flowview_databases.php:828 flowview_databases.php:1203
 #: flowview_databases.php:1495 flowview_filters.php:243
@@ -1123,26 +1109,25 @@ msgstr "필터 지우기"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge"
-msgstr ""
+msgstr "숙청"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge the DNS Cache"
-msgstr ""
+msgstr "DNS 캐시 제거"
 
 #: flowview_databases.php:997
 msgid "Not Specified"
-msgstr ""
+msgstr "지정되지 않음"
 
 #: flowview_databases.php:1013
 msgid "No Matching Entries Found"
-msgstr ""
+msgstr "일치하는 항목을 찾을 수 없습니다."
 
 #: flowview_databases.php:1073
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "다음 일정을 삭제하려면 '계속'을 클릭하십시오."
-msgstr[1] "다음 일정을 삭제하려면 '계속'을 클릭하십시오."
 
 #: flowview_databases.php:1078 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
@@ -1158,8 +1143,7 @@ msgstr "계속"
 #: flowview_databases.php:1078
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "DNS 항목 삭제"
 
 #: flowview_databases.php:1152
 #, fuzzy
@@ -1169,64 +1153,63 @@ msgstr "FlowView 일정"
 #: flowview_databases.php:1167 flowview_databases.php:1173
 #: flowview_databases.php:1372
 msgid "Verified"
-msgstr ""
+msgstr "인증"
 
 #: flowview_databases.php:1172 flowview_databases.php:1372
 msgid "Unverified"
-msgstr ""
+msgstr "미인증"
 
 #: flowview_databases.php:1323
 msgid "This is the IP Address of the Cache entry."
-msgstr ""
+msgstr "캐시 항목의 IP 주소입니다."
 
 #: flowview_databases.php:1326
 msgid "DNS Hostname"
-msgstr ""
+msgstr "DNS 호스트 이름"
 
 #: flowview_databases.php:1329
 msgid "The DNS Name assigned to the IP Address."
-msgstr ""
+msgstr "IP 주소에 할당된 DNS 이름입니다."
 
 #: flowview_databases.php:1335
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
+msgstr "DNS 호스트 이름의 소스입니다.  DNS, 정적 조회 또는 ARIN일 수 있습니다."
 
 #: flowview_databases.php:1338
 msgid "Arin Verified"
-msgstr ""
+msgstr "아린 인증"
 
 #: flowview_databases.php:1341
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
-msgstr ""
+msgstr "이 IP 주소에 대한 Arin 정보가 확인되었거나 로컬 도메인 IP 주소입니다."
 
 #: flowview_databases.php:1344
 msgid "CIDR ID"
-msgstr ""
+msgstr "CIDR ID"
 
 #: flowview_databases.php:1347
 msgid "The Arin primary key.  This is not official Arin information."
-msgstr ""
+msgstr "Arin 기본 키입니다.  이것은 공식적인 Arin 정보가 아닙니다."
 
 #: flowview_databases.php:1350
 msgid "Autonomous System ID"
-msgstr ""
+msgstr "자율 시스템 ID"
 
 #: flowview_databases.php:1353
 msgid "The Arin Origin AS.  This is official Arin AS information."
-msgstr ""
+msgstr "아린 오리진으로.  이것은 공식 Arin AS 정보입니다."
 
 #: flowview_databases.php:1356
-#, fuzzy
 msgid "Updated Time"
-msgstr "업데이트"
+msgstr "업데이트된 시간"
 
 #: flowview_databases.php:1359
 msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
+msgstr "DNS 캐시가 입력되었거나 마지막으로 업데이트된 시간입니다."
 
 #: flowview_databases.php:1380
 msgid "No DNS Cache Entries Found"
-msgstr ""
+msgstr "DNS 캐시 항목을 찾을 수 없습니다."
 
 #: flowview_databases.php:1444
 #, fuzzy
@@ -1241,7 +1224,7 @@ msgstr "버전"
 
 #: flowview_databases.php:1464
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4 (IPv4)"
 
 #: flowview_databases.php:1465
 #, fuzzy
@@ -1249,52 +1232,50 @@ msgid "IPv6"
 msgstr "IPv6"
 
 #: flowview_databases.php:1622
-#, fuzzy
-#| msgid "Routine"
 msgid "Route"
-msgstr "정기적인"
+msgstr "경로"
 
 #: flowview_databases.php:1624
 msgid "This is the published Internet Route."
-msgstr ""
+msgstr "게시된 인터넷 경로입니다."
 
 #: flowview_databases.php:1627
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
-msgstr "번호"
+msgstr "티켓 번호"
 
 #: flowview_databases.php:1630
 msgid "The Autonomous System Number for the route."
-msgstr ""
+msgstr "경로의 자율 시스템 번호입니다."
 
 #: flowview_databases.php:1633
 msgid "Route Description"
-msgstr ""
+msgstr "경로 설명"
 
 #: flowview_databases.php:1636
 msgid "The Descrption logged by the Route Maintainer."
-msgstr ""
+msgstr "Route Maintainer에 의해 기록된 설명입니다."
 
 #: flowview_databases.php:1642
 msgid "The source database used to publish the route."
-msgstr ""
+msgstr "경로를 게시하는 데 사용되는 원본 데이터베이스입니다."
 
 #: flowview_databases.php:1645
 msgid "Maintained By"
-msgstr ""
+msgstr "유지 관리 작성자"
 
 #: flowview_databases.php:1648
 msgid "The Internet Carrier who is maintaining the route for the customer."
-msgstr ""
+msgstr "고객의 경로를 유지 관리하는 인터넷 통신 사업자입니다."
 
 #: flowview_databases.php:1654
 msgid "The last time the information on this route was modified."
-msgstr ""
+msgstr "이 경로에 대한 정보가 마지막으로 수정된 시간입니다."
 
 #: flowview_databases.php:1675
 msgid "No Matching Routes Found"
-msgstr ""
+msgstr "일치하는 경로를 찾을 수 없습니다."
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -1345,7 +1326,7 @@ msgstr "IP 프로토콜"
 #: flowview_devices.php:152
 #, php-format
 msgid "No Flow Template was found for Device ID:%s and Template ID:%s"
-msgstr ""
+msgstr "장치 ID:%s 및 템플릿 ID:에 대한 흐름 템플릿을 찾을 수 없습니다%s"
 
 #: flowview_devices.php:204
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
@@ -1357,11 +1338,11 @@ msgstr "하나 이상의 장치를 선택해야합니다."
 
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
-msgstr ""
+msgstr "저장에 성공했습니다.  Flowview 수신기가 저장되고 서비스가 다시 시작되었습니다."
 
 #: flowview_devices.php:272
 msgid "Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running."
-msgstr ""
+msgstr "저장에 성공했습니다.  Flowview 리스너가 저장되었습니다.  그러나 서비스 플로우 캡처가 실행되고 있지 않습니다."
 
 #: flowview_devices.php:291
 #, php-format
@@ -1377,7 +1358,6 @@ msgid "Name"
 msgstr "이름"
 
 #: flowview_devices.php:344
-#, fuzzy
 msgid "Version"
 msgstr "버전"
 
@@ -1403,7 +1383,7 @@ msgstr "수신기 감지 템플릿"
 
 #: flowview_devices.php:460
 msgid "Ex Addr"
-msgstr ""
+msgstr "Ex Addr"
 
 #: flowview_devices.php:474
 msgid "Template"
@@ -1419,7 +1399,7 @@ msgstr "Field Name"
 
 #: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
-msgstr ""
+msgstr "지원"
 
 #: flowview_devices.php:567
 msgid "Field ID"
@@ -1480,7 +1460,7 @@ msgstr "버전"
 
 #: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
-msgstr ""
+msgstr "관찰 중인 트래픽 흐름 버전입니다."
 
 #: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
@@ -1778,7 +1758,7 @@ msgstr "새 Flow File 생성 빈도."
 
 #: functions.php:598
 msgid "New"
-msgstr ""
+msgstr "신규"
 
 #: functions.php:599
 msgid "Edit"
@@ -1801,7 +1781,6 @@ msgid "Save the Flow Filter"
 msgstr "보고서 인쇄"
 
 #: functions.php:601
-#, fuzzy
 msgid "Save As"
 msgstr "다른 이름으로 저장"
 
@@ -1813,11 +1792,11 @@ msgstr "보고서 인쇄"
 
 #: functions.php:602
 msgid "Rename"
-msgstr ""
+msgstr "이름 변경"
 
 #: functions.php:602
 msgid "Rename the Flow Filter"
-msgstr ""
+msgstr "흐름 필터 이름 바꾸기"
 
 #: functions.php:603
 #, fuzzy
@@ -1931,7 +1910,7 @@ msgstr "보고서 인쇄"
 
 #: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
-msgstr ""
+msgstr "이 플로우 필터를 삭제하려면 계속을 누릅니다.  Flow Filter가 Scheduled Report에서 사용 중인 경우 작업이 차단됩니다."
 
 #: functions.php:857
 #, php-format
@@ -1980,11 +1959,12 @@ msgstr "상위 %s 트리맵 흐름 차트"
 
 #: functions.php:976
 msgid "Rename Layout"
-msgstr ""
+msgstr "레이아웃 이름 바꾸기"
 
 #: functions.php:984
+#, fuzzy
 msgid " <new>"
-msgstr ""
+msgstr "신규"
 
 #: functions.php:1502
 msgid "Filter Settings Saved"
@@ -2085,7 +2065,7 @@ msgstr "패킷"
 
 #: functions.php:3395
 msgid "The Parallel Query Timed Out.  Please contact your administrator"
-msgstr ""
+msgstr "병렬 쿼리 시간이 초과되었습니다.  관리자에게 문의하십시오."
 
 #: functions.php:3588
 #, php-format
@@ -2243,7 +2223,7 @@ msgstr "%s 유형의 FlowView 차트는  %s입니다."
 
 #: functions.php:4459
 msgid "Not Supported"
-msgstr ""
+msgstr "지원되지 않음"
 
 #: functions.php:4534
 msgid "Total Flows"
@@ -2271,7 +2251,7 @@ msgstr "flowview 디렉토리에서 config.php.dist 또는 config_local.php.dist
 
 #: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
-msgstr ""
+msgstr "Flowview 플러그인 테이블이 백그라운드에서 업그레이드되고 있음을 알려드립니다.  시간이 좀 걸릴 수 있습니다. 자세한 내용은 Cacti 로그를 확인하세요."
 
 #: setup.php:136
 msgid "The Filter has been Deleted"
@@ -2292,7 +2272,7 @@ msgstr "FlowView"
 
 #: setup.php:146
 msgid "Databases"
-msgstr ""
+msgstr "데이터베이스"
 
 #: setup.php:154
 msgid "Normal User"
@@ -2357,19 +2337,19 @@ msgstr "도메인 이름 제거"
 
 #: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
-msgstr ""
+msgstr "로컬로 확인되지 않는 로컬 네트워크의 IPv4 주소의 경우 결과 IP 주소에 이 접미사를 추가합니다."
 
 #: setup.php:381
 msgid "Local IP Range"
-msgstr ""
+msgstr "로컬 IP 범위"
 
 #: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
-msgstr ""
+msgstr "DNS에 등록되지 않았을 수 있는 호스트의 로컬 네트워크에 대한 IPv4 IP 주소 범위를 제공합니다.  이러한 호스트는 위의 로컬 도메인 이름에 매핑됩니다.  이것은 가정 사용자를 위한 것입니다.  CIDR 또는 비 CIDR 형식을 사용할 수 있습니다.  예시: 192.168.11.0 또는 192.168.11.0/24"
 
 #: setup.php:385
 msgid "Use CIDR or Non-CIDR"
-msgstr ""
+msgstr "CIDR 또는 비 CIDR 사용"
 
 #: setup.php:390
 #, fuzzy
@@ -2383,15 +2363,15 @@ msgstr "많은 빅 테크 데이터 수집 서비스는 도메인 소유권을 �
 
 #: setup.php:396
 msgid "Whois Provider Host"
-msgstr ""
+msgstr "Whois 공급자 호스트"
 
 #: setup.php:399
 msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
-msgstr ""
+msgstr "whois 통화를 해결하기 위해 호스트 이름을 제공하십시오.  null이 아닌 경우 시스템 경로에 whois 이진 파일이 있어야 합니다."
 
 #: setup.php:400
 msgid "whois.radb.net"
-msgstr ""
+msgstr "whois.radb.net"
 
 #: setup.php:405
 #, fuzzy
@@ -2400,15 +2380,15 @@ msgstr "흐름 도구 이진 경로"
 
 #: setup.php:408
 msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
-msgstr ""
+msgstr "'whois' 바이너리의 경로 이름을 제공하세요.  'whois' 바이너리는 Arin을 보완하는 AS 정보를 찾는 데 사용됩니다."
 
 #: setup.php:409
 msgid "Enter binary path"
-msgstr ""
+msgstr "바이너리 경로 입력"
 
 #: setup.php:414
 msgid "Data Retention and Report Generation"
-msgstr ""
+msgstr "데이터 보존 및 보고서 생성"
 
 #: setup.php:426
 msgid "Data Retention Policy"
@@ -2461,35 +2441,33 @@ msgstr "매시간 마다"
 
 #: setup.php:453
 msgid "Storage Engine for Raw Tables"
-msgstr ""
+msgstr "원시 테이블용 스토리지 엔진"
 
 #: setup.php:454
 msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
-msgstr ""
+msgstr "Aria Engine은 Live raw 테이블을 제외한 모든 작업에 적합합니다.  라이브 원시 테이블은 항상 InnoDB입니다.  골라보세요."
 
 #: setup.php:457
 msgid "Aria (Fast, Crash Safe)"
-msgstr ""
+msgstr "Aria (빠르고, 충돌 안전)"
 
 #: setup.php:458
 msgid "InnoDB (Slow, High Concurrency)"
-msgstr ""
+msgstr "InnoDB(느림, 높은 동시성)"
 
 #: setup.php:463
 msgid "Parallel Queries"
-msgstr ""
+msgstr "병렬 쿼리Parallel Queries"
 
 #: setup.php:468
 msgid "Max Concurrent Threads"
-msgstr ""
+msgstr "최대 동시 스레드 수"
 
 #: setup.php:469
 msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
-msgstr ""
+msgstr "FlowView 쿼리를 실행하기 위해 디스패치될 최대 스레드 수입니다.  데이터베이스 파티션당 최대 1개의 스레드를 가질 수 있으며, 너무 많은 동시 스레드를 실행하여 데이터베이스 서버에 과부하가 걸리지 않도록 주의해야 합니다."
 
 #: setup.php:472
-#, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
 msgstr "비활성화"
 
@@ -2499,7 +2477,7 @@ msgstr "비활성화"
 #: setup.php:488 setup.php:489 setup.php:490 setup.php:491
 #, php-format
 msgid "%d Threads"
-msgstr ""
+msgstr "%d 스레드"
 
 #: setup.php:496
 #, fuzzy
@@ -2509,32 +2487,31 @@ msgstr "최대 행"
 
 #: setup.php:497
 msgid "If the Parallel Query does not finish in this time, exit."
-msgstr ""
+msgstr "이 시간 내에 병렬 쿼리가 완료되지 않으면 종료합니다."
 
 #: setup.php:500
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minute"
-msgstr "% d 분"
+msgstr "%d 분"
 
 #: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
 #: setup.php:506
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minutes"
 msgstr "%d 분"
 
 #: setup.php:511
 msgid "Cached Data Time to Live"
-msgstr ""
+msgstr "캐시된 데이터 TTL(Time to Live)"
 
 #: setup.php:512
 msgid "How long should FlowView hold onto Cached Query results before purging them?"
-msgstr ""
+msgstr "FlowView는 캐시된 쿼리 결과를 제거하기 전에 얼마나 오래 보유해야 하나요?"
 
 #: setup.php:515 setup.php:516
-#, fuzzy, php-format
-#| msgid "Every %d Hours"
+#, php-format
 msgid "%d Hours"
-msgstr "% d 시간마다"
+msgstr "%d 시간"
 
 #: setup.php:517
 #, fuzzy, php-format
@@ -2542,29 +2519,29 @@ msgid "%d Day"
 msgstr "%d일"
 
 #: setup.php:518
-#, fuzzy, php-format
+#, php-format
 msgid "%d Days"
 msgstr "%d일"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
-msgstr ""
+msgstr "MaxScale 샤딩"
 
 #: setup.php:528
 msgid "Leverage MaxScale to Distribute Query Shards"
-msgstr ""
+msgstr "MaxScale을 활용하여 쿼리 샤드 배포"
 
 #: setup.php:529
 msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
-msgstr ""
+msgstr "MaxScale의 슬레이브 역할을 하는 여러 서비스가 있는 경우 병렬 쿼리를 여러 MariaDB 백엔드 서버에 배포하여 쿼리 속도를 높일 수 있습니다."
 
 #: setup.php:534
 msgid "MaxScale Read-Only Port"
-msgstr ""
+msgstr "MaxScale 읽기 전용 포트"
 
 #: setup.php:537
 msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
-msgstr ""
+msgstr "이 포트는 Read-Only-Service(readconnroute) 서비스 및 라우터의 포트여야 합니다."
 
 #: setup.php:543
 #, fuzzy

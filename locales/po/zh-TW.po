@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 15:10-0400\n"
-"PO-Revision-Date: 2024-06-07 22:22-0400\n"
+"PO-Revision-Date: 2024-07-14 15:50-0400\n"
 "Last-Translator: Linya Huang <linya0405@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <http://translate.cacti.net/projects/cacti/flowview/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -173,7 +173,7 @@ msgstr "沒有限制"
 #: arrays.php:90 arrays.php:91 arrays.php:92 arrays.php:93 arrays.php:94
 #: arrays.php:95 arrays.php:96 arrays.php:97 arrays.php:98 arrays.php:99
 #: arrays.php:100 arrays.php:101 arrays.php:102
-#, fuzzy, php-format
+#, php-format
 msgid "%s Bytes"
 msgstr "％s GBytes"
 
@@ -350,7 +350,7 @@ msgstr "主題 ID"
 
 #: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
-msgstr ""
+msgstr "僅限 v9 和IPFIX流的流範本ID。 請注意，範本ID可能因製造商而異。"
 
 #: arrays.php:615
 #, fuzzy
@@ -360,7 +360,7 @@ msgstr "IP 位址"
 
 #: arrays.php:616
 msgid "The Stream IP Address or Hostname from the list of registered streams."
-msgstr ""
+msgstr "已註冊流清單中的流IP位址或主機名。"
 
 #: arrays.php:623
 msgid "Presets"
@@ -600,11 +600,11 @@ msgstr "在篩選器中選擇的目標AS上進行篩選。這可以是Destimatio
 
 #: arrays.php:860
 msgid "DNS Cache"
-msgstr ""
+msgstr "DNS 快取"
 
 #: arrays.php:864
 msgid "CIDR/Routes"
-msgstr ""
+msgstr "CIDR/路由"
 
 #: arrays.php:868
 #, fuzzy
@@ -614,34 +614,31 @@ msgstr "數字"
 
 #: arrays.php:876
 msgid "AS Blocks"
-msgstr ""
+msgstr "AS 塊"
 
 #: arrays.php:884
 msgid "AS Sets"
-msgstr ""
+msgstr "AS 集"
 
 #: arrays.php:892
 msgid "Route Sets"
-msgstr ""
+msgstr "路由集"
 
 #: arrays.php:900
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Domains"
-msgstr "來源域名"
+msgstr "網域"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
-msgstr "過濾已保存"
+msgstr "過濾器組"
 
 #: arrays.php:916
 msgid "Peering Sets"
-msgstr ""
+msgstr "對等互連集"
 
 #: arrays.php:924 flowview_databases.php:438
 msgid "Network"
-msgstr ""
+msgstr "網絡"
 
 #: arrays.php:932
 #, fuzzy
@@ -651,28 +648,28 @@ msgstr "互聯網控制"
 
 #: arrays.php:940
 msgid "Incident Response Teams"
-msgstr ""
+msgstr "事件回應團隊"
 
 #: arrays.php:948
 msgid "Auth Agents"
-msgstr ""
+msgstr "身份驗證代理"
 
 #: arrays.php:956
 msgid "Organizations"
-msgstr ""
+msgstr "主辦單位"
 
 #: arrays.php:964
 msgid "Roles"
-msgstr ""
+msgstr "角色"
 
 #: arrays.php:972
 msgid "Persons"
-msgstr ""
+msgstr "人員"
 
 #: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
-msgstr ""
+msgstr "無法刪除流量過濾器「%s」 因為它正在計劃報告中使用。"
 
 #: flowview.php:127
 #, fuzzy, php-format
@@ -687,69 +684,63 @@ msgstr "刪除"
 
 #: flowview_databases.php:50
 msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
+msgstr "DNS 快取已被清除。 當記錄傳入時，它將重新填充。"
 
 #: flowview_databases.php:92
 msgid "Internet Route Registry Details"
-msgstr ""
+msgstr "Internet Route Registry 詳細資訊"
 
 #: flowview_databases.php:99
 msgid "Authorized Agent Details"
-msgstr ""
+msgstr "授權代理詳細資訊"
 
 #: flowview_databases.php:218
 msgid "Remarks"
-msgstr ""
+msgstr "備註"
 
 #: flowview_databases.php:223 flowview_databases.php:1651
-#, fuzzy
-#| msgid "Last Updated"
 msgid "Last Modified"
-msgstr "最後更新"
+msgstr "最後修改"
 
 #: flowview_databases.php:233
-#, fuzzy
-#| msgid "Destination Domain"
 msgid "Registration Date"
-msgstr "目標域名"
+msgstr "註冊日期"
 
 #: flowview_databases.php:238
 msgid "MNT By"
-msgstr ""
+msgstr "MNT 作者"
 
 #: flowview_databases.php:243
 msgid "Admin Contact"
-msgstr ""
+msgstr "管理員聯繫人"
 
 #: flowview_databases.php:248
 msgid "Organization"
-msgstr ""
+msgstr "組織"
 
 #: flowview_databases.php:253
 msgid "Changes"
-msgstr ""
+msgstr "修訂與更新"
 
 #: flowview_databases.php:258
 msgid "Notify"
-msgstr ""
+msgstr "通知"
 
 #: flowview_databases.php:263
-#, fuzzy
-#| msgid "Destination"
 msgid "Description"
-msgstr "目的地"
+msgstr "描述"
 
 #: flowview_databases.php:268
 msgid "Tech Contact"
-msgstr ""
+msgstr "技術聯繫人"
 
 #: flowview_databases.php:273
 msgid "MNT Lower"
-msgstr ""
+msgstr "MNT較低"
 
 #: flowview_databases.php:278
 msgid "Country"
-msgstr ""
+msgstr "國家"
 
 #: flowview_databases.php:283
 #, fuzzy
@@ -758,14 +749,12 @@ msgid "Abuse Email"
 msgstr "電子郵件"
 
 #: flowview_databases.php:288
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Fax Number"
-msgstr "數字"
+msgstr "傳真號碼"
 
 #: flowview_databases.php:293
 msgid "Phone"
-msgstr ""
+msgstr "電話"
 
 #: flowview_databases.php:298 flowview_schedules.php:559
 msgid "Email"
@@ -781,35 +770,35 @@ msgstr "狀態"
 
 #: flowview_databases.php:313
 msgid "Members By Fef"
-msgstr ""
+msgstr "成員 by fef"
 
 #: flowview_databases.php:318
 msgid "Abuse Contacts"
-msgstr ""
+msgstr "虐待連絡人"
 
 #: flowview_databases.php:323
 msgid "MNT Reference"
-msgstr ""
+msgstr "MNT 參考"
 
 #: flowview_databases.php:328
 msgid "Members"
-msgstr ""
+msgstr "會員"
 
 #: flowview_databases.php:333
 msgid "MNT Notify"
-msgstr ""
+msgstr "MNT 通知"
 
 #: flowview_databases.php:338
 msgid "Authorization"
-msgstr ""
+msgstr "授權"
 
 #: flowview_databases.php:343
 msgid "MNT Routes"
-msgstr ""
+msgstr "MNT 路線"
 
 #: flowview_databases.php:348
 msgid "Member of"
-msgstr ""
+msgstr "成員 "
 
 #: flowview_databases.php:353
 #, fuzzy
@@ -818,15 +807,15 @@ msgstr "更新"
 
 #: flowview_databases.php:358
 msgid "NOC Handle"
-msgstr ""
+msgstr "NOC手柄"
 
 #: flowview_databases.php:363
 msgid "Sponsor Org"
-msgstr ""
+msgstr "贊助機構"
 
 #: flowview_databases.php:368
 msgid "MNT Irt"
-msgstr ""
+msgstr "MNT Irt"
 
 #: flowview_databases.php:373
 #, fuzzy
@@ -848,7 +837,7 @@ msgstr "啟用"
 
 #: flowview_databases.php:388
 msgid "Alias"
-msgstr ""
+msgstr "別名"
 
 #: flowview_databases.php:393
 #, fuzzy
@@ -858,21 +847,19 @@ msgstr "圖表類型"
 
 #: flowview_databases.php:398
 msgid "Refer To"
-msgstr ""
+msgstr "指"
 
 #: flowview_databases.php:403
 msgid "MP Peering"
-msgstr ""
+msgstr "MP 對等互連"
 
 #: flowview_databases.php:408 flowview_devices.php:490
-#, fuzzy
-#| msgid "Report"
 msgid "Export"
-msgstr "報告"
+msgstr "匯出"
 
 #: flowview_databases.php:413
 msgid "Holes"
-msgstr ""
+msgstr "孔"
 
 #: flowview_databases.php:418
 #, fuzzy
@@ -882,37 +869,38 @@ msgstr "預設"
 
 #: flowview_databases.php:423
 msgid "Components"
-msgstr ""
+msgstr "組件"
 
 #: flowview_databases.php:428
 msgid "RS Out"
-msgstr ""
+msgstr "RS 輸出"
 
 #: flowview_databases.php:433
 msgid "Organization Name"
-msgstr ""
+msgstr "組織名稱"
 
 #: flowview_databases.php:443
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
-msgstr "名稱"
+msgstr "名稱： "
 
 #: flowview_databases.php:448
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: flowview_databases.php:453
 msgid "IRT Notify"
-msgstr ""
+msgstr "IRT 通知"
 
 #: flowview_databases.php:458
 msgid "Aggr MTD"
-msgstr ""
+msgstr "Aggr MTD"
 
 #: flowview_databases.php:463
+#, fuzzy
 msgid "AS Type"
-msgstr ""
+msgstr "這個類型"
 
 #: flowview_databases.php:468
 #, fuzzy
@@ -928,7 +916,7 @@ msgstr "預設"
 
 #: flowview_databases.php:478
 msgid "Assignment Size"
-msgstr ""
+msgstr "分配大小"
 
 #: flowview_databases.php:483
 #, fuzzy
@@ -938,65 +926,63 @@ msgstr "報告"
 
 #: flowview_databases.php:488
 msgid "RS In"
-msgstr ""
+msgstr "RS 輸入"
 
 #: flowview_databases.php:493
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
-msgstr "字段名稱"
+msgstr "網絡名稱"
 
 #: flowview_databases.php:498
 msgid "DS Rdata"
-msgstr ""
+msgstr "DS Rdata"
 
 #: flowview_databases.php:503
 msgid "Aggr Boundary"
-msgstr ""
+msgstr "Aggr 邊界"
 
 #: flowview_databases.php:513
 msgid "MP Import"
-msgstr ""
+msgstr "MP 匯入"
 
 #: flowview_databases.php:518
 msgid "Language"
-msgstr ""
+msgstr "語言"
 
 #: flowview_databases.php:523
 msgid "RESFful Link"
-msgstr ""
+msgstr "RESFful 連結"
 
 #: flowview_databases.php:528
 msgid "Peer"
-msgstr ""
+msgstr "對點"
 
 #: flowview_databases.php:533
 msgid "Zone Contact"
-msgstr ""
+msgstr "區域聯繫人"
 
 #: flowview_databases.php:538
 msgid "Inject"
-msgstr ""
+msgstr "注入"
 
 #: flowview_databases.php:543
 msgid "MP Peer"
-msgstr ""
+msgstr "MP 對等體"
 
 #: flowview_databases.php:548
 msgid "Referral By"
-msgstr ""
+msgstr "推薦人"
 
 #: flowview_databases.php:553
 msgid "Form"
-msgstr ""
+msgstr "表單"
 
 #: flowview_databases.php:558
 msgid "MNT Domains"
-msgstr ""
+msgstr "MNT功能變數名稱"
 
 #: flowview_databases.php:563
 msgid "Origin AS"
-msgstr ""
+msgstr "原產地 AS"
 
 #: flowview_databases.php:568
 #, fuzzy
@@ -1011,11 +997,11 @@ msgstr "到期日"
 
 #: flowview_databases.php:578
 msgid "Geo Feed"
-msgstr ""
+msgstr "地理源"
 
 #: flowview_databases.php:583
 msgid "Geo Index"
-msgstr ""
+msgstr "地理索引"
 
 #: flowview_databases.php:588
 #, fuzzy
@@ -1030,48 +1016,44 @@ msgstr "報告"
 
 #: flowview_databases.php:598
 msgid "Trouble"
-msgstr ""
+msgstr "麻煩"
 
 #: flowview_databases.php:603
 msgid "Name Servers"
-msgstr ""
+msgstr "名稱伺服器"
 
 #: flowview_databases.php:608
 msgid "Ping Handle"
-msgstr ""
+msgstr "Ping 手柄"
 
 #: flowview_databases.php:613
-#, fuzzy
 msgid "Interface"
-msgstr "用戶介面"
+msgstr "界面"
 
 #: flowview_databases.php:618
-#, fuzzy
-#| msgid "Report"
 msgid "Import"
-msgstr "報告"
+msgstr "匯入"
 
 #: flowview_databases.php:623
 msgid "Signature"
-msgstr ""
+msgstr "簽名"
 
 #: flowview_databases.php:628
-#, fuzzy
 msgid "Geo Location"
-msgstr "旋轉"
+msgstr "地理位置"
 
 #: flowview_databases.php:633
 msgid "Local AS"
-msgstr ""
+msgstr "本地 AS 號碼"
 
 #: flowview_databases.php:638
 msgid "Import Via"
-msgstr ""
+msgstr "導入方式"
 
 #: flowview_databases.php:683
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
-msgstr ""
+msgstr "致命：未知資料庫表 %s"
 
 #: flowview_databases.php:796 flowview_databases.php:1161
 #: flowview_databases.php:1453 flowview_devices.php:699
@@ -1083,13 +1065,13 @@ msgstr "搜尋"
 #: flowview_databases.php:1181 flowview_databases.php:1463
 #: flowview_databases.php:1473
 msgid "Any"
-msgstr ""
+msgstr "任何"
 
 #: flowview_databases.php:824 flowview_databases.php:956
 #: flowview_databases.php:1199 flowview_databases.php:1311
 #: flowview_databases.php:1491 flowview_databases.php:1612
 msgid "Entries"
-msgstr ""
+msgstr "留言"
 
 #: flowview_databases.php:828 flowview_databases.php:1203
 #: flowview_databases.php:1495 flowview_filters.php:243
@@ -1124,19 +1106,19 @@ msgstr "清除過濾器"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge"
-msgstr ""
+msgstr "清除"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge the DNS Cache"
-msgstr ""
+msgstr "清除 DNS 快取"
 
 #: flowview_databases.php:997
 msgid "Not Specified"
-msgstr ""
+msgstr "未指定外掛"
 
 #: flowview_databases.php:1013
 msgid "No Matching Entries Found"
-msgstr ""
+msgstr "未找到匹配的條目"
 
 #: flowview_databases.php:1073
 #, fuzzy
@@ -1158,7 +1140,7 @@ msgstr "繼續"
 #: flowview_databases.php:1078
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
-msgstr[0] ""
+msgstr[0] "刪除DNS條目"
 
 #: flowview_databases.php:1152
 #, fuzzy
@@ -1168,64 +1150,63 @@ msgstr "FlowView計劃"
 #: flowview_databases.php:1167 flowview_databases.php:1173
 #: flowview_databases.php:1372
 msgid "Verified"
-msgstr ""
+msgstr "已驗證"
 
 #: flowview_databases.php:1172 flowview_databases.php:1372
 msgid "Unverified"
-msgstr ""
+msgstr "未驗證"
 
 #: flowview_databases.php:1323
 msgid "This is the IP Address of the Cache entry."
-msgstr ""
+msgstr "這是緩存條目的IP位址。"
 
 #: flowview_databases.php:1326
 msgid "DNS Hostname"
-msgstr ""
+msgstr "DNS 主機名"
 
 #: flowview_databases.php:1329
 msgid "The DNS Name assigned to the IP Address."
-msgstr ""
+msgstr "分配給IP位址的 DNS 名稱。"
 
 #: flowview_databases.php:1335
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
+msgstr "DNS 主機名的來源。 它可以是 DNS、靜態查找或 ARIN。"
 
 #: flowview_databases.php:1338
 msgid "Arin Verified"
-msgstr ""
+msgstr "Arin 已核實"
 
 #: flowview_databases.php:1341
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
-msgstr ""
+msgstr "此IP位址的Arin資訊已驗證，或者它是本地域IP位址。"
 
 #: flowview_databases.php:1344
 msgid "CIDR ID"
-msgstr ""
+msgstr "CIDR ID"
 
 #: flowview_databases.php:1347
 msgid "The Arin primary key.  This is not official Arin information."
-msgstr ""
+msgstr "Arin 主鍵。 這不是 Arin 的官方資訊。"
 
 #: flowview_databases.php:1350
 msgid "Autonomous System ID"
-msgstr ""
+msgstr "自治系統ID"
 
 #: flowview_databases.php:1353
 msgid "The Arin Origin AS.  This is official Arin AS information."
-msgstr ""
+msgstr "Arin 起源 AS。 這是 Arin AS 的官方資訊。"
 
 #: flowview_databases.php:1356
-#, fuzzy
 msgid "Updated Time"
-msgstr "更新"
+msgstr "更新時間"
 
 #: flowview_databases.php:1359
 msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
+msgstr "這是輸入或上次更新 DNS 快取的時間。"
 
 #: flowview_databases.php:1380
 msgid "No DNS Cache Entries Found"
-msgstr ""
+msgstr "未找到 DNS 快取項目"
 
 #: flowview_databases.php:1444
 #, fuzzy
@@ -1234,66 +1215,62 @@ msgid "Flowview Internet Routes"
 msgstr "FlowView監聽器"
 
 #: flowview_databases.php:1459
-#, fuzzy
 msgid "IP Version"
-msgstr "版本"
+msgstr "IP 版本"
 
 #: flowview_databases.php:1464
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: flowview_databases.php:1465
-#, fuzzy
 msgid "IPv6"
-msgstr "IPv6的"
+msgstr "IPv6"
 
 #: flowview_databases.php:1622
-#, fuzzy
-#| msgid "Routine"
 msgid "Route"
-msgstr "常規"
+msgstr "路線"
 
 #: flowview_databases.php:1624
 msgid "This is the published Internet Route."
-msgstr ""
+msgstr "這是已發佈的 Internet 路由。"
 
 #: flowview_databases.php:1627
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
-msgstr "數字"
+msgstr "連接埠"
 
 #: flowview_databases.php:1630
 msgid "The Autonomous System Number for the route."
-msgstr ""
+msgstr "路由的自治系統編號。"
 
 #: flowview_databases.php:1633
 msgid "Route Description"
-msgstr ""
+msgstr "路線說明"
 
 #: flowview_databases.php:1636
 msgid "The Descrption logged by the Route Maintainer."
-msgstr ""
+msgstr "路由維護者記錄的描述。"
 
 #: flowview_databases.php:1642
 msgid "The source database used to publish the route."
-msgstr ""
+msgstr "用於發佈路由的源資料庫。"
 
 #: flowview_databases.php:1645
 msgid "Maintained By"
-msgstr ""
+msgstr "維護者"
 
 #: flowview_databases.php:1648
 msgid "The Internet Carrier who is maintaining the route for the customer."
-msgstr ""
+msgstr "為客戶維護路由的 Internet 運營商。"
 
 #: flowview_databases.php:1654
 msgid "The last time the information on this route was modified."
-msgstr ""
+msgstr "上次修改此路由的信息的時間。"
 
 #: flowview_databases.php:1675
 msgid "No Matching Routes Found"
-msgstr ""
+msgstr "未找到匹配的路由"
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -1344,7 +1321,7 @@ msgstr "IP 通訊協定"
 #: flowview_devices.php:152
 #, php-format
 msgid "No Flow Template was found for Device ID:%s and Template ID:%s"
-msgstr ""
+msgstr "未找到設備 ID：%s 和範本 ID：%s 的流範本"
 
 #: flowview_devices.php:204
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
@@ -1356,11 +1333,11 @@ msgstr "您必須至少選擇一個設備。"
 
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
-msgstr ""
+msgstr "保存成功。 Flowview 偵聽器已保存，服務已重新啟動。"
 
 #: flowview_devices.php:272
 msgid "Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running."
-msgstr ""
+msgstr "保存成功。 Flowview 偵聽器已保存。 但是，服務流捕獲未運行。"
 
 #: flowview_devices.php:291
 #, php-format
@@ -1376,7 +1353,6 @@ msgid "Name"
 msgstr "名稱"
 
 #: flowview_devices.php:344
-#, fuzzy
 msgid "Version"
 msgstr "版本"
 
@@ -1402,7 +1378,7 @@ msgstr "偵聽器檢測到的範本"
 
 #: flowview_devices.php:460
 msgid "Ex Addr"
-msgstr ""
+msgstr "Ex Addr"
 
 #: flowview_devices.php:474
 msgid "Template"
@@ -1418,7 +1394,7 @@ msgstr "字段名稱"
 
 #: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
-msgstr ""
+msgstr "不支援您的瀏覽器 ！"
 
 #: flowview_devices.php:567
 msgid "Field ID"
@@ -1479,7 +1455,7 @@ msgstr "版本"
 
 #: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
-msgstr ""
+msgstr "正在觀察的流量流版本。"
 
 #: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
@@ -1553,7 +1529,7 @@ msgstr "每隔一小時"
 
 #: flowview_schedules.php:44 flowview_schedules.php:45
 #: flowview_schedules.php:46 flowview_schedules.php:47
-#, fuzzy, php-format
+#, php-format
 msgid "Every %d Hours"
 msgstr "每個％d小時"
 
@@ -1777,7 +1753,7 @@ msgstr "多久創建一個新的Flow文件。"
 
 #: functions.php:598
 msgid "New"
-msgstr ""
+msgstr "新增"
 
 #: functions.php:599
 msgid "Edit"
@@ -1800,7 +1776,6 @@ msgid "Save the Flow Filter"
 msgstr "打印報告"
 
 #: functions.php:601
-#, fuzzy
 msgid "Save As"
 msgstr "另存為"
 
@@ -1812,11 +1787,11 @@ msgstr "打印報告"
 
 #: functions.php:602
 msgid "Rename"
-msgstr ""
+msgstr "重新命名"
 
 #: functions.php:602
 msgid "Rename the Flow Filter"
-msgstr ""
+msgstr "重新命名流量篩檢程式"
 
 #: functions.php:603
 #, fuzzy
@@ -1917,10 +1892,8 @@ msgid "Save Flow Filter"
 msgstr "新篩選器"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
-msgstr "字段名稱"
+msgstr "新名稱"
 
 #: functions.php:838
 #, fuzzy
@@ -1930,7 +1903,7 @@ msgstr "打印報告"
 
 #: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
-msgstr ""
+msgstr "要刪除此流量過濾器，請按繼續。 如果在計劃報告中使用流量篩檢程式，則該操作將被阻止。"
 
 #: functions.php:857
 #, php-format
@@ -1979,11 +1952,12 @@ msgstr "前 %s 條狀圖流程圖"
 
 #: functions.php:976
 msgid "Rename Layout"
-msgstr ""
+msgstr "重新命名佈局"
 
 #: functions.php:984
+#, fuzzy
 msgid " <new>"
-msgstr ""
+msgstr "[新]"
 
 #: functions.php:1502
 msgid "Filter Settings Saved"
@@ -2084,7 +2058,7 @@ msgstr "封包"
 
 #: functions.php:3395
 msgid "The Parallel Query Timed Out.  Please contact your administrator"
-msgstr ""
+msgstr "並行查詢超時。 請與您的管理員聯繫"
 
 #: functions.php:3588
 #, php-format
@@ -2242,7 +2216,7 @@ msgstr "%s類型的 FlowView 圖表是%s"
 
 #: functions.php:4459
 msgid "Not Supported"
-msgstr ""
+msgstr "僅在“https”站點中受支持"
 
 #: functions.php:4534
 msgid "Total Flows"
@@ -2270,7 +2244,7 @@ msgstr "請重命名 flowview 目錄中的 config.php.dist 或 config_local.php.
 
 #: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
-msgstr ""
+msgstr "請注意，Flowview 外掛程式表正在後台進行升級。 這可能需要一些時間。檢查仙人掌日誌以獲取更多資訊"
 
 #: setup.php:136
 msgid "The Filter has been Deleted"
@@ -2291,7 +2265,7 @@ msgstr "FlowView"
 
 #: setup.php:146
 msgid "Databases"
-msgstr ""
+msgstr "資料庫"
 
 #: setup.php:154
 msgid "Normal User"
@@ -2356,19 +2330,19 @@ msgstr "剝離域名"
 
 #: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
-msgstr ""
+msgstr "對於本地網路上無法在本地解析的 IPv4 位址，請將此後綴追加到生成的 IP 位址。"
 
 #: setup.php:381
 msgid "Local IP Range"
-msgstr ""
+msgstr "本地IP範圍"
 
 #: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
-msgstr ""
+msgstr "為可能未在 DNS 中註冊的主機提供本地網路的 IPv4 IP 位址範圍。 這些主機將映射到上面的本地域名。 這更適合家庭使用者。 您可以使用 CIDR 格式或非 CIDR 格式。 檢查：192.168.11.0 或 192.168.11.0/24"
 
 #: setup.php:385
 msgid "Use CIDR or Non-CIDR"
-msgstr ""
+msgstr "使用 CIDR 或非 CIDR"
 
 #: setup.php:390
 #, fuzzy
@@ -2382,15 +2356,15 @@ msgstr "許多大型科技數據收集服務喜歡掩蓋他們對域名的擁有
 
 #: setup.php:396
 msgid "Whois Provider Host"
-msgstr ""
+msgstr "Whois 提供商託管"
 
 #: setup.php:399
 msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
-msgstr ""
+msgstr "請提供主機名以解決 whois 調用。 如果不為 null，則系統路徑中必須具有 whois 二進位檔。"
 
 #: setup.php:400
 msgid "whois.radb.net"
-msgstr ""
+msgstr "whois.radb.net"
 
 #: setup.php:405
 #, fuzzy
@@ -2399,15 +2373,15 @@ msgstr "Flow Tools二進制路徑"
 
 #: setup.php:408
 msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
-msgstr ""
+msgstr "請提供「whois」二進位文件的路徑名。 “whois”二進位檔將用於查找補充 Arin 的 AS 資訊。"
 
 #: setup.php:409
 msgid "Enter binary path"
-msgstr ""
+msgstr "輸入二進位路徑"
 
 #: setup.php:414
 msgid "Data Retention and Report Generation"
-msgstr ""
+msgstr "數據保留和報告生成"
 
 #: setup.php:426
 msgid "Data Retention Policy"
@@ -2418,12 +2392,12 @@ msgid "The amount of time Cacti will maintain the partitioned Flow tables."
 msgstr "仙人掌將維護分區流表的時間。"
 
 #: setup.php:430
-#, fuzzy, php-format
+#, php-format
 msgid "%d Week"
 msgstr "％d週"
 
 #: setup.php:431 setup.php:432
-#, fuzzy, php-format
+#, php-format
 msgid "%d Weeks"
 msgstr "最後％d週"
 
@@ -2433,7 +2407,7 @@ msgid "%d Month"
 msgstr "%d月"
 
 #: setup.php:434 setup.php:435 setup.php:436 setup.php:437
-#, fuzzy, php-format
+#, php-format
 msgid "%d Months"
 msgstr "最後％d個月"
 
@@ -2460,35 +2434,33 @@ msgstr "每小時"
 
 #: setup.php:453
 msgid "Storage Engine for Raw Tables"
-msgstr ""
+msgstr "原始表的儲存引擎"
 
 #: setup.php:454
 msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
-msgstr ""
+msgstr "Aria Engine 非常適合除 Live raw 表以外的所有內容。 Live raw 表將始終為 InnoDB。 任您挑選。"
 
 #: setup.php:457
 msgid "Aria (Fast, Crash Safe)"
-msgstr ""
+msgstr "Aria（快速、碰撞安全）"
 
 #: setup.php:458
 msgid "InnoDB (Slow, High Concurrency)"
-msgstr ""
+msgstr "InnoDB（慢速、高併發）"
 
 #: setup.php:463
 msgid "Parallel Queries"
-msgstr ""
+msgstr "並行查詢"
 
 #: setup.php:468
 msgid "Max Concurrent Threads"
-msgstr ""
+msgstr "最大併發線程數"
 
 #: setup.php:469
 msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
-msgstr ""
+msgstr "為運行 FlowView 查詢而調度的最大線程數。 請注意，每個資料庫分區最多可以有1個線程，並且應注意不要因運行過多的併發線程而使資料庫伺服器過載。"
 
 #: setup.php:472
-#, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
 msgstr "停用"
 
@@ -2498,7 +2470,7 @@ msgstr "停用"
 #: setup.php:488 setup.php:489 setup.php:490 setup.php:491
 #, php-format
 msgid "%d Threads"
-msgstr ""
+msgstr "％d個主題"
 
 #: setup.php:496
 #, fuzzy
@@ -2508,61 +2480,61 @@ msgstr "最大行數"
 
 #: setup.php:497
 msgid "If the Parallel Query does not finish in this time, exit."
-msgstr ""
+msgstr "如果並行查詢在此時間內未完成，請退出。"
 
 #: setup.php:500
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minute"
-msgstr "％d分鐘"
+msgstr "%d 分鐘"
 
 #: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
 #: setup.php:506
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minutes"
 msgstr "%d 分鐘"
 
 #: setup.php:511
 msgid "Cached Data Time to Live"
-msgstr ""
+msgstr "快取資料存留時間"
 
 #: setup.php:512
 msgid "How long should FlowView hold onto Cached Query results before purging them?"
-msgstr ""
+msgstr "在清除緩存查詢結果之前，FlowView 應將緩存查詢結果保留多長時間？"
 
 #: setup.php:515 setup.php:516
-#, fuzzy, php-format
+#, php-format
 msgid "%d Hours"
-msgstr "每個％d小時"
+msgstr "%d 小時"
 
 #: setup.php:517
-#, fuzzy, php-format
+#, php-format
 msgid "%d Day"
 msgstr "%d 天"
 
 #: setup.php:518
-#, fuzzy, php-format
+#, php-format
 msgid "%d Days"
 msgstr "%d 天"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
-msgstr ""
+msgstr "MaxScale 分片"
 
 #: setup.php:528
 msgid "Leverage MaxScale to Distribute Query Shards"
-msgstr ""
+msgstr "利用 MaxScale 分發查詢分片"
 
 #: setup.php:529
 msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
-msgstr ""
+msgstr "如果您有多個服務充當 MaxScale 的從屬伺服器，則可以通過將並行查詢分發到多個 MariaDB 後端伺服器來提高查詢速度。"
 
 #: setup.php:534
 msgid "MaxScale Read-Only Port"
-msgstr ""
+msgstr "MaxScale 只讀埠"
 
 #: setup.php:537
 msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
-msgstr ""
+msgstr "這應該是只讀服務 （readconnroute） 服務和路由器的埠。"
 
 #: setup.php:543
 #, fuzzy

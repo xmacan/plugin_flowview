@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 15:10-0400\n"
-"PO-Revision-Date: 2024-06-07 22:27-0400\n"
+"PO-Revision-Date: 2024-07-14 15:44-0400\n"
 "Last-Translator: Seita Kawamot <seita_sk@yahoo.co.jp>\n"
 "Language-Team: Japanese <http://translate.cacti.net/projects/cacti/flowview/ja/>\n"
 "Language: ja_JP\n"
@@ -350,7 +350,7 @@ msgstr "テンプレート ID"
 
 #: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
-msgstr ""
+msgstr "v9 および IPFIX フローのみのフロー テンプレート ID。 テンプレート ID はメーカーによって異なる場合があります。"
 
 #: arrays.php:615
 #, fuzzy
@@ -360,7 +360,7 @@ msgstr "IPアドレス"
 
 #: arrays.php:616
 msgid "The Stream IP Address or Hostname from the list of registered streams."
-msgstr ""
+msgstr "登録済みストリームのリストからのストリーム IP アドレスまたはホスト名。"
 
 #: arrays.php:623
 msgid "Presets"
@@ -600,11 +600,11 @@ msgstr "フィルタで選択した宛先ASでフィルタリングします。�
 
 #: arrays.php:860
 msgid "DNS Cache"
-msgstr ""
+msgstr "DNS キャッシュ"
 
 #: arrays.php:864
 msgid "CIDR/Routes"
-msgstr ""
+msgstr "CIDR/ルート"
 
 #: arrays.php:868
 #, fuzzy
@@ -614,21 +614,19 @@ msgstr "AS番号"
 
 #: arrays.php:876
 msgid "AS Blocks"
-msgstr ""
+msgstr "ASブロック"
 
 #: arrays.php:884
 msgid "AS Sets"
-msgstr ""
+msgstr "ASセット"
 
 #: arrays.php:892
 msgid "Route Sets"
-msgstr ""
+msgstr "ルート セット"
 
 #: arrays.php:900
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Domains"
-msgstr "ソースドメイン"
+msgstr "ドメイン"
 
 #: arrays.php:908
 #, fuzzy
@@ -637,11 +635,11 @@ msgstr "保存したフィルタ"
 
 #: arrays.php:916
 msgid "Peering Sets"
-msgstr ""
+msgstr "ピアリング セット"
 
 #: arrays.php:924 flowview_databases.php:438
 msgid "Network"
-msgstr ""
+msgstr "ネットワーク"
 
 #: arrays.php:932
 #, fuzzy
@@ -651,28 +649,28 @@ msgstr "インターネット制御"
 
 #: arrays.php:940
 msgid "Incident Response Teams"
-msgstr ""
+msgstr "インシデント対応チーム"
 
 #: arrays.php:948
 msgid "Auth Agents"
-msgstr ""
+msgstr "認証エージェント"
 
 #: arrays.php:956
 msgid "Organizations"
-msgstr ""
+msgstr "組織"
 
 #: arrays.php:964
 msgid "Roles"
-msgstr ""
+msgstr "権限"
 
 #: arrays.php:972
 msgid "Persons"
-msgstr ""
+msgstr "人数"
 
 #: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
-msgstr ""
+msgstr "フロー フィルタ '%s' をスケジュール レポートで使用中として削除できません。"
 
 #: flowview.php:127
 #, fuzzy, php-format
@@ -687,69 +685,63 @@ msgstr "削除"
 
 #: flowview_databases.php:50
 msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
+msgstr "DNS キャッシュはパージされました。 レコードが入ってくると補充されます。"
 
 #: flowview_databases.php:92
 msgid "Internet Route Registry Details"
-msgstr ""
+msgstr "インターネットルートレジストリの詳細"
 
 #: flowview_databases.php:99
 msgid "Authorized Agent Details"
-msgstr ""
+msgstr "認定エージェントの詳細"
 
 #: flowview_databases.php:218
 msgid "Remarks"
-msgstr ""
+msgstr "備考"
 
 #: flowview_databases.php:223 flowview_databases.php:1651
-#, fuzzy
-#| msgid "Last Updated"
 msgid "Last Modified"
-msgstr "最終更新"
+msgstr "最終編集日"
 
 #: flowview_databases.php:233
-#, fuzzy
-#| msgid "Destination Domain"
 msgid "Registration Date"
-msgstr "宛先ドメイン名"
+msgstr "登録日"
 
 #: flowview_databases.php:238
 msgid "MNT By"
-msgstr ""
+msgstr "MNTによって"
 
 #: flowview_databases.php:243
 msgid "Admin Contact"
-msgstr ""
+msgstr "管理者の連絡先"
 
 #: flowview_databases.php:248
 msgid "Organization"
-msgstr ""
+msgstr "組織"
 
 #: flowview_databases.php:253
 msgid "Changes"
-msgstr ""
+msgstr "変更内容"
 
 #: flowview_databases.php:258
 msgid "Notify"
-msgstr ""
+msgstr "通知"
 
 #: flowview_databases.php:263
-#, fuzzy
-#| msgid "Destination"
 msgid "Description"
-msgstr "宛先"
+msgstr "説明"
 
 #: flowview_databases.php:268
 msgid "Tech Contact"
-msgstr ""
+msgstr "技術連絡先"
 
 #: flowview_databases.php:273
 msgid "MNT Lower"
-msgstr ""
+msgstr "MNTロワー"
 
 #: flowview_databases.php:278
 msgid "Country"
-msgstr ""
+msgstr "国"
 
 #: flowview_databases.php:283
 #, fuzzy
@@ -758,14 +750,12 @@ msgid "Abuse Email"
 msgstr "メールアドレス"
 
 #: flowview_databases.php:288
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Fax Number"
-msgstr "AS番号"
+msgstr "FAX番号"
 
 #: flowview_databases.php:293
 msgid "Phone"
-msgstr ""
+msgstr "電話番号"
 
 #: flowview_databases.php:298 flowview_schedules.php:559
 msgid "Email"
@@ -781,35 +771,35 @@ msgstr "状態"
 
 #: flowview_databases.php:313
 msgid "Members By Fef"
-msgstr ""
+msgstr "Members 作成者: Fef"
 
 #: flowview_databases.php:318
 msgid "Abuse Contacts"
-msgstr ""
+msgstr "不正使用の連絡先"
 
 #: flowview_databases.php:323
 msgid "MNT Reference"
-msgstr ""
+msgstr "MNT リファレンス"
 
 #: flowview_databases.php:328
 msgid "Members"
-msgstr ""
+msgstr "メンバー"
 
 #: flowview_databases.php:333
 msgid "MNT Notify"
-msgstr ""
+msgstr "MNT通知"
 
 #: flowview_databases.php:338
 msgid "Authorization"
-msgstr ""
+msgstr "承認"
 
 #: flowview_databases.php:343
 msgid "MNT Routes"
-msgstr ""
+msgstr "MNTルート"
 
 #: flowview_databases.php:348
 msgid "Member of"
-msgstr ""
+msgstr "メンバー: "
 
 #: flowview_databases.php:353
 #, fuzzy
@@ -818,15 +808,15 @@ msgstr "更新"
 
 #: flowview_databases.php:358
 msgid "NOC Handle"
-msgstr ""
+msgstr "NOCハンドル"
 
 #: flowview_databases.php:363
 msgid "Sponsor Org"
-msgstr ""
+msgstr "スポンサー組織"
 
 #: flowview_databases.php:368
 msgid "MNT Irt"
-msgstr ""
+msgstr "MNT Irt"
 
 #: flowview_databases.php:373
 #, fuzzy
@@ -835,10 +825,8 @@ msgid "MP Members"
 msgstr "AS番号"
 
 #: flowview_databases.php:378
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
-msgstr "ソースドメイン"
+msgstr "サブ ドメイン"
 
 #: flowview_databases.php:383
 #, fuzzy
@@ -848,7 +836,7 @@ msgstr "有効"
 
 #: flowview_databases.php:388
 msgid "Alias"
-msgstr ""
+msgstr "エイリアス"
 
 #: flowview_databases.php:393
 #, fuzzy
@@ -858,21 +846,19 @@ msgstr "グラフタイプ"
 
 #: flowview_databases.php:398
 msgid "Refer To"
-msgstr ""
+msgstr "言い及ぶ"
 
 #: flowview_databases.php:403
 msgid "MP Peering"
-msgstr ""
+msgstr "MP ピアリング"
 
 #: flowview_databases.php:408 flowview_devices.php:490
-#, fuzzy
-#| msgid "Report"
 msgid "Export"
-msgstr "レポート"
+msgstr "エクスポート"
 
 #: flowview_databases.php:413
 msgid "Holes"
-msgstr ""
+msgstr "穴"
 
 #: flowview_databases.php:418
 #, fuzzy
@@ -882,37 +868,38 @@ msgstr "デフォルト"
 
 #: flowview_databases.php:423
 msgid "Components"
-msgstr ""
+msgstr "コンポーネント"
 
 #: flowview_databases.php:428
 msgid "RS Out"
-msgstr ""
+msgstr "RS出力"
 
 #: flowview_databases.php:433
 msgid "Organization Name"
-msgstr ""
+msgstr "寄付の宛先 (組織名)"
 
 #: flowview_databases.php:443
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
-msgstr "名前"
+msgstr "名前："
 
 #: flowview_databases.php:448
 msgid "Author"
-msgstr ""
+msgstr "投稿者"
 
 #: flowview_databases.php:453
 msgid "IRT Notify"
-msgstr ""
+msgstr "IRT 通知"
 
 #: flowview_databases.php:458
 msgid "Aggr MTD"
-msgstr ""
+msgstr "アグリゲート MTD"
 
 #: flowview_databases.php:463
+#, fuzzy
 msgid "AS Type"
-msgstr ""
+msgstr "タイプ"
 
 #: flowview_databases.php:468
 #, fuzzy
@@ -921,14 +908,12 @@ msgid "MP Filter"
 msgstr "フィルター"
 
 #: flowview_databases.php:473
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
-msgstr "デフォルト"
+msgstr "既定のルート"
 
 #: flowview_databases.php:478
 msgid "Assignment Size"
-msgstr ""
+msgstr "割り当てサイズ"
 
 #: flowview_databases.php:483
 #, fuzzy
@@ -938,7 +923,7 @@ msgstr "レポート"
 
 #: flowview_databases.php:488
 msgid "RS In"
-msgstr ""
+msgstr "RS入力"
 
 #: flowview_databases.php:493
 #, fuzzy
@@ -948,55 +933,55 @@ msgstr "フィールド名"
 
 #: flowview_databases.php:498
 msgid "DS Rdata"
-msgstr ""
+msgstr "DS Rdata"
 
 #: flowview_databases.php:503
 msgid "Aggr Boundary"
-msgstr ""
+msgstr "集計境界"
 
 #: flowview_databases.php:513
 msgid "MP Import"
-msgstr ""
+msgstr "MPインポート"
 
 #: flowview_databases.php:518
 msgid "Language"
-msgstr ""
+msgstr "言語"
 
 #: flowview_databases.php:523
 msgid "RESFful Link"
-msgstr ""
+msgstr "RESFful リンク"
 
 #: flowview_databases.php:528
 msgid "Peer"
-msgstr ""
+msgstr "ピア"
 
 #: flowview_databases.php:533
 msgid "Zone Contact"
-msgstr ""
+msgstr "ゾーンコンタクト"
 
 #: flowview_databases.php:538
 msgid "Inject"
-msgstr ""
+msgstr "注射する"
 
 #: flowview_databases.php:543
 msgid "MP Peer"
-msgstr ""
+msgstr "MPピア"
 
 #: flowview_databases.php:548
 msgid "Referral By"
-msgstr ""
+msgstr "紹介者"
 
 #: flowview_databases.php:553
 msgid "Form"
-msgstr ""
+msgstr "フォーム"
 
 #: flowview_databases.php:558
 msgid "MNT Domains"
-msgstr ""
+msgstr "MNT ドメイン"
 
 #: flowview_databases.php:563
 msgid "Origin AS"
-msgstr ""
+msgstr "オリジンAS"
 
 #: flowview_databases.php:568
 #, fuzzy
@@ -1011,11 +996,11 @@ msgstr "有効期限"
 
 #: flowview_databases.php:578
 msgid "Geo Feed"
-msgstr ""
+msgstr "Geo フィード"
 
 #: flowview_databases.php:583
 msgid "Geo Index"
-msgstr ""
+msgstr "地域インデックス"
 
 #: flowview_databases.php:588
 #, fuzzy
@@ -1030,30 +1015,27 @@ msgstr "レポート"
 
 #: flowview_databases.php:598
 msgid "Trouble"
-msgstr ""
+msgstr "トラブル"
 
 #: flowview_databases.php:603
 msgid "Name Servers"
-msgstr ""
+msgstr "ネームサーバー"
 
 #: flowview_databases.php:608
 msgid "Ping Handle"
-msgstr ""
+msgstr "Pingハンドル"
 
 #: flowview_databases.php:613
-#, fuzzy
 msgid "Interface"
 msgstr "インタフェース"
 
 #: flowview_databases.php:618
-#, fuzzy
-#| msgid "Report"
 msgid "Import"
-msgstr "レポート"
+msgstr "インポート"
 
 #: flowview_databases.php:623
 msgid "Signature"
-msgstr ""
+msgstr "署名"
 
 #: flowview_databases.php:628
 #, fuzzy
@@ -1062,16 +1044,16 @@ msgstr "ローテーション"
 
 #: flowview_databases.php:633
 msgid "Local AS"
-msgstr ""
+msgstr "ローカルAS"
 
 #: flowview_databases.php:638
 msgid "Import Via"
-msgstr ""
+msgstr "インポート方法"
 
 #: flowview_databases.php:683
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
-msgstr ""
+msgstr "致命的: 不明なデータベース表%s"
 
 #: flowview_databases.php:796 flowview_databases.php:1161
 #: flowview_databases.php:1453 flowview_devices.php:699
@@ -1083,13 +1065,13 @@ msgstr "検索"
 #: flowview_databases.php:1181 flowview_databases.php:1463
 #: flowview_databases.php:1473
 msgid "Any"
-msgstr ""
+msgstr "任意"
 
 #: flowview_databases.php:824 flowview_databases.php:956
 #: flowview_databases.php:1199 flowview_databases.php:1311
 #: flowview_databases.php:1491 flowview_databases.php:1612
 msgid "Entries"
-msgstr ""
+msgstr "エントリー"
 
 #: flowview_databases.php:828 flowview_databases.php:1203
 #: flowview_databases.php:1495 flowview_filters.php:243
@@ -1124,19 +1106,19 @@ msgstr "絞り込み条件を解除する"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge"
-msgstr ""
+msgstr "粛清"
 
 #: flowview_databases.php:842 flowview_databases.php:1217
 msgid "Purge the DNS Cache"
-msgstr ""
+msgstr "DNS キャッシュのパージ"
 
 #: flowview_databases.php:997
 msgid "Not Specified"
-msgstr ""
+msgstr "指定なし"
 
 #: flowview_databases.php:1013
 msgid "No Matching Entries Found"
-msgstr ""
+msgstr "一致するエントリが見つかりません"
 
 #: flowview_databases.php:1073
 #, fuzzy
@@ -1158,7 +1140,7 @@ msgstr "続ける"
 #: flowview_databases.php:1078
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
-msgstr[0] ""
+msgstr[0] "DNS エントリの削除"
 
 #: flowview_databases.php:1152
 #, fuzzy
@@ -1168,51 +1150,51 @@ msgstr "FlowViewスケジュール"
 #: flowview_databases.php:1167 flowview_databases.php:1173
 #: flowview_databases.php:1372
 msgid "Verified"
-msgstr ""
+msgstr "承認済み"
 
 #: flowview_databases.php:1172 flowview_databases.php:1372
 msgid "Unverified"
-msgstr ""
+msgstr "未承認"
 
 #: flowview_databases.php:1323
 msgid "This is the IP Address of the Cache entry."
-msgstr ""
+msgstr "これは、キャッシュエントリのIPアドレスです。"
 
 #: flowview_databases.php:1326
 msgid "DNS Hostname"
-msgstr ""
+msgstr "DNS ホスト名"
 
 #: flowview_databases.php:1329
 msgid "The DNS Name assigned to the IP Address."
-msgstr ""
+msgstr "IP アドレスに割り当てられた DNS 名。"
 
 #: flowview_databases.php:1335
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
+msgstr "DNS ホスト名のソース。 DNS、スタティックルックアップ、ARINのいずれかです。"
 
 #: flowview_databases.php:1338
 msgid "Arin Verified"
-msgstr ""
+msgstr "Arin 確認済み"
 
 #: flowview_databases.php:1341
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
-msgstr ""
+msgstr "この IP アドレスの Arin 情報が検証されているか、ローカル ドメイン IP アドレスです。"
 
 #: flowview_databases.php:1344
 msgid "CIDR ID"
-msgstr ""
+msgstr "CIDR ID"
 
 #: flowview_databases.php:1347
 msgid "The Arin primary key.  This is not official Arin information."
-msgstr ""
+msgstr "Arin 主キー。 これはアリンの公式情報ではありません。"
 
 #: flowview_databases.php:1350
 msgid "Autonomous System ID"
-msgstr ""
+msgstr "自律システム ID"
 
 #: flowview_databases.php:1353
 msgid "The Arin Origin AS.  This is official Arin AS information."
-msgstr ""
+msgstr "アリンオリジンAS。 これはアリンASの公式情報です。"
 
 #: flowview_databases.php:1356
 #, fuzzy
@@ -1221,11 +1203,11 @@ msgstr "更新"
 
 #: flowview_databases.php:1359
 msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
+msgstr "これは、DNSキャッシュが入力された時刻または最後に更新された時刻です。"
 
 #: flowview_databases.php:1380
 msgid "No DNS Cache Entries Found"
-msgstr ""
+msgstr "DNS キャッシュ エントリが見つかりませんでした"
 
 #: flowview_databases.php:1444
 #, fuzzy
@@ -1240,60 +1222,57 @@ msgstr "バージョン"
 
 #: flowview_databases.php:1464
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: flowview_databases.php:1465
-#, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
 #: flowview_databases.php:1622
-#, fuzzy
-#| msgid "Routine"
 msgid "Route"
-msgstr "ルーチン"
+msgstr "ルート"
 
 #: flowview_databases.php:1624
 msgid "This is the published Internet Route."
-msgstr ""
+msgstr "これは、公開されているインターネットルートです。"
 
 #: flowview_databases.php:1627
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
-msgstr "AS番号"
+msgstr "ポート番号"
 
 #: flowview_databases.php:1630
 msgid "The Autonomous System Number for the route."
-msgstr ""
+msgstr "ルートの自律システム番号。"
 
 #: flowview_databases.php:1633
 msgid "Route Description"
-msgstr ""
+msgstr "ルートの説明"
 
 #: flowview_databases.php:1636
 msgid "The Descrption logged by the Route Maintainer."
-msgstr ""
+msgstr "ルートメンテナによって記録された説明。"
 
 #: flowview_databases.php:1642
 msgid "The source database used to publish the route."
-msgstr ""
+msgstr "ルートの公開に使用されるソース データベース。"
 
 #: flowview_databases.php:1645
 msgid "Maintained By"
-msgstr ""
+msgstr "保守担当者"
 
 #: flowview_databases.php:1648
 msgid "The Internet Carrier who is maintaining the route for the customer."
-msgstr ""
+msgstr "顧客のルートを維持しているインターネットキャリア。"
 
 #: flowview_databases.php:1654
 msgid "The last time the information on this route was modified."
-msgstr ""
+msgstr "このルートの情報が最後に変更された時刻。"
 
 #: flowview_databases.php:1675
 msgid "No Matching Routes Found"
-msgstr ""
+msgstr "一致するルートが見つかりません"
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -1344,7 +1323,7 @@ msgstr "IPプロトコル"
 #: flowview_devices.php:152
 #, php-format
 msgid "No Flow Template was found for Device ID:%s and Template ID:%s"
-msgstr ""
+msgstr "デバイス ID:%s とテンプレート ID:%s のフロー テンプレートが見つかりませんでした。"
 
 #: flowview_devices.php:204
 msgid "Click 'Continue' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service."
@@ -1356,11 +1335,11 @@ msgstr "少なくとも1つのデバイスを選択する必要があります�
 
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
-msgstr ""
+msgstr "保存に成功しました。 Flowview Listener が保存され、サービスが再起動されました。"
 
 #: flowview_devices.php:272
 msgid "Save Successful.  The Flowview Listener has been saved.  However, the service flow-capture is not running."
-msgstr ""
+msgstr "保存に成功しました。 Flowview リスナーが保存されました。 ただし、サービス フロー キャプチャは実行されていません。"
 
 #: flowview_devices.php:291
 #, php-format
@@ -1376,7 +1355,6 @@ msgid "Name"
 msgstr "名前"
 
 #: flowview_devices.php:344
-#, fuzzy
 msgid "Version"
 msgstr "バージョン"
 
@@ -1402,7 +1380,7 @@ msgstr "リスナー検出テンプレート(Listener Detected Templates)"
 
 #: flowview_devices.php:460
 msgid "Ex Addr"
-msgstr ""
+msgstr "Ex Addr"
 
 #: flowview_devices.php:474
 msgid "Template"
@@ -1418,7 +1396,7 @@ msgstr "フィールド名"
 
 #: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
-msgstr ""
+msgstr "サポートされています"
 
 #: flowview_devices.php:567
 msgid "Field ID"
@@ -1479,7 +1457,7 @@ msgstr "バージョン"
 
 #: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
-msgstr ""
+msgstr "監視されているトラフィック フローのバージョン。"
 
 #: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
@@ -1777,7 +1755,7 @@ msgstr "新しいフローファイルを作成する頻度。"
 
 #: functions.php:598
 msgid "New"
-msgstr ""
+msgstr "新規"
 
 #: functions.php:599
 msgid "Edit"
@@ -1800,7 +1778,6 @@ msgid "Save the Flow Filter"
 msgstr "印刷レポート"
 
 #: functions.php:601
-#, fuzzy
 msgid "Save As"
 msgstr "保存する"
 
@@ -1812,11 +1789,11 @@ msgstr "印刷レポート"
 
 #: functions.php:602
 msgid "Rename"
-msgstr ""
+msgstr "名前の変更"
 
 #: functions.php:602
 msgid "Rename the Flow Filter"
-msgstr ""
+msgstr "フロー フィルターの名前を変更する"
 
 #: functions.php:603
 #, fuzzy
@@ -1917,10 +1894,8 @@ msgid "Save Flow Filter"
 msgstr "新規フィルタ"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
-msgstr "フィールド名"
+msgstr "新しい名前"
 
 #: functions.php:838
 #, fuzzy
@@ -1930,7 +1905,7 @@ msgstr "印刷レポート"
 
 #: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
-msgstr ""
+msgstr "このフロー フィルタを削除するには、[続行] を押します。 フロー フィルタがスケジュール レポートで使用されている場合、操作はブロックされます。"
 
 #: functions.php:857
 #, php-format
@@ -1979,11 +1954,12 @@ msgstr "フローの上位%sツリーマップチャート"
 
 #: functions.php:976
 msgid "Rename Layout"
-msgstr ""
+msgstr "レイアウト名の変更"
 
 #: functions.php:984
+#, fuzzy
 msgid " <new>"
-msgstr ""
+msgstr "新規"
 
 #: functions.php:1502
 msgid "Filter Settings Saved"
@@ -2084,7 +2060,7 @@ msgstr "パケット"
 
 #: functions.php:3395
 msgid "The Parallel Query Timed Out.  Please contact your administrator"
-msgstr ""
+msgstr "並列クエリがタイムアウトしました。 管理者に問い合わせてください"
 
 #: functions.php:3588
 #, php-format
@@ -2242,7 +2218,7 @@ msgstr "%sタイプのフロービューチャートは%s"
 
 #: functions.php:4459
 msgid "Not Supported"
-msgstr ""
+msgstr "サポートされていません"
 
 #: functions.php:4534
 msgid "Total Flows"
@@ -2270,7 +2246,7 @@ msgstr "インストールする前に、flowview ディレクトリ内の confi
 
 #: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
-msgstr ""
+msgstr "Flowviewプラグインのテーブルはバックグラウンドでアップグレードされていることに注意してください。 これには時間がかかる場合があります。詳細については、Cacti ログを確認してください。"
 
 #: setup.php:136
 msgid "The Filter has been Deleted"
@@ -2291,7 +2267,7 @@ msgstr "FlowView"
 
 #: setup.php:146
 msgid "Databases"
-msgstr ""
+msgstr "データベース"
 
 #: setup.php:154
 msgid "Normal User"
@@ -2356,19 +2332,19 @@ msgstr "ドメイン名を削除する"
 
 #: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
-msgstr ""
+msgstr "ローカル・ネットワーク上の IPv4 アドレスがローカルで解決されない場合は、結果の IP アドレスにこのサフィックスを付加します。"
 
 #: setup.php:381
 msgid "Local IP Range"
-msgstr ""
+msgstr "ローカル IP 範囲"
 
 #: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
-msgstr ""
+msgstr "DNS に登録されていない可能性のあるホストのローカル ネットワークの IPv4 IP アドレス範囲を指定します。 これらのホストは、上記のローカルドメイン名にマッピングされます。 これはホームユーザー向けです。 CIDR 形式または非 CIDR 形式のいずれかを使用できます。 例:192.168.11.0または192.168.11.0/24"
 
 #: setup.php:385
 msgid "Use CIDR or Non-CIDR"
-msgstr ""
+msgstr "CIDRまたは非CIDRの使用"
 
 #: setup.php:390
 #, fuzzy
@@ -2382,15 +2358,15 @@ msgstr "多くのビッグテックデータ収集サービスは、個人情報
 
 #: setup.php:396
 msgid "Whois Provider Host"
-msgstr ""
+msgstr "Whois プロバイダー ホスト"
 
 #: setup.php:399
 msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
-msgstr ""
+msgstr "whois呼び出しを解決するためのホスト名を指定してください。 null でない場合は、システムパスに whois バイナリが含まれている必要があります。"
 
 #: setup.php:400
 msgid "whois.radb.net"
-msgstr ""
+msgstr "whois.radb.net"
 
 #: setup.php:405
 #, fuzzy
@@ -2399,15 +2375,15 @@ msgstr "フローツールバイナリパス"
 
 #: setup.php:408
 msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
-msgstr ""
+msgstr "「whois」バイナリのパス名を指定してください。 「whois」バイナリは、Arinを補足するAS情報を見つけるために使用されます。"
 
 #: setup.php:409
 msgid "Enter binary path"
-msgstr ""
+msgstr "バイナリパスを入力"
 
 #: setup.php:414
 msgid "Data Retention and Report Generation"
-msgstr ""
+msgstr "データ保持とレポート生成"
 
 #: setup.php:426
 msgid "Data Retention Policy"
@@ -2460,35 +2436,33 @@ msgstr "一時間ごと"
 
 #: setup.php:453
 msgid "Storage Engine for Raw Tables"
-msgstr ""
+msgstr "生テーブルのストレージ エンジン"
 
 #: setup.php:454
 msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
-msgstr ""
+msgstr "Aria エンジンは、Live raw テーブル以外のすべてに最適です。 ライブ生テーブルは常に InnoDB になります。 お好きな方をお選びください。"
 
 #: setup.php:457
 msgid "Aria (Fast, Crash Safe)"
-msgstr ""
+msgstr "アリア(高速、衝突安全)"
 
 #: setup.php:458
 msgid "InnoDB (Slow, High Concurrency)"
-msgstr ""
+msgstr "InnoDB (低速、高同時実行性)"
 
 #: setup.php:463
 msgid "Parallel Queries"
-msgstr ""
+msgstr "並列クエリ"
 
 #: setup.php:468
 msgid "Max Concurrent Threads"
-msgstr ""
+msgstr "最大同時スレッド数"
 
 #: setup.php:469
 msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
-msgstr ""
+msgstr "FlowView クエリを実行するためにディスパッチされるスレッドの最大数。 データベース・パーティションごとに最大で 1 つのスレッドを持つことができ、並行して実行しているスレッドの数が多すぎるためにデータベース・サーバーが過負荷にならないように注意する必要があることに注意してください。"
 
 #: setup.php:472
-#, fuzzy
-#| msgid "Disable"
 msgid "Disabled"
 msgstr "無効"
 
@@ -2498,7 +2472,7 @@ msgstr "無効"
 #: setup.php:488 setup.php:489 setup.php:490 setup.php:491
 #, php-format
 msgid "%d Threads"
-msgstr ""
+msgstr "%d スレッド"
 
 #: setup.php:496
 #, fuzzy
@@ -2508,7 +2482,7 @@ msgstr "最大行数"
 
 #: setup.php:497
 msgid "If the Parallel Query does not finish in this time, exit."
-msgstr ""
+msgstr "この時間内に並列クエリが終了しない場合は、終了します。"
 
 #: setup.php:500
 #, fuzzy, php-format
@@ -2523,47 +2497,47 @@ msgstr "%d 分"
 
 #: setup.php:511
 msgid "Cached Data Time to Live"
-msgstr ""
+msgstr "キャッシュされたデータの存続時間"
 
 #: setup.php:512
 msgid "How long should FlowView hold onto Cached Query results before purging them?"
-msgstr ""
+msgstr "FlowViewは、キャッシュされたクエリの結果をパージするまで、どのくらいの期間保持する必要がありますか?"
 
 #: setup.php:515 setup.php:516
 #, fuzzy, php-format
 #| msgid "Every %d Hours"
 msgid "%d Hours"
-msgstr "%d時間ごと"
+msgstr "%d 時間"
 
 #: setup.php:517
-#, fuzzy, php-format
+#, php-format
 msgid "%d Day"
-msgstr "％d日"
+msgstr "%d 日間"
 
 #: setup.php:518
 #, fuzzy, php-format
 msgid "%d Days"
-msgstr "％d日"
+msgstr "%d 日"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
-msgstr ""
+msgstr "MaxScale シャーディング"
 
 #: setup.php:528
 msgid "Leverage MaxScale to Distribute Query Shards"
-msgstr ""
+msgstr "MaxScaleを活用してクエリシャードを分散"
 
 #: setup.php:529
 msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
-msgstr ""
+msgstr "MaxScale のスレーブとして機能する複数のサービスがある場合は、並列クエリを複数の MariaDB バックエンドサーバーに分散することで、クエリの速度を上げることができます。"
 
 #: setup.php:534
 msgid "MaxScale Read-Only Port"
-msgstr ""
+msgstr "MaxScale 読み取り専用ポート"
 
 #: setup.php:537
 msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
-msgstr ""
+msgstr "これは、Read-Only-Service(readconnroute)サービスとルータのポートである必要があります。"
 
 #: setup.php:543
 #, fuzzy
