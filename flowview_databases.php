@@ -96,7 +96,7 @@ function flowview_get_item_details() {
 	html_end_box();
 
 	if ($response['mnt_by_present'] == true) {
-		html_start_box(__('Object Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
+		html_start_box(__('Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
 
 		$sql_params   = array();
 		$sql_params[] = $response['mnt_by'];
