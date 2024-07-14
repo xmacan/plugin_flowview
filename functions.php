@@ -4821,9 +4821,9 @@ function flowview_check_databases($import_only = false, $force = false) {
 		$curr_serial = trim(file_get_contents("$ftp_base/{$details['serial']}"));
 
 		if ($force) {
-			cacti_log("IRR UPDATE: Forced Run, IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW');
+			cacti_log("IRR UPDATE: Forced Run, IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 		} else {
-			cacti_log("IRR UPDATE: IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW');
+			cacti_log("IRR UPDATE: IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 		}
 
 		if ($force || $import_only !== false || ($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
@@ -4838,7 +4838,7 @@ function flowview_check_databases($import_only = false, $force = false) {
 			$files_broken = false;
 
 			foreach($details['files'] as $file) {
-				cacti_log("IRR UPDATE: Downloading {$file}", true, 'FLOWVIEW');
+				cacti_log("IRR UPDATE: Downloading {$file}", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 
 				$local_file  = "$directory/$file";
 				$remote_file = "$ftp_base/$file";
@@ -4854,7 +4854,7 @@ function flowview_check_databases($import_only = false, $force = false) {
 				}
 
 				if ($return_var == 0) {
-					cacti_log("IRR UPDATE: Importing Database File: $file", true, 'FLOWVIEW');
+					cacti_log("IRR UPDATE: Importing Database File: $file", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 
 					set_config_option("flowview_{$source}_serial", $curr_serial);
 
@@ -4883,7 +4883,7 @@ function flowview_update_database($source, $irr_file = false) {
 	global $debug;
 
 	if ($irr_file === false) {
-		cacti_log(sprintf('IRR UPDATE: WARNING: Unable to open RADB database file %s as it was not specified', $irr_file), true, 'FLOWVIEW');
+		cacti_log(sprintf('IRR UPDATE: WARNING: Unable to open IRR database file %s as it was not specified', $irr_file), true, 'FLOWVIEW');
 		return false;
 	}
 
