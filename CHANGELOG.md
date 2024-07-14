@@ -68,6 +68,7 @@
 * feature#155: Allow Choosing your Raw Storage Engine Format
 * feature#156: Create Persistent Shard Result Cache
 * feature#160: Use whois providers such as radb.net to find origin AS when Arin does not provide it
+* feature#163: Restructure the DNS Cache page to include: ASNs, People, Routes, etc. per the Internet Routing Registry format RSP
 * feature#164: Only update the Routes databases if they have changed as recommened at radb.net
 
 --- 3.3 ---

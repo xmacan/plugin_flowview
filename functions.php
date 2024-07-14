@@ -59,12 +59,9 @@ function display_tabs($id) {
 }
 
 function display_db_tabs() {
-	global $config;
+	global $db_tabs, $config;
 
-	/* present a tabbed interface */
-	$tabs['dns_cache']   = array('url' => 'flowview_databases.php', 'name' => __('DNS Cache', 'flowview'));
-	$tabs['routes']      = array('url' => 'flowview_databases.php', 'name' => __('Routes', 'flowview'));
-	$tabs['asn']         = array('url' => 'flowview_databases.php', 'name' => __('ASN\'s', 'flowview'));
+	$base_url = 'flowview_databases.php';
 
 	/* if they were redirected to the page, let's set that up */
 	if (!isset_request_var('tab')) {
@@ -76,16 +73,16 @@ function display_db_tabs() {
 	/* draw the tabs */
 	print "<div class='tabs'><nav><ul>";
 
-	if (cacti_sizeof($tabs)) {
-		foreach ($tabs as $shortname => $tab) {
+	if (cacti_sizeof($db_tabs)) {
+		foreach ($db_tabs as $shortname => $tab) {
 			print '<li><a class="tab ' . (($shortname == $current_tab) ? 'selected"':'"') . " href='" . html_escape($config['url_path'] .
-				'plugins/flowview/' . $tab['url'] .
+				'plugins/flowview/' . $base_url .
 				'?tab=' . $shortname) .
-				"'>" . html_escape($tab['name']) . "</a></li>";
+				"'>" . $tab['name'] . '</a></li>';
 		}
 	}
 
-	print "</ul></nav></div>";
+	print '</ul></nav></div>';
 }
 
 function listener_has_templates($id) {

@@ -342,10 +342,12 @@ function flowview_config_settings() {
 
 	include_once($config['base_path'] . '/lib/reports.php');
 
-	foreach($flowview_sighup_settings as $setting) {
-		$$setting = read_config_option($setting, true);
+	if (cacti_sizeof($flowview_sighup_settings)) {
+		foreach($flowview_sighup_settings as $setting) {
+			$$setting = read_config_option($setting, true);
 
-		$_SESSION['sess_flowview_settings'][$setting] = $$setting;
+			$_SESSION['sess_flowview_settings'][$setting] = $$setting;
+		}
 	}
 
 	$formats = reports_get_format_files();

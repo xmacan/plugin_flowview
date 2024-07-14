@@ -54,7 +54,10 @@ switch (get_request_var('action')) {
 }
 
 function view_databases() {
-	global $actions, $item_rows;
+	global $config, $actions, $item_rows, $db_tabs;
+	global $graph_timeshifts, $graph_timespans, $graph_heights;
+
+	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
 	if (!isset_request_var('tab')) {
 		if (isset($_SESSION['sess_fv_db_tab'])) {
@@ -66,14 +69,748 @@ function view_databases() {
 
 	$_SESSION['sess_fv_db_tab'] = get_request_var('tab');
 
-	display_db_tabs();
+	display_db_tabs($db_tabs);
 
 	if (get_request_var('tab') == 'dns_cache') {
 		view_dns_cache();
-	} elseif (get_request_var('tab') == 'routes') {
+	} elseif (get_request_var('tab') == 'route') {
 		view_routes();
-	} elseif (get_request_var('tab') == 'asn') {
-		print "Under Construction";
+	} else {
+		view_db_table(get_request_var('tab'), $db_tabs);
+	}
+}
+
+
+function view_db_table($tab, &$tabs) {
+	global $item_rows;
+
+	$display_text = array();
+
+	// Be consistent with the Tab Name
+	foreach($tabs as $tabname => $details) {
+		$text = array(
+			$tabname => array(
+				'display' => $details['name'],
+				'align'   => 'left',
+				'sort'    => 'ASC'
+			)
+		);
+
+		$display_text = array_merge($display_text, $text);
+	}
+
+	$columns = array(
+		'remarks' => array(
+			'display' => __esc('Remarks', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'last_modified' => array(
+			'display' => __esc('Last Modified', 'flowview'),
+			'align'   => 'right',
+			'order'   => 'ASC'
+		),
+		'source' => array(
+			'display' => __esc('Source', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'created' => array(
+			'display' => __esc('Registration Date', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_by' => array(
+			'display' => __esc('MNT By', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'admin_c' => array(
+			'display' => __esc('Admin Contact', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'org' => array(
+			'display' => __esc('Organization', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'changed' => array(
+			'display' => __esc('Changes', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'notify' => array(
+			'display' => __esc('Notify', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'descr' => array(
+			'display' => __esc('Description', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'tech_c' => array(
+			'display' => __esc('Tech Contact', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_lower' => array(
+			'display' => __esc('MNT Lower', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'country' => array(
+			'display' => __esc('Country', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'abuse_mailbox' => array(
+			'display' => __esc('Abuse Email', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'fax_no' => array(
+			'display' => __esc('Fax Number', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'phone' => array(
+			'display' => __esc('Phone', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'e_mail' => array(
+			'display' => __esc('Email', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'address' => array(
+			'display' => __esc('Address', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'status' => array(
+			'display' => __esc('Status', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mbrs_by_ref' => array(
+			'display' => __esc('Members By Fef', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'abuse_c' => array(
+			'display' => __esc('Abuse Contacts', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_ref' => array(
+			'display' => __esc('MNT Reference', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'members' => array(
+			'display' => __esc('Members', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_nfy' => array(
+			'display' => __esc('MNT Notify', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'auth' => array(
+			'display' => __esc('Authorization', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_routes' => array(
+			'display' => __esc('MNT Routes', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'member_of' => array(
+			'display' => __esc('Member of', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'upd_to' => array(
+			'display' => __esc('Updates Email', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'nic_hdl' => array(
+			'display' => __esc('NOC Handle', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'sponsoring_org' => array(
+			'display' => __esc('Sponsor Org', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_irt' => array(
+			'display' => __esc('MNT Irt', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_members' => array(
+			'display' => __esc('MP Members', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'sub_dom' => array(
+			'display' => __esc('Sub Domain', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'pingable' => array(
+			'display' => __esc('Pingable', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'alias' => array(
+			'display' => __esc('Alias', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'org_type' => array(
+			'display' => __esc('Org Type', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'refer' => array(
+			'display' => __esc('Refer To', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_peering' => array(
+			'display' => __esc('MP Peering', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'export' => array(
+			'display' => __esc('Export', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'holes' => array(
+			'display' => __esc('Holes', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_default' => array(
+			'display' => __esc('MP Default', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'components' => array(
+			'display' => __esc('Components', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'rs_out' => array(
+			'display' => __esc('RS Out', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'org_name' => array(
+			'display' => __esc('Organization Name', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'dom_net' => array(
+			'display' => __esc('Network', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'as_name' => array(
+			'display' => __esc('AS Name', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'author' => array(
+			'display' => __esc('Author', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'irt_nfy' => array(
+			'display' => __esc('IRT Notify', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'aggr_mtd' => array(
+			'display' => __esc('Aggr MTD', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'type' => array(
+			'display' => __esc('AS Type', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_filter' => array(
+			'display' => __esc('MP Filter', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'default' => array(
+			'display' => __esc('Default Route', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'assignment_size' => array(
+			'display' => __esc('Assignment Size', 'flowview'),
+			'align'   => 'right',
+			'order'   => 'DESC'
+		),
+		'export_comps' => array(
+			'display' => __esc('Export Comps', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'rs_in' => array(
+			'display' => __esc('RS In', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'netname' => array(
+			'display' => __esc('Net Name', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'ds_rdata' => array(
+			'display' => __esc('DS Rdata', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'aggr_bndry' => array(
+			'display' => __esc('Aggr Boundary', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'filter' => array(
+			'display' => __esc('Filter', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_import' => array(
+			'display' => __esc('MP Import', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'language' => array(
+			'display' => __esc('Language', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'roa_uri' => array(
+			'display' => __esc('RESFful Link', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'peer' => array(
+			'display' => __esc('Peer', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'zone_c' => array(
+			'display' => __esc('Zone Contact', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'inject' => array(
+			'display' => __esc('Inject', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_peer' => array(
+			'display' => __esc('MP Peer', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'referral_by' => array(
+			'display' => __esc('Referral By', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'form' => array(
+			'display' => __esc('Form', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mnt_domains' => array(
+			'display' => __esc('MNT Domains', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'origin' => array(
+			'display' => __esc('Origin AS', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mp_export' => array(
+			'display' => __esc('MP Export', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'encryption' => array(
+			'display' => __esc('Encyption', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'geofeed' => array(
+			'display' => __esc('Geo Feed', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'geoidx' => array(
+			'display' => __esc('Geo Index', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'ifaddr' => array(
+			'display' => __esc('Interface Addr', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'export_via' => array(
+			'display' => __esc('Export Via', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'trouble' => array(
+			'display' => __esc('Trouble', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'nserver' => array(
+			'display' => __esc('Name Servers', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'ping_hdl' => array(
+			'display' => __esc('Ping Handle', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'interface' => array(
+			'display' => __esc('Interface', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'import' => array(
+			'display' => __esc('Import', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'signature' => array(
+			'display' => __esc('Signature', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'geoloc' => array(
+			'display' => __esc('Geo Location', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'local_as' => array(
+			'display' => __esc('Local AS', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'import_via' => array(
+			'display' => __esc('Import Via', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		)
+	);
+
+	$display_text = array_merge($display_text, $columns);
+
+	//print '<pre>';print_r($display_text);print '</pre>';exit;
+
+	$table_det     = $tabs[$tab];
+	$columns       = array_map('trim', explode(',', $table_det['columns']));
+	$search        = array_map('trim', explode(',', $table_det['search']));
+	$filter        = array_map('trim', explode(',', $table_det['filter']));
+	$table_name    = "plugin_flowview_irr_$tab";
+	$odisplay_text = array();
+
+	/* create display text for column */
+	if (isset($tabs[$tab])) {
+		$i = 0;
+		foreach($columns as $key => $c) {
+			$c = trim($c);
+
+			if ($i == 0) {
+				$default_column    = $c;
+				$default_direction = $display_text[$c]['sort'];
+			}
+
+			if (isset($display_text[$c])) {
+				$odisplay_text[$c] = $display_text[$c];
+			}
+
+			$i++;
+		}
+	} else {
+		print __esc("FATAL: Unknown Database Table %s", $tab);
+		exit;
+	}
+
+	//print "Default Column: $default_column, Default Direction $default_direction";exit;
+
+	/* ================= input validation and session storage ================= */
+	$filters = array(
+		'rows' => array(
+			'filter' => FILTER_VALIDATE_INT,
+			'pageset' => true,
+			'default' => '-1'
+		),
+		'page' => array(
+			'filter' => FILTER_VALIDATE_INT,
+			'default' => '1'
+		),
+		'filter' => array(
+			'filter' => FILTER_DEFAULT,
+			'pageset' => true,
+			'default' => ''
+		),
+		'source' => array(
+			'filter' => FILTER_DEFAULT,
+			'pageset' => true,
+			'default' => '-1'
+		),
+		'sort_column' => array(
+			'filter' => FILTER_CALLBACK,
+			'default' => $default_column,
+			'options' => array('options' => 'sanitize_search_string')
+		),
+		'sort_direction' => array(
+			'filter' => FILTER_CALLBACK,
+			'default' => $default_direction,
+			'options' => array('options' => 'sanitize_search_string')
+		)
+	);
+
+	validate_store_request_vars($filters, 'sess_fv_db_' . $tab);
+	/* ================= input validation ================= */
+
+	if (get_request_var('rows') == '-1' || isempty_request_var('rows')) {
+		$rows = read_config_option('num_rows_table');
+	} else {
+		$rows = get_request_var('rows');
+	}
+
+	$sql_where  = '';
+	$sql_params = array();
+	$sql_order  = get_order_string();
+	$sql_limit  = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
+
+	/* sort naturally if the orgin is in the sort */
+	$natural_columns = array(
+		'origin',
+		'route',
+		'aut_num',
+		'as_block',
+		'as_net'
+	);
+
+	foreach($natural_columns as $c) {
+		if (strpos($sql_order, "`$c` ") !== false) {
+			$sql_order = str_replace("`$c` ", "NATURAL_SORT_KEY(`$c`) ", $sql_order);
+		}
+	}
+
+	if (get_request_var('source') != '-1') {
+		$sql_where .= ($sql_where != '' ? ' AND ':'WHERE ') . 'source = ?';
+		$sql_params[] = get_request_var('source');
+	}
+
+	foreach($search as $column) {
+		$column       = '`' . trim($column) . '`';
+		$sql_where   .= ($sql_where != '' ? ' AND ':'WHERE ') . "$column LIKE ?";
+		$sql_params[] = '%' . get_request_var('filter') . '%';
+	}
+
+	$results = flowview_db_fetch_assoc_prepared("SELECT {$table_det['columns']}
+		FROM $table_name
+		$sql_where
+		$sql_order
+		$sql_limit",
+		$sql_params);
+
+	$total_rows = flowview_db_fetch_cell_prepared("SELECT COUNT(*)
+		FROM $table_name
+		$sql_where",
+		$sql_params);
+
+
+	html_start_box($table_det['name'], '100%', '', '3', 'center', '');
+
+	?>
+	<tr class='even'>
+		<td>
+			<form id='form' action='flowview_databases.php&tab=dns_cache'>
+			<table class='filterTable'>
+				<tr>
+					<td>
+						<?php print __('Search', 'flowview');?>
+					</td>
+					<td>
+						<input type='text' class='ui-state-default ui-corner-all' id='filter' name='filter' size='25' value='<?php print html_escape_request_var('filter');?>'>
+					</td>
+					<td>
+						<?php print __('Source', 'flowview');?>
+					</td>
+					<td>
+						<select id='source' name='source' onChange='applyFilter()'>
+							<option value='-1'<?php print (get_request_var('source') == '-1' ? ' selected>':'>') . __('Any', 'flowview');?></option>
+							<?php
+							$sources = array_rekey(
+								flowview_db_fetch_assoc("SELECT DISTINCT source
+									FROM plugin_flowview_irr_$tab
+									ORDER BY source"),
+								'source', 'source'
+							);
+
+							if (cacti_sizeof($sources) > 0) {
+								foreach ($sources as $key => $value) {
+									print "<option value='" . $key . "'" . (get_request_var('source') == $key ? ' selected':'') . '>' . html_escape($value) . '</option>';
+								}
+							}
+							?>
+						</select>
+					</td>
+					<td>
+						<?php print __('Entries', 'flowview');?>
+					</td>
+					<td>
+						<select id='rows' name='rows' onChange='applyFilter()'>
+							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'flowview');?></option>
+							<?php
+							if (cacti_sizeof($item_rows) > 0) {
+								foreach ($item_rows as $key => $value) {
+									print "<option value='" . $key . "'" . (get_request_var('rows') == $key ? ' selected':'') . '>' . html_escape($value) . '</option>';
+								}
+							}
+							?>
+						</select>
+					</td>
+					<td>
+						<span>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='refresh' value='<?php print __esc('Go', 'flowview');?>' title='<?php print __esc('Set/Refresh Filters', 'flowview');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='clear' value='<?php print __esc('Clear', 'flowview');?>' title='<?php print __esc('Clear Filters', 'flowview');?>'>
+							<input type='button' class='ui-button ui-corner-all ui-widget' id='purge' value='<?php print __esc('Purge', 'flowview');?>' title='<?php print __esc('Purge the DNS Cache', 'flowview');?>'>
+						</span>
+					</td>
+				</tr>
+			</table>
+			</form>
+			<script type='text/javascript'>
+
+			var tab='<?php print $tab;?>';
+
+			function applyFilter() {
+				strURL  = 'flowview_databases.php?header=false';
+				strURL += '&tab='      + tab;
+				strURL += '&filter='   + $('#filter').val();
+				strURL += '&source='   + $('#source').val();
+				strURL += '&rows='     + $('#rows').val();
+				loadPageNoHeader(strURL);
+			}
+
+			function clearFilter() {
+				strURL = 'flowview_databases.php?tab='+tab+'&clear=1&header=false';
+				loadPageNoHeader(strURL);
+			}
+
+			function purgeFilter() {
+				strURL = 'flowview_databases.php?tab='+tab+'&action=purge&header=false';
+				loadPageNoHeader(strURL);
+			}
+
+			$(function() {
+				$('#refresh').click(function() {
+					applyFilter();
+				});
+
+				$('#clear').click(function() {
+					clearFilter();
+				});
+
+				$('#purge').click(function() {
+					purgeFilter();
+				});
+
+				$('#form').submit(function(event) {
+					event.preventDefault();
+					applyFilter();
+				});
+			});
+
+			</script>
+		</td>
+	</tr>
+	<?php
+
+	html_end_box();
+
+	$nav = html_nav_bar("flowview_databases.php?tab={$tab}&filter=" . get_request_var('filter'), MAX_DISPLAY_PAGES, get_request_var('page'), $rows, $total_rows, cacti_sizeof($odisplay_text), __('Entries', 'flowview'), 'page', 'main');
+
+	print $nav;
+
+	html_start_box('', '100%', '', '3', 'center', '');
+
+	html_header_sort($odisplay_text, get_request_var('sort_column'), get_request_var('sort_direction'), false, "flowview_databases.php?tab=$tab");
+
+	$i = 0;
+	if (cacti_sizeof($results)) {
+		foreach($results as $result) {
+			form_alternate_row('line' . $i, false);
+
+			foreach($columns as $c) {
+				$align = $odisplay_text[$c]['align'];
+
+				if ($c == 'descr' || $c == 'remarks' || $c == 'members' || $c == 'filter' || $c == 'netname') {
+					$align = 'white-space:pre-wrap;text-align:left';
+					$result[$c] = str_replace("\n", ', ', $result[$c]);
+				}
+
+				if ($c == 'as_set' || $c == 'mnt_by') {
+					$result[$c] = strtoupper($result[$c]);
+				}
+
+				if (in_array($c, $search, true)) {
+					form_selectable_cell(filter_value($result[$c], get_request_var('filter')), $i, '', $align);
+				} else {
+					if ($c == 'last_modified' || $c == 'created') {
+						if ($result[$c] == '0000-00-00 00:00:00') {
+							$value = __('Not Specified', 'flowview');
+						} else {
+							$value = $result[$c];
+						}
+
+						form_selectable_cell($value, $i, '', $align);
+					} else {
+						form_selectable_cell($result[$c], $i, '', $align);
+					}
+				}
+			}
+
+			form_end_row();
+			$i++;
+		}
+	} else {
+		print "<tr class='tableRow'><td colspan='" . (cacti_sizeof($odisplay_text)) . "'><em>" . __('No Matching Entries Found', 'flowview') . "</em></td></tr>";
+	}
+
+	html_end_box(false);
+
+	if (cacti_sizeof($results)) {
+		print $nav;
 	}
 }
 
@@ -646,13 +1383,13 @@ function view_routes() {
 	$sql_order = get_order_string();
 
 	/* sort naturally if the orgin is in the sort */
-	if (strpos($sql_order, 'origin ') !== false) {
+	if (strpos($sql_order, '`origin` ') !== false) {
 		$sql_order = str_replace('`origin` ', 'NATURAL_SORT_KEY(`origin`) ', $sql_order);
 	}
 
 	/* sort naturally if the route is in the sort */
-	if (strpos($sql_order, 'route ') !== false) {
-		$sql_order = str_replace('route ', 'NATURAL_SORT_KEY(route) ', $sql_order);
+	if (strpos($sql_order, '`route` ') !== false) {
+		$sql_order = str_replace('route ', 'NATURAL_SORT_KEY(`route`) ', $sql_order);
 	}
 
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;

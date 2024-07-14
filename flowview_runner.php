@@ -247,7 +247,7 @@ if ($shard_id === false) {
 				$exists = array();
 			}
 
-			if (!sizeof($exists)) {
+			if (!cacti_sizeof($exists)) {
 				//cacti_log("The table is {$shard['map_query']}, the params are: {$shard['map_params']}");
 				$results = flowview_db_fetch_assoc_prepared("{$shard['map_query']}", json_decode($shard['map_params']), false, $max_cnn);
 			} else {
