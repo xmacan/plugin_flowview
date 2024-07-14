@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-06-23 21:17-0400\n"
+"POT-Creation-Date: 2024-07-14 15:10-0400\n"
 "PO-Revision-Date: 2024-06-07 22:24-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.4\n"
 
-#: arrays.php:26 arrays.php:60 functions.php:603
+#: arrays.php:26 arrays.php:60 functions.php:619
 msgid "Select a Report"
 msgstr "Εκτύπωση αναφορών"
 
@@ -50,7 +50,7 @@ msgid "UDP/TCP Port"
 msgstr "Θύρα UDP / TCP"
 
 #: arrays.php:37 arrays.php:397 arrays.php:403 arrays.php:492 arrays.php:508
-#: arrays.php:520 arrays.php:769 functions.php:2742
+#: arrays.php:520 arrays.php:785 functions.php:2912
 msgid "Source IP"
 msgstr "Πηγή IP"
 
@@ -82,8 +82,8 @@ msgstr "Διεπαφή εξόδου"
 msgid "Input/Output Interface"
 msgstr "Διασύνδεση εισόδου / εξόδου"
 
-#: arrays.php:48 arrays.php:434 arrays.php:446 arrays.php:511 arrays.php:793
-#: functions.php:2766
+#: arrays.php:48 arrays.php:434 arrays.php:446 arrays.php:511 arrays.php:809
+#: functions.php:2936
 msgid "Source AS"
 msgstr "Πηγή"
 
@@ -99,7 +99,7 @@ msgstr "Πηγή / προορισμός AS"
 msgid "IP ToS"
 msgstr "IP ToS"
 
-#: arrays.php:54 arrays.php:466 arrays.php:478 functions.php:2774
+#: arrays.php:54 arrays.php:466 arrays.php:478 functions.php:2944
 msgid "Source Prefix"
 msgstr "Πρόθεμα προέλευσης"
 
@@ -132,19 +132,27 @@ msgid "Show IP Accounting Emulation"
 msgstr "Εμφάνιση προσομοίωσης λογιστικής IP"
 
 #: arrays.php:69
-msgid "Any Part in Range"
+#, fuzzy
+#| msgid "Any Part in Range"
+msgid "Any Part in Range (slow)"
 msgstr "Οποιοδήποτε μέρος στο εύρος"
 
 #: arrays.php:70
-msgid "End Time in Range"
+#, fuzzy
+#| msgid "End Time in Range"
+msgid "End Time in Range (fast)"
 msgstr "Ώρα Λήξης"
 
 #: arrays.php:71
-msgid "Start Time in Range"
+#, fuzzy
+#| msgid "Start Time in Range"
+msgid "Start Time in Range (fast)"
 msgstr "Ώρα Έναρξης"
 
 #: arrays.php:72
-msgid "Entirely in Range"
+#, fuzzy
+#| msgid "Entirely in Range"
+msgid "Entirely in Range (slow)"
 msgstr "Πλήρως σε εύρος"
 
 #: arrays.php:76
@@ -168,8 +176,8 @@ msgstr "Χωρίς Όριο"
 msgid "%s Bytes"
 msgstr "%s Bytes"
 
-#: arrays.php:106 arrays.php:588 arrays.php:595 arrays.php:603
-#: flowview_devices.php:460 flowview_devices.php:474 flowview_filters.php:372
+#: arrays.php:106 arrays.php:567 arrays.php:575 arrays.php:604
+#: flowview_devices.php:465 flowview_devices.php:479 flowview_filters.php:369
 msgid "All"
 msgstr "Όλα"
 
@@ -181,8 +189,8 @@ msgstr "Πηγή (ες) θύρας"
 #: arrays.php:386 arrays.php:392 arrays.php:398 arrays.php:405 arrays.php:411
 #: arrays.php:417 arrays.php:423 arrays.php:429 arrays.php:435 arrays.php:441
 #: arrays.php:448 arrays.php:454 arrays.php:461 arrays.php:467 arrays.php:473
-#: arrays.php:480 arrays.php:541 functions.php:802 functions.php:849
-#: functions.php:2794 functions.php:3039
+#: arrays.php:480 arrays.php:541 functions.php:818 functions.php:866
+#: functions.php:2964 functions.php:3511
 msgid "Flows"
 msgstr "Ροές"
 
@@ -191,8 +199,8 @@ msgstr "Ροές"
 #: arrays.php:418 arrays.php:424 arrays.php:430 arrays.php:436 arrays.php:442
 #: arrays.php:449 arrays.php:455 arrays.php:462 arrays.php:468 arrays.php:474
 #: arrays.php:481 arrays.php:499 arrays.php:513 arrays.php:528 arrays.php:534
-#: arrays.php:543 functions.php:794 functions.php:839 functions.php:2798
-#: functions.php:3037
+#: arrays.php:543 functions.php:810 functions.php:856 functions.php:2968
+#: functions.php:3509
 msgid "Bytes"
 msgstr "Bytes"
 
@@ -201,8 +209,8 @@ msgstr "Bytes"
 #: arrays.php:419 arrays.php:425 arrays.php:431 arrays.php:437 arrays.php:443
 #: arrays.php:450 arrays.php:456 arrays.php:463 arrays.php:469 arrays.php:475
 #: arrays.php:482 arrays.php:498 arrays.php:514 arrays.php:527 arrays.php:533
-#: arrays.php:542 functions.php:798 functions.php:844 functions.php:2802
-#: functions.php:3038
+#: arrays.php:542 functions.php:814 functions.php:861 functions.php:2972
+#: functions.php:3510
 msgid "Packets"
 msgstr "Πακέτα"
 
@@ -211,20 +219,20 @@ msgid "Destination Domain"
 msgstr "Προορισμός IP"
 
 #: arrays.php:373 arrays.php:379 arrays.php:385 flowview_devices.php:66
-#: flowview_devices.php:755
+#: flowview_devices.php:765
 msgid "Port"
 msgstr "Θύρα"
 
-#: arrays.php:404 arrays.php:801 functions.php:2746
+#: arrays.php:404 arrays.php:817 functions.php:2916
 msgid "Dest IP"
 msgstr "Dest. IP"
 
-#: arrays.php:410 flowview_dnscache.php:319 functions.php:2738
+#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
 msgid "IP Address"
 msgstr "IP Address"
 
 #: arrays.php:416 arrays.php:495 arrays.php:510 arrays.php:525
-#: flowview_devices.php:75 flowview_devices.php:760 functions.php:2782
+#: flowview_devices.php:75 flowview_devices.php:770 functions.php:2952
 msgid "Protocol"
 msgstr "Πρωτόκολλο"
 
@@ -244,11 +252,11 @@ msgstr "Όροι Χρήσης"
 msgid "Destingation Prefix"
 msgstr "Πρόθεμα προορισμού"
 
-#: arrays.php:485 functions.php:683 functions.php:2955 functions.php:2979
+#: arrays.php:485 functions.php:699 functions.php:3125 functions.php:3149
 msgid "N/A"
 msgstr "Μη Διαθέσιμο"
 
-#: arrays.php:491 arrays.php:519 functions.php:2758
+#: arrays.php:491 arrays.php:519 functions.php:2928
 msgid "Source IF"
 msgstr "Πηγή"
 
@@ -256,7 +264,7 @@ msgstr "Πηγή"
 msgid "Destination IF"
 msgstr "Προορισμός"
 
-#: arrays.php:496 arrays.php:521 arrays.php:539 functions.php:2750
+#: arrays.php:496 arrays.php:521 arrays.php:539 functions.php:2920
 msgid "Source Port"
 msgstr "Πηγή (ες) θύρας"
 
@@ -264,11 +272,11 @@ msgstr "Πηγή (ες) θύρας"
 msgid "Destination Port"
 msgstr "Προορισμός IP"
 
-#: arrays.php:500 arrays.php:517 flowview_schedules.php:96 functions.php:2706
+#: arrays.php:500 arrays.php:517 flowview_schedules.php:96 functions.php:2876
 msgid "Start Time"
 msgstr "Ώρα Έναρξης"
 
-#: arrays.php:501 arrays.php:518 functions.php:2710
+#: arrays.php:501 arrays.php:518 functions.php:2880
 msgid "End Time"
 msgstr "Ώρα Λήξης"
 
@@ -288,12 +296,14 @@ msgstr "Ts"
 msgid "Fl"
 msgstr "Fl"
 
-#: arrays.php:526 functions.php:2790
+#: arrays.php:526 functions.php:2960
 msgid "Flags"
 msgstr "Σημαίες"
 
-#: arrays.php:531 arrays.php:537 flowview_dnscache.php:191
-#: flowview_dnscache.php:330
+#: arrays.php:531 arrays.php:537 flowview_databases.php:228
+#: flowview_databases.php:802 flowview_databases.php:1177
+#: flowview_databases.php:1332 flowview_databases.php:1469
+#: flowview_databases.php:1639
 msgid "Source"
 msgstr "Πηγή"
 
@@ -307,301 +317,984 @@ msgstr "Προορισμός"
 msgid "%d Pixels"
 msgstr "%d Εικονοστοιχεία"
 
-#: arrays.php:570
+#: arrays.php:586
 msgid "General Filters"
 msgstr "Καθαρισμός Φίλτρων"
 
-#: arrays.php:573 functions.php:522
+#: arrays.php:589 flowview_databases.php:508 functions.php:537
 msgid "Filter"
 msgstr "Φίλτρο"
 
-#: arrays.php:574
+#: arrays.php:590
 msgid "The Saved Filter to display."
 msgstr "Το αποθηκευμένο φίλτρο για εμφάνιση."
 
-#: arrays.php:577
+#: arrays.php:593
 msgid "New Filter"
 msgstr "Φίλτρο"
 
-#: arrays.php:582 flowview_filters.php:330 functions.php:541
+#: arrays.php:598 flowview_filters.php:327 functions.php:556
 msgid "Listener"
 msgstr "Ακροατής"
 
-#: arrays.php:583
+#: arrays.php:599
 msgid "The Listener to use for the Filter."
 msgstr "Ο ακροατής που θα χρησιμοποιηθεί για το φίλτρο."
 
-#: arrays.php:591
+#: arrays.php:607
 #, fuzzy
 #| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "ID προτύπου"
 
-#: arrays.php:592
+#: arrays.php:608
 msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID's may differ from manufacturer to manufacturer."
 msgstr ""
 
-#: arrays.php:599
+#: arrays.php:615
 #, fuzzy
 #| msgid "IP Address"
-msgid "Stream IP Address"
+msgid "Stream Address"
 msgstr "IP Address"
 
-#: arrays.php:600
-msgid "The Streams IP Address from the list of registered streams."
+#: arrays.php:616
+msgid "The Stream IP Address or Hostname from the list of registered streams."
 msgstr ""
 
-#: arrays.php:607
+#: arrays.php:623
 msgid "Presets"
 msgstr "Προρυθμίσεις"
 
-#: arrays.php:608
+#: arrays.php:624
 msgid "If this Filter is based upon a pre-defined Timespan, select it here."
 msgstr "Εάν αυτό το φίλτρο βασίζεται σε ένα προκαθορισμένο χρονικό διάστημα, επιλέξτε το εδώ."
 
-#: arrays.php:617
+#: arrays.php:633
 msgid "Detailed Filter Criteria"
 msgstr "Λεπτομερή κριτήρια φίλτρου"
 
-#: arrays.php:620 flowview_filters.php:335
+#: arrays.php:636 flowview_filters.php:332
 msgid "Report Type"
 msgstr "Είδος Αναφοράς"
 
-#: arrays.php:621
+#: arrays.php:637
 msgid "The Report Type to use by default for this Filter when creating a Report."
 msgstr "Ο τύπος αναφοράς για χρήση από προεπιλογή για αυτό το φίλτρο κατά τη δημιουργία μιας αναφοράς."
 
-#: arrays.php:624
+#: arrays.php:640
 msgid "Printed"
 msgstr "Εμπριμέ"
 
-#: arrays.php:624
+#: arrays.php:640
 msgid "Statistical"
 msgstr "Στατιστικά"
 
-#: arrays.php:628
+#: arrays.php:644
 msgid "Statistical Report"
 msgstr "Στατιστικές αναφορές"
 
-#: arrays.php:629
+#: arrays.php:645
 msgid "The Display Report Type to use by default for this Filter when creating a Report."
 msgstr "Ο τύπος αναφοράς εμφάνισης για χρήση από προεπιλογή για αυτό το φίλτρο κατά τη δημιουργία αναφοράς"
 
-#: arrays.php:636
+#: arrays.php:652
 msgid "Printed Report"
 msgstr "Εκτύπωση αναφορών"
 
-#: arrays.php:637
+#: arrays.php:653
 msgid "The Printed Report Type to use by default for this Filter when creating a Printed Report."
 msgstr "Ο τυπωμένος τύπος αναφοράς για χρήση από προεπιλογή για αυτό το φίλτρο κατά τη δημιουργία μιας εκτυπωμένης αναφοράς."
 
-#: arrays.php:644
+#: arrays.php:660
 msgid "Range Rules"
 msgstr "Διαχείριση Προγραμμάτων"
 
-#: arrays.php:645
+#: arrays.php:661
 msgid "Constrain the Filter Data by these time filter rules."
 msgstr "Περιορίστε τα δεδομένα φίλτρου με αυτούς τους κανόνες φίλτρου χρόνου."
 
-#: arrays.php:652
+#: arrays.php:668
 msgid "Resolve IP's"
 msgstr "Επίλυση διευθύνσεων:"
 
-#: arrays.php:653
+#: arrays.php:669
 msgid "Resolve IP Addresses to Domain Names."
 msgstr "Επίλυση διευθύνσεων:"
 
-#: arrays.php:658 flowview_schedules.php:596
+#: arrays.php:674 flowview_schedules.php:588
 msgid "Yes"
 msgstr "Ναι"
 
-#: arrays.php:659 flowview_schedules.php:596
+#: arrays.php:675 flowview_schedules.php:588
 msgid "No"
 msgstr "Όχι"
 
-#: arrays.php:663 flowview_filters.php:345 functions.php:628
+#: arrays.php:679 flowview_filters.php:342 functions.php:644
 msgid "Sort Field"
 msgstr "Πεδίο ταξινόμησης:"
 
-#: arrays.php:664
+#: arrays.php:680
 msgid "The default Sort Field for the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "Το προεπιλεγμένο πεδίο ταξινόμησης για το φίλτρο. Αυτή η ρύθμιση θα εφαρμοστεί για τυχόν προγραμματισμένες αναφορές."
 
-#: arrays.php:671
+#: arrays.php:687
 msgid "Maximum Rows"
 msgstr "Μέγιστος Αριθμός Σειρών"
 
-#: arrays.php:672
+#: arrays.php:688
 msgid "The Maximum Rows to provide in the Filter.  This setting will be applied for any Scheduled Reports."
 msgstr "Οι μέγιστες σειρές που πρέπει να παρέχονται στο φίλτρο. Αυτή η ρύθμιση θα εφαρμοστεί για τυχόν προγραμματισμένες αναφορές."
 
-#: arrays.php:679
+#: arrays.php:695
 msgid "Minimum Bytes"
 msgstr "Ελάχιστα byte:"
 
-#: arrays.php:680
+#: arrays.php:696
 msgid "The Minimum Total Bytes to consider for the Filter.  Any flow totals that are less than this many bytes will be ignored."
 msgstr "Τα ελάχιστα συνολικά bytes που πρέπει να ληφθούν υπόψη για το φίλτρο. Τυχόν σύνολα ροής που είναι μικρότερα από αυτό πολλά byte θα αγνοούνται."
 
-#: arrays.php:689
+#: arrays.php:705
 msgid "Charting Options"
 msgstr "Επιλογές γραφημάτων"
 
-#: arrays.php:692
+#: arrays.php:708
 msgid "Graph Type"
 msgstr "Τύπος γραφήματος"
 
-#: arrays.php:693
+#: arrays.php:709
 msgid "The Graph Type to display by default.  They include Bar, Pie, and Treemap."
 msgstr "Ο τύπος γραφήματος που θα εμφανίζεται από προεπιλογή.  Περιλαμβάνουν Bar, Pie και Treemap."
 
-#: arrays.php:698
+#: arrays.php:714
 msgid "Bar Chart"
 msgstr "Ραβδόγραμμα"
 
-#: arrays.php:699
+#: arrays.php:715
 msgid "Pie Chart"
 msgstr "Γράφημα πίτας"
 
-#: arrays.php:700
+#: arrays.php:716
 msgid "Treemap Chart"
 msgstr "Γράφημα Treemap"
 
-#: arrays.php:704
+#: arrays.php:720
 msgid "Graph Height"
 msgstr "Ύψος γραφήματος"
 
-#: arrays.php:705
+#: arrays.php:721
 msgid "The Graph Hight to use by default."
 msgstr "Το Γράφημα Hight για χρήση από προεπιλογή."
 
-#: arrays.php:712
+#: arrays.php:728
 msgid "Table Panel"
 msgstr "Πίνακας"
 
-#: arrays.php:713
+#: arrays.php:729
 msgid "Should the Table Panel be displayed by default."
 msgstr "Θα πρέπει ο πίνακας πίνακα πίνακα να εμφανίζεται από προεπιλογή."
 
-#: arrays.php:719
+#: arrays.php:735
 msgid "Bytes Panel"
 msgstr "Bytes Bar"
 
-#: arrays.php:720
+#: arrays.php:736
 msgid "Should the Bytes Panel be displayed by default."
 msgstr "Θα πρέπει ο πίνακας Bytes να εμφανίζεται από προεπιλογή."
 
-#: arrays.php:726
+#: arrays.php:742
 msgid "Packets Panel"
 msgstr "Μπαταρίες πακέτων"
 
-#: arrays.php:727
+#: arrays.php:743
 msgid "Should the Packets Panel be displayed by default."
 msgstr "Θα πρέπει ο πίνακας πακέτων να εμφανίζεται από προεπιλογή."
 
-#: arrays.php:733
+#: arrays.php:749
 msgid "Flows Panel"
 msgstr "Ροή ροής"
 
-#: arrays.php:734
+#: arrays.php:750
 msgid "Should the Flows Panel be displayed by default."
 msgstr "Θα πρέπει ο πίνακας \"Ροές\" να εμφανίζεται από προεπιλογή."
 
-#: arrays.php:742
+#: arrays.php:758
 msgid "Protocol Filters"
 msgstr "Πρωτόκολλα"
 
-#: arrays.php:745
+#: arrays.php:761
 msgid "Protocols"
 msgstr "Πρωτόκολλα"
 
-#: arrays.php:746
+#: arrays.php:762
 msgid "Select the Specific Protocol for the Filter."
 msgstr "Επιλέξτε το ειδικό πρωτόκολλο για το φίλτρο."
 
-#: arrays.php:753
+#: arrays.php:769
 msgid "TCP Flags"
 msgstr "Σημαίες TCP"
 
-#: arrays.php:754
+#: arrays.php:770
 msgid "The TCP Flags to search for in the Filter.  This can be a comma delimited list of TCP Flags"
 msgstr "Οι σημαίες TCP για αναζήτηση στο φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα TCP Flags"
 
-#: arrays.php:761
+#: arrays.php:777
 msgid "TOS Fields"
 msgstr "Πεδία TOS"
 
-#: arrays.php:762
+#: arrays.php:778
 msgid "The TOS Fields to search for in the Filter.  This can be a comma delimited list of TOS Fields"
 msgstr "Τα πεδία TOS για αναζήτηση στο φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα πεδίων TOS"
 
-#: arrays.php:770
+#: arrays.php:786
 msgid "Filter on the select Source IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "Φιλτράρετε την επιλεγμένη πηγή IP για το φίλτρο Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα διευθύνσεων IPv4 ή IPv6 ή μια λίστα οριοθετημένων με κόμματα διευθύνσεων IPv4 ή IPv6 σε μορφή CIDR (π.χ. 192.168.1.0/24)."
 
-#: arrays.php:777
+#: arrays.php:793
 msgid "Source Ports"
 msgstr "Πηγή (ες) θύρας"
 
-#: arrays.php:778
+#: arrays.php:794
 msgid "Filter on the select Source Ports for in the Filter.  This can be a comma delimited list of Source Ports."
 msgstr "Φιλτράρετε στις επιλεγμένες θύρες πηγής για στο φίλτρο Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα πηγών πηγών."
 
-#: arrays.php:785
+#: arrays.php:801
 msgid "Source Interface"
 msgstr "Διασύνδεση πηγής"
 
-#: arrays.php:786
+#: arrays.php:802
 msgid "Filter on the select Source Interface for in the Filter.  This can be a comma delimited list of Source Interfaces"
 msgstr "Φιλτράρετε την επιλεγμένη διεπαφή πηγής για το φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμμα των διασυνδέσεων πηγής"
 
-#: arrays.php:794
+#: arrays.php:810
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Source AS's"
 msgstr "Φιλτράρετε στο επιλέξτε Destination AS για στο φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα των Source AS's"
 
-#: arrays.php:802
+#: arrays.php:818
 msgid "Filter on the select Destination IP for in the Filter.  This can be a comma delimited list of IPv4 or IPv6 addresses, or a comma delimited list of IPv4 or IPv6 address ranges in CIDR format (eg. 192.168.1.0/24)."
 msgstr "Φιλτράρετε στην επιλεγμένη διεύθυνση IP προορισμού στο φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα διευθύνσεων IPv4 ή IPv6 ή μια λίστα οριοθετημένων με κόμματα διευθύνσεων IPv4 ή IPv6 σε μορφή CIDR (π.χ. 192.168.1.0/24)."
 
-#: arrays.php:809
+#: arrays.php:825
 msgid "Dest Ports"
 msgstr "Dest Port"
 
-#: arrays.php:810
+#: arrays.php:826
 msgid "Filter on the select Destination Ports for in the Filter.  This can be a comma delimited list of Destimation Ports."
 msgstr "Φιλτράρετε στις επιλεγμένες θύρες προορισμού για το φίλτρο Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα των λιμένων προορισμού."
 
-#: arrays.php:817
+#: arrays.php:833
 msgid "Dest Interface"
 msgstr "Διασύνδεση Dest"
 
-#: arrays.php:818
+#: arrays.php:834
 msgid "Filter on the select Destination Interface for in the Filter.  This can be a comma delimited list of Destimation Interfaces."
 msgstr "Φιλτράρετε στην επιλογή Διεπαφή προορισμού για στο Φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμμα των διεπαφών προορισμού."
 
-#: arrays.php:825 functions.php:2770
+#: arrays.php:841 functions.php:2940
 msgid "Dest AS"
 msgstr "Dest AS"
 
-#: arrays.php:826
+#: arrays.php:842
 msgid "Filter on the select Destination AS for in the Filter.  This can be a comma delimited list of Destimation AS's"
 msgstr "Φιλτράρετε στο επιλέξτε Destination AS για στο φίλτρο. Αυτή μπορεί να είναι μια λίστα οριοθετημένων με κόμματα των Destimation AS's"
 
-#: flowview.php:118
+#: arrays.php:860
+msgid "DNS Cache"
+msgstr ""
+
+#: arrays.php:864
+msgid "CIDR/Routes"
+msgstr ""
+
+#: arrays.php:868
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Numbers"
+msgstr "Αριθμοί"
+
+#: arrays.php:876
+msgid "AS Blocks"
+msgstr ""
+
+#: arrays.php:884
+msgid "AS Sets"
+msgstr ""
+
+#: arrays.php:892
+msgid "Route Sets"
+msgstr ""
+
+#: arrays.php:900
+#, fuzzy
+#| msgid "Source Domain"
+msgid "Domains"
+msgstr "Πηγή (ες) θύρας"
+
+#: arrays.php:908
+#, fuzzy
+msgid "Filter Sets"
+msgstr "Το φίλτρο αποθηκεύτηκε"
+
+#: arrays.php:916
+msgid "Peering Sets"
+msgstr ""
+
+#: arrays.php:924 flowview_databases.php:438
+msgid "Network"
+msgstr ""
+
+#: arrays.php:932
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Routers"
+msgstr "Έλεγχος Διαδικτύου"
+
+#: arrays.php:940
+msgid "Incident Response Teams"
+msgstr ""
+
+#: arrays.php:948
+msgid "Auth Agents"
+msgstr ""
+
+#: arrays.php:956
+msgid "Organizations"
+msgstr ""
+
+#: arrays.php:964
+msgid "Roles"
+msgstr ""
+
+#: arrays.php:972
+msgid "Persons"
+msgstr ""
+
+#: flowview.php:124
 #, php-format
 msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
 msgstr ""
 
-#: flowview.php:121
+#: flowview.php:127
 #, fuzzy, php-format
 #| msgid "The Filter has been Deleted"
 msgid "Flow Filter '%s' Deleted."
 msgstr "Το φίλτρο έχει διαγραφεί"
 
-#: flowview_devices.php:35 flowview_dnscache.php:31 flowview_filters.php:37
-#: flowview_schedules.php:37 functions.php:587
+#: flowview_databases.php:33 flowview_devices.php:35 flowview_filters.php:39
+#: flowview_schedules.php:37 functions.php:603
 msgid "Delete"
 msgstr "Διαγραφή"
+
+#: flowview_databases.php:50
+msgid "DNS Cache has been purged.  It will refill as records come in."
+msgstr ""
+
+#: flowview_databases.php:92
+msgid "Internet Route Registry Details"
+msgstr ""
+
+#: flowview_databases.php:99
+msgid "Authorized Agent Details"
+msgstr ""
+
+#: flowview_databases.php:218
+msgid "Remarks"
+msgstr ""
+
+#: flowview_databases.php:223 flowview_databases.php:1651
+#, fuzzy
+#| msgid "Last Updated"
+msgid "Last Modified"
+msgstr "Τελευταία ενημέρωση"
+
+#: flowview_databases.php:233
+#, fuzzy
+#| msgid "Destination Domain"
+msgid "Registration Date"
+msgstr "Προορισμός IP"
+
+#: flowview_databases.php:238
+msgid "MNT By"
+msgstr ""
+
+#: flowview_databases.php:243
+msgid "Admin Contact"
+msgstr ""
+
+#: flowview_databases.php:248
+msgid "Organization"
+msgstr ""
+
+#: flowview_databases.php:253
+msgid "Changes"
+msgstr ""
+
+#: flowview_databases.php:258
+msgid "Notify"
+msgstr ""
+
+#: flowview_databases.php:263
+#, fuzzy
+#| msgid "Destination"
+msgid "Description"
+msgstr "Προορισμός"
+
+#: flowview_databases.php:268
+msgid "Tech Contact"
+msgstr ""
+
+#: flowview_databases.php:273
+msgid "MNT Lower"
+msgstr ""
+
+#: flowview_databases.php:278
+msgid "Country"
+msgstr ""
+
+#: flowview_databases.php:283
+#, fuzzy
+#| msgid "Email"
+msgid "Abuse Email"
+msgstr "Email"
+
+#: flowview_databases.php:288
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Fax Number"
+msgstr "Αριθμοί"
+
+#: flowview_databases.php:293
+msgid "Phone"
+msgstr ""
+
+#: flowview_databases.php:298 flowview_schedules.php:559
+msgid "Email"
+msgstr "Email"
+
+#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: flowview_databases.php:313
+msgid "Members By Fef"
+msgstr ""
+
+#: flowview_databases.php:318
+msgid "Abuse Contacts"
+msgstr ""
+
+#: flowview_databases.php:323
+msgid "MNT Reference"
+msgstr ""
+
+#: flowview_databases.php:328
+msgid "Members"
+msgstr ""
+
+#: flowview_databases.php:333
+msgid "MNT Notify"
+msgstr ""
+
+#: flowview_databases.php:338
+msgid "Authorization"
+msgstr ""
+
+#: flowview_databases.php:343
+msgid "MNT Routes"
+msgstr ""
+
+#: flowview_databases.php:348
+msgid "Member of"
+msgstr ""
+
+#: flowview_databases.php:353
+#, fuzzy
+msgid "Updates Email"
+msgstr "Ενημέρωση"
+
+#: flowview_databases.php:358
+msgid "NOC Handle"
+msgstr ""
+
+#: flowview_databases.php:363
+msgid "Sponsor Org"
+msgstr ""
+
+#: flowview_databases.php:368
+msgid "MNT Irt"
+msgstr ""
+
+#: flowview_databases.php:373
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "MP Members"
+msgstr "Αριθμοί"
+
+#: flowview_databases.php:378
+#, fuzzy
+#| msgid "Source Domain"
+msgid "Sub Domain"
+msgstr "Πηγή (ες) θύρας"
+
+#: flowview_databases.php:383
+#, fuzzy
+#| msgid "Enable"
+msgid "Pingable"
+msgstr "Ενεργοποίηση"
+
+#: flowview_databases.php:388
+msgid "Alias"
+msgstr ""
+
+#: flowview_databases.php:393
+#, fuzzy
+#| msgid "Graph Type"
+msgid "Org Type"
+msgstr "Τύπος γραφήματος"
+
+#: flowview_databases.php:398
+msgid "Refer To"
+msgstr ""
+
+#: flowview_databases.php:403
+msgid "MP Peering"
+msgstr ""
+
+#: flowview_databases.php:408 flowview_devices.php:490
+#, fuzzy
+#| msgid "Report"
+msgid "Export"
+msgstr "Αναφορά"
+
+#: flowview_databases.php:413
+msgid "Holes"
+msgstr ""
+
+#: flowview_databases.php:418
+#, fuzzy
+#| msgid "Default"
+msgid "MP Default"
+msgstr "Προεπιλογή"
+
+#: flowview_databases.php:423
+msgid "Components"
+msgstr ""
+
+#: flowview_databases.php:428
+msgid "RS Out"
+msgstr ""
+
+#: flowview_databases.php:433
+msgid "Organization Name"
+msgstr ""
+
+#: flowview_databases.php:443
+#, fuzzy
+#| msgid "Name"
+msgid "AS Name"
+msgstr "Όνομα"
+
+#: flowview_databases.php:448
+msgid "Author"
+msgstr ""
+
+#: flowview_databases.php:453
+msgid "IRT Notify"
+msgstr ""
+
+#: flowview_databases.php:458
+msgid "Aggr MTD"
+msgstr ""
+
+#: flowview_databases.php:463
+msgid "AS Type"
+msgstr ""
+
+#: flowview_databases.php:468
+#, fuzzy
+#| msgid "Filter"
+msgid "MP Filter"
+msgstr "Φίλτρο"
+
+#: flowview_databases.php:473
+#, fuzzy
+#| msgid "Default"
+msgid "Default Route"
+msgstr "Προεπιλογή"
+
+#: flowview_databases.php:478
+msgid "Assignment Size"
+msgstr ""
+
+#: flowview_databases.php:483
+#, fuzzy
+#| msgid "Report"
+msgid "Export Comps"
+msgstr "Αναφορά"
+
+#: flowview_databases.php:488
+msgid "RS In"
+msgstr ""
+
+#: flowview_databases.php:493
+#, fuzzy
+#| msgid "Field Name"
+msgid "Net Name"
+msgstr "Όνομα Πεδίου"
+
+#: flowview_databases.php:498
+msgid "DS Rdata"
+msgstr ""
+
+#: flowview_databases.php:503
+msgid "Aggr Boundary"
+msgstr ""
+
+#: flowview_databases.php:513
+msgid "MP Import"
+msgstr ""
+
+#: flowview_databases.php:518
+msgid "Language"
+msgstr ""
+
+#: flowview_databases.php:523
+msgid "RESFful Link"
+msgstr ""
+
+#: flowview_databases.php:528
+msgid "Peer"
+msgstr ""
+
+#: flowview_databases.php:533
+msgid "Zone Contact"
+msgstr ""
+
+#: flowview_databases.php:538
+msgid "Inject"
+msgstr ""
+
+#: flowview_databases.php:543
+msgid "MP Peer"
+msgstr ""
+
+#: flowview_databases.php:548
+msgid "Referral By"
+msgstr ""
+
+#: flowview_databases.php:553
+msgid "Form"
+msgstr ""
+
+#: flowview_databases.php:558
+msgid "MNT Domains"
+msgstr ""
+
+#: flowview_databases.php:563
+msgid "Origin AS"
+msgstr ""
+
+#: flowview_databases.php:568
+#, fuzzy
+#| msgid "Report"
+msgid "MP Export"
+msgstr "Αναφορά"
+
+#: flowview_databases.php:573
+#, fuzzy
+msgid "Encyption"
+msgstr "Λήξη"
+
+#: flowview_databases.php:578
+msgid "Geo Feed"
+msgstr ""
+
+#: flowview_databases.php:583
+msgid "Geo Index"
+msgstr ""
+
+#: flowview_databases.php:588
+#, fuzzy
+msgid "Interface Addr"
+msgstr "Διεπαφή"
+
+#: flowview_databases.php:593
+#, fuzzy
+#| msgid "Report"
+msgid "Export Via"
+msgstr "Αναφορά"
+
+#: flowview_databases.php:598
+msgid "Trouble"
+msgstr ""
+
+#: flowview_databases.php:603
+msgid "Name Servers"
+msgstr ""
+
+#: flowview_databases.php:608
+msgid "Ping Handle"
+msgstr ""
+
+#: flowview_databases.php:613
+#, fuzzy
+msgid "Interface"
+msgstr "Διεπαφή"
+
+#: flowview_databases.php:618
+#, fuzzy
+#| msgid "Report"
+msgid "Import"
+msgstr "Αναφορά"
+
+#: flowview_databases.php:623
+msgid "Signature"
+msgstr ""
+
+#: flowview_databases.php:628
+#, fuzzy
+msgid "Geo Location"
+msgstr "Περιστροφή"
+
+#: flowview_databases.php:633
+msgid "Local AS"
+msgstr ""
+
+#: flowview_databases.php:638
+msgid "Import Via"
+msgstr ""
+
+#: flowview_databases.php:683
+#, php-format
+msgid "FATAL: Unknown Database Table %s"
+msgstr ""
+
+#: flowview_databases.php:796 flowview_databases.php:1161
+#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_filters.php:233 flowview_schedules.php:450
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: flowview_databases.php:806 flowview_databases.php:1171
+#: flowview_databases.php:1181 flowview_databases.php:1463
+#: flowview_databases.php:1473
+msgid "Any"
+msgstr ""
+
+#: flowview_databases.php:824 flowview_databases.php:956
+#: flowview_databases.php:1199 flowview_databases.php:1311
+#: flowview_databases.php:1491 flowview_databases.php:1612
+msgid "Entries"
+msgstr ""
+
+#: flowview_databases.php:828 flowview_databases.php:1203
+#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_schedules.php:460
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: flowview_databases.php:840 flowview_databases.php:1215
+#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
+#: functions.php:596
+msgid "Go"
+msgstr "Πήγαινε"
+
+#: flowview_databases.php:840 flowview_databases.php:1215
+#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_filters.php:254 flowview_schedules.php:471
+msgid "Set/Refresh Filters"
+msgstr "Ρύθμιση / Ανανέωση φίλτρων"
+
+#: flowview_databases.php:841 flowview_databases.php:1216
+#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
+msgid "Clear"
+msgstr "Καθαρισμός"
+
+#: flowview_databases.php:841 flowview_databases.php:1216
+#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_filters.php:257 flowview_schedules.php:474
+msgid "Clear Filters"
+msgstr "Καθαρισμός Φίλτρων"
+
+#: flowview_databases.php:842 flowview_databases.php:1217
+msgid "Purge"
+msgstr ""
+
+#: flowview_databases.php:842 flowview_databases.php:1217
+msgid "Purge the DNS Cache"
+msgstr ""
+
+#: flowview_databases.php:997
+msgid "Not Specified"
+msgstr ""
+
+#: flowview_databases.php:1013
+msgid "No Matching Entries Found"
+msgstr ""
+
+#: flowview_databases.php:1073
+#, fuzzy
+msgid "Click 'Continue' to delete the following DNS Cache Entriy."
+msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
+msgstr[0] "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να διαγράψετε τα παρακάτω χρονοδιαγράμματα."
+msgstr[1] "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να διαγράψετε τα παρακάτω χρονοδιαγράμματα."
+
+#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
+#: functions.php:843
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
+msgid "Continue"
+msgstr "Συνέχεια"
+
+#: flowview_databases.php:1078
+msgid "Delete DNS Entry"
+msgid_plural "Delete DNS Entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: flowview_databases.php:1152
+#, fuzzy
+msgid "Flowview DNS Cache Entries"
+msgstr "FlowView Schedules"
+
+#: flowview_databases.php:1167 flowview_databases.php:1173
+#: flowview_databases.php:1372
+msgid "Verified"
+msgstr ""
+
+#: flowview_databases.php:1172 flowview_databases.php:1372
+msgid "Unverified"
+msgstr ""
+
+#: flowview_databases.php:1323
+msgid "This is the IP Address of the Cache entry."
+msgstr ""
+
+#: flowview_databases.php:1326
+msgid "DNS Hostname"
+msgstr ""
+
+#: flowview_databases.php:1329
+msgid "The DNS Name assigned to the IP Address."
+msgstr ""
+
+#: flowview_databases.php:1335
+msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
+msgstr ""
+
+#: flowview_databases.php:1338
+msgid "Arin Verified"
+msgstr ""
+
+#: flowview_databases.php:1341
+msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
+msgstr ""
+
+#: flowview_databases.php:1344
+msgid "CIDR ID"
+msgstr ""
+
+#: flowview_databases.php:1347
+msgid "The Arin primary key.  This is not official Arin information."
+msgstr ""
+
+#: flowview_databases.php:1350
+msgid "Autonomous System ID"
+msgstr ""
+
+#: flowview_databases.php:1353
+msgid "The Arin Origin AS.  This is official Arin AS information."
+msgstr ""
+
+#: flowview_databases.php:1356
+#, fuzzy
+msgid "Updated Time"
+msgstr "Ενημέρωση"
+
+#: flowview_databases.php:1359
+msgid "This is the time that the DNS cache was entered or last updated."
+msgstr ""
+
+#: flowview_databases.php:1380
+msgid "No DNS Cache Entries Found"
+msgstr ""
+
+#: flowview_databases.php:1444
+#, fuzzy
+#| msgid "No Flowview Listeners"
+msgid "Flowview Internet Routes"
+msgstr "Οι ακροατές ροής δεδομένων"
+
+#: flowview_databases.php:1459
+#, fuzzy
+msgid "IP Version"
+msgstr "Έκδοση"
+
+#: flowview_databases.php:1464
+msgid "IPv4"
+msgstr ""
+
+#: flowview_databases.php:1465
+#, fuzzy
+msgid "IPv6"
+msgstr "IPv6"
+
+#: flowview_databases.php:1622
+#, fuzzy
+#| msgid "Routine"
+msgid "Route"
+msgstr "Ρουτίνα"
+
+#: flowview_databases.php:1624
+msgid "This is the published Internet Route."
+msgstr ""
+
+#: flowview_databases.php:1627
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "AS Number"
+msgstr "Αριθμοί"
+
+#: flowview_databases.php:1630
+msgid "The Autonomous System Number for the route."
+msgstr ""
+
+#: flowview_databases.php:1633
+msgid "Route Description"
+msgstr ""
+
+#: flowview_databases.php:1636
+msgid "The Descrption logged by the Route Maintainer."
+msgstr ""
+
+#: flowview_databases.php:1642
+msgid "The source database used to publish the route."
+msgstr ""
+
+#: flowview_databases.php:1645
+msgid "Maintained By"
+msgstr ""
+
+#: flowview_databases.php:1648
+msgid "The Internet Carrier who is maintaining the route for the customer."
+msgstr ""
+
+#: flowview_databases.php:1654
+msgid "The last time the information on this route was modified."
+msgstr ""
+
+#: flowview_databases.php:1675
+msgid "No Matching Routes Found"
+msgstr ""
 
 #: flowview_devices.php:43
 msgid "Listener Name"
@@ -662,16 +1355,6 @@ msgstr "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να
 msgid "You must select at least one device."
 msgstr "Πρέπει να επιλέξετε τουλάχιστον μία συσκευή."
 
-#: flowview_devices.php:214 flowview_dnscache.php:107 flowview_filters.php:156
-#: flowview_schedules.php:256 functions.php:827
-msgid "Continue"
-msgstr "Συνέχεια"
-
-#: flowview_devices.php:222 flowview_dnscache.php:107 flowview_filters.php:164
-#: flowview_schedules.php:264 functions.php:816 functions.php:828
-msgid "Cancel"
-msgstr "Ακύρωση"
-
 #: flowview_devices.php:270
 msgid "Save Successful.  The Flowview Listener has been saved, and the service restarted."
 msgstr ""
@@ -689,247 +1372,137 @@ msgstr "Αναφορά: [επεξεργασία: %s]"
 msgid "Listener [new]"
 msgstr "Έκθεση: [νέο]"
 
-#: flowview_devices.php:332 flowview_devices.php:546
-msgid "Address"
-msgstr "Διεύθυνση"
+#: flowview_devices.php:332 flowview_devices.php:752
+msgid "Name"
+msgstr "Όνομα"
 
-#: flowview_devices.php:336 flowview_devices.php:765
-msgid "Status"
-msgstr "Κατάσταση"
-
-#: flowview_devices.php:340
+#: flowview_devices.php:344
 #, fuzzy
 msgid "Version"
 msgstr "Έκδοση"
 
-#: flowview_devices.php:344 functions.php:34
+#: flowview_devices.php:348 functions.php:34
 msgid "Templates"
 msgstr "Πρότυπα"
 
-#: flowview_devices.php:348 flowview_devices.php:788
+#: flowview_devices.php:352 flowview_devices.php:798
 msgid "Last Updated"
 msgstr "Τελευταία ενημέρωση"
 
-#: flowview_devices.php:350
+#: flowview_devices.php:354
 msgid "Active Streams update every 5 minutes"
 msgstr "Ενημέρωση ενεργών ροών κάθε 5 λεπτά"
 
-#: flowview_devices.php:381
+#: flowview_devices.php:386
 msgid "No Inbound Streams Detected"
 msgstr "Δεν εντοπίστηκαν εισερχόμενες ροές"
 
-#: flowview_devices.php:446
+#: flowview_devices.php:451
 msgid "Listener Detected Templates"
 msgstr "Πρότυπα που εντοπίστηκαν από ακροατή"
 
-#: flowview_devices.php:455
+#: flowview_devices.php:460
 msgid "Ex Addr"
 msgstr ""
 
-#: flowview_devices.php:469
+#: flowview_devices.php:474
 msgid "Template"
 msgstr "Πρότυπο"
 
-#: flowview_devices.php:484 flowview_devices.php:695 flowview_dnscache.php:229
-#: flowview_filters.php:257 flowview_schedules.php:479 functions.php:581
-msgid "Go"
-msgstr "Πήγαινε"
-
-#: flowview_devices.php:485
-#, fuzzy
-#| msgid "Report"
-msgid "Export"
-msgstr "Αναφορά"
-
-#: flowview_devices.php:550
+#: flowview_devices.php:555
 msgid "Template ID"
 msgstr "ID προτύπου"
 
-#: flowview_devices.php:554
+#: flowview_devices.php:559
 msgid "Field Name"
 msgstr "Όνομα Πεδίου"
 
-#: flowview_devices.php:558 functions.php:3892
+#: flowview_devices.php:563 functions.php:4457
 msgid "Supported"
 msgstr ""
 
-#: flowview_devices.php:562
+#: flowview_devices.php:567
 msgid "Field ID"
 msgstr "ID πεδίου"
 
-#: flowview_devices.php:566
+#: flowview_devices.php:571
 msgid "Field Type"
 msgstr "Τύπος πεδίου"
 
-#: flowview_devices.php:570
+#: flowview_devices.php:575
 msgid "Length"
 msgstr "Μήκος"
 
-#: flowview_devices.php:574
+#: flowview_devices.php:579
 msgid "Unpack"
 msgstr "Ξεπακετάρω"
 
-#: flowview_devices.php:616
+#: flowview_devices.php:621
 msgid "No Inbound Stream Templates Detected"
 msgstr "Δεν εντοπίστηκαν πρότυπα εισερχόμενης ροής"
 
-#: flowview_devices.php:680
+#: flowview_devices.php:690
 msgid "FlowView Listeners"
 msgstr "Οι ακροατές ροής δεδομένων"
 
-#: flowview_devices.php:689 flowview_dnscache.php:185 flowview_filters.php:236
-#: flowview_schedules.php:458
-msgid "Search"
-msgstr "Αναζήτηση"
-
-#: flowview_devices.php:695 flowview_dnscache.php:229 flowview_filters.php:257
-#: flowview_schedules.php:479
-msgid "Set/Refresh Filters"
-msgstr "Ρύθμιση / Ανανέωση φίλτρων"
-
-#: flowview_devices.php:698 flowview_dnscache.php:230 flowview_filters.php:260
-#: flowview_schedules.php:482 functions.php:582
-msgid "Clear"
-msgstr "Καθαρισμός"
-
-#: flowview_devices.php:698 flowview_dnscache.php:230 flowview_filters.php:260
-#: flowview_schedules.php:482
-msgid "Clear Filters"
-msgstr "Καθαρισμός Φίλτρων"
-
-#: flowview_devices.php:732 setup.php:136 setup.php:197
+#: flowview_devices.php:742 setup.php:143 setup.php:204
 msgid "Listeners"
 msgstr "Ακρόαση"
 
-#: flowview_devices.php:742
-msgid "Name"
-msgstr "Όνομα"
-
-#: flowview_devices.php:746
+#: flowview_devices.php:756
 msgid "Method"
 msgstr "Μέθοδος"
 
-#: flowview_devices.php:750
+#: flowview_devices.php:760
 msgid "Allowed From"
 msgstr "Επιτρέπεται από"
 
-#: flowview_devices.php:770
+#: flowview_devices.php:780
 msgid "Observed Listen"
 msgstr "Παρατηρήθηκε Ακούστε"
 
-#: flowview_devices.php:772
+#: flowview_devices.php:782
 msgid "The port security actually observed on the listeners port."
 msgstr "Η ασφάλεια του λιμανιού παρατηρήθηκε πραγματικά στη θύρα ακροατών."
 
-#: flowview_devices.php:776
+#: flowview_devices.php:786
 msgid "Streams"
 msgstr "Ροές"
 
-#: flowview_devices.php:778
+#: flowview_devices.php:788
 msgid "The number of inbound connections from various sources."
 msgstr "Ο αριθμός των εισερχόμενων συνδέσεων από διάφορες πηγές."
 
-#: flowview_devices.php:782
+#: flowview_devices.php:792
 #, fuzzy
 msgid "Stream Versions"
 msgstr "Έκδοση"
 
-#: flowview_devices.php:784
+#: flowview_devices.php:794
 msgid "The Traffic Flow versions being observed."
 msgstr ""
 
-#: flowview_devices.php:790
+#: flowview_devices.php:800
 msgid "The maximum update time from all streams being collected.  This value is updated every 5 minutes."
 msgstr "Ο μέγιστος χρόνος ενημέρωσης από όλες τις ροές που συλλέγονται.  Αυτή η τιμή ενημερώνεται κάθε 5 λεπτά."
 
-#: flowview_devices.php:823
+#: flowview_devices.php:833
 msgid "Cacti"
 msgstr "Astrophytum asterias (I)"
 
-#: flowview_devices.php:836
+#: flowview_devices.php:846
 msgid "No Flowview Listeners"
 msgstr "Οι ακροατές ροής δεδομένων"
 
-#: flowview_dnscache.php:45
-msgid "DNS Cache has been purged.  It will refill as records come in."
-msgstr ""
-
-#: flowview_dnscache.php:102
-#, fuzzy
-msgid "Click 'Continue' to delete the following DNS Cache Entriy."
-msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
-msgstr[0] "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να διαγράψετε τα παρακάτω χρονοδιαγράμματα."
-msgstr[1] "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να διαγράψετε τα παρακάτω χρονοδιαγράμματα."
-
-#: flowview_dnscache.php:107
-msgid "Delete DNS Entry"
-msgid_plural "Delete DNS Entries"
-msgstr[0] ""
-msgstr[1] ""
-
-#: flowview_dnscache.php:176
-#, fuzzy
-msgid "Flowview DNS Cache Entries"
-msgstr "FlowView Schedules"
-
-#: flowview_dnscache.php:195
-msgid "Any"
-msgstr ""
-
-#: flowview_dnscache.php:213 flowview_dnscache.php:309
-msgid "Entries"
-msgstr ""
-
-#: flowview_dnscache.php:217 flowview_filters.php:246
-#: flowview_schedules.php:468
-msgid "Default"
-msgstr "Προεπιλογή"
-
-#: flowview_dnscache.php:231
-msgid "Purge"
-msgstr ""
-
-#: flowview_dnscache.php:231
-msgid "Purge the DNS Cache"
-msgstr ""
-
-#: flowview_dnscache.php:321
-msgid "This is the IP Address of the Cache entry."
-msgstr ""
-
-#: flowview_dnscache.php:324
-msgid "DNS Hostname"
-msgstr ""
-
-#: flowview_dnscache.php:327
-msgid "The DNS Name assigned to the IP Address."
-msgstr ""
-
-#: flowview_dnscache.php:333
-msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
-msgstr ""
-
-#: flowview_dnscache.php:336
-msgid "Time Inserted"
-msgstr ""
-
-#: flowview_dnscache.php:339
-msgid "This is the time that the DNS cache was entered or last updated."
-msgstr ""
-
-#: flowview_dnscache.php:357
-msgid "No DNS Cache Entries Found"
-msgstr ""
-
-#: flowview_filters.php:36 flowview_schedules.php:36
+#: flowview_filters.php:38 flowview_schedules.php:36
 msgid "Send Now"
 msgstr "Αποστολή τώρα"
 
-#: flowview_filters.php:38 flowview_schedules.php:38
+#: flowview_filters.php:40 flowview_schedules.php:38
 msgid "Disable"
 msgstr "Απενεργοποίηση"
 
-#: flowview_filters.php:39 flowview_schedules.php:39
+#: flowview_filters.php:41 flowview_schedules.php:39
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
@@ -949,29 +1522,29 @@ msgstr "Κάντε κλικ στο κουμπί 'Συνέχεια' για να �
 msgid "You must select at least one Filter."
 msgstr "Πρέπει να επιλέξετε τουλάχιστον μία συσκευή."
 
-#: flowview_filters.php:224
+#: flowview_filters.php:221
 msgid "FlowView Filters"
 msgstr "Φίλτρα ροής"
 
-#: flowview_filters.php:226
+#: flowview_filters.php:223
 msgid "FlowView Filters [ Add Devices before Filters ]"
 msgstr "Φίλτρα FlowView [Προσθήκη συσκευών πριν από φίλτρα]"
 
-#: flowview_filters.php:242 flowview_filters.php:356 setup.php:137
-#: setup.php:253
+#: flowview_filters.php:239 flowview_filters.php:353 setup.php:144
+#: setup.php:260
 msgid "Filters"
 msgstr "Φίλτρα"
 
-#: flowview_filters.php:325 flowview_schedules.php:81
-#: flowview_schedules.php:551
+#: flowview_filters.php:322 flowview_schedules.php:81
+#: flowview_schedules.php:543
 msgid "Filter Name"
 msgstr "Όνομα φίλτρου"
 
-#: flowview_filters.php:340
+#: flowview_filters.php:337
 msgid "ID"
 msgstr "ID"
 
-#: flowview_filters.php:350
+#: flowview_filters.php:347
 msgid "Resolution"
 msgstr "Ανάλυση"
 
@@ -1014,7 +1587,7 @@ msgstr "Νέο πρόγραμμα"
 msgid "Enter a Report Title for the FlowView Schedule."
 msgstr "Καταχωρίστε έναν τίτλο αναφοράς για το πρόγραμμα FlowView."
 
-#: flowview_schedules.php:73 flowview_schedules.php:571
+#: flowview_schedules.php:73 flowview_schedules.php:563
 msgid "Enabled"
 msgstr "Ενεργοποιημένο"
 
@@ -1046,626 +1619,641 @@ msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου
 msgid "Email addresses (command delimited) to send this NetFlow Scan to."
 msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου (οριοθετημένη εντολή) για να στείλετε αυτήν τη σαρωτή NetFlow Scan."
 
-#: flowview_schedules.php:113 setup.php:387
+#: flowview_schedules.php:113 setup.php:419
 msgid "Format File to Use"
 msgstr "Μορφοποίηση αρχείου για χρήση"
 
-#: flowview_schedules.php:116 setup.php:390
+#: flowview_schedules.php:116 setup.php:422
 msgid "Choose the custom html wrapper and CSS file to use.  This file contains both html and CSS to wrap around your report.  If it contains more than simply CSS, you need to place a special <REPORT> tag inside of the file.  This format tag will be replaced by the report content.  These files are located in the 'formats' directory."
 msgstr "Επιλέξτε το προσαρμοσμένο περιτύλιγμα html και το αρχείο CSS για χρήση. Αυτό το αρχείο περιέχει html και CSS για να ολοκληρώσετε την αναφορά σας. Εάν περιέχει περισσότερα από απλά CSS, πρέπει να τοποθετήσετε ένα ειδικό<REPORT> ετικέτα μέσα στο αρχείο. Αυτή η ετικέτα μορφής θα αντικατασταθεί από το περιεχόμενο της αναφοράς. Αυτά τα αρχεία βρίσκονται στον κατάλογο «μορφές»."
 
-#: flowview_schedules.php:187
+#: flowview_schedules.php:185
 #, php-format
 msgid "Sent Scheduled Report %s in Background."
 msgstr "Αποστολή προγραμματισμένης αναφοράς %s στο παρασκήνιο"
 
-#: flowview_schedules.php:190
+#: flowview_schedules.php:188
 msgid "Reports will arrive once Complete."
 msgstr "Οι αναφορές θα φτάσουν μόλις ολοκληρωθούν."
 
-#: flowview_schedules.php:225
+#: flowview_schedules.php:223
 msgid "Click 'Continue' to delete the following Schedule(s)."
 msgstr "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να διαγράψετε τα παρακάτω χρονοδιαγράμματα."
 
-#: flowview_schedules.php:232
+#: flowview_schedules.php:230
 msgid "Click 'Continue' to send the following Schedule(s) now."
 msgstr "Κάντε κλικ στο κουμπί 'Συνέχεια' για να στείλετε τώρα τα ακόλουθα Χρονοδιαγράμματα."
 
-#: flowview_schedules.php:239
+#: flowview_schedules.php:237
 msgid "Click 'Continue' to Disable the following Schedule(s)."
 msgstr "Κάντε κλικ στο κουμπί \"Συνέχεια\" για να απενεργοποιήσετε τα παρακάτω χρονοδιαγράμματα."
 
-#: flowview_schedules.php:246
+#: flowview_schedules.php:244
 msgid "Click 'Continue' to Enable the following Schedule(s)."
 msgstr "Κάντε κλικ στο κουμπί 'Συνέχεια' για να ενεργοποιήσετε τα παρακάτω χρονοδιαγράμματα."
 
-#: flowview_schedules.php:253
+#: flowview_schedules.php:251
 msgid "You must select at least one schedule."
 msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα πρόγραμμα."
 
-#: flowview_schedules.php:351
+#: flowview_schedules.php:345
 #, php-format
 msgid "Report: [edit: %s]"
 msgstr "Αναφορά: [επεξεργασία: %s]"
 
-#: flowview_schedules.php:353
+#: flowview_schedules.php:347
 msgid "Report: [new]"
 msgstr "Έκθεση: [νέο]"
 
-#: flowview_schedules.php:374 functions.php:729
+#: flowview_schedules.php:368 functions.php:745
 msgid "Start Date Selector"
 msgstr "Επιλογή επιλογής έναρξης"
 
-#: flowview_schedules.php:446
+#: flowview_schedules.php:438
 msgid "FlowView Schedules"
 msgstr "FlowView Schedules"
 
-#: flowview_schedules.php:448
+#: flowview_schedules.php:440
 msgid "FlowView Schedules [ Add Devices before Schedules ]"
 msgstr "Προγράμματα FlowView [Προσθήκη συσκευών πριν από τα προγράμματα]"
 
-#: flowview_schedules.php:464 flowview_schedules.php:576 setup.php:138
-#: setup.php:225
+#: flowview_schedules.php:456 flowview_schedules.php:568 setup.php:145
+#: setup.php:232
 msgid "Schedules"
 msgstr "Πρόγραμμα"
 
-#: flowview_schedules.php:547
+#: flowview_schedules.php:539
 msgid "Schedule Title"
 msgstr "Τίτλος χρονοδιαγράμματος"
 
-#: flowview_schedules.php:555
+#: flowview_schedules.php:547
 msgid "Interval"
 msgstr "Διάστημα"
 
-#: flowview_schedules.php:559
+#: flowview_schedules.php:551
 msgid "Start Date"
 msgstr "Ημερομηνία Έναρξης"
 
-#: flowview_schedules.php:563
+#: flowview_schedules.php:555
 msgid "Next Send"
 msgstr "Επόμενο Αποστολή"
-
-#: flowview_schedules.php:567
-msgid "Email"
-msgstr "Email"
 
 #: functions.php:31
 msgid "General"
 msgstr "Γενικά"
 
-#: functions.php:87
+#: functions.php:112
 msgid "Select a Report Type First"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:115
+#: functions.php:138
 #, php-format
 msgid "Filter: [edit: %s]"
 msgstr "Αναφορά: [επεξεργασία: %s]"
 
-#: functions.php:117
+#: functions.php:140
 msgid "Filter: [new]"
 msgstr "Έκθεση: [νέο]"
 
-#: functions.php:496
+#: functions.php:511
 msgid "Undefined Filter [ Select Filter to get Details ]"
 msgstr "Απροσδιόριστο φίλτρο [Επιλέξτε φίλτρο για λήψη λεπτομερειών]"
 
-#: functions.php:506
+#: functions.php:521
 #, php-format
 msgid "Statistical Report: %s [ Including overrides as specified below ]"
 msgstr "Στατιστική αναφορά: %s [Συμπεριλαμβάνονται παρακάμψεις όπως ορίζονται παρακάτω]"
 
-#: functions.php:508
+#: functions.php:523
 #, php-format
 msgid "Printed Report: %s [ Including overrides as specified below ]"
 msgstr "Έντυπη αναφορά: %s [Συμπεριλαμβάνονται παρακάμψεις όπως ορίζεται παρακάτω]"
 
-#: functions.php:526
+#: functions.php:541
 msgid "Select a Filter"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:545
+#: functions.php:560
 msgid "Select a Listener"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:560
+#: functions.php:575
 msgid "Exclude"
 msgstr "Εξαίρεση"
 
-#: functions.php:564
+#: functions.php:579
 msgid "None"
 msgstr "Κανένα"
 
-#: functions.php:565
+#: functions.php:580
 msgid "Top Sample"
 msgstr "Κορυφή Δείγμα"
 
-#: functions.php:570
+#: functions.php:585
 #, fuzzy, php-format
 #| msgid "Top 2 Samples"
 msgid "Top %d Samples"
 msgstr "Κορυφαία 2 δείγματα"
 
-#: functions.php:575
+#: functions.php:590
 msgid "Show only Domains on Charts Below"
 msgstr "Εμφάνιση μόνο τομέων στους παρακάτω πίνακες"
 
-#: functions.php:577
+#: functions.php:592
 msgid "Domains/Hostnames Only"
 msgstr "Μόνο τομείς"
 
-#: functions.php:581
+#: functions.php:596
 msgid "Apply Filter"
 msgstr "Εφαρμογή φίλτρου"
 
-#: functions.php:582
+#: functions.php:597
 msgid "Clear Filter"
 msgstr "Διαγραφή φίλτρου"
 
-#: functions.php:583
+#: functions.php:598
 #, fuzzy
 msgid "Create new Flow Filter"
 msgstr "Πόσο συχνά δημιουργείτε ένα νέο αρχείο ροής."
 
-#: functions.php:583
+#: functions.php:598
 msgid "New"
 msgstr ""
 
-#: functions.php:584
+#: functions.php:599
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: functions.php:584
+#: functions.php:599
 #, fuzzy
 #| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "Επεξεργασία τρέχοντος φίλτρου"
 
-#: functions.php:585 functions.php:815
+#: functions.php:600 functions.php:832
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: functions.php:585
+#: functions.php:600
 #, fuzzy
 #| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:586
+#: functions.php:601
+#, fuzzy
+msgid "Save As"
+msgstr "Αποθήκευση ως"
+
+#: functions.php:601
+#, fuzzy
+#| msgid "Select a Filter"
+msgid "Save the existing Flow Filter as new Filter"
+msgstr "Εκτύπωση αναφορών"
+
+#: functions.php:602
 msgid "Rename"
 msgstr ""
 
-#: functions.php:586
+#: functions.php:602
 msgid "Rename the Flow Filter"
 msgstr ""
 
-#: functions.php:587
+#: functions.php:603
 #, fuzzy
 #| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:595
+#: functions.php:611
 msgid "Report"
 msgstr "Αναφορά"
 
-#: functions.php:606
+#: functions.php:622
 #, php-format
 msgid "Statistical: %s"
 msgstr "Στατιστικές: %s"
 
-#: functions.php:612
+#: functions.php:628
 #, php-format
 msgid "Printed: %s"
 msgstr "Εκτύπωση: %s"
 
-#: functions.php:616 functions.php:633
+#: functions.php:632 functions.php:649
 msgid "Select a Filter First"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:672
+#: functions.php:688
 msgid "Lines"
 msgstr "Γραμμές"
 
-#: functions.php:690
+#: functions.php:706
 msgid "Octets"
 msgstr "Οκτάδες"
 
-#: functions.php:708
+#: functions.php:724
 msgid "Timespan"
 msgstr "Χρόνος"
 
-#: functions.php:717
+#: functions.php:733
 msgid "Custom"
 msgstr "Προσαρμογή"
 
-#: functions.php:723
+#: functions.php:739
 msgid "From"
 msgstr "Από"
 
-#: functions.php:732
+#: functions.php:748
 msgid "To"
 msgstr "Προς"
 
-#: functions.php:738
+#: functions.php:754
 msgid "End Date Selector"
 msgstr "Επιλογή ημερομηνίας λήξης"
 
-#: functions.php:741
+#: functions.php:757
 msgid "Shift Time Backward"
 msgstr "Shift Time προς τα πίσω"
 
-#: functions.php:744
+#: functions.php:760
 msgid "Define Shifting Interval"
 msgstr "Ορίστε το διάστημα αλλαγής"
 
-#: functions.php:757
+#: functions.php:773
 msgid "Shift Time Forward"
 msgstr "Shift Time Forward"
 
-#: functions.php:764
+#: functions.php:780
 msgid "Graph"
 msgstr "Γραφικό Σχήμα"
 
-#: functions.php:768
+#: functions.php:784
 msgid "Bar"
 msgstr "Ραβδόγραμμα"
 
-#: functions.php:769
+#: functions.php:785
 msgid "Pie"
 msgstr "Πίτα"
 
-#: functions.php:770
+#: functions.php:786
 msgid "Treemap"
 msgstr "Δεντροχάρτης"
 
-#: functions.php:774
+#: functions.php:790
 msgid "Height"
 msgstr "Ύψος"
 
-#: functions.php:786
+#: functions.php:802
 msgid "Show/Hide"
 msgstr "Εμφάνιση/απόκρυψη adminbar χρήστη"
 
-#: functions.php:790
+#: functions.php:806
 msgid "Table"
 msgstr "Πίνακας"
 
-#: functions.php:810
+#: functions.php:827
 #, fuzzy
 #| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "Φίλτρο"
 
-#: functions.php:812
+#: functions.php:829
 #, fuzzy
 #| msgid "Field Name"
 msgid "New Name"
 msgstr "Όνομα Πεδίου"
 
-#: functions.php:823
+#: functions.php:838
 #, fuzzy
 #| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "Εκτύπωση αναφορών"
 
-#: functions.php:825
+#: functions.php:840
 msgid "To Delete this Flow Filter, press Continue.  If the Flow Filter is in use in a Scheduled Report, the operation will be blocked."
 msgstr ""
 
-#: functions.php:840
+#: functions.php:857
 #, php-format
 msgid "Top %s Distribution Chart of Bytes"
 msgstr "Γράφημα διανομής Top %s των byte"
 
-#: functions.php:841
+#: functions.php:858
 #, php-format
 msgid "Top %s Pie Chart of Bytes"
 msgstr "Επάνω %s γράφημα πίτας byte"
 
-#: functions.php:842
+#: functions.php:859
 #, php-format
 msgid "Top %s Treemap Chart of Bytes"
 msgstr "Κορυφή %s γράφημα Treemap των bytes"
 
-#: functions.php:845
+#: functions.php:862
 #, php-format
 msgid "Top %s Distribution Chart of Packets"
 msgstr "Top %s διάγραμμα διανομής πακέτων"
 
-#: functions.php:846
+#: functions.php:863
 #, php-format
 msgid "Top %s Pie Chart of Packets"
 msgstr "Top %s γράφημα πίτας πακέτων"
 
-#: functions.php:847
+#: functions.php:864
 #, php-format
 msgid "Top %s Treemap Chart of Packets"
 msgstr "Top %s Treemap Γράφημα Πακέτων"
 
-#: functions.php:850
+#: functions.php:867
 #, php-format
 msgid "Top %s Distribution Chart of Flows"
 msgstr "Γράφημα διανομής ροών Top %s"
 
-#: functions.php:851
+#: functions.php:868
 #, php-format
 msgid "Top %s Pie Chart of Flows"
 msgstr "Επάνω %s γράφημα πίτας ροών"
 
-#: functions.php:852
+#: functions.php:869
 #, php-format
 msgid "Top %s Treemap Chart of Flows"
 msgstr "Επάνω %s γράφημα ροών Treemap"
 
-#: functions.php:959
+#: functions.php:976
 msgid "Rename Layout"
 msgstr ""
 
-#: functions.php:1451
+#: functions.php:984
+msgid " <new>"
+msgstr ""
+
+#: functions.php:1502
 msgid "Filter Settings Saved"
 msgstr "Οι ρυθμίσεις φίλτρου αποθηκεύτηκαν"
 
-#: functions.php:1568
+#: functions.php:1618
 #, php-format
 msgid "Client/Private (%s)"
 msgstr "Πελάτης / Ιδιωτικός (%s)"
 
-#: functions.php:1570
+#: functions.php:1620
 msgid "icmp (0)"
 msgstr "icmp (0)"
 
-#: functions.php:1581
+#: functions.php:1631
 #, php-format
 msgid "Unknown (%s)"
 msgstr "Άγνωστο (%s)"
 
-#: functions.php:1614
+#: functions.php:1662
 msgid "Cacti Flowview"
 msgstr "Cacti Flowview"
 
-#: functions.php:1620
+#: functions.php:1668
 #, php-format
 msgid "Netflow - %s"
 msgstr "Netflow - %s"
 
-#: functions.php:1822
+#: functions.php:1870
 #, php-format
 msgid "Subnet Filter: %s is not a value CIDR format"
 msgstr "Φίλτρο υποδικτύου: Το %s δεν έχει μορφή CIDR αξίας"
 
-#: functions.php:1976 functions.php:1982 functions.php:1988 functions.php:1991
-#: functions.php:2017 functions.php:3010
+#: functions.php:2044 functions.php:2050 functions.php:2056 functions.php:2059
+#: functions.php:2085 functions.php:3482
 msgid "unresolved"
 msgstr "δεν επίλυσε"
 
-#: functions.php:2325 functions.php:2326 functions.php:2327 functions.php:2328
-#: functions.php:2329 functions.php:2330 functions.php:2331 functions.php:2332
-#: functions.php:2333 functions.php:2334 functions.php:2335 functions.php:2336
-#: functions.php:2337 functions.php:2338 functions.php:2339 functions.php:2340
-#: functions.php:2341 functions.php:2342 functions.php:2343 functions.php:2344
-#: functions.php:2345 functions.php:2346 functions.php:2347 functions.php:2348
-#: functions.php:2349 functions.php:2350
+#: functions.php:2394 functions.php:2395 functions.php:2396 functions.php:2397
+#: functions.php:2398 functions.php:2399 functions.php:2400 functions.php:2401
+#: functions.php:2402 functions.php:2403 functions.php:2404 functions.php:2405
+#: functions.php:2406 functions.php:2407 functions.php:2408 functions.php:2409
+#: functions.php:2410 functions.php:2411 functions.php:2412 functions.php:2413
+#: functions.php:2414 functions.php:2415 functions.php:2416 functions.php:2417
+#: functions.php:2418 functions.php:2419
 #, php-format
 msgid "%d - %d Bytes"
 msgstr "%d - %d bytes"
 
-#: functions.php:2351
+#: functions.php:2420
 #, php-format
 msgid "> %d Bytes"
 msgstr "> %d Bytes"
 
-#: functions.php:2714
+#: functions.php:2884
 msgid "Source DNS"
 msgstr "Πηγή AS"
 
-#: functions.php:2718
+#: functions.php:2888
 msgid "Source Root DNS"
 msgstr "Πηγή AS"
 
-#: functions.php:2722
+#: functions.php:2892
 msgid "Dest DNS"
 msgstr "Dest AS"
 
-#: functions.php:2726
+#: functions.php:2896
 msgid "Dest Root DNS"
 msgstr "Dest Port"
 
-#: functions.php:2730
+#: functions.php:2900
 msgid "DNS"
 msgstr "DSR"
 
-#: functions.php:2734
+#: functions.php:2904
 msgid "Root DNS"
 msgstr "Ρίζα DNS"
 
-#: functions.php:2754
+#: functions.php:2924
 msgid "Dest Port"
 msgstr "Dest Port"
 
-#: functions.php:2762
+#: functions.php:2932
 msgid "Dest IF"
 msgstr "Dest IF"
 
-#: functions.php:2778
+#: functions.php:2948
 msgid "Dest Prefix"
 msgstr "Dest Prefix"
 
-#: functions.php:2786
+#: functions.php:2956
 msgid "Type of Service"
 msgstr "Τύπος υπηρεσίας"
 
-#: functions.php:2805
+#: functions.php:2975
 msgid "Bytes/Packet"
 msgstr "Πακέτα"
 
-#: functions.php:3116
+#: functions.php:3395
+msgid "The Parallel Query Timed Out.  Please contact your administrator"
+msgstr ""
+
+#: functions.php:3588
 #, php-format
 msgid "Boolean: %s, Numeric: %s, Hex: %s"
 msgstr "Boolean: %s, Αριθμητικό: %s, Hex: %s"
 
-#: functions.php:3127
+#: functions.php:3599
 msgid "Low Delay"
 msgstr "Χαμηλή καθυστέρηση"
 
-#: functions.php:3128
+#: functions.php:3600
 msgid "Throughput"
 msgstr "Διακίνηση"
 
-#: functions.php:3129
+#: functions.php:3601
 msgid "Reliability"
 msgstr "Αξιοπιστία"
 
-#: functions.php:3130
+#: functions.php:3602
 msgid "Mincost"
 msgstr "Ελάχιστο κόστος"
 
-#: functions.php:3134
+#: functions.php:3606
 msgid "Net Control"
 msgstr "Καθαρός έλεγχος"
 
-#: functions.php:3135
+#: functions.php:3607
 msgid "Internet Control"
 msgstr "Έλεγχος Διαδικτύου"
 
-#: functions.php:3136
+#: functions.php:3608
 msgid "Critic ECP"
 msgstr "Κρίσιμο ECP"
 
-#: functions.php:3137
+#: functions.php:3609
 msgid "Flash Override"
 msgstr "Παράκαμψη Flash"
 
-#: functions.php:3138
+#: functions.php:3610
 msgid "Flash"
 msgstr "Φλας"
 
-#: functions.php:3139
+#: functions.php:3611
 msgid "Immediate"
 msgstr "Άμεση"
 
-#: functions.php:3140
+#: functions.php:3612
 msgid "Priority"
 msgstr "Προτεραιότητα"
 
-#: functions.php:3141
+#: functions.php:3613
 msgid "Routine"
 msgstr "Ρουτίνα"
 
-#: functions.php:3181
+#: functions.php:3653
 msgid "Summary Statistics"
 msgstr "Συνοπτική Στατιστική"
 
-#: functions.php:3192
+#: functions.php:3664
 #, php-format
 msgid "IP Packet Size Distribution (%%)"
 msgstr "Κατανομή μεγέθους πακέτου IP (%%)"
 
-#: functions.php:3197
+#: functions.php:3669
 #, php-format
 msgid "Packets per Flow Distribution (%%)"
 msgstr "Πακέτα ανά διανομή ροής (%%)"
 
-#: functions.php:3202
+#: functions.php:3674
 #, php-format
 msgid "Octets per Flow Distribution (%%)"
 msgstr "Οκτάδες ανά κατανομή ροής (%%)"
 
-#: functions.php:3207
+#: functions.php:3679
 #, php-format
 msgid "Flow Time Distribution (%%)"
 msgstr "Κατανομή χρόνου ροής (%%)"
 
-#: functions.php:3394
+#: functions.php:3864
 msgid "You must select a Statistics Report or Printed Report!"
 msgstr "Πρέπει να επιλέξετε μια αναφορά στατιστικών στοιχείων ή μια τυπωμένη αναφορά!"
 
-#: functions.php:3398
+#: functions.php:3868
 msgid "You must select only a Statistics Report or a Printed Report (not both)!"
 msgstr "Πρέπει να επιλέξετε μόνο μια αναφορά στατιστικών στοιχείων ή μια τυπωμένη αναφορά (όχι και τις δύο)!"
 
-#: functions.php:3402
+#: functions.php:3872
 msgid "Invalid dates, End Date/Time is earlier than Start Date/Time!"
 msgstr "Μη έγκυρες ημερομηνίες, η ημερομηνία / ώρα λήξης είναι νωρίτερα από την ημερομηνία / ώρα έναρξης!"
 
-#: functions.php:3413 functions.php:3418
+#: functions.php:3883 functions.php:3888
 msgid "Invalid IP for the Source Address!<br>(Must be in the form of '192.168.0.1')"
 msgstr "Μη έγκυρη διεύθυνση IP για τη διεύθυνση προέλευσης! <br> (Πρέπει να έχει τη μορφή '192.168.0.1')"
 
-#: functions.php:3425 functions.php:3429 functions.php:3433
+#: functions.php:3895 functions.php:3901 functions.php:3905
 msgid "Invalid subnet for the Source Address!<br>(Must be in the form of '192.168.0.1/255.255.255.0' or '192.168.0.1/24')"
 msgstr "Μη έγκυρο υποδίκτυο για τη διεύθυνση προέλευσης! <br> (Πρέπει να έχει τη μορφή '192.168.0.1/255.255.255.0' ή '192.168.0.1/24')"
 
-#: functions.php:3447 functions.php:3451
+#: functions.php:3919 functions.php:3923
 msgid "Invalid IP for the Destination Address!<br>(Must be in the form of '192.168.0.1')"
 msgstr "Μη έγκυρη διεύθυνση IP για τη διεύθυνση προορισμού! <br> (Πρέπει να έχει τη μορφή '192.168.0.1')"
 
-#: functions.php:3457 functions.php:3461 functions.php:3465
+#: functions.php:3929 functions.php:3933 functions.php:3937
 msgid "Invalid subnet for the Destination Address!<br>(Must be in the form of '192.168.0.1/255.255.255.0' or '192.168.0.1/24')"
 msgstr "Μη έγκυρο υποδίκτυο για τη διεύθυνση προορισμού! <br> (Πρέπει να έχει τη μορφή '192.168.0.1/255.255.255.0' ή '192.168.0.1/24')"
 
-#: functions.php:3483
+#: functions.php:3955
 msgid "Invalid value for Source Interface!"
 msgstr "Μη έγκυρη τιμή για τη διασύνδεση προέλευσης!"
 
-#: functions.php:3499
+#: functions.php:3971
 msgid "Invalid value for Source Port! (0 - 65535)"
 msgstr "Μη έγκυρη τιμή για τη θύρα προέλευσης! (0 - 65535)"
 
-#: functions.php:3515
+#: functions.php:3987
 msgid "Invalid value for Source AS! (0 - 65535)"
 msgstr "Μη έγκυρη τιμή για την προέλευση AS! (0 - 65535)"
 
-#: functions.php:3531
+#: functions.php:4003
 msgid "Invalid value for Destination Interface!"
 msgstr "Μη έγκυρη τιμή για τη διεπαφή προορισμού!"
 
-#: functions.php:3547
+#: functions.php:4019
 msgid "Invalid value for Destination Port! (0 - 65535)"
 msgstr "Μη έγκυρη τιμή για τη θύρα προορισμού! (0 - 65535)"
 
-#: functions.php:3563
+#: functions.php:4035
 msgid "Invalid value for Destination AS! (0 - 65535)"
 msgstr "Μη έγκυρη τιμή για τον προορισμό AS! (0 - 65535)"
 
-#: functions.php:3579
+#: functions.php:4051
 msgid "Invalid value for Protocol! (1 - 255)"
 msgstr "Μη έγκυρη τιμή για το πρωτόκολλο! (1 - 255)"
 
-#: functions.php:3591
+#: functions.php:4063
 msgid "Invalid value for TCP Flag! (ex: 0x1b or 0x1b/SA or SA/SA)"
 msgstr "Μη έγκυρη τιμή για την επισήμανση TCP! (πρώην: 0x1b ή 0x1b / SA ή SA / SA)"
 
-#: functions.php:3600
+#: functions.php:4072
 msgid "Invalid value for Cutoff Octets!"
 msgstr "Μη έγκυρη τιμή για τα Octets Cutoff!"
 
-#: functions.php:3607
+#: functions.php:4079
 msgid "Invalid value for Cutoff Lines!"
 msgstr "Μη έγκυρη τιμή για τις γραμμές Cutoff!"
 
-#: functions.php:3614
+#: functions.php:4086
 msgid "Invalid value for Sort Field!"
 msgstr "Μη έγκυρη τιμή για το πεδίο Ταξινόμηση!"
 
-#: functions.php:3641
+#: functions.php:4113
 #, php-format
 msgid "FlowView Chart for %s Type is %s"
 msgstr "Ο χάρτης FlowView για τον τύπο %s είναι %s"
 
-#: functions.php:3894
+#: functions.php:4459
 msgid "Not Supported"
 msgstr ""
 
-#: functions.php:3969
+#: functions.php:4534
 msgid "Total Flows"
 msgstr "Μέγιστες ροές:"
 
-#: functions.php:3974
+#: functions.php:4539
 msgid "Bytes Exchanged"
 msgstr "Ανταλλαγή bytes"
 
-#: functions.php:3978
+#: functions.php:4543
 msgid "Packets Examined"
 msgstr "Μπαταρίες πακέτων"
 
@@ -1677,166 +2265,308 @@ msgstr "Plugin -> Flow Viewer"
 msgid "Plugin -> Flow Admin"
 msgstr "Plugin -> Διαχείριση ροών"
 
-#: setup.php:43 setup.php:64
+#: setup.php:43 setup.php:71
 msgid "Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing."
 msgstr "Μετονομάστε τα αρχεία config.php.dist ή config_local.php.dist στον κατάλογο flowview και αλλάξτε τη ρύθμιση της βάσης δεδομένων σας πριν από την εγκατάσταση."
 
-#: setup.php:116
+#: setup.php:123
 msgid "Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information"
 msgstr ""
 
-#: setup.php:129
+#: setup.php:136
 msgid "The Filter has been Deleted"
 msgstr "Το φίλτρο έχει διαγραφεί"
 
-#: setup.php:130
+#: setup.php:137
 msgid "The Filter has been Updated"
 msgstr "Το φίλτρο έχει ενημερωθεί"
 
-#: setup.php:135
+#: setup.php:142
 msgid "Import/Export"
 msgstr "Εισαγωγή/Εξαγωγή"
 
-#: setup.php:136 setup.php:137 setup.php:138 setup.php:139 setup.php:144
-#: setup.php:288 setup.php:290
+#: setup.php:143 setup.php:144 setup.php:145 setup.php:146 setup.php:151
+#: setup.php:295 setup.php:297
 msgid "FlowView"
 msgstr "FlowView"
 
-#: setup.php:139
-msgid "DNS Cache"
+#: setup.php:146
+msgid "Databases"
 msgstr ""
 
-#: setup.php:147
+#: setup.php:154
 msgid "Normal User"
 msgstr "Απλός Χρήστης"
 
-#: setup.php:148
+#: setup.php:155
 msgid "System Administration"
 msgstr "Διαχείριση συστήματος"
 
-#: setup.php:169 setup.php:190 setup.php:348
+#: setup.php:176 setup.php:197
 msgid "Flow Viewer"
 msgstr "Flow Viewer"
 
-#: setup.php:176
+#: setup.php:183
 msgid "Dashboard"
 msgstr "Πίνακας Ελέγχου"
 
-#: setup.php:183 setup.php:211 setup.php:239 setup.php:267
+#: setup.php:190 setup.php:218 setup.php:246 setup.php:274
 msgid "(save)"
 msgstr "Αποθήκευση"
 
-#: setup.php:204 setup.php:232 setup.php:260
+#: setup.php:211 setup.php:239 setup.php:267
 msgid "(edit)"
 msgstr "(Eπεξεργασία)"
 
-#: setup.php:218 setup.php:246 setup.php:274
+#: setup.php:225 setup.php:253 setup.php:281
 msgid "(actions)"
 msgstr "Ενέργειες"
 
-#: setup.php:353
+#: setup.php:357
+#, fuzzy
+#| msgid "Hostname Resolution"
+msgid "Name Resolution"
+msgstr "Ανάλυση"
+
+#: setup.php:362
 msgid "Hostname Resolution"
 msgstr "Ανάλυση"
 
-#: setup.php:354
+#: setup.php:363
 msgid "The method by which you wish to resolve hostnames."
 msgstr "Η μέθοδος με την οποία θέλετε να επιλύσετε τα ονόματα κεντρικών υπολογιστών."
 
-#: setup.php:357
+#: setup.php:366
 msgid "Use Local Server"
 msgstr "Χρησιμοποιήστε τον τοπικό διακομιστή"
 
-#: setup.php:358
+#: setup.php:367
 #, fuzzy
 #| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "Χρησιμοποιήστε τον παρακάτω διακομιστή DNS"
 
-#: setup.php:359
+#: setup.php:368
 msgid "Don't Resolve DNS"
 msgstr "Μην επιλύσετε το DNS"
 
-#: setup.php:364
+#: setup.php:373
 #, fuzzy
 msgid "Local Domain Name"
 msgstr "Διαγραφή ονομάτων τομέα"
 
-#: setup.php:367
+#: setup.php:376
 msgid "For IPv4 addresses on the local network that do not resolve locally, append this suffix to the resultant ip address."
 msgstr ""
 
-#: setup.php:372
+#: setup.php:381
 msgid "Local IP Range"
 msgstr ""
 
-#: setup.php:375
+#: setup.php:384
 msgid "Provide the IPv4 ip address range for your local network for hosts that may not be registered in DNS.  These hosts will be mapped to the Local Domain Name above.  This more for home users.  You can use either CIDR or non-CIDR formats.  For examle: 192.168.11.0 or 192.168.11.0/24"
 msgstr ""
 
-#: setup.php:376
+#: setup.php:385
 msgid "Use CIDR or Non-CIDR"
 msgstr ""
 
-#: setup.php:381
+#: setup.php:390
 #, fuzzy
 #| msgid "Use Arin to Find Unregistered Domains"
-msgid "Use Arin to Find Unregistered Domains and AS Numbers"
+msgid "Use Arin to find Domains and AS Numbers"
 msgstr "Χρησιμοποιήστε το Arin για να βρείτε μη καταχωρημένους τομείς"
 
-#: setup.php:382
+#: setup.php:391
 msgid "Many Big Tech data collection services like to mask their ownership of domains to obfuscate the fact that they are collecting your personal information.  If you are concerned with this and your Cacti install has access to the Internet, you can use Arin to remove the mask from those Big Tech companies."
 msgstr "Πολλές υπηρεσίες συλλογής δεδομένων Big Tech επιθυμούν να αποκρύψουν την ιδιοκτησία των τομέων για να αποκρύψουν το γεγονός ότι συλλέγουν τα προσωπικά σας στοιχεία.  Εάν ανησυχείτε για αυτό και η εγκατάσταση κάκτων σας έχει πρόσβαση στο Διαδίκτυο, μπορείτε να χρησιμοποιήσετε το Arin για να αφαιρέσετε τη μάσκα από αυτές τις εταιρείες Big Tech."
 
-#: setup.php:394
+#: setup.php:396
+msgid "Whois Provider Host"
+msgstr ""
+
+#: setup.php:399
+msgid "Please provide the hostname for resolving whois calls.  If not null, you must have the whois binary in your system path."
+msgstr ""
+
+#: setup.php:400
+msgid "whois.radb.net"
+msgstr ""
+
+#: setup.php:405
+#, fuzzy
+msgid "Whois Binary Path"
+msgstr "Εργαλεία ροής Δυαδική διαδρομή"
+
+#: setup.php:408
+msgid "Please provide the pathname for the 'whois' binary.  The 'whois' binary will be used to find AS information supplementing Arin."
+msgstr ""
+
+#: setup.php:409
+msgid "Enter binary path"
+msgstr ""
+
+#: setup.php:414
+msgid "Data Retention and Report Generation"
+msgstr ""
+
+#: setup.php:426
 msgid "Data Retention Policy"
 msgstr "Πολιτική διατήρησης δεδομένων"
 
-#: setup.php:395
+#: setup.php:427
 msgid "The amount of time Cacti will maintain the partitioned Flow tables."
 msgstr "Το χρονικό διάστημα που ο Cacti θα διατηρήσει τους διαχωρισμένους πίνακες ροής."
 
-#: setup.php:398
+#: setup.php:430
 #, php-format
 msgid "%d Week"
 msgstr "% d Εβδομάδα"
 
-#: setup.php:399 setup.php:400
+#: setup.php:431 setup.php:432
 #, php-format
 msgid "%d Weeks"
 msgstr "% d εβδομάδες"
 
-#: setup.php:401
+#: setup.php:433
 #, php-format
 msgid "%d Month"
 msgstr "% d Μήνα"
 
-#: setup.php:402 setup.php:403 setup.php:404 setup.php:405
+#: setup.php:434 setup.php:435 setup.php:436 setup.php:437
 #, php-format
 msgid "%d Months"
 msgstr "% d Μήνας"
 
-#: setup.php:406
+#: setup.php:438
 #, php-format
 msgid "%d Year"
 msgstr "% d Έτος"
 
-#: setup.php:411
+#: setup.php:443
 msgid "Database Partitioning Scheme"
 msgstr "Σχέδιο διαμέρισης βάσης δεδομένων"
 
-#: setup.php:412
+#: setup.php:444
 msgid "Depending on the number of flows per minute, you may require more tables per day."
 msgstr "Ανάλογα με τον αριθμό των ροών ανά λεπτό, ενδέχεται να χρειαστείτε περισσότερους πίνακες ανά ημέρα."
 
-#: setup.php:415
+#: setup.php:447
 msgid "Daily"
 msgstr "Καθημερινά"
 
-#: setup.php:416
+#: setup.php:448
 msgid "Hourly"
 msgstr "Aνά ώρα"
 
-#: setup.php:422
+#: setup.php:453
+msgid "Storage Engine for Raw Tables"
+msgstr ""
+
+#: setup.php:454
+msgid "The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick."
+msgstr ""
+
+#: setup.php:457
+msgid "Aria (Fast, Crash Safe)"
+msgstr ""
+
+#: setup.php:458
+msgid "InnoDB (Slow, High Concurrency)"
+msgstr ""
+
+#: setup.php:463
+msgid "Parallel Queries"
+msgstr ""
+
+#: setup.php:468
+msgid "Max Concurrent Threads"
+msgstr ""
+
+#: setup.php:469
+msgid "The maximum number of threads that will be dispatched to run the FlowView queries.  Note that you can have at most 1 thread per database partition, and you should be careful not to overload your database server with having too many concurrent threads running."
+msgstr ""
+
+#: setup.php:472
+#, fuzzy
+#| msgid "Disable"
+msgid "Disabled"
+msgstr "Απενεργοποίηση"
+
+#: setup.php:473 setup.php:474 setup.php:475 setup.php:476 setup.php:477
+#: setup.php:478 setup.php:479 setup.php:480 setup.php:481 setup.php:482
+#: setup.php:483 setup.php:484 setup.php:485 setup.php:486 setup.php:487
+#: setup.php:488 setup.php:489 setup.php:490 setup.php:491
+#, php-format
+msgid "%d Threads"
+msgstr ""
+
+#: setup.php:496
+#, fuzzy
+#| msgid "Maximum Rows"
+msgid "Maximum Run Time"
+msgstr "Μέγιστος Αριθμός Σειρών"
+
+#: setup.php:497
+msgid "If the Parallel Query does not finish in this time, exit."
+msgstr ""
+
+#: setup.php:500
+#, fuzzy, php-format
+msgid "%d Minute"
+msgstr "% d λεπτά"
+
+#: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
+#: setup.php:506
+#, fuzzy, php-format
+msgid "%d Minutes"
+msgstr "%d λεπτά"
+
+#: setup.php:511
+msgid "Cached Data Time to Live"
+msgstr ""
+
+#: setup.php:512
+msgid "How long should FlowView hold onto Cached Query results before purging them?"
+msgstr ""
+
+#: setup.php:515 setup.php:516
+#, fuzzy, php-format
+#| msgid "Every %d Hours"
+msgid "%d Hours"
+msgstr "Κάθε% d Ώρες"
+
+#: setup.php:517
+#, fuzzy, php-format
+msgid "%d Day"
+msgstr "%d Ημέρες"
+
+#: setup.php:518
+#, fuzzy, php-format
+msgid "%d Days"
+msgstr "%d Ημέρες"
+
+#: setup.php:523
+msgid "MaxScale Sharding"
+msgstr ""
+
+#: setup.php:528
+msgid "Leverage MaxScale to Distribute Query Shards"
+msgstr ""
+
+#: setup.php:529
+msgid "If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers."
+msgstr ""
+
+#: setup.php:534
+msgid "MaxScale Read-Only Port"
+msgstr ""
+
+#: setup.php:537
+msgid "This should be the port of the Read-Only-Service (readconnroute) service and router."
+msgstr ""
+
+#: setup.php:543
 #, fuzzy
 msgid "Flowview"
 msgstr "FlowView"
@@ -1852,18 +2582,6 @@ msgstr "FlowView"
 
 #~ msgid "Save Overrides to Selected Filter"
 #~ msgstr "Αποθήκευση παρακάμψεων σε επιλεγμένο φίλτρο"
-
-#, fuzzy
-#~ msgid "%d Days"
-#~ msgstr "%d Ημέρες"
-
-#, fuzzy
-#~ msgid "%d Minute"
-#~ msgstr "% d λεπτά"
-
-#, fuzzy
-#~ msgid "%d Minutes"
-#~ msgstr "%d λεπτά"
 
 #, fuzzy
 #~ msgid "(e.g., -0x0b/0x0F)"
@@ -2020,10 +2738,6 @@ msgstr "FlowView"
 #~ msgstr "Πλήρως σε καθορισμένο χρονικό διάστημα"
 
 #, fuzzy
-#~ msgid "Expiration"
-#~ msgstr "Λήξη"
-
-#, fuzzy
 #~ msgid "Expire"
 #~ msgstr "Εκπνέω"
 
@@ -2032,16 +2746,8 @@ msgstr "FlowView"
 #~ msgstr "Όνομα φίλτρου"
 
 #, fuzzy
-#~ msgid "Filter Saved"
-#~ msgstr "Το φίλτρο αποθηκεύτηκε"
-
-#, fuzzy
 #~ msgid "Flow Filter Constraints"
 #~ msgstr "Περιορισμοί φίλτρου ροής"
-
-#, fuzzy
-#~ msgid "Flow Tools Binary Path"
-#~ msgstr "Εργαλεία ροής Δυαδική διαδρομή"
 
 #, fuzzy
 #~ msgid "Flow Tools Work Directory"
@@ -2124,10 +2830,6 @@ msgstr "FlowView"
 #~ msgstr "IPSEC-ESP"
 
 #, fuzzy
-#~ msgid "IPv6"
-#~ msgstr "IPv6"
-
-#, fuzzy
 #~ msgid "IPv6-Frag"
 #~ msgstr "IPv6-Frag"
 
@@ -2158,10 +2860,6 @@ msgstr "FlowView"
 #, fuzzy
 #~ msgid "Include if:"
 #~ msgstr "Συμπεριλάβετε εάν:"
-
-#, fuzzy
-#~ msgid "Interface"
-#~ msgstr "Διεπαφή"
 
 #, fuzzy
 #~ msgid "LEAF-1"
@@ -2351,20 +3049,12 @@ msgstr "FlowView"
 #~ msgstr "Παράμετροι αναφοράς"
 
 #, fuzzy
-#~ msgid "Rotation"
-#~ msgstr "Περιστροφή"
-
-#, fuzzy
 #~ msgid "SDRP"
 #~ msgstr "SDRP"
 
 #, fuzzy
 #~ msgid "ST"
 #~ msgstr "Σεν. Φορ"
-
-#, fuzzy
-#~ msgid "Save As"
-#~ msgstr "Αποθήκευση ως"
 
 #, fuzzy
 #~ msgid "Select One"
@@ -2444,10 +3134,6 @@ msgstr "FlowView"
 
 #~ msgid "Up"
 #~ msgstr "Πάνω"
-
-#, fuzzy
-#~ msgid "Update"
-#~ msgstr "Ενημέρωση"
 
 #, fuzzy
 #~ msgid "VMTP"
