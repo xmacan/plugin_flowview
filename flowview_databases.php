@@ -629,10 +629,22 @@ function view_db_table($tab, &$tabs) {
 		$sql_params[] = get_request_var('source');
 	}
 
-	foreach($search as $column) {
-		$column       = '`' . trim($column) . '`';
-		$sql_where   .= ($sql_where != '' ? ' AND ':'WHERE ') . "$column LIKE ?";
-		$sql_params[] = '%' . get_request_var('filter') . '%';
+	if (get_request_var('filter') != '') {
+		if (cacti_sizeof($search)) {
+			foreach($search as $index => $column) {
+				$column = '`' . trim($column) . '`';
+
+				if ($index == 0) {
+					$sql_where .= ($sql_where != '' ? ' OR (':'WHERE (') . "$column LIKE ?";
+				} else {
+					$sql_where .= ' OR ' . "$column LIKE ?";
+				}
+
+				$sql_params[] = '%' . get_request_var('filter') . '%';
+			}
+
+			$sql_where .= ')';
+		}
 	}
 
 	$results = flowview_db_fetch_assoc_prepared("SELECT {$table_det['columns']}
