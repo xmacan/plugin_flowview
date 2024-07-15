@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-07-14 15:10-0400\n"
+"POT-Creation-Date: 2024-07-14 20:09-0400\n"
 "PO-Revision-Date: 2024-07-14 15:43-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -228,7 +228,7 @@ msgstr "Porta"
 msgid "Dest IP"
 msgstr "IP di destinazione"
 
-#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
+#: arrays.php:410 flowview_databases.php:1388 functions.php:2908
 msgid "IP Address"
 msgstr "Indirizzo IP"
 
@@ -301,10 +301,10 @@ msgstr "Fl"
 msgid "Flags"
 msgstr "Flag"
 
-#: arrays.php:531 arrays.php:537 flowview_databases.php:228
-#: flowview_databases.php:802 flowview_databases.php:1177
-#: flowview_databases.php:1332 flowview_databases.php:1469
-#: flowview_databases.php:1639
+#: arrays.php:531 arrays.php:537 flowview_databases.php:295
+#: flowview_databases.php:869 flowview_databases.php:1244
+#: flowview_databases.php:1399 flowview_databases.php:1536
+#: flowview_databases.php:1706
 msgid "Source"
 msgstr "Sorgente"
 
@@ -322,7 +322,7 @@ msgstr "%d pixel"
 msgid "General Filters"
 msgstr "Filtri Genrali"
 
-#: arrays.php:589 flowview_databases.php:508 functions.php:537
+#: arrays.php:589 flowview_databases.php:575 functions.php:537
 msgid "Filter"
 msgstr "Filtro"
 
@@ -637,7 +637,7 @@ msgstr "Filtro salvato"
 msgid "Peering Sets"
 msgstr "Set di peering"
 
-#: arrays.php:924 flowview_databases.php:438
+#: arrays.php:924 flowview_databases.php:245 flowview_databases.php:505
 msgid "Network"
 msgstr "Rete"
 
@@ -695,586 +695,669 @@ msgstr "Dettagli del Registro di sistema delle route Internet"
 msgid "Authorized Agent Details"
 msgstr "Dettagli dell'agente autorizzato"
 
-#: flowview_databases.php:218
-msgid "Remarks"
-msgstr "Osservazioni"
+#: flowview_databases.php:205
+#, fuzzy
+#| msgid "CIDR/Routes"
+msgid "CIDR/Route"
+msgstr "CIDR/Rotte"
 
-#: flowview_databases.php:223 flowview_databases.php:1651
-msgid "Last Modified"
-msgstr "Ultima modifica"
+#: flowview_databases.php:210
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Number"
+msgstr "Numeri"
 
-#: flowview_databases.php:233
-msgid "Registration Date"
-msgstr "Data di Registrazione"
+#: flowview_databases.php:215
+#, fuzzy
+#| msgid "AS Blocks"
+msgid "AS Block"
+msgstr "Blocchi AS"
 
-#: flowview_databases.php:238
-msgid "MNT By"
-msgstr "MNT Di"
+#: flowview_databases.php:220
+#, fuzzy
+#| msgid "AS Sets"
+msgid "AS Set"
+msgstr "Set AS"
 
-#: flowview_databases.php:243
-msgid "Admin Contact"
-msgstr "Contatto amministratore"
+#: flowview_databases.php:225
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Route Set"
+msgstr "Set di percorsi"
 
-#: flowview_databases.php:248
+#: flowview_databases.php:230
+#, fuzzy
+#| msgid "Domains"
+msgid "Domain"
+msgstr "Domini"
+
+#: flowview_databases.php:235
+#, fuzzy
+msgid "Filter Set"
+msgstr "Filtro salvato"
+
+#: flowview_databases.php:240
+#, fuzzy
+#| msgid "Peering Sets"
+msgid "Peering Set"
+msgstr "Set di peering"
+
+#: flowview_databases.php:250
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Router"
+msgstr "Controllo di Internet"
+
+#: flowview_databases.php:255
+#, fuzzy
+#| msgid "Incident Response Teams"
+msgid "Incident Response Team"
+msgstr "Team di risposta agli incidenti"
+
+#: flowview_databases.php:260
+#, fuzzy
+#| msgid "Auth Agents"
+msgid "Auth Agent"
+msgstr "Agenti di autenticazione"
+
+#: flowview_databases.php:265 flowview_databases.php:315
 msgid "Organization"
 msgstr "Organizzazione"
 
-#: flowview_databases.php:253
+#: flowview_databases.php:270
+#, fuzzy
+#| msgid "Roles"
+msgid "Role"
+msgstr "Ruoli"
+
+#: flowview_databases.php:275
+#, fuzzy
+#| msgid "Persons"
+msgid "Person"
+msgstr "Persone"
+
+#: flowview_databases.php:280
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Router Set"
+msgstr "Set di percorsi"
+
+#: flowview_databases.php:285
+msgid "Remarks"
+msgstr "Osservazioni"
+
+#: flowview_databases.php:290 flowview_databases.php:1718
+msgid "Last Modified"
+msgstr "Ultima modifica"
+
+#: flowview_databases.php:300
+msgid "Registration Date"
+msgstr "Data di Registrazione"
+
+#: flowview_databases.php:305
+msgid "MNT By"
+msgstr "MNT Di"
+
+#: flowview_databases.php:310
+msgid "Admin Contact"
+msgstr "Contatto amministratore"
+
+#: flowview_databases.php:320
 msgid "Changes"
 msgstr "Modifiche"
 
-#: flowview_databases.php:258
+#: flowview_databases.php:325
 msgid "Notify"
 msgstr "Notifica"
 
-#: flowview_databases.php:263
+#: flowview_databases.php:330
 msgid "Description"
 msgstr "Descrizione"
 
-#: flowview_databases.php:268
+#: flowview_databases.php:335
 msgid "Tech Contact"
 msgstr "Contatto tecnico"
 
-#: flowview_databases.php:273
+#: flowview_databases.php:340
 msgid "MNT Lower"
 msgstr "MNT inferiore"
 
-#: flowview_databases.php:278
+#: flowview_databases.php:345
 msgid "Country"
 msgstr "Nazione"
 
-#: flowview_databases.php:283
+#: flowview_databases.php:350
 #, fuzzy
 #| msgid "Email"
 msgid "Abuse Email"
 msgstr "Email"
 
-#: flowview_databases.php:288
+#: flowview_databases.php:355
 msgid "Fax Number"
 msgstr "Fax"
 
-#: flowview_databases.php:293
+#: flowview_databases.php:360
 msgid "Phone"
 msgstr "Telefono"
 
-#: flowview_databases.php:298 flowview_schedules.php:559
+#: flowview_databases.php:365 flowview_schedules.php:559
 msgid "Email"
 msgstr "Email"
 
-#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+#: flowview_databases.php:370 flowview_devices.php:336 flowview_devices.php:551
 msgid "Address"
 msgstr "Indirizzo"
 
-#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+#: flowview_databases.php:375 flowview_devices.php:340 flowview_devices.php:775
 msgid "Status"
 msgstr "Stato"
 
-#: flowview_databases.php:313
+#: flowview_databases.php:380
 msgid "Members By Fef"
 msgstr "Membri di Fef"
 
-#: flowview_databases.php:318
+#: flowview_databases.php:385
 msgid "Abuse Contacts"
 msgstr "Contatti per l'abuso"
 
-#: flowview_databases.php:323
+#: flowview_databases.php:390
 msgid "MNT Reference"
 msgstr "Riferimento MNT"
 
-#: flowview_databases.php:328
+#: flowview_databases.php:395
 msgid "Members"
 msgstr "Membri"
 
-#: flowview_databases.php:333
+#: flowview_databases.php:400
 msgid "MNT Notify"
 msgstr "Notifica MNT"
 
-#: flowview_databases.php:338
+#: flowview_databases.php:405
 msgid "Authorization"
 msgstr "Autorizzazione"
 
-#: flowview_databases.php:343
+#: flowview_databases.php:410
 msgid "MNT Routes"
 msgstr "Rotte MNT"
 
-#: flowview_databases.php:348
+#: flowview_databases.php:415
 msgid "Member of"
 msgstr "Membro di"
 
-#: flowview_databases.php:353
+#: flowview_databases.php:420
 #, fuzzy
 msgid "Updates Email"
 msgstr "Aggiorna"
 
-#: flowview_databases.php:358
+#: flowview_databases.php:425
 msgid "NOC Handle"
 msgstr "Maniglia NOC"
 
-#: flowview_databases.php:363
+#: flowview_databases.php:430
 msgid "Sponsor Org"
 msgstr "Organizzazione sponsor"
 
-#: flowview_databases.php:368
+#: flowview_databases.php:435
 msgid "MNT Irt"
 msgstr "MNT Irt"
 
-#: flowview_databases.php:373
+#: flowview_databases.php:440
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "Numeri"
 
-#: flowview_databases.php:378
+#: flowview_databases.php:445
 #, fuzzy
 #| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "Porta(i) di origine"
 
-#: flowview_databases.php:383
+#: flowview_databases.php:450
 msgid "Pingable"
 msgstr "Pingable"
 
-#: flowview_databases.php:388
+#: flowview_databases.php:455
 msgid "Alias"
 msgstr "Alias"
 
-#: flowview_databases.php:393
+#: flowview_databases.php:460
 #, fuzzy
 #| msgid "Graph Type"
 msgid "Org Type"
 msgstr "Tipo di grafico"
 
-#: flowview_databases.php:398
+#: flowview_databases.php:465
 msgid "Refer To"
 msgstr "Fare riferimento a"
 
-#: flowview_databases.php:403
+#: flowview_databases.php:470
 msgid "MP Peering"
 msgstr "MP Peering"
 
-#: flowview_databases.php:408 flowview_devices.php:490
+#: flowview_databases.php:475 flowview_devices.php:490
 msgid "Export"
 msgstr "Esporta"
 
-#: flowview_databases.php:413
+#: flowview_databases.php:480
 msgid "Holes"
 msgstr "Buchi"
 
-#: flowview_databases.php:418
+#: flowview_databases.php:485
 #, fuzzy
 #| msgid "Default"
 msgid "MP Default"
 msgstr "Predefinito"
 
-#: flowview_databases.php:423
+#: flowview_databases.php:490
 msgid "Components"
 msgstr "Componenti"
 
-#: flowview_databases.php:428
+#: flowview_databases.php:495
 msgid "RS Out"
 msgstr "Uscita RS"
 
-#: flowview_databases.php:433
+#: flowview_databases.php:500
 msgid "Organization Name"
 msgstr "Nome dell’Organizzazione"
 
-#: flowview_databases.php:443
+#: flowview_databases.php:510
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
 msgstr "Nome: "
 
-#: flowview_databases.php:448
+#: flowview_databases.php:515
 msgid "Author"
 msgstr "Autore"
 
-#: flowview_databases.php:453
+#: flowview_databases.php:520
 msgid "IRT Notify"
 msgstr "Notifica IRT"
 
-#: flowview_databases.php:458
+#: flowview_databases.php:525
 msgid "Aggr MTD"
 msgstr "Aggr MTD"
 
-#: flowview_databases.php:463
+#: flowview_databases.php:530
 msgid "AS Type"
 msgstr "Tipo AS"
 
-#: flowview_databases.php:468
+#: flowview_databases.php:535
 #, fuzzy
 #| msgid "Filter"
 msgid "MP Filter"
 msgstr "Filtro"
 
-#: flowview_databases.php:473
+#: flowview_databases.php:540
 #, fuzzy
 #| msgid "Default"
 msgid "Default Route"
 msgstr "Predefinito"
 
-#: flowview_databases.php:478
+#: flowview_databases.php:545
 msgid "Assignment Size"
 msgstr "Dimensione dell'incarico"
 
-#: flowview_databases.php:483
+#: flowview_databases.php:550
 #, fuzzy
 #| msgid "Report"
 msgid "Export Comps"
 msgstr "Segnala"
 
-#: flowview_databases.php:488
+#: flowview_databases.php:555
 msgid "RS In"
 msgstr "RS In"
 
-#: flowview_databases.php:493
+#: flowview_databases.php:560
 #, fuzzy
 #| msgid "Field Name"
 msgid "Net Name"
 msgstr "Campo Nome"
 
-#: flowview_databases.php:498
+#: flowview_databases.php:565
 msgid "DS Rdata"
 msgstr "DS Rdata"
 
-#: flowview_databases.php:503
+#: flowview_databases.php:570
 msgid "Aggr Boundary"
 msgstr "Limite Aggr"
 
-#: flowview_databases.php:513
+#: flowview_databases.php:580
 msgid "MP Import"
 msgstr "Importazione MP"
 
-#: flowview_databases.php:518
+#: flowview_databases.php:585
 msgid "Language"
 msgstr "Lingua"
 
-#: flowview_databases.php:523
+#: flowview_databases.php:590
 msgid "RESFful Link"
 msgstr "Collegamento RESFful"
 
-#: flowview_databases.php:528
+#: flowview_databases.php:595
 msgid "Peer"
 msgstr "Nodo"
 
-#: flowview_databases.php:533
+#: flowview_databases.php:600
 msgid "Zone Contact"
 msgstr "Contatto di zona"
 
-#: flowview_databases.php:538
+#: flowview_databases.php:605
 msgid "Inject"
 msgstr "Iniettare"
 
-#: flowview_databases.php:543
+#: flowview_databases.php:610
 msgid "MP Peer"
 msgstr "MP Peer"
 
-#: flowview_databases.php:548
+#: flowview_databases.php:615
 msgid "Referral By"
 msgstr "Segnalazione di"
 
-#: flowview_databases.php:553
+#: flowview_databases.php:620
 msgid "Form"
 msgstr "Modulo"
 
-#: flowview_databases.php:558
+#: flowview_databases.php:625
 msgid "MNT Domains"
 msgstr "Domini MNT"
 
-#: flowview_databases.php:563
+#: flowview_databases.php:630
 msgid "Origin AS"
 msgstr "Origine AS"
 
-#: flowview_databases.php:568
+#: flowview_databases.php:635
 #, fuzzy
 #| msgid "Report"
 msgid "MP Export"
 msgstr "Segnala"
 
-#: flowview_databases.php:573
+#: flowview_databases.php:640
 #, fuzzy
 msgid "Encyption"
 msgstr "Scadenza"
 
-#: flowview_databases.php:578
+#: flowview_databases.php:645
 msgid "Geo Feed"
 msgstr "Feed geografico"
 
-#: flowview_databases.php:583
+#: flowview_databases.php:650
 msgid "Geo Index"
 msgstr "Indice geografico"
 
-#: flowview_databases.php:588
+#: flowview_databases.php:655
 #, fuzzy
 msgid "Interface Addr"
 msgstr "Interfaccia"
 
-#: flowview_databases.php:593
+#: flowview_databases.php:660
 #, fuzzy
 #| msgid "Report"
 msgid "Export Via"
 msgstr "Segnala"
 
-#: flowview_databases.php:598
+#: flowview_databases.php:665
 msgid "Trouble"
 msgstr "Guaio"
 
-#: flowview_databases.php:603
+#: flowview_databases.php:670
 msgid "Name Servers"
 msgstr "Server dei nomi"
 
-#: flowview_databases.php:608
+#: flowview_databases.php:675
 msgid "Ping Handle"
 msgstr "Maniglia ping"
 
-#: flowview_databases.php:613
+#: flowview_databases.php:680
 msgid "Interface"
 msgstr "Interfaccia"
 
-#: flowview_databases.php:618
+#: flowview_databases.php:685
 msgid "Import"
 msgstr "Importa"
 
-#: flowview_databases.php:623
+#: flowview_databases.php:690
 msgid "Signature"
 msgstr "Firma"
 
-#: flowview_databases.php:628
+#: flowview_databases.php:695
 msgid "Geo Location"
 msgstr "Geolocalizzazione"
 
-#: flowview_databases.php:633
+#: flowview_databases.php:700
 #, fuzzy
 msgid "Local AS"
 msgstr "Locale"
 
-#: flowview_databases.php:638
+#: flowview_databases.php:705
 msgid "Import Via"
 msgstr "Importa tramite"
 
-#: flowview_databases.php:683
+#: flowview_databases.php:750
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
 msgstr "IRREVERSIBILE: Tabella di database sconosciuta %s"
 
-#: flowview_databases.php:796 flowview_databases.php:1161
-#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_databases.php:863 flowview_databases.php:1228
+#: flowview_databases.php:1520 flowview_devices.php:699
 #: flowview_filters.php:233 flowview_schedules.php:450
 msgid "Search"
 msgstr "Cerca"
 
-#: flowview_databases.php:806 flowview_databases.php:1171
-#: flowview_databases.php:1181 flowview_databases.php:1463
-#: flowview_databases.php:1473
+#: flowview_databases.php:873 flowview_databases.php:1238
+#: flowview_databases.php:1248 flowview_databases.php:1530
+#: flowview_databases.php:1540
 msgid "Any"
 msgstr "Qualsiasi"
 
-#: flowview_databases.php:824 flowview_databases.php:956
-#: flowview_databases.php:1199 flowview_databases.php:1311
-#: flowview_databases.php:1491 flowview_databases.php:1612
+#: flowview_databases.php:891 flowview_databases.php:1023
+#: flowview_databases.php:1266 flowview_databases.php:1378
+#: flowview_databases.php:1558 flowview_databases.php:1679
 msgid "Entries"
 msgstr "Voci"
 
-#: flowview_databases.php:828 flowview_databases.php:1203
-#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_databases.php:895 flowview_databases.php:1270
+#: flowview_databases.php:1562 flowview_filters.php:243
 #: flowview_schedules.php:460
 msgid "Default"
 msgstr "Predefinito"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:489
 #: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
 #: functions.php:596
 msgid "Go"
 msgstr "Vai"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:706
 #: flowview_filters.php:254 flowview_schedules.php:471
 msgid "Set/Refresh Filters"
 msgstr "Impostazione/Rifresh Filtri"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
 msgid "Clear"
 msgstr "Cancella"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474
 msgid "Clear Filters"
 msgstr "Pulisci filtri"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge"
 msgstr "Svuota"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge the DNS Cache"
 msgstr "Svuota la cache DNS"
 
-#: flowview_databases.php:997
+#: flowview_databases.php:1064
 msgid "Not Specified"
 msgstr "Non specificato"
 
-#: flowview_databases.php:1013
+#: flowview_databases.php:1080
 msgid "No Matching Entries Found"
 msgstr "Nessuna voce corrispondente trovata"
 
-#: flowview_databases.php:1073
+#: flowview_databases.php:1140
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "Fare clic su \"Continua\" per eliminare il seguente/i Programma(i)."
 msgstr[1] "Fare clic su \"Continua\" per eliminare il seguente/i Programma(i)."
 
-#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_databases.php:1145 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
 #: functions.php:843
 msgid "Cancel"
 msgstr "Annulla"
 
-#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_databases.php:1145 flowview_devices.php:214
 #: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
 msgid "Continue"
 msgstr "Continua"
 
-#: flowview_databases.php:1078
+#: flowview_databases.php:1145
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
 msgstr[0] "Elimina voce DNS"
 msgstr[1] "Elimina voci DNS"
 
-#: flowview_databases.php:1152
+#: flowview_databases.php:1219
 #, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "Orari FlowView"
 
-#: flowview_databases.php:1167 flowview_databases.php:1173
-#: flowview_databases.php:1372
+#: flowview_databases.php:1234 flowview_databases.php:1240
+#: flowview_databases.php:1439
 msgid "Verified"
 msgstr "Verificato"
 
-#: flowview_databases.php:1172 flowview_databases.php:1372
+#: flowview_databases.php:1239 flowview_databases.php:1439
 msgid "Unverified"
 msgstr "Non verificato"
 
-#: flowview_databases.php:1323
+#: flowview_databases.php:1390
 msgid "This is the IP Address of the Cache entry."
 msgstr "Questo è l'indirizzo IP della voce della cache."
 
-#: flowview_databases.php:1326
+#: flowview_databases.php:1393
 msgid "DNS Hostname"
 msgstr "Nome host DNS"
 
-#: flowview_databases.php:1329
+#: flowview_databases.php:1396
 msgid "The DNS Name assigned to the IP Address."
 msgstr "Nome DNS assegnato all'indirizzo IP."
 
-#: flowview_databases.php:1335
+#: flowview_databases.php:1402
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
 msgstr "L'origine del nome host DNS.  Può essere DNS, ricerca statica o ARIN."
 
-#: flowview_databases.php:1338
+#: flowview_databases.php:1405
 msgid "Arin Verified"
 msgstr "Verificato da Arin"
 
-#: flowview_databases.php:1341
+#: flowview_databases.php:1408
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
 msgstr "Le informazioni Arin per questo indirizzo IP sono verificate o si tratta di un indirizzo IP di dominio locale."
 
-#: flowview_databases.php:1344
+#: flowview_databases.php:1411
 msgid "CIDR ID"
 msgstr "CIDR ID"
 
-#: flowview_databases.php:1347
+#: flowview_databases.php:1414
 msgid "The Arin primary key.  This is not official Arin information."
 msgstr "La chiave primaria di Arin.  Questa non è un'informazione ufficiale di Arin."
 
-#: flowview_databases.php:1350
+#: flowview_databases.php:1417
 msgid "Autonomous System ID"
 msgstr "ID di sistema autonomo"
 
-#: flowview_databases.php:1353
+#: flowview_databases.php:1420
 msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "L'Arin Origin AS.  Queste sono informazioni ufficiali di Arin AS."
 
-#: flowview_databases.php:1356
+#: flowview_databases.php:1423
 #, fuzzy
 msgid "Updated Time"
 msgstr "Aggiorna"
 
-#: flowview_databases.php:1359
+#: flowview_databases.php:1426
 msgid "This is the time that the DNS cache was entered or last updated."
 msgstr "Questa è l'ora in cui la cache DNS è stata inserita o aggiornata l'ultima volta."
 
-#: flowview_databases.php:1380
+#: flowview_databases.php:1447
 msgid "No DNS Cache Entries Found"
 msgstr "Nessuna voce della cache DNS trovata"
 
-#: flowview_databases.php:1444
+#: flowview_databases.php:1511
 #, fuzzy
 #| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "Ascoltatori FlowView"
 
-#: flowview_databases.php:1459
+#: flowview_databases.php:1526
 #, fuzzy
 msgid "IP Version"
 msgstr "Versione"
 
-#: flowview_databases.php:1464
+#: flowview_databases.php:1531
 msgid "IPv4"
 msgstr "IPv4"
 
-#: flowview_databases.php:1465
+#: flowview_databases.php:1532
 #, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
-#: flowview_databases.php:1622
+#: flowview_databases.php:1689
 msgid "Route"
 msgstr "Percorso"
 
-#: flowview_databases.php:1624
+#: flowview_databases.php:1691
 msgid "This is the published Internet Route."
 msgstr "Questa è la rotta Internet pubblicata."
 
-#: flowview_databases.php:1627
+#: flowview_databases.php:1694
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "Porta Numero"
 
-#: flowview_databases.php:1630
+#: flowview_databases.php:1697
 msgid "The Autonomous System Number for the route."
 msgstr "Numero di sistema autonomo per la route."
 
-#: flowview_databases.php:1633
+#: flowview_databases.php:1700
 msgid "Route Description"
 msgstr "Descrizione del percorso"
 
-#: flowview_databases.php:1636
+#: flowview_databases.php:1703
 msgid "The Descrption logged by the Route Maintainer."
 msgstr "La descrizione registrata dal manutentore della rotta."
 
-#: flowview_databases.php:1642
+#: flowview_databases.php:1709
 msgid "The source database used to publish the route."
 msgstr "Database di origine utilizzato per pubblicare la route."
 
-#: flowview_databases.php:1645
+#: flowview_databases.php:1712
 msgid "Maintained By"
 msgstr "Gestito da"
 
-#: flowview_databases.php:1648
+#: flowview_databases.php:1715
 msgid "The Internet Carrier who is maintaining the route for the customer."
 msgstr "L'operatore Internet che gestisce il percorso per il cliente."
 
-#: flowview_databases.php:1654
+#: flowview_databases.php:1721
 msgid "The last time the information on this route was modified."
 msgstr "L'ultima volta che le informazioni su questo percorso sono state modificate."
 
-#: flowview_databases.php:1675
+#: flowview_databases.php:1742
 msgid "No Matching Routes Found"
 msgstr "Nessuna route corrispondente trovata"
 
