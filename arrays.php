@@ -884,8 +884,8 @@ $db_tabs = array(
 		'name' => __esc('AS Sets', 'flowview'),
 		'function' => 'view_db_table',
 		'filter'   => '',
-		'columns'  => 'as_set, source, descr, members, created, last_modified',
-		'search'   => 'as_set, descr, members, tech_c, admin_c',
+		'columns'  => 'as_set, source, mnt_by, descr, members, created, last_modified',
+		'search'   => 'as_set, descr, mnt_by, members, tech_c, admin_c',
 		'rowid'    => 'as_set, source'
 	),
 	'route_set'    => array(
