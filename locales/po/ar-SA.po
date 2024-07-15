@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-07-14 15:10-0400\n"
+"POT-Creation-Date: 2024-07-14 20:09-0400\n"
 "PO-Revision-Date: 2024-07-14 15:31-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -228,7 +228,7 @@ msgstr "منفذ"
 msgid "Dest IP"
 msgstr "Dest IP"
 
-#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
+#: arrays.php:410 flowview_databases.php:1388 functions.php:2908
 msgid "IP Address"
 msgstr "عنوان الIP"
 
@@ -301,10 +301,10 @@ msgstr "فلوريدا"
 msgid "Flags"
 msgstr "أعلام"
 
-#: arrays.php:531 arrays.php:537 flowview_databases.php:228
-#: flowview_databases.php:802 flowview_databases.php:1177
-#: flowview_databases.php:1332 flowview_databases.php:1469
-#: flowview_databases.php:1639
+#: arrays.php:531 arrays.php:537 flowview_databases.php:295
+#: flowview_databases.php:869 flowview_databases.php:1244
+#: flowview_databases.php:1399 flowview_databases.php:1536
+#: flowview_databases.php:1706
 msgid "Source"
 msgstr "المصدر"
 
@@ -322,7 +322,7 @@ msgstr "%d بكسل"
 msgid "General Filters"
 msgstr "مرشحات واضحة"
 
-#: arrays.php:589 flowview_databases.php:508 functions.php:537
+#: arrays.php:589 flowview_databases.php:575 functions.php:537
 msgid "Filter"
 msgstr "فلتر"
 
@@ -637,7 +637,7 @@ msgstr "تم حفظ الفلتر"
 msgid "Peering Sets"
 msgstr "مجموعات التناظر"
 
-#: arrays.php:924 flowview_databases.php:438
+#: arrays.php:924 flowview_databases.php:245 flowview_databases.php:505
 msgid "Network"
 msgstr "الشبكة"
 
@@ -695,439 +695,522 @@ msgstr "تفاصيل سجل مسار الإنترنت"
 msgid "Authorized Agent Details"
 msgstr "تفاصيل الوكيل المعتمد"
 
-#: flowview_databases.php:218
+#: flowview_databases.php:205
+#, fuzzy
+#| msgid "CIDR/Routes"
+msgid "CIDR/Route"
+msgstr "CIDR / الطرق"
+
+#: flowview_databases.php:210
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Number"
+msgstr "يعيّن قيمة الأس على المحور ص للأرقام. ملاحظة: تم إيقاف هذا الخيار واستبداله بخيار --y-grid. في هذا الخيار ، تظهر خطوط الشبكة Y-axis في كل فاصل زمني خطوة شبكة. يتم وضع العلامات كل خطوط عامل التسمية."
+
+#: flowview_databases.php:215
+#, fuzzy
+#| msgid "AS Blocks"
+msgid "AS Block"
+msgstr "كتل AS"
+
+#: flowview_databases.php:220
+#, fuzzy
+#| msgid "AS Sets"
+msgid "AS Set"
+msgstr "مجموعات AS"
+
+#: flowview_databases.php:225
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Route Set"
+msgstr "مجموعات الطريق"
+
+#: flowview_databases.php:230
+#, fuzzy
+#| msgid "Domains"
+msgid "Domain"
+msgstr "المواقع"
+
+#: flowview_databases.php:235
+#, fuzzy
+msgid "Filter Set"
+msgstr "تم حفظ الفلتر"
+
+#: flowview_databases.php:240
+#, fuzzy
+#| msgid "Peering Sets"
+msgid "Peering Set"
+msgstr "مجموعات التناظر"
+
+#: flowview_databases.php:250
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Router"
+msgstr "التحكم في الإنترنت"
+
+#: flowview_databases.php:255
+#, fuzzy
+#| msgid "Incident Response Teams"
+msgid "Incident Response Team"
+msgstr "فرق الاستجابة للحوادث"
+
+#: flowview_databases.php:260
+#, fuzzy
+#| msgid "Auth Agents"
+msgid "Auth Agent"
+msgstr "وكلاء المصادقة"
+
+#: flowview_databases.php:265 flowview_databases.php:315
+msgid "Organization"
+msgstr "منظمة"
+
+#: flowview_databases.php:270
+#, fuzzy
+#| msgid "Roles"
+msgid "Role"
+msgstr "الأدوار"
+
+#: flowview_databases.php:275
+#, fuzzy
+#| msgid "Persons"
+msgid "Person"
+msgstr "الاشخاص"
+
+#: flowview_databases.php:280
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Router Set"
+msgstr "مجموعات الطريق"
+
+#: flowview_databases.php:285
 msgid "Remarks"
 msgstr "ملاحظات"
 
-#: flowview_databases.php:223 flowview_databases.php:1651
+#: flowview_databases.php:290 flowview_databases.php:1718
 msgid "Last Modified"
 msgstr "آخر تعديل"
 
-#: flowview_databases.php:233
+#: flowview_databases.php:300
 #, fuzzy
 #| msgid "Destination Domain"
 msgid "Registration Date"
 msgstr "عنوان الانترنت المطلوب"
 
-#: flowview_databases.php:238
+#: flowview_databases.php:305
 msgid "MNT By"
 msgstr "MNT بواسطة"
 
-#: flowview_databases.php:243
+#: flowview_databases.php:310
 msgid "Admin Contact"
 msgstr "جهة اتصال المسؤول"
 
-#: flowview_databases.php:248
-msgid "Organization"
-msgstr "منظمة"
-
-#: flowview_databases.php:253
+#: flowview_databases.php:320
 #, fuzzy
 msgid "Changes"
 msgstr "تم اكتشاف التغييرات غير المحفوظة"
 
-#: flowview_databases.php:258
+#: flowview_databases.php:325
 msgid "Notify"
 msgstr "ذكرنى"
 
-#: flowview_databases.php:263
+#: flowview_databases.php:330
 msgid "Description"
 msgstr "الوصف"
 
-#: flowview_databases.php:268
+#: flowview_databases.php:335
 msgid "Tech Contact"
 msgstr "الاتصال التقني"
 
-#: flowview_databases.php:273
+#: flowview_databases.php:340
 msgid "MNT Lower"
 msgstr "MNT السفلى"
 
-#: flowview_databases.php:278
+#: flowview_databases.php:345
 msgid "Country"
 msgstr "الدولة"
 
-#: flowview_databases.php:283
+#: flowview_databases.php:350
 #, fuzzy
 #| msgid "Email"
 msgid "Abuse Email"
 msgstr "البريد الإلكتروني"
 
-#: flowview_databases.php:288
+#: flowview_databases.php:355
 msgid "Fax Number"
 msgstr "رقم الفاكس"
 
-#: flowview_databases.php:293
+#: flowview_databases.php:360
 msgid "Phone"
 msgstr "الهاتف"
 
-#: flowview_databases.php:298 flowview_schedules.php:559
+#: flowview_databases.php:365 flowview_schedules.php:559
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+#: flowview_databases.php:370 flowview_devices.php:336 flowview_devices.php:551
 msgid "Address"
 msgstr "العنوان"
 
-#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+#: flowview_databases.php:375 flowview_devices.php:340 flowview_devices.php:775
 msgid "Status"
 msgstr "الحالة"
 
-#: flowview_databases.php:313
+#: flowview_databases.php:380
 msgid "Members By Fef"
 msgstr "الأعضاء بواسطة Fef"
 
-#: flowview_databases.php:318
+#: flowview_databases.php:385
 msgid "Abuse Contacts"
 msgstr "إساءة استخدام جهات الاتصال"
 
-#: flowview_databases.php:323
+#: flowview_databases.php:390
 msgid "MNT Reference"
 msgstr "مرجع MNT"
 
-#: flowview_databases.php:328
+#: flowview_databases.php:395
 msgid "Members"
 msgstr "الطلاب"
 
-#: flowview_databases.php:333
+#: flowview_databases.php:400
 msgid "MNT Notify"
 msgstr "إخطار MNT"
 
-#: flowview_databases.php:338
+#: flowview_databases.php:405
 msgid "Authorization"
 msgstr "إذن"
 
-#: flowview_databases.php:343
+#: flowview_databases.php:410
 msgid "MNT Routes"
 msgstr "مسارات MNT"
 
-#: flowview_databases.php:348
+#: flowview_databases.php:415
 msgid "Member of"
 msgstr "عضو في"
 
-#: flowview_databases.php:353
+#: flowview_databases.php:420
 #, fuzzy
 msgid "Updates Email"
 msgstr "تحديث"
 
-#: flowview_databases.php:358
+#: flowview_databases.php:425
 msgid "NOC Handle"
 msgstr "مقبض شهادة عدم الممانعة"
 
-#: flowview_databases.php:363
+#: flowview_databases.php:430
 msgid "Sponsor Org"
 msgstr "المنظمة الراعية"
 
-#: flowview_databases.php:368
+#: flowview_databases.php:435
 msgid "MNT Irt"
 msgstr "MNT Irt"
 
-#: flowview_databases.php:373
+#: flowview_databases.php:440
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "يعيّن قيمة الأس على المحور ص للأرقام. ملاحظة: تم إيقاف هذا الخيار واستبداله بخيار --y-grid. في هذا الخيار ، تظهر خطوط الشبكة Y-axis في كل فاصل زمني خطوة شبكة. يتم وضع العلامات كل خطوط عامل التسمية."
 
-#: flowview_databases.php:378
+#: flowview_databases.php:445
 msgid "Sub Domain"
 msgstr "سب دومين"
 
-#: flowview_databases.php:383
+#: flowview_databases.php:450
 #, fuzzy
 #| msgid "Enable"
 msgid "Pingable"
 msgstr "تفعيل"
 
-#: flowview_databases.php:388
+#: flowview_databases.php:455
 msgid "Alias"
 msgstr "اسم مستعار"
 
-#: flowview_databases.php:393
+#: flowview_databases.php:460
 #, fuzzy
 #| msgid "Graph Type"
 msgid "Org Type"
 msgstr "نوع الجراف"
 
-#: flowview_databases.php:398
+#: flowview_databases.php:465
 msgid "Refer To"
 msgstr "الرجوع إلى"
 
-#: flowview_databases.php:403
+#: flowview_databases.php:470
 msgid "MP Peering"
 msgstr "النائب النظير"
 
-#: flowview_databases.php:408 flowview_devices.php:490
+#: flowview_databases.php:475 flowview_devices.php:490
 msgid "Export"
 msgstr "تصدير"
 
-#: flowview_databases.php:413
+#: flowview_databases.php:480
 msgid "Holes"
 msgstr "الثقوب"
 
-#: flowview_databases.php:418
+#: flowview_databases.php:485
 #, fuzzy
 #| msgid "Default"
 msgid "MP Default"
 msgstr "الافتراضي"
 
-#: flowview_databases.php:423
+#: flowview_databases.php:490
 msgid "Components"
 msgstr "المكونات"
 
-#: flowview_databases.php:428
+#: flowview_databases.php:495
 msgid "RS Out"
 msgstr "مخرج RS"
 
-#: flowview_databases.php:433
+#: flowview_databases.php:500
 msgid "Organization Name"
 msgstr "اسم المنظمة"
 
-#: flowview_databases.php:443
+#: flowview_databases.php:510
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
 msgstr "الاسم:"
 
-#: flowview_databases.php:448
+#: flowview_databases.php:515
 msgid "Author"
 msgstr "المؤلف"
 
-#: flowview_databases.php:453
+#: flowview_databases.php:520
 msgid "IRT Notify"
 msgstr "إخطار IRT"
 
-#: flowview_databases.php:458
+#: flowview_databases.php:525
 msgid "Aggr MTD"
 msgstr "Aggr MTD"
 
-#: flowview_databases.php:463
+#: flowview_databases.php:530
 #, fuzzy
 msgid "AS Type"
 msgstr "هذا النوع"
 
-#: flowview_databases.php:468
+#: flowview_databases.php:535
 #, fuzzy
 #| msgid "Filter"
 msgid "MP Filter"
 msgstr "فلتر"
 
-#: flowview_databases.php:473
+#: flowview_databases.php:540
 #, fuzzy
 #| msgid "Default"
 msgid "Default Route"
 msgstr "الافتراضي"
 
-#: flowview_databases.php:478
+#: flowview_databases.php:545
 msgid "Assignment Size"
 msgstr "حجم المهمة"
 
-#: flowview_databases.php:483
+#: flowview_databases.php:550
 #, fuzzy
 #| msgid "Report"
 msgid "Export Comps"
 msgstr "تقرير"
 
-#: flowview_databases.php:488
+#: flowview_databases.php:555
 msgid "RS In"
 msgstr "آر إس إن"
 
-#: flowview_databases.php:493
+#: flowview_databases.php:560
 #, fuzzy
 #| msgid "Field Name"
 msgid "Net Name"
 msgstr "اسم الحقل"
 
-#: flowview_databases.php:498
+#: flowview_databases.php:565
 msgid "DS Rdata"
 msgstr "DS Rdata"
 
-#: flowview_databases.php:503
+#: flowview_databases.php:570
 msgid "Aggr Boundary"
 msgstr "حدود Aggr"
 
-#: flowview_databases.php:513
+#: flowview_databases.php:580
 msgid "MP Import"
 msgstr "النائب للاستيراد"
 
-#: flowview_databases.php:518
+#: flowview_databases.php:585
 msgid "Language"
 msgstr "اللغة"
 
-#: flowview_databases.php:523
+#: flowview_databases.php:590
 msgid "RESFful Link"
 msgstr "رابط ريسففول"
 
-#: flowview_databases.php:528
+#: flowview_databases.php:595
 msgid "Peer"
 msgstr "نظير"
 
-#: flowview_databases.php:533
+#: flowview_databases.php:600
 msgid "Zone Contact"
 msgstr "الاتصال بالمنطقة"
 
-#: flowview_databases.php:538
+#: flowview_databases.php:605
 msgid "Inject"
 msgstr "حقن"
 
-#: flowview_databases.php:543
+#: flowview_databases.php:610
 msgid "MP Peer"
 msgstr "النائب النظير"
 
-#: flowview_databases.php:548
+#: flowview_databases.php:615
 msgid "Referral By"
 msgstr "الإحالة عن طريق"
 
-#: flowview_databases.php:553
+#: flowview_databases.php:620
 msgid "Form"
 msgstr "نموذج"
 
-#: flowview_databases.php:558
+#: flowview_databases.php:625
 msgid "MNT Domains"
 msgstr "نطاقات MNT"
 
-#: flowview_databases.php:563
+#: flowview_databases.php:630
 msgid "Origin AS"
 msgstr "الأصل AS"
 
-#: flowview_databases.php:568
+#: flowview_databases.php:635
 #, fuzzy
 #| msgid "Report"
 msgid "MP Export"
 msgstr "تقرير"
 
-#: flowview_databases.php:573
+#: flowview_databases.php:640
 #, fuzzy
 msgid "Encyption"
 msgstr "تاريخ الانتهاء"
 
-#: flowview_databases.php:578
+#: flowview_databases.php:645
 msgid "Geo Feed"
 msgstr "تغذية جغرافية"
 
-#: flowview_databases.php:583
+#: flowview_databases.php:650
 msgid "Geo Index"
 msgstr "المؤشر الجغرافي"
 
-#: flowview_databases.php:588
+#: flowview_databases.php:655
 #, fuzzy
 msgid "Interface Addr"
 msgstr "جهة تعامل"
 
-#: flowview_databases.php:593
+#: flowview_databases.php:660
 #, fuzzy
 #| msgid "Report"
 msgid "Export Via"
 msgstr "تقرير"
 
-#: flowview_databases.php:598
+#: flowview_databases.php:665
 msgid "Trouble"
 msgstr "تعب"
 
-#: flowview_databases.php:603
+#: flowview_databases.php:670
 msgid "Name Servers"
 msgstr "خوادم الأسماء"
 
-#: flowview_databases.php:608
+#: flowview_databases.php:675
 msgid "Ping Handle"
 msgstr "مقبض بينغ"
 
-#: flowview_databases.php:613
+#: flowview_databases.php:680
 msgid "Interface"
 msgstr "سطح بيني، سطح فاصل"
 
-#: flowview_databases.php:618
+#: flowview_databases.php:685
 msgid "Import"
 msgstr "استيراد"
 
-#: flowview_databases.php:623
+#: flowview_databases.php:690
 msgid "Signature"
 msgstr "التوقيع"
 
-#: flowview_databases.php:628
+#: flowview_databases.php:695
 #, fuzzy
 msgid "Geo Location"
 msgstr "دوران"
 
-#: flowview_databases.php:633
+#: flowview_databases.php:700
 #, fuzzy
 msgid "Local AS"
 msgstr "محلي"
 
-#: flowview_databases.php:638
+#: flowview_databases.php:705
 msgid "Import Via"
 msgstr "الاستيراد عبر"
 
-#: flowview_databases.php:683
+#: flowview_databases.php:750
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
 msgstr "FATAL: قاعدة بيانات غير معروفة الجدول %s"
 
-#: flowview_databases.php:796 flowview_databases.php:1161
-#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_databases.php:863 flowview_databases.php:1228
+#: flowview_databases.php:1520 flowview_devices.php:699
 #: flowview_filters.php:233 flowview_schedules.php:450
 msgid "Search"
 msgstr "بحث"
 
-#: flowview_databases.php:806 flowview_databases.php:1171
-#: flowview_databases.php:1181 flowview_databases.php:1463
-#: flowview_databases.php:1473
+#: flowview_databases.php:873 flowview_databases.php:1238
+#: flowview_databases.php:1248 flowview_databases.php:1530
+#: flowview_databases.php:1540
 msgid "Any"
 msgstr "الجميع"
 
-#: flowview_databases.php:824 flowview_databases.php:956
-#: flowview_databases.php:1199 flowview_databases.php:1311
-#: flowview_databases.php:1491 flowview_databases.php:1612
+#: flowview_databases.php:891 flowview_databases.php:1023
+#: flowview_databases.php:1266 flowview_databases.php:1378
+#: flowview_databases.php:1558 flowview_databases.php:1679
 msgid "Entries"
 msgstr "مقالات"
 
-#: flowview_databases.php:828 flowview_databases.php:1203
-#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_databases.php:895 flowview_databases.php:1270
+#: flowview_databases.php:1562 flowview_filters.php:243
 #: flowview_schedules.php:460
 msgid "Default"
 msgstr "الافتراضي"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:489
 #: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
 #: functions.php:596
 msgid "Go"
 msgstr "أذهب"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:706
 #: flowview_filters.php:254 flowview_schedules.php:471
 msgid "Set/Refresh Filters"
 msgstr "مجموعة / تحديث الفلاتر"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
 msgid "Clear"
 msgstr "واضح"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474
 msgid "Clear Filters"
 msgstr "مسح الفلتر"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge"
 msgstr "شربة، مسهل. يسهل"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge the DNS Cache"
 msgstr "تطهير ذاكرة التخزين المؤقت لنظام أسماء النطاقات"
 
-#: flowview_databases.php:997
+#: flowview_databases.php:1064
 #, fuzzy
 msgid "Not Specified"
 msgstr "فشل في تطبيق الفاصل الزمني cron المحدد"
 
-#: flowview_databases.php:1013
+#: flowview_databases.php:1080
 msgid "No Matching Entries Found"
 msgstr "لم يتم العثور على إدخالات مطابقة"
 
-#: flowview_databases.php:1073
+#: flowview_databases.php:1140
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
@@ -1138,18 +1221,18 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_databases.php:1145 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
 #: functions.php:843
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_databases.php:1145 flowview_devices.php:214
 #: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
 msgid "Continue"
 msgstr "إستمرار"
 
-#: flowview_databases.php:1078
+#: flowview_databases.php:1145
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
 msgstr[0] "حذف إدخال DNS"
@@ -1159,138 +1242,138 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: flowview_databases.php:1152
+#: flowview_databases.php:1219
 #, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "جداول FlowView"
 
-#: flowview_databases.php:1167 flowview_databases.php:1173
-#: flowview_databases.php:1372
+#: flowview_databases.php:1234 flowview_databases.php:1240
+#: flowview_databases.php:1439
 msgid "Verified"
 msgstr "موثق"
 
-#: flowview_databases.php:1172 flowview_databases.php:1372
+#: flowview_databases.php:1239 flowview_databases.php:1439
 msgid "Unverified"
 msgstr "لم يتم التحقق منه"
 
-#: flowview_databases.php:1323
+#: flowview_databases.php:1390
 msgid "This is the IP Address of the Cache entry."
 msgstr "هذا هو عنوان IP لإدخال ذاكرة التخزين المؤقت."
 
-#: flowview_databases.php:1326
+#: flowview_databases.php:1393
 msgid "DNS Hostname"
 msgstr "اسم مضيف DNS"
 
-#: flowview_databases.php:1329
+#: flowview_databases.php:1396
 msgid "The DNS Name assigned to the IP Address."
 msgstr "اسم DNS المعين لعنوان IP."
 
-#: flowview_databases.php:1335
+#: flowview_databases.php:1402
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
 msgstr "مصدر اسم مضيف DNS.  يمكن أن يكون إما DNS أو بحث ثابت أو ARIN."
 
-#: flowview_databases.php:1338
+#: flowview_databases.php:1405
 msgid "Arin Verified"
 msgstr "عرين تم التحقق منه"
 
-#: flowview_databases.php:1341
+#: flowview_databases.php:1408
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
 msgstr "يتم التحقق من معلومات Arin لعنوان IP هذا ، أو أنه عنوان IP للمجال المحلي."
 
-#: flowview_databases.php:1344
+#: flowview_databases.php:1411
 msgid "CIDR ID"
 msgstr "معرف CIDR"
 
-#: flowview_databases.php:1347
+#: flowview_databases.php:1414
 msgid "The Arin primary key.  This is not official Arin information."
 msgstr "مفتاح Arin الأساسي.  هذه ليست معلومات آرين الرسمية."
 
-#: flowview_databases.php:1350
+#: flowview_databases.php:1417
 msgid "Autonomous System ID"
 msgstr "معرف النظام المستقل"
 
-#: flowview_databases.php:1353
+#: flowview_databases.php:1420
 msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "أصل آرين AS.  هذه هي معلومات Arin AS الرسمية."
 
-#: flowview_databases.php:1356
+#: flowview_databases.php:1423
 #, fuzzy
 msgid "Updated Time"
 msgstr "تحديث"
 
-#: flowview_databases.php:1359
+#: flowview_databases.php:1426
 msgid "This is the time that the DNS cache was entered or last updated."
 msgstr "هذا هو الوقت الذي تم فيه إدخال ذاكرة التخزين المؤقت لنظام أسماء النطاقات أو آخر تحديث."
 
-#: flowview_databases.php:1380
+#: flowview_databases.php:1447
 msgid "No DNS Cache Entries Found"
 msgstr "لم يتم العثور على إدخالات ذاكرة التخزين المؤقت لنظام أسماء النطاقات"
 
-#: flowview_databases.php:1444
+#: flowview_databases.php:1511
 #, fuzzy
 #| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "مستمع FlowView"
 
-#: flowview_databases.php:1459
+#: flowview_databases.php:1526
 #, fuzzy
 msgid "IP Version"
 msgstr "الإصدار"
 
-#: flowview_databases.php:1464
+#: flowview_databases.php:1531
 msgid "IPv4"
 msgstr "آي بي في 4"
 
-#: flowview_databases.php:1465
+#: flowview_databases.php:1532
 #, fuzzy
 msgid "IPv6"
 msgstr "الإصدار IPv6"
 
-#: flowview_databases.php:1622
+#: flowview_databases.php:1689
 #, fuzzy
 #| msgid "Routine"
 msgid "Route"
 msgstr "نمط"
 
-#: flowview_databases.php:1624
+#: flowview_databases.php:1691
 msgid "This is the published Internet Route."
 msgstr "هذا هو مسار الإنترنت المنشور."
 
-#: flowview_databases.php:1627
+#: flowview_databases.php:1694
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "رقم المنفذ"
 
-#: flowview_databases.php:1630
+#: flowview_databases.php:1697
 msgid "The Autonomous System Number for the route."
 msgstr "رقم النظام المستقل للمسار."
 
-#: flowview_databases.php:1633
+#: flowview_databases.php:1700
 msgid "Route Description"
 msgstr "وصف الطريق"
 
-#: flowview_databases.php:1636
+#: flowview_databases.php:1703
 msgid "The Descrption logged by the Route Maintainer."
 msgstr "تم تسجيل Descrption بواسطة مشرف المسار."
 
-#: flowview_databases.php:1642
+#: flowview_databases.php:1709
 msgid "The source database used to publish the route."
 msgstr "قاعدة البيانات المصدر المستخدمة لنشر المسار."
 
-#: flowview_databases.php:1645
+#: flowview_databases.php:1712
 msgid "Maintained By"
 msgstr "تتم صيانته بواسطة"
 
-#: flowview_databases.php:1648
+#: flowview_databases.php:1715
 msgid "The Internet Carrier who is maintaining the route for the customer."
 msgstr "مشغل شبكة الإنترنت الذي يحافظ على المسار للعميل."
 
-#: flowview_databases.php:1654
+#: flowview_databases.php:1721
 msgid "The last time the information on this route was modified."
 msgstr "آخر مرة تم فيها تعديل المعلومات على هذا الطريق."
 
-#: flowview_databases.php:1675
+#: flowview_databases.php:1742
 msgid "No Matching Routes Found"
 msgstr "لم يتم العثور على طرق مطابقة"
 
