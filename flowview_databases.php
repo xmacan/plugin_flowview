@@ -63,7 +63,7 @@ function flowview_get_item_details() {
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
 
-	$cols  = get_all_columns($db_tabs);
+	$cols  = get_all_columns();
 	$tab   = get_request_var('tab');
 	$ids   = json_decode(base64_decode(str_replace('line_', '', get_request_var('id'))), true);
 	$table = "plugin_flowview_irr_$tab";
@@ -197,23 +197,90 @@ function view_databases() {
 	}
 }
 
-function get_all_columns($tabs) {
+function get_all_columns() {
 	$display_text = array();
 
-	// Be consistent with the Tab Name
-	foreach($tabs as $tabname => $details) {
-		$text = array(
-			$tabname => array(
-				'display' => rtrim($details['name'], "s \n"),
-				'align'   => 'left',
-				'sort'    => 'ASC'
-			)
-		);
-
-		$display_text = array_merge($display_text, $text);
-	}
-
 	$columns = array(
+		'route' => array(
+			'display' => __esc('CIDR/Route', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'aut_num'=> array(
+			'display' => __esc('Autonomous Number', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'as_block' => array(
+			'display' => __esc('AS Block', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'as_set' => array(
+			'display' => __esc('AS Set', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'route_set' => array(
+			'display' => __esc('Route Set', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'domain' => array(
+			'display' => __esc('Domain', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'filter_set' => array(
+			'display' => __esc('Filter Set', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'peering_set' => array(
+			'display' => __esc('Peering Set', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'inetnum' => array(
+			'display' => __esc('Network', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'inet_rtr' => array(
+			'display' => __esc('Internet Router', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'irt' => array(
+			'display' => __esc('Incident Response Team', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'mntner' => array(
+			'display' => __esc('Auth Agent', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'organisation' => array(
+			'display' => __esc('Organization', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'role' => array(
+			'display' => __esc('Role', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'person' => array(
+			'display' => __esc('Person', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
+		'rtr_set' => array(
+			'display' => __esc('Router Set', 'flowview'),
+			'align'   => 'left',
+			'order'   => 'ASC'
+		),
 		'remarks' => array(
 			'display' => __esc('Remarks', 'flowview'),
 			'align'   => 'left',
@@ -650,7 +717,7 @@ function get_all_columns($tabs) {
 function view_db_table($tab, &$tabs) {
 	global $item_rows;
 
-	$display_text = get_all_columns($tabs);
+	$display_text = get_all_columns();
 
 	//print '<pre>';print_r($display_text);print '</pre>';exit;
 
