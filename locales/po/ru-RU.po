@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-07-14 15:10-0400\n"
+"POT-Creation-Date: 2024-07-14 20:09-0400\n"
 "PO-Revision-Date: 2024-07-14 15:47-0400\n"
 "Last-Translator: Anton Zhuravlev <baka109g@gmail.com>\n"
 "Language-Team: Russian <http://translate.cacti.net/projects/cacti/flowview/ru/>\n"
@@ -228,7 +228,7 @@ msgstr "Порт"
 msgid "Dest IP"
 msgstr "IP-адрес назначения"
 
-#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
+#: arrays.php:410 flowview_databases.php:1388 functions.php:2908
 msgid "IP Address"
 msgstr "IP адрес"
 
@@ -301,10 +301,10 @@ msgstr "Флэм"
 msgid "Flags"
 msgstr "Флаги"
 
-#: arrays.php:531 arrays.php:537 flowview_databases.php:228
-#: flowview_databases.php:802 flowview_databases.php:1177
-#: flowview_databases.php:1332 flowview_databases.php:1469
-#: flowview_databases.php:1639
+#: arrays.php:531 arrays.php:537 flowview_databases.php:295
+#: flowview_databases.php:869 flowview_databases.php:1244
+#: flowview_databases.php:1399 flowview_databases.php:1536
+#: flowview_databases.php:1706
 msgid "Source"
 msgstr "Источник"
 
@@ -322,7 +322,7 @@ msgstr "%d пикселей"
 msgid "General Filters"
 msgstr "Очистить фильтры"
 
-#: arrays.php:589 flowview_databases.php:508 functions.php:537
+#: arrays.php:589 flowview_databases.php:575 functions.php:537
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -635,7 +635,7 @@ msgstr "Сохраненный фильтр"
 msgid "Peering Sets"
 msgstr "Наборы пиринга"
 
-#: arrays.php:924 flowview_databases.php:438
+#: arrays.php:924 flowview_databases.php:245 flowview_databases.php:505
 msgid "Network"
 msgstr "Сеть"
 
@@ -693,434 +693,517 @@ msgstr "Сведения о реестре интернет-маршрутов"
 msgid "Authorized Agent Details"
 msgstr "Сведения об уполномоченном агенте"
 
-#: flowview_databases.php:218
-msgid "Remarks"
-msgstr "Примечания"
+#: flowview_databases.php:205
+#, fuzzy
+#| msgid "CIDR/Routes"
+msgid "CIDR/Route"
+msgstr "CIDR/Маршруты"
 
-#: flowview_databases.php:223 flowview_databases.php:1651
-msgid "Last Modified"
-msgstr "Последнее изменение"
+#: flowview_databases.php:210
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Number"
+msgstr "Числа"
 
-#: flowview_databases.php:233
-msgid "Registration Date"
-msgstr "Дата регистрации"
+#: flowview_databases.php:215
+#, fuzzy
+#| msgid "AS Blocks"
+msgid "AS Block"
+msgstr "Блоки AS"
 
-#: flowview_databases.php:238
-msgid "MNT By"
-msgstr "МНТ По"
+#: flowview_databases.php:220
+#, fuzzy
+#| msgid "AS Sets"
+msgid "AS Set"
+msgstr "Комплекты AS"
 
-#: flowview_databases.php:243
-msgid "Admin Contact"
-msgstr "Контактное лицо администратора"
+#: flowview_databases.php:225
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Route Set"
+msgstr "Наборы маршрутов"
 
-#: flowview_databases.php:248
+#: flowview_databases.php:230
+#, fuzzy
+#| msgid "Domains"
+msgid "Domain"
+msgstr "Домены"
+
+#: flowview_databases.php:235
+#, fuzzy
+msgid "Filter Set"
+msgstr "Сохраненный фильтр"
+
+#: flowview_databases.php:240
+#, fuzzy
+#| msgid "Peering Sets"
+msgid "Peering Set"
+msgstr "Наборы пиринга"
+
+#: flowview_databases.php:250
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Router"
+msgstr "Интернет-контроль"
+
+#: flowview_databases.php:255
+#, fuzzy
+#| msgid "Incident Response Teams"
+msgid "Incident Response Team"
+msgstr "Группы реагирования на инциденты"
+
+#: flowview_databases.php:260
+#, fuzzy
+#| msgid "Auth Agents"
+msgid "Auth Agent"
+msgstr "Агенты аутентификации"
+
+#: flowview_databases.php:265 flowview_databases.php:315
 msgid "Organization"
 msgstr "Организация"
 
-#: flowview_databases.php:253
+#: flowview_databases.php:270
+#, fuzzy
+#| msgid "Roles"
+msgid "Role"
+msgstr "Роли"
+
+#: flowview_databases.php:275
+#, fuzzy
+#| msgid "Persons"
+msgid "Person"
+msgstr "Люди"
+
+#: flowview_databases.php:280
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Router Set"
+msgstr "Наборы маршрутов"
+
+#: flowview_databases.php:285
+msgid "Remarks"
+msgstr "Примечания"
+
+#: flowview_databases.php:290 flowview_databases.php:1718
+msgid "Last Modified"
+msgstr "Последнее изменение"
+
+#: flowview_databases.php:300
+msgid "Registration Date"
+msgstr "Дата регистрации"
+
+#: flowview_databases.php:305
+msgid "MNT By"
+msgstr "МНТ По"
+
+#: flowview_databases.php:310
+msgid "Admin Contact"
+msgstr "Контактное лицо администратора"
+
+#: flowview_databases.php:320
 msgid "Changes"
 msgstr "Изменения"
 
-#: flowview_databases.php:258
+#: flowview_databases.php:325
 msgid "Notify"
 msgstr "Уведомить"
 
-#: flowview_databases.php:263
+#: flowview_databases.php:330
 msgid "Description"
 msgstr "Описание"
 
-#: flowview_databases.php:268
+#: flowview_databases.php:335
 msgid "Tech Contact"
 msgstr "Контактное лицо по техническим вопросам"
 
-#: flowview_databases.php:273
+#: flowview_databases.php:340
 msgid "MNT Lower"
 msgstr "МНТ Нижний"
 
-#: flowview_databases.php:278
+#: flowview_databases.php:345
 msgid "Country"
 msgstr "Страна"
 
-#: flowview_databases.php:283
+#: flowview_databases.php:350
 #, fuzzy
 #| msgid "Email"
 msgid "Abuse Email"
 msgstr "Email"
 
-#: flowview_databases.php:288
+#: flowview_databases.php:355
 msgid "Fax Number"
 msgstr "Номер факса"
 
-#: flowview_databases.php:293
+#: flowview_databases.php:360
 msgid "Phone"
 msgstr "Телефон"
 
-#: flowview_databases.php:298 flowview_schedules.php:559
+#: flowview_databases.php:365 flowview_schedules.php:559
 msgid "Email"
 msgstr "Email"
 
-#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+#: flowview_databases.php:370 flowview_devices.php:336 flowview_devices.php:551
 msgid "Address"
 msgstr "Адрес"
 
-#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+#: flowview_databases.php:375 flowview_devices.php:340 flowview_devices.php:775
 msgid "Status"
 msgstr "Статус"
 
-#: flowview_databases.php:313
+#: flowview_databases.php:380
 msgid "Members By Fef"
 msgstr "Участники Fef"
 
-#: flowview_databases.php:318
+#: flowview_databases.php:385
 msgid "Abuse Contacts"
 msgstr "Контакты по вопросам злоупотребления"
 
-#: flowview_databases.php:323
+#: flowview_databases.php:390
 msgid "MNT Reference"
 msgstr "Справочник MNT"
 
-#: flowview_databases.php:328
+#: flowview_databases.php:395
 msgid "Members"
 msgstr "Участники"
 
-#: flowview_databases.php:333
+#: flowview_databases.php:400
 msgid "MNT Notify"
 msgstr "МНТ Уведомить"
 
-#: flowview_databases.php:338
+#: flowview_databases.php:405
 msgid "Authorization"
 msgstr "Авторизация"
 
-#: flowview_databases.php:343
+#: flowview_databases.php:410
 msgid "MNT Routes"
 msgstr "Маршруты МНТ"
 
-#: flowview_databases.php:348
+#: flowview_databases.php:415
 msgid "Member of"
 msgstr "Представитель"
 
-#: flowview_databases.php:353
+#: flowview_databases.php:420
 #, fuzzy
 msgid "Updates Email"
 msgstr "Обновить"
 
-#: flowview_databases.php:358
+#: flowview_databases.php:425
 msgid "NOC Handle"
 msgstr "Рукоятка NOC"
 
-#: flowview_databases.php:363
+#: flowview_databases.php:430
 msgid "Sponsor Org"
 msgstr "Спонсорская организация"
 
-#: flowview_databases.php:368
+#: flowview_databases.php:435
 msgid "MNT Irt"
 msgstr "МНТ Ирт"
 
-#: flowview_databases.php:373
+#: flowview_databases.php:440
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "Числа"
 
-#: flowview_databases.php:378
+#: flowview_databases.php:445
 msgid "Sub Domain"
 msgstr "Поддомен"
 
-#: flowview_databases.php:383
+#: flowview_databases.php:450
 #, fuzzy
 #| msgid "Enable"
 msgid "Pingable"
 msgstr "Включить"
 
-#: flowview_databases.php:388
+#: flowview_databases.php:455
 msgid "Alias"
 msgstr "Алиас"
 
-#: flowview_databases.php:393
+#: flowview_databases.php:460
 #, fuzzy
 #| msgid "Graph Type"
 msgid "Org Type"
 msgstr "Тип диаграммы"
 
-#: flowview_databases.php:398
+#: flowview_databases.php:465
 msgid "Refer To"
 msgstr "См"
 
-#: flowview_databases.php:403
+#: flowview_databases.php:470
 msgid "MP Peering"
 msgstr "Пиринг MP"
 
-#: flowview_databases.php:408 flowview_devices.php:490
+#: flowview_databases.php:475 flowview_devices.php:490
 msgid "Export"
 msgstr "Экспорт"
 
-#: flowview_databases.php:413
+#: flowview_databases.php:480
 msgid "Holes"
 msgstr "Отверстия"
 
-#: flowview_databases.php:418
+#: flowview_databases.php:485
 #, fuzzy
 #| msgid "Default"
 msgid "MP Default"
 msgstr "Стандартно"
 
-#: flowview_databases.php:423
+#: flowview_databases.php:490
 msgid "Components"
 msgstr "Компоненты"
 
-#: flowview_databases.php:428
+#: flowview_databases.php:495
 msgid "RS Out"
 msgstr "Выход RS"
 
-#: flowview_databases.php:433
+#: flowview_databases.php:500
 msgid "Organization Name"
 msgstr "Название организации"
 
-#: flowview_databases.php:443
+#: flowview_databases.php:510
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
 msgstr "Имя"
 
-#: flowview_databases.php:448
+#: flowview_databases.php:515
 msgid "Author"
 msgstr "Автор"
 
-#: flowview_databases.php:453
+#: flowview_databases.php:520
 msgid "IRT Notify"
 msgstr "Уведомление IRT"
 
-#: flowview_databases.php:458
+#: flowview_databases.php:525
 msgid "Aggr MTD"
 msgstr "Aggr MTD"
 
-#: flowview_databases.php:463
+#: flowview_databases.php:530
 #, fuzzy
 msgid "AS Type"
 msgstr "Тип"
 
-#: flowview_databases.php:468
+#: flowview_databases.php:535
 #, fuzzy
 #| msgid "Filter"
 msgid "MP Filter"
 msgstr "Фильтр"
 
-#: flowview_databases.php:473
+#: flowview_databases.php:540
 #, fuzzy
 #| msgid "Default"
 msgid "Default Route"
 msgstr "Стандартно"
 
-#: flowview_databases.php:478
+#: flowview_databases.php:545
 msgid "Assignment Size"
 msgstr "Размер задания"
 
-#: flowview_databases.php:483
+#: flowview_databases.php:550
 #, fuzzy
 #| msgid "Report"
 msgid "Export Comps"
 msgstr "Отчет"
 
-#: flowview_databases.php:488
+#: flowview_databases.php:555
 msgid "RS In"
 msgstr "РС В"
 
-#: flowview_databases.php:493
+#: flowview_databases.php:560
 #, fuzzy
 #| msgid "Field Name"
 msgid "Net Name"
 msgstr "Имя поля"
 
-#: flowview_databases.php:498
+#: flowview_databases.php:565
 msgid "DS Rdata"
 msgstr "DS Rdata"
 
-#: flowview_databases.php:503
+#: flowview_databases.php:570
 msgid "Aggr Boundary"
 msgstr "Граница Aggr"
 
-#: flowview_databases.php:513
+#: flowview_databases.php:580
 msgid "MP Import"
 msgstr "Импорт MP"
 
-#: flowview_databases.php:518
+#: flowview_databases.php:585
 msgid "Language"
 msgstr "Язык"
 
-#: flowview_databases.php:523
+#: flowview_databases.php:590
 msgid "RESFful Link"
 msgstr "Ссылка RESFful"
 
-#: flowview_databases.php:528
+#: flowview_databases.php:595
 msgid "Peer"
 msgstr "Пэр"
 
-#: flowview_databases.php:533
+#: flowview_databases.php:600
 msgid "Zone Contact"
 msgstr "Зональный контакт"
 
-#: flowview_databases.php:538
+#: flowview_databases.php:605
 msgid "Inject"
 msgstr "Внедрить"
 
-#: flowview_databases.php:543
+#: flowview_databases.php:610
 msgid "MP Peer"
 msgstr "Член парламента Пэр"
 
-#: flowview_databases.php:548
+#: flowview_databases.php:615
 msgid "Referral By"
 msgstr "Реферал"
 
-#: flowview_databases.php:553
+#: flowview_databases.php:620
 msgid "Form"
 msgstr "Форма"
 
-#: flowview_databases.php:558
+#: flowview_databases.php:625
 msgid "MNT Domains"
 msgstr "Домены МНТ"
 
-#: flowview_databases.php:563
+#: flowview_databases.php:630
 msgid "Origin AS"
 msgstr "Происхождение AS"
 
-#: flowview_databases.php:568
+#: flowview_databases.php:635
 #, fuzzy
 #| msgid "Report"
 msgid "MP Export"
 msgstr "Отчет"
 
-#: flowview_databases.php:573
+#: flowview_databases.php:640
 #, fuzzy
 msgid "Encyption"
 msgstr "Срок действия"
 
-#: flowview_databases.php:578
+#: flowview_databases.php:645
 msgid "Geo Feed"
 msgstr "Гео лента"
 
-#: flowview_databases.php:583
+#: flowview_databases.php:650
 msgid "Geo Index"
 msgstr "Географический индекс"
 
-#: flowview_databases.php:588
+#: flowview_databases.php:655
 #, fuzzy
 msgid "Interface Addr"
 msgstr "Интерфейс"
 
-#: flowview_databases.php:593
+#: flowview_databases.php:660
 #, fuzzy
 #| msgid "Report"
 msgid "Export Via"
 msgstr "Отчет"
 
-#: flowview_databases.php:598
+#: flowview_databases.php:665
 msgid "Trouble"
 msgstr "Неисправность"
 
-#: flowview_databases.php:603
+#: flowview_databases.php:670
 msgid "Name Servers"
 msgstr "DNS серверы"
 
-#: flowview_databases.php:608
+#: flowview_databases.php:675
 msgid "Ping Handle"
 msgstr "Ручка пинга"
 
-#: flowview_databases.php:613
+#: flowview_databases.php:680
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: flowview_databases.php:618
+#: flowview_databases.php:685
 msgid "Import"
 msgstr "Импорт"
 
-#: flowview_databases.php:623
+#: flowview_databases.php:690
 msgid "Signature"
 msgstr "Подпись"
 
-#: flowview_databases.php:628
+#: flowview_databases.php:695
 msgid "Geo Location"
 msgstr "Местоположение"
 
-#: flowview_databases.php:633
+#: flowview_databases.php:700
 #, fuzzy
 msgid "Local AS"
 msgstr "Локальный"
 
-#: flowview_databases.php:638
+#: flowview_databases.php:705
 msgid "Import Via"
 msgstr "Импорт через"
 
-#: flowview_databases.php:683
+#: flowview_databases.php:750
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
 msgstr "FATAL: Неизвестная таблица базы данных %s"
 
-#: flowview_databases.php:796 flowview_databases.php:1161
-#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_databases.php:863 flowview_databases.php:1228
+#: flowview_databases.php:1520 flowview_devices.php:699
 #: flowview_filters.php:233 flowview_schedules.php:450
 msgid "Search"
 msgstr "Поиск"
 
-#: flowview_databases.php:806 flowview_databases.php:1171
-#: flowview_databases.php:1181 flowview_databases.php:1463
-#: flowview_databases.php:1473
+#: flowview_databases.php:873 flowview_databases.php:1238
+#: flowview_databases.php:1248 flowview_databases.php:1530
+#: flowview_databases.php:1540
 msgid "Any"
 msgstr "Любой"
 
-#: flowview_databases.php:824 flowview_databases.php:956
-#: flowview_databases.php:1199 flowview_databases.php:1311
-#: flowview_databases.php:1491 flowview_databases.php:1612
+#: flowview_databases.php:891 flowview_databases.php:1023
+#: flowview_databases.php:1266 flowview_databases.php:1378
+#: flowview_databases.php:1558 flowview_databases.php:1679
 msgid "Entries"
 msgstr "Записи"
 
-#: flowview_databases.php:828 flowview_databases.php:1203
-#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_databases.php:895 flowview_databases.php:1270
+#: flowview_databases.php:1562 flowview_filters.php:243
 #: flowview_schedules.php:460
 msgid "Default"
 msgstr "Стандартно"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:489
 #: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
 #: functions.php:596
 msgid "Go"
 msgstr "Перейти"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:706
 #: flowview_filters.php:254 flowview_schedules.php:471
 msgid "Set/Refresh Filters"
 msgstr "Выбрать/Обновить фильтры"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
 msgid "Clear"
 msgstr "Очистить"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474
 msgid "Clear Filters"
 msgstr "Очистить фильтры"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge"
 msgstr "Удалить"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge the DNS Cache"
 msgstr "Очистка кэша DNS"
 
-#: flowview_databases.php:997
+#: flowview_databases.php:1064
 msgid "Not Specified"
 msgstr "Не определен"
 
-#: flowview_databases.php:1013
+#: flowview_databases.php:1080
 msgid "No Matching Entries Found"
 msgstr "Совпадающие записи не найдены"
 
-#: flowview_databases.php:1073
+#: flowview_databases.php:1140
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
@@ -1128,153 +1211,153 @@ msgstr[0] "Нажмите кнопку \"Продолжить\", чтобы уд
 msgstr[1] "Нажмите кнопку \"Продолжить\", чтобы удалить следующие Расписания."
 msgstr[2] "Нажмите кнопку \"Продолжить\", чтобы удалить следующие Расписания."
 
-#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_databases.php:1145 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
 #: functions.php:843
 msgid "Cancel"
 msgstr "Отмена"
 
-#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_databases.php:1145 flowview_devices.php:214
 #: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
 msgid "Continue"
 msgstr "Продолжить"
 
-#: flowview_databases.php:1078
+#: flowview_databases.php:1145
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
 msgstr[0] "Удалить запись DNS"
 msgstr[1] ""
 msgstr[2] ""
 
-#: flowview_databases.php:1152
+#: flowview_databases.php:1219
 #, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "Расписания FlowView"
 
-#: flowview_databases.php:1167 flowview_databases.php:1173
-#: flowview_databases.php:1372
+#: flowview_databases.php:1234 flowview_databases.php:1240
+#: flowview_databases.php:1439
 msgid "Verified"
 msgstr "Проверенный"
 
-#: flowview_databases.php:1172 flowview_databases.php:1372
+#: flowview_databases.php:1239 flowview_databases.php:1439
 msgid "Unverified"
 msgstr "Непроверенный"
 
-#: flowview_databases.php:1323
+#: flowview_databases.php:1390
 msgid "This is the IP Address of the Cache entry."
 msgstr "Это IP-адрес записи кэша."
 
-#: flowview_databases.php:1326
+#: flowview_databases.php:1393
 msgid "DNS Hostname"
 msgstr "Имя хоста DNS"
 
-#: flowview_databases.php:1329
+#: flowview_databases.php:1396
 msgid "The DNS Name assigned to the IP Address."
 msgstr "DNS-имя, присвоенное IP-адресу."
 
-#: flowview_databases.php:1335
+#: flowview_databases.php:1402
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
 msgstr "Источник DNS Hostname.  Это может быть DNS, статический поиск или ARIN."
 
-#: flowview_databases.php:1338
+#: flowview_databases.php:1405
 msgid "Arin Verified"
 msgstr "Проверено Arin"
 
-#: flowview_databases.php:1341
+#: flowview_databases.php:1408
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
 msgstr "Информация Arin для этого IP-адреса проверяется, или это IP-адрес локального домена."
 
-#: flowview_databases.php:1344
+#: flowview_databases.php:1411
 msgid "CIDR ID"
 msgstr "Идентификатор CIDR"
 
-#: flowview_databases.php:1347
+#: flowview_databases.php:1414
 msgid "The Arin primary key.  This is not official Arin information."
 msgstr "Первичный ключ Арин.  Это не официальная информация Арина."
 
-#: flowview_databases.php:1350
+#: flowview_databases.php:1417
 msgid "Autonomous System ID"
 msgstr "Идентификатор автономной системы"
 
-#: flowview_databases.php:1353
+#: flowview_databases.php:1420
 msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "Происхождение Арина AS.  Это официальная информация Arin AS."
 
-#: flowview_databases.php:1356
+#: flowview_databases.php:1423
 msgid "Updated Time"
 msgstr "Обновленное время"
 
-#: flowview_databases.php:1359
+#: flowview_databases.php:1426
 msgid "This is the time that the DNS cache was entered or last updated."
 msgstr "Это время, когда кэш DNS был введен или обновлен в последний раз."
 
-#: flowview_databases.php:1380
+#: flowview_databases.php:1447
 msgid "No DNS Cache Entries Found"
 msgstr "Записи кэша DNS не найдены"
 
-#: flowview_databases.php:1444
+#: flowview_databases.php:1511
 #, fuzzy
 #| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "FlowView Слушатели"
 
-#: flowview_databases.php:1459
+#: flowview_databases.php:1526
 #, fuzzy
 msgid "IP Version"
 msgstr "Версия"
 
-#: flowview_databases.php:1464
+#: flowview_databases.php:1531
 msgid "IPv4"
 msgstr "IPv4"
 
-#: flowview_databases.php:1465
+#: flowview_databases.php:1532
 #, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
-#: flowview_databases.php:1622
+#: flowview_databases.php:1689
 msgid "Route"
 msgstr "Маршрут"
 
-#: flowview_databases.php:1624
+#: flowview_databases.php:1691
 msgid "This is the published Internet Route."
 msgstr "Это опубликованный Интернет-маршрут."
 
-#: flowview_databases.php:1627
+#: flowview_databases.php:1694
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "Номер порта"
 
-#: flowview_databases.php:1630
+#: flowview_databases.php:1697
 msgid "The Autonomous System Number for the route."
 msgstr "Номер автономной системы для маршрута."
 
-#: flowview_databases.php:1633
+#: flowview_databases.php:1700
 msgid "Route Description"
 msgstr "Описание Планового Обхода"
 
-#: flowview_databases.php:1636
+#: flowview_databases.php:1703
 msgid "The Descrption logged by the Route Maintainer."
 msgstr "Описание, записанное сопровождающим маршрута."
 
-#: flowview_databases.php:1642
+#: flowview_databases.php:1709
 msgid "The source database used to publish the route."
 msgstr "Исходная база данных, используемая для публикации маршрута."
 
-#: flowview_databases.php:1645
+#: flowview_databases.php:1712
 msgid "Maintained By"
 msgstr "Поддерживается"
 
-#: flowview_databases.php:1648
+#: flowview_databases.php:1715
 msgid "The Internet Carrier who is maintaining the route for the customer."
 msgstr "Интернет-оператор, который обслуживает маршрут для клиента."
 
-#: flowview_databases.php:1654
+#: flowview_databases.php:1721
 msgid "The last time the information on this route was modified."
 msgstr "В последний раз информация на этом маршруте была изменена."
 
-#: flowview_databases.php:1675
+#: flowview_databases.php:1742
 msgid "No Matching Routes Found"
 msgstr "Не найдено подходящих маршрутов"
 
