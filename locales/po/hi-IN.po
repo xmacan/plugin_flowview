@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-07-14 15:10-0400\n"
+"POT-Creation-Date: 2024-07-14 20:09-0400\n"
 "PO-Revision-Date: 2024-07-14 15:44-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -228,7 +228,7 @@ msgstr "पोर्ट"
 msgid "Dest IP"
 msgstr "गंतव्य आईपी"
 
-#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
+#: arrays.php:410 flowview_databases.php:1388 functions.php:2908
 msgid "IP Address"
 msgstr "IP सिरनामा"
 
@@ -301,10 +301,10 @@ msgstr "Fl"
 msgid "Flags"
 msgstr "झंडे"
 
-#: arrays.php:531 arrays.php:537 flowview_databases.php:228
-#: flowview_databases.php:802 flowview_databases.php:1177
-#: flowview_databases.php:1332 flowview_databases.php:1469
-#: flowview_databases.php:1639
+#: arrays.php:531 arrays.php:537 flowview_databases.php:295
+#: flowview_databases.php:869 flowview_databases.php:1244
+#: flowview_databases.php:1399 flowview_databases.php:1536
+#: flowview_databases.php:1706
 msgid "Source"
 msgstr "स्रोत आईपी"
 
@@ -322,7 +322,7 @@ msgstr "%d पिक्सेल"
 msgid "General Filters"
 msgstr "साफ फिल्टर"
 
-#: arrays.php:589 flowview_databases.php:508 functions.php:537
+#: arrays.php:589 flowview_databases.php:575 functions.php:537
 msgid "Filter"
 msgstr "छलनी "
 
@@ -639,7 +639,7 @@ msgstr "सेव को छान लें"
 msgid "Peering Sets"
 msgstr "पीयरिंग सेट"
 
-#: arrays.php:924 flowview_databases.php:438
+#: arrays.php:924 flowview_databases.php:245 flowview_databases.php:505
 msgid "Network"
 msgstr "नैट्टवर्क"
 
@@ -697,596 +697,679 @@ msgstr "इंटरनेट मार्ग रजिस्ट्री वि
 msgid "Authorized Agent Details"
 msgstr "अधिकृत एजेंट विवरण"
 
-#: flowview_databases.php:218
+#: flowview_databases.php:205
+#, fuzzy
+#| msgid "CIDR/Routes"
+msgid "CIDR/Route"
+msgstr "सीआईडीआर/मार्ग"
+
+#: flowview_databases.php:210
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Number"
+msgstr "एएस नंबर"
+
+#: flowview_databases.php:215
+#, fuzzy
+#| msgid "AS Blocks"
+msgid "AS Block"
+msgstr "एएस ब्लॉक"
+
+#: flowview_databases.php:220
+#, fuzzy
+#| msgid "AS Sets"
+msgid "AS Set"
+msgstr "एएस सेट"
+
+#: flowview_databases.php:225
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Route Set"
+msgstr "मार्ग सेट"
+
+#: flowview_databases.php:230
+#, fuzzy
+#| msgid "Source Domain"
+msgid "Domain"
+msgstr "स्रोत पोर्ट"
+
+#: flowview_databases.php:235
+#, fuzzy
+msgid "Filter Set"
+msgstr "सेव को छान लें"
+
+#: flowview_databases.php:240
+#, fuzzy
+#| msgid "Peering Sets"
+msgid "Peering Set"
+msgstr "पीयरिंग सेट"
+
+#: flowview_databases.php:250
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Router"
+msgstr "इंटरनेट कंट्रोल"
+
+#: flowview_databases.php:255
+#, fuzzy
+#| msgid "Incident Response Teams"
+msgid "Incident Response Team"
+msgstr "घटना प्रतिक्रिया दल"
+
+#: flowview_databases.php:260
+#, fuzzy
+#| msgid "Auth Agents"
+msgid "Auth Agent"
+msgstr "प्रामाणिक एजेंट"
+
+#: flowview_databases.php:265 flowview_databases.php:315
+msgid "Organization"
+msgstr "संगठन"
+
+#: flowview_databases.php:270
+#, fuzzy
+#| msgid "Roles"
+msgid "Role"
+msgstr "भूमिकाओं"
+
+#: flowview_databases.php:275
+#, fuzzy
+#| msgid "Persons"
+msgid "Person"
+msgstr "व्यक्तियों"
+
+#: flowview_databases.php:280
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Router Set"
+msgstr "मार्ग सेट"
+
+#: flowview_databases.php:285
 msgid "Remarks"
 msgstr "टिप्पणियां"
 
-#: flowview_databases.php:223 flowview_databases.php:1651
+#: flowview_databases.php:290 flowview_databases.php:1718
 msgid "Last Modified"
 msgstr "पिछली मर्तबा परिवर्धित"
 
-#: flowview_databases.php:233
+#: flowview_databases.php:300
 #, fuzzy
 #| msgid "Destination Domain"
 msgid "Registration Date"
 msgstr "लक्षित अंतरराष्ट्रीय कम्प्यूटर तंत्र प्रणाली नियमावली"
 
-#: flowview_databases.php:238
+#: flowview_databases.php:305
 msgid "MNT By"
 msgstr "MNT द्वारा"
 
-#: flowview_databases.php:243
+#: flowview_databases.php:310
 msgid "Admin Contact"
 msgstr "व्यवस्थापक संपर्क"
 
-#: flowview_databases.php:248
-msgid "Organization"
-msgstr "संगठन"
-
-#: flowview_databases.php:253
+#: flowview_databases.php:320
 msgid "Changes"
 msgstr "परिवर्तन"
 
-#: flowview_databases.php:258
+#: flowview_databases.php:325
 msgid "Notify"
 msgstr "अधिसूचित करना"
 
-#: flowview_databases.php:263
+#: flowview_databases.php:330
 msgid "Description"
 msgstr "विवरण"
 
-#: flowview_databases.php:268
+#: flowview_databases.php:335
 msgid "Tech Contact"
 msgstr "तकनीकी संपर्क"
 
-#: flowview_databases.php:273
+#: flowview_databases.php:340
 msgid "MNT Lower"
 msgstr "एमएनटी लोअर"
 
-#: flowview_databases.php:278
+#: flowview_databases.php:345
 msgid "Country"
 msgstr "देश"
 
-#: flowview_databases.php:283
+#: flowview_databases.php:350
 #, fuzzy
 #| msgid "Email"
 msgid "Abuse Email"
 msgstr "ईमेल"
 
-#: flowview_databases.php:288
+#: flowview_databases.php:355
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "Fax Number"
 msgstr "एएस नंबर"
 
-#: flowview_databases.php:293
+#: flowview_databases.php:360
 msgid "Phone"
 msgstr "फ़ोन"
 
-#: flowview_databases.php:298 flowview_schedules.php:559
+#: flowview_databases.php:365 flowview_schedules.php:559
 msgid "Email"
 msgstr "ईमेल"
 
-#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+#: flowview_databases.php:370 flowview_devices.php:336 flowview_devices.php:551
 msgid "Address"
 msgstr "IP सिरनामा"
 
-#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+#: flowview_databases.php:375 flowview_devices.php:340 flowview_devices.php:775
 msgid "Status"
 msgstr "ऑर्डर स्थिति"
 
-#: flowview_databases.php:313
+#: flowview_databases.php:380
 msgid "Members By Fef"
 msgstr "Fef द्वारा सदस्य"
 
-#: flowview_databases.php:318
+#: flowview_databases.php:385
 msgid "Abuse Contacts"
 msgstr "दुरुपयोग संपर्क"
 
-#: flowview_databases.php:323
+#: flowview_databases.php:390
 msgid "MNT Reference"
 msgstr "MNT संदर्भ"
 
-#: flowview_databases.php:328
+#: flowview_databases.php:395
 msgid "Members"
 msgstr "सदस्यगण"
 
-#: flowview_databases.php:333
+#: flowview_databases.php:400
 msgid "MNT Notify"
 msgstr "MNT Notify"
 
-#: flowview_databases.php:338
+#: flowview_databases.php:405
 msgid "Authorization"
 msgstr "प्राधिकरण"
 
-#: flowview_databases.php:343
+#: flowview_databases.php:410
 msgid "MNT Routes"
 msgstr "MNT रूट्स"
 
-#: flowview_databases.php:348
+#: flowview_databases.php:415
 #, fuzzy
 msgid "Member of"
 msgstr "सदस्य"
 
-#: flowview_databases.php:353
+#: flowview_databases.php:420
 #, fuzzy
 msgid "Updates Email"
 msgstr "अपडेट करें"
 
-#: flowview_databases.php:358
+#: flowview_databases.php:425
 msgid "NOC Handle"
 msgstr "एनओसी हैंडल"
 
-#: flowview_databases.php:363
+#: flowview_databases.php:430
 msgid "Sponsor Org"
 msgstr "प्रायोजक संगठन"
 
-#: flowview_databases.php:368
+#: flowview_databases.php:435
 msgid "MNT Irt"
 msgstr "एमएनटी आईआरटी"
 
-#: flowview_databases.php:373
+#: flowview_databases.php:440
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "एएस नंबर"
 
-#: flowview_databases.php:378
+#: flowview_databases.php:445
 #, fuzzy
 #| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "स्रोत पोर्ट"
 
-#: flowview_databases.php:383
+#: flowview_databases.php:450
 #, fuzzy
 #| msgid "Enable"
 msgid "Pingable"
 msgstr "सक्षम करें"
 
-#: flowview_databases.php:388
+#: flowview_databases.php:455
 msgid "Alias"
 msgstr "उर्फ़"
 
-#: flowview_databases.php:393
+#: flowview_databases.php:460
 #, fuzzy
 #| msgid "Graph Type"
 msgid "Org Type"
 msgstr "ग्राफ़ प्रकार"
 
-#: flowview_databases.php:398
+#: flowview_databases.php:465
 msgid "Refer To"
 msgstr "संदर्भ लें"
 
-#: flowview_databases.php:403
+#: flowview_databases.php:470
 msgid "MP Peering"
 msgstr "एमपी पीयरिंग"
 
-#: flowview_databases.php:408 flowview_devices.php:490
+#: flowview_databases.php:475 flowview_devices.php:490
 msgid "Export"
 msgstr "एक्सपोर्ट"
 
-#: flowview_databases.php:413
+#: flowview_databases.php:480
 msgid "Holes"
 msgstr "छेद"
 
-#: flowview_databases.php:418
+#: flowview_databases.php:485
 #, fuzzy
 #| msgid "Default"
 msgid "MP Default"
 msgstr "डिफ़ॉल्ट"
 
-#: flowview_databases.php:423
+#: flowview_databases.php:490
 msgid "Components"
 msgstr "घटक"
 
-#: flowview_databases.php:428
+#: flowview_databases.php:495
 msgid "RS Out"
 msgstr "आरएस आउट"
 
-#: flowview_databases.php:433
+#: flowview_databases.php:500
 msgid "Organization Name"
 msgstr "संगठन का नाम"
 
-#: flowview_databases.php:443
+#: flowview_databases.php:510
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
 msgstr "नाम"
 
-#: flowview_databases.php:448
+#: flowview_databases.php:515
 msgid "Author"
 msgstr "लेखक "
 
-#: flowview_databases.php:453
+#: flowview_databases.php:520
 msgid "IRT Notify"
 msgstr "IRT सूचित करें"
 
-#: flowview_databases.php:458
+#: flowview_databases.php:525
 msgid "Aggr MTD"
 msgstr "एजीजीआर एमटीडी"
 
-#: flowview_databases.php:463
+#: flowview_databases.php:530
 msgid "AS Type"
 msgstr "एएस टाइप"
 
-#: flowview_databases.php:468
+#: flowview_databases.php:535
 #, fuzzy
 #| msgid "Filter"
 msgid "MP Filter"
 msgstr "छलनी "
 
-#: flowview_databases.php:473
+#: flowview_databases.php:540
 #, fuzzy
 #| msgid "Default"
 msgid "Default Route"
 msgstr "डिफ़ॉल्ट"
 
-#: flowview_databases.php:478
+#: flowview_databases.php:545
 msgid "Assignment Size"
 msgstr "असाइनमेंट आकार"
 
-#: flowview_databases.php:483
+#: flowview_databases.php:550
 #, fuzzy
 #| msgid "Report"
 msgid "Export Comps"
 msgstr "रिपोर्ट"
 
-#: flowview_databases.php:488
+#: flowview_databases.php:555
 msgid "RS In"
 msgstr "रुपये में"
 
-#: flowview_databases.php:493
+#: flowview_databases.php:560
 #, fuzzy
 #| msgid "Field Name"
 msgid "Net Name"
 msgstr "क्षेत्र नाम"
 
-#: flowview_databases.php:498
+#: flowview_databases.php:565
 msgid "DS Rdata"
 msgstr "डीएस Rdata"
 
-#: flowview_databases.php:503
+#: flowview_databases.php:570
 msgid "Aggr Boundary"
 msgstr "Aggr सीमा"
 
-#: flowview_databases.php:513
+#: flowview_databases.php:580
 msgid "MP Import"
 msgstr "एमपी आयात"
 
-#: flowview_databases.php:518
+#: flowview_databases.php:585
 msgid "Language"
 msgstr "भाषा"
 
-#: flowview_databases.php:523
+#: flowview_databases.php:590
 msgid "RESFful Link"
 msgstr "RESFful लिंक"
 
-#: flowview_databases.php:528
+#: flowview_databases.php:595
 msgid "Peer"
 msgstr "ताकना"
 
-#: flowview_databases.php:533
+#: flowview_databases.php:600
 msgid "Zone Contact"
 msgstr "ज़ोन संपर्क"
 
-#: flowview_databases.php:538
+#: flowview_databases.php:605
 msgid "Inject"
 msgstr "चढा"
 
-#: flowview_databases.php:543
+#: flowview_databases.php:610
 msgid "MP Peer"
 msgstr "एमपी पीर"
 
-#: flowview_databases.php:548
+#: flowview_databases.php:615
 msgid "Referral By"
 msgstr "द्वारा रेफरल"
 
-#: flowview_databases.php:553
+#: flowview_databases.php:620
 msgid "Form"
 msgstr "रूप"
 
-#: flowview_databases.php:558
+#: flowview_databases.php:625
 msgid "MNT Domains"
 msgstr "MNT डोमेन"
 
-#: flowview_databases.php:563
+#: flowview_databases.php:630
 msgid "Origin AS"
 msgstr "उत्पत्ति के रूप में"
 
-#: flowview_databases.php:568
+#: flowview_databases.php:635
 #, fuzzy
 #| msgid "Report"
 msgid "MP Export"
 msgstr "रिपोर्ट"
 
-#: flowview_databases.php:573
+#: flowview_databases.php:640
 #, fuzzy
 msgid "Encyption"
 msgstr "समय सीमा समाप्ति"
 
-#: flowview_databases.php:578
+#: flowview_databases.php:645
 msgid "Geo Feed"
 msgstr "जियो फीड"
 
-#: flowview_databases.php:583
+#: flowview_databases.php:650
 msgid "Geo Index"
 msgstr "भू सूचकांक"
 
-#: flowview_databases.php:588
+#: flowview_databases.php:655
 #, fuzzy
 msgid "Interface Addr"
 msgstr "इंटरफेस"
 
-#: flowview_databases.php:593
+#: flowview_databases.php:660
 #, fuzzy
 #| msgid "Report"
 msgid "Export Via"
 msgstr "रिपोर्ट"
 
-#: flowview_databases.php:598
+#: flowview_databases.php:665
 msgid "Trouble"
 msgstr "कष्ट"
 
-#: flowview_databases.php:603
+#: flowview_databases.php:670
 msgid "Name Servers"
 msgstr "नाम सर्वर"
 
-#: flowview_databases.php:608
+#: flowview_databases.php:675
 msgid "Ping Handle"
 msgstr "पिंग हैंडल"
 
-#: flowview_databases.php:613
+#: flowview_databases.php:680
 msgid "Interface"
 msgstr "इंटरफेस"
 
-#: flowview_databases.php:618
+#: flowview_databases.php:685
 msgid "Import"
 msgstr "आयात करें"
 
-#: flowview_databases.php:623
+#: flowview_databases.php:690
 msgid "Signature"
 msgstr "हस्ताक्षर"
 
-#: flowview_databases.php:628
+#: flowview_databases.php:695
 #, fuzzy
 msgid "Geo Location"
 msgstr "रोटेशन"
 
-#: flowview_databases.php:633
+#: flowview_databases.php:700
 #, fuzzy
 msgid "Local AS"
 msgstr "स्थानीय"
 
-#: flowview_databases.php:638
+#: flowview_databases.php:705
 msgid "Import Via"
 msgstr "आयात के माध्यम से"
 
-#: flowview_databases.php:683
+#: flowview_databases.php:750
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
 msgstr "घातक: अज्ञात डेटाबेस तालिका %s"
 
-#: flowview_databases.php:796 flowview_databases.php:1161
-#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_databases.php:863 flowview_databases.php:1228
+#: flowview_databases.php:1520 flowview_devices.php:699
 #: flowview_filters.php:233 flowview_schedules.php:450
 msgid "Search"
 msgstr "खोजें"
 
-#: flowview_databases.php:806 flowview_databases.php:1171
-#: flowview_databases.php:1181 flowview_databases.php:1463
-#: flowview_databases.php:1473
+#: flowview_databases.php:873 flowview_databases.php:1238
+#: flowview_databases.php:1248 flowview_databases.php:1530
+#: flowview_databases.php:1540
 msgid "Any"
 msgstr "कोई भी@ label"
 
-#: flowview_databases.php:824 flowview_databases.php:956
-#: flowview_databases.php:1199 flowview_databases.php:1311
-#: flowview_databases.php:1491 flowview_databases.php:1612
+#: flowview_databases.php:891 flowview_databases.php:1023
+#: flowview_databases.php:1266 flowview_databases.php:1378
+#: flowview_databases.php:1558 flowview_databases.php:1679
 msgid "Entries"
 msgstr "प्रविश्टयां"
 
-#: flowview_databases.php:828 flowview_databases.php:1203
-#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_databases.php:895 flowview_databases.php:1270
+#: flowview_databases.php:1562 flowview_filters.php:243
 #: flowview_schedules.php:460
 msgid "Default"
 msgstr "डिफ़ॉल्ट"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:489
 #: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
 #: functions.php:596
 msgid "Go"
 msgstr "जाएं"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:706
 #: flowview_filters.php:254 flowview_schedules.php:471
 msgid "Set/Refresh Filters"
 msgstr "सेट / फ़िल्टर ताज़ा करें"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
 msgid "Clear"
 msgstr "明确"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474
 msgid "Clear Filters"
 msgstr "साफ फिल्टर"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge"
 msgstr "सफाई"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge the DNS Cache"
 msgstr "DNS कैश को पर्ज करें"
 
-#: flowview_databases.php:997
+#: flowview_databases.php:1064
 msgid "Not Specified"
 msgstr "निर्दिष्ट नहीं"
 
-#: flowview_databases.php:1013
+#: flowview_databases.php:1080
 msgid "No Matching Entries Found"
 msgstr "कोई मेल खाती प्रविष्टियाँ नहीं मिलीं"
 
-#: flowview_databases.php:1073
+#: flowview_databases.php:1140
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "निम्न शेड्यूल को हटाने के लिए 'जारी रखें' पर क्लिक करें।"
 msgstr[1] "निम्न शेड्यूल को हटाने के लिए 'जारी रखें' पर क्लिक करें।"
 
-#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_databases.php:1145 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
 #: functions.php:843
 msgid "Cancel"
 msgstr "कैंसिल करें"
 
-#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_databases.php:1145 flowview_devices.php:214
 #: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
 msgid "Continue"
 msgstr "जारी रखें"
 
-#: flowview_databases.php:1078
+#: flowview_databases.php:1145
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
 msgstr[0] "DNS प्रविष्टि हटाएँ"
 msgstr[1] "DNS प्रविष्टियाँ हटाएँ"
 
-#: flowview_databases.php:1152
+#: flowview_databases.php:1219
 #, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "फ़्लो व्यू शेड्यूल"
 
-#: flowview_databases.php:1167 flowview_databases.php:1173
-#: flowview_databases.php:1372
+#: flowview_databases.php:1234 flowview_databases.php:1240
+#: flowview_databases.php:1439
 msgid "Verified"
 msgstr "सत्यापित"
 
-#: flowview_databases.php:1172 flowview_databases.php:1372
+#: flowview_databases.php:1239 flowview_databases.php:1439
 msgid "Unverified"
 msgstr "असत्यापित"
 
-#: flowview_databases.php:1323
+#: flowview_databases.php:1390
 msgid "This is the IP Address of the Cache entry."
 msgstr "यह कैश प्रविष्टि का IP पता है।"
 
-#: flowview_databases.php:1326
+#: flowview_databases.php:1393
 msgid "DNS Hostname"
 msgstr "DNS होस्टनाम"
 
-#: flowview_databases.php:1329
+#: flowview_databases.php:1396
 msgid "The DNS Name assigned to the IP Address."
 msgstr "IP पते को असाइन किया गया DNS नाम."
 
-#: flowview_databases.php:1335
+#: flowview_databases.php:1402
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
 msgstr "DNS होस्टनाम का स्रोत.  यह या तो DNS, स्टेटिक लुकअप या ARIN हो सकता है।"
 
-#: flowview_databases.php:1338
+#: flowview_databases.php:1405
 msgid "Arin Verified"
 msgstr "Arin सत्यापित"
 
-#: flowview_databases.php:1341
+#: flowview_databases.php:1408
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
 msgstr "इस आईपी पते के लिए अरिन जानकारी सत्यापित है, या यह एक स्थानीय डोमेन आईपी पता है।"
 
-#: flowview_databases.php:1344
+#: flowview_databases.php:1411
 msgid "CIDR ID"
 msgstr "सीआईडीआर आईडी"
 
-#: flowview_databases.php:1347
+#: flowview_databases.php:1414
 msgid "The Arin primary key.  This is not official Arin information."
 msgstr "अरिन प्राथमिक कुंजी।  यह आधिकारिक अरिन जानकारी नहीं है।"
 
-#: flowview_databases.php:1350
+#: flowview_databases.php:1417
 msgid "Autonomous System ID"
 msgstr "स्वायत्त सिस्टम आईडी"
 
-#: flowview_databases.php:1353
+#: flowview_databases.php:1420
 msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "अरिन मूल के रूप में।  यह आधिकारिक अरिन एएस जानकारी है।"
 
-#: flowview_databases.php:1356
+#: flowview_databases.php:1423
 #, fuzzy
 msgid "Updated Time"
 msgstr "अपडेट करें"
 
-#: flowview_databases.php:1359
+#: flowview_databases.php:1426
 msgid "This is the time that the DNS cache was entered or last updated."
 msgstr "यह वह समय है जब DNS कैश दर्ज किया गया था या अंतिम बार अपडेट किया गया था।"
 
-#: flowview_databases.php:1380
+#: flowview_databases.php:1447
 msgid "No DNS Cache Entries Found"
 msgstr "कोई DNS कैश प्रविष्टियाँ नहीं मिलीं"
 
-#: flowview_databases.php:1444
+#: flowview_databases.php:1511
 #, fuzzy
 #| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "फ़्लो व्यू श्रोता"
 
-#: flowview_databases.php:1459
+#: flowview_databases.php:1526
 #, fuzzy
 msgid "IP Version"
 msgstr "संस्करण %s"
 
-#: flowview_databases.php:1464
+#: flowview_databases.php:1531
 msgid "IPv4"
 msgstr "आईपीवी4"
 
-#: flowview_databases.php:1465
+#: flowview_databases.php:1532
 #, fuzzy
 msgid "IPv6"
 msgstr "आईपीवी 6"
 
-#: flowview_databases.php:1622
+#: flowview_databases.php:1689
 #, fuzzy
 #| msgid "Routine"
 msgid "Route"
 msgstr "सामान्य"
 
-#: flowview_databases.php:1624
+#: flowview_databases.php:1691
 msgid "This is the published Internet Route."
 msgstr "यह प्रकाशित इंटरनेट मार्ग है।"
 
-#: flowview_databases.php:1627
+#: flowview_databases.php:1694
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "पोर्ट संख्या"
 
-#: flowview_databases.php:1630
+#: flowview_databases.php:1697
 msgid "The Autonomous System Number for the route."
 msgstr "मार्ग के लिए स्वायत्त प्रणाली संख्या।"
 
-#: flowview_databases.php:1633
+#: flowview_databases.php:1700
 msgid "Route Description"
 msgstr "मार्ग विवरण"
 
-#: flowview_databases.php:1636
+#: flowview_databases.php:1703
 msgid "The Descrption logged by the Route Maintainer."
 msgstr "रूट मेंटेनर द्वारा लॉग किया गया विवरण।"
 
-#: flowview_databases.php:1642
+#: flowview_databases.php:1709
 msgid "The source database used to publish the route."
 msgstr "रूट प्रकाशित करने के लिए उपयोग किया जाने वाला स्रोत डेटाबेस."
 
-#: flowview_databases.php:1645
+#: flowview_databases.php:1712
 msgid "Maintained By"
 msgstr "द्वारा बनाए रखा गया"
 
-#: flowview_databases.php:1648
+#: flowview_databases.php:1715
 msgid "The Internet Carrier who is maintaining the route for the customer."
 msgstr "इंटरनेट वाहक जो ग्राहक के लिए मार्ग का रखरखाव कर रहा है।"
 
-#: flowview_databases.php:1654
+#: flowview_databases.php:1721
 msgid "The last time the information on this route was modified."
 msgstr "पिछली बार इस मार्ग की जानकारी को संशोधित किया गया था।"
 
-#: flowview_databases.php:1675
+#: flowview_databases.php:1742
 msgid "No Matching Routes Found"
 msgstr "कोई मिलान मार्ग नहीं मिला"
 
