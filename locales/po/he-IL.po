@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2024-07-14 15:10-0400\n"
+"POT-Creation-Date: 2024-07-14 20:09-0400\n"
 "PO-Revision-Date: 2024-07-14 15:42-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -228,7 +228,7 @@ msgstr "פורט"
 msgid "Dest IP"
 msgstr "כתובת IP של Dest"
 
-#: arrays.php:410 flowview_databases.php:1321 functions.php:2908
+#: arrays.php:410 flowview_databases.php:1388 functions.php:2908
 msgid "IP Address"
 msgstr "כתובת IP"
 
@@ -301,10 +301,10 @@ msgstr "Fl"
 msgid "Flags"
 msgstr "דגלים"
 
-#: arrays.php:531 arrays.php:537 flowview_databases.php:228
-#: flowview_databases.php:802 flowview_databases.php:1177
-#: flowview_databases.php:1332 flowview_databases.php:1469
-#: flowview_databases.php:1639
+#: arrays.php:531 arrays.php:537 flowview_databases.php:295
+#: flowview_databases.php:869 flowview_databases.php:1244
+#: flowview_databases.php:1399 flowview_databases.php:1536
+#: flowview_databases.php:1706
 msgid "Source"
 msgstr "מקור"
 
@@ -322,7 +322,7 @@ msgstr "%d פיקסלים"
 msgid "General Filters"
 msgstr "מחיקת מסננים"
 
-#: arrays.php:589 flowview_databases.php:508 functions.php:537
+#: arrays.php:589 flowview_databases.php:575 functions.php:537
 msgid "Filter"
 msgstr "סינון"
 
@@ -637,7 +637,7 @@ msgstr "המסנן נשמר"
 msgid "Peering Sets"
 msgstr "ערכות עמיתים"
 
-#: arrays.php:924 flowview_databases.php:438
+#: arrays.php:924 flowview_databases.php:245 flowview_databases.php:505
 msgid "Network"
 msgstr "רשת"
 
@@ -695,437 +695,520 @@ msgstr "פרטי הרישום של נתיב האינטרנט"
 msgid "Authorized Agent Details"
 msgstr "פרטי סוכן מורשה"
 
-#: flowview_databases.php:218
-msgid "Remarks"
-msgstr "הערות"
+#: flowview_databases.php:205
+#, fuzzy
+#| msgid "CIDR/Routes"
+msgid "CIDR/Route"
+msgstr "CIDR/מסלולים"
 
-#: flowview_databases.php:223 flowview_databases.php:1651
-msgid "Last Modified"
-msgstr "תאריך שינוי"
+#: flowview_databases.php:210
+#, fuzzy
+#| msgid "AS Numbers"
+msgid "Autonomous Number"
+msgstr "מספרים"
 
-#: flowview_databases.php:233
-msgid "Registration Date"
-msgstr "תאריך ההרשמה"
+#: flowview_databases.php:215
+#, fuzzy
+#| msgid "AS Blocks"
+msgid "AS Block"
+msgstr "כבלוקים"
 
-#: flowview_databases.php:238
-msgid "MNT By"
-msgstr "MNT מאת"
+#: flowview_databases.php:220
+#, fuzzy
+#| msgid "AS Sets"
+msgid "AS Set"
+msgstr "ערכות AS"
 
-#: flowview_databases.php:243
-msgid "Admin Contact"
-msgstr "איש קשר למנהל מערכת"
+#: flowview_databases.php:225
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Route Set"
+msgstr "ערכות מסלולים"
 
-#: flowview_databases.php:248
+#: flowview_databases.php:230
+#, fuzzy
+#| msgid "Domains"
+msgid "Domain"
+msgstr "שמות מתחם"
+
+#: flowview_databases.php:235
+#, fuzzy
+msgid "Filter Set"
+msgstr "המסנן נשמר"
+
+#: flowview_databases.php:240
+#, fuzzy
+#| msgid "Peering Sets"
+msgid "Peering Set"
+msgstr "ערכות עמיתים"
+
+#: flowview_databases.php:250
+#, fuzzy
+#| msgid "Internet Control"
+msgid "Internet Router"
+msgstr "בקרת אינטרנט"
+
+#: flowview_databases.php:255
+#, fuzzy
+#| msgid "Incident Response Teams"
+msgid "Incident Response Team"
+msgstr "צוותי תגובה לאירועים"
+
+#: flowview_databases.php:260
+#, fuzzy
+#| msgid "Auth Agents"
+msgid "Auth Agent"
+msgstr "סוכני Auth"
+
+#: flowview_databases.php:265 flowview_databases.php:315
 msgid "Organization"
 msgstr "ארגון"
 
-#: flowview_databases.php:253
+#: flowview_databases.php:270
+#, fuzzy
+#| msgid "Roles"
+msgid "Role"
+msgstr "תפקידים "
+
+#: flowview_databases.php:275
+#, fuzzy
+#| msgid "Persons"
+msgid "Person"
+msgstr "אנשים"
+
+#: flowview_databases.php:280
+#, fuzzy
+#| msgid "Route Sets"
+msgid "Router Set"
+msgstr "ערכות מסלולים"
+
+#: flowview_databases.php:285
+msgid "Remarks"
+msgstr "הערות"
+
+#: flowview_databases.php:290 flowview_databases.php:1718
+msgid "Last Modified"
+msgstr "תאריך שינוי"
+
+#: flowview_databases.php:300
+msgid "Registration Date"
+msgstr "תאריך ההרשמה"
+
+#: flowview_databases.php:305
+msgid "MNT By"
+msgstr "MNT מאת"
+
+#: flowview_databases.php:310
+msgid "Admin Contact"
+msgstr "איש קשר למנהל מערכת"
+
+#: flowview_databases.php:320
 msgid "Changes"
 msgstr "שינויים"
 
-#: flowview_databases.php:258
+#: flowview_databases.php:325
 msgid "Notify"
 msgstr "הודיע"
 
-#: flowview_databases.php:263
+#: flowview_databases.php:330
 msgid "Description"
 msgstr "תיאור"
 
-#: flowview_databases.php:268
+#: flowview_databases.php:335
 msgid "Tech Contact"
 msgstr "איש קשר טכני"
 
-#: flowview_databases.php:273
+#: flowview_databases.php:340
 msgid "MNT Lower"
 msgstr "MNT תחתון"
 
-#: flowview_databases.php:278
+#: flowview_databases.php:345
 msgid "Country"
 msgstr "מדינה"
 
-#: flowview_databases.php:283
+#: flowview_databases.php:350
 #, fuzzy
 #| msgid "Email"
 msgid "Abuse Email"
 msgstr "אימייל"
 
-#: flowview_databases.php:288
+#: flowview_databases.php:355
 msgid "Fax Number"
 msgstr "מספר פקס"
 
-#: flowview_databases.php:293
+#: flowview_databases.php:360
 msgid "Phone"
 msgstr "טלפון"
 
-#: flowview_databases.php:298 flowview_schedules.php:559
+#: flowview_databases.php:365 flowview_schedules.php:559
 msgid "Email"
 msgstr "אימייל"
 
-#: flowview_databases.php:303 flowview_devices.php:336 flowview_devices.php:551
+#: flowview_databases.php:370 flowview_devices.php:336 flowview_devices.php:551
 msgid "Address"
 msgstr "כתובת"
 
-#: flowview_databases.php:308 flowview_devices.php:340 flowview_devices.php:775
+#: flowview_databases.php:375 flowview_devices.php:340 flowview_devices.php:775
 msgid "Status"
 msgstr "סטטוס"
 
-#: flowview_databases.php:313
+#: flowview_databases.php:380
 msgid "Members By Fef"
 msgstr "חברי הלהקה מאת Fef"
 
-#: flowview_databases.php:318
+#: flowview_databases.php:385
 msgid "Abuse Contacts"
 msgstr "שימוש לרעה באנשי קשר"
 
-#: flowview_databases.php:323
+#: flowview_databases.php:390
 msgid "MNT Reference"
 msgstr "חומר עזר בנושא MNT"
 
-#: flowview_databases.php:328
+#: flowview_databases.php:395
 msgid "Members"
 msgstr "חברים"
 
-#: flowview_databases.php:333
+#: flowview_databases.php:400
 msgid "MNT Notify"
 msgstr "הודעת MNT"
 
-#: flowview_databases.php:338
+#: flowview_databases.php:405
 msgid "Authorization"
 msgstr "הרשאה"
 
-#: flowview_databases.php:343
+#: flowview_databases.php:410
 msgid "MNT Routes"
 msgstr "מסלולי MNT"
 
-#: flowview_databases.php:348
+#: flowview_databases.php:415
 #, fuzzy
 msgid "Member of"
 msgstr "משתמש"
 
-#: flowview_databases.php:353
+#: flowview_databases.php:420
 #, fuzzy
 msgid "Updates Email"
 msgstr "עדכון"
 
-#: flowview_databases.php:358
+#: flowview_databases.php:425
 msgid "NOC Handle"
 msgstr "ידית NOC"
 
-#: flowview_databases.php:363
+#: flowview_databases.php:430
 msgid "Sponsor Org"
 msgstr "ארגון נותני חסות"
 
-#: flowview_databases.php:368
+#: flowview_databases.php:435
 msgid "MNT Irt"
 msgstr "MNT Irt"
 
-#: flowview_databases.php:373
+#: flowview_databases.php:440
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "מספרים"
 
-#: flowview_databases.php:378
+#: flowview_databases.php:445
 #, fuzzy
 #| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "מקור דומיין"
 
-#: flowview_databases.php:383
+#: flowview_databases.php:450
 #, fuzzy
 #| msgid "Enable"
 msgid "Pingable"
 msgstr "אפשר"
 
-#: flowview_databases.php:388
+#: flowview_databases.php:455
 msgid "Alias"
 msgstr "כינוי"
 
-#: flowview_databases.php:393
+#: flowview_databases.php:460
 #, fuzzy
 #| msgid "Graph Type"
 msgid "Org Type"
 msgstr "סוג גרף סטטיסטיקה"
 
-#: flowview_databases.php:398
+#: flowview_databases.php:465
 msgid "Refer To"
 msgstr "עיין ב"
 
-#: flowview_databases.php:403
+#: flowview_databases.php:470
 msgid "MP Peering"
 msgstr "MP Peering"
 
-#: flowview_databases.php:408 flowview_devices.php:490
+#: flowview_databases.php:475 flowview_devices.php:490
 msgid "Export"
 msgstr "ייצא"
 
-#: flowview_databases.php:413
+#: flowview_databases.php:480
 msgid "Holes"
 msgstr "חורים"
 
-#: flowview_databases.php:418
+#: flowview_databases.php:485
 #, fuzzy
 #| msgid "Default"
 msgid "MP Default"
 msgstr "ברירת מחדל"
 
-#: flowview_databases.php:423
+#: flowview_databases.php:490
 msgid "Components"
 msgstr "רכיבים"
 
-#: flowview_databases.php:428
+#: flowview_databases.php:495
 msgid "RS Out"
 msgstr "יציאת RS"
 
-#: flowview_databases.php:433
+#: flowview_databases.php:500
 msgid "Organization Name"
 msgstr "שם ארגון"
 
-#: flowview_databases.php:443
+#: flowview_databases.php:510
 #, fuzzy
 #| msgid "Name"
 msgid "AS Name"
 msgstr "שם: "
 
-#: flowview_databases.php:448
+#: flowview_databases.php:515
 msgid "Author"
 msgstr "מחבר"
 
-#: flowview_databases.php:453
+#: flowview_databases.php:520
 msgid "IRT Notify"
 msgstr "הודעת IRT"
 
-#: flowview_databases.php:458
+#: flowview_databases.php:525
 msgid "Aggr MTD"
 msgstr "Aggr MTD"
 
-#: flowview_databases.php:463
+#: flowview_databases.php:530
 msgid "AS Type"
 msgstr "כסוג"
 
-#: flowview_databases.php:468
+#: flowview_databases.php:535
 #, fuzzy
 #| msgid "Filter"
 msgid "MP Filter"
 msgstr "סינון"
 
-#: flowview_databases.php:473
+#: flowview_databases.php:540
 #, fuzzy
 #| msgid "Default"
 msgid "Default Route"
 msgstr "ברירת מחדל"
 
-#: flowview_databases.php:478
+#: flowview_databases.php:545
 msgid "Assignment Size"
 msgstr "גודל המשימה"
 
-#: flowview_databases.php:483
+#: flowview_databases.php:550
 #, fuzzy
 #| msgid "Report"
 msgid "Export Comps"
 msgstr "דו\"ח"
 
-#: flowview_databases.php:488
+#: flowview_databases.php:555
 msgid "RS In"
 msgstr "RS ב"
 
-#: flowview_databases.php:493
+#: flowview_databases.php:560
 #, fuzzy
 #| msgid "Field Name"
 msgid "Net Name"
 msgstr "שדה שם"
 
-#: flowview_databases.php:498
+#: flowview_databases.php:565
 msgid "DS Rdata"
 msgstr "DS Rdata"
 
-#: flowview_databases.php:503
+#: flowview_databases.php:570
 msgid "Aggr Boundary"
 msgstr "גבול Aggr"
 
-#: flowview_databases.php:513
+#: flowview_databases.php:580
 msgid "MP Import"
 msgstr "ייבוא MP"
 
-#: flowview_databases.php:518
+#: flowview_databases.php:585
 msgid "Language"
 msgstr "שפה"
 
-#: flowview_databases.php:523
+#: flowview_databases.php:590
 msgid "RESFful Link"
 msgstr "קישור RESFful"
 
-#: flowview_databases.php:528
+#: flowview_databases.php:595
 msgid "Peer"
 msgstr "עמית"
 
-#: flowview_databases.php:533
+#: flowview_databases.php:600
 msgid "Zone Contact"
 msgstr "אזור צור קשר"
 
-#: flowview_databases.php:538
+#: flowview_databases.php:605
 msgid "Inject"
 msgstr "להזריק"
 
-#: flowview_databases.php:543
+#: flowview_databases.php:610
 msgid "MP Peer"
 msgstr "חבר פרלמנט עמית"
 
-#: flowview_databases.php:548
+#: flowview_databases.php:615
 msgid "Referral By"
 msgstr "הפניה על ידי"
 
-#: flowview_databases.php:553
+#: flowview_databases.php:620
 msgid "Form"
 msgstr "טופס"
 
-#: flowview_databases.php:558
+#: flowview_databases.php:625
 msgid "MNT Domains"
 msgstr "דומיינים של MNT"
 
-#: flowview_databases.php:563
+#: flowview_databases.php:630
 msgid "Origin AS"
 msgstr "מקור כ"
 
-#: flowview_databases.php:568
+#: flowview_databases.php:635
 #, fuzzy
 #| msgid "Report"
 msgid "MP Export"
 msgstr "דו\"ח"
 
-#: flowview_databases.php:573
+#: flowview_databases.php:640
 #, fuzzy
 msgid "Encyption"
 msgstr "תאריך תפוגה"
 
-#: flowview_databases.php:578
+#: flowview_databases.php:645
 msgid "Geo Feed"
 msgstr "הזנה גיאוגרפית"
 
-#: flowview_databases.php:583
+#: flowview_databases.php:650
 msgid "Geo Index"
 msgstr "אינדקס גאוגרפי"
 
-#: flowview_databases.php:588
+#: flowview_databases.php:655
 #, fuzzy
 msgid "Interface Addr"
 msgstr "ממשק"
 
-#: flowview_databases.php:593
+#: flowview_databases.php:660
 #, fuzzy
 #| msgid "Report"
 msgid "Export Via"
 msgstr "דו\"ח"
 
-#: flowview_databases.php:598
+#: flowview_databases.php:665
 msgid "Trouble"
 msgstr "טרחה"
 
-#: flowview_databases.php:603
+#: flowview_databases.php:670
 msgid "Name Servers"
 msgstr "שרתי שמות"
 
-#: flowview_databases.php:608
+#: flowview_databases.php:675
 msgid "Ping Handle"
 msgstr "ידית פינג"
 
-#: flowview_databases.php:613
+#: flowview_databases.php:680
 msgid "Interface"
 msgstr "ממשק"
 
-#: flowview_databases.php:618
+#: flowview_databases.php:685
 msgid "Import"
 msgstr "ייבוא"
 
-#: flowview_databases.php:623
+#: flowview_databases.php:690
 msgid "Signature"
 msgstr "חתימה"
 
-#: flowview_databases.php:628
+#: flowview_databases.php:695
 #, fuzzy
 msgid "Geo Location"
 msgstr "סיבוב"
 
-#: flowview_databases.php:633
+#: flowview_databases.php:700
 #, fuzzy
 msgid "Local AS"
 msgstr "מקומי"
 
-#: flowview_databases.php:638
+#: flowview_databases.php:705
 msgid "Import Via"
 msgstr "ייבוא באמצעות"
 
-#: flowview_databases.php:683
+#: flowview_databases.php:750
 #, php-format
 msgid "FATAL: Unknown Database Table %s"
 msgstr "FATAL: טבלת מסד נתונים לא ידועה %s"
 
-#: flowview_databases.php:796 flowview_databases.php:1161
-#: flowview_databases.php:1453 flowview_devices.php:699
+#: flowview_databases.php:863 flowview_databases.php:1228
+#: flowview_databases.php:1520 flowview_devices.php:699
 #: flowview_filters.php:233 flowview_schedules.php:450
 msgid "Search"
 msgstr "חיפוש"
 
-#: flowview_databases.php:806 flowview_databases.php:1171
-#: flowview_databases.php:1181 flowview_databases.php:1463
-#: flowview_databases.php:1473
+#: flowview_databases.php:873 flowview_databases.php:1238
+#: flowview_databases.php:1248 flowview_databases.php:1530
+#: flowview_databases.php:1540
 msgid "Any"
 msgstr "הכל"
 
-#: flowview_databases.php:824 flowview_databases.php:956
-#: flowview_databases.php:1199 flowview_databases.php:1311
-#: flowview_databases.php:1491 flowview_databases.php:1612
+#: flowview_databases.php:891 flowview_databases.php:1023
+#: flowview_databases.php:1266 flowview_databases.php:1378
+#: flowview_databases.php:1558 flowview_databases.php:1679
 msgid "Entries"
 msgstr "רשומות"
 
-#: flowview_databases.php:828 flowview_databases.php:1203
-#: flowview_databases.php:1495 flowview_filters.php:243
+#: flowview_databases.php:895 flowview_databases.php:1270
+#: flowview_databases.php:1562 flowview_filters.php:243
 #: flowview_schedules.php:460
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:489
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:489
 #: flowview_devices.php:706 flowview_filters.php:254 flowview_schedules.php:471
 #: functions.php:596
 msgid "Go"
 msgstr "עבור"
 
-#: flowview_databases.php:840 flowview_databases.php:1215
-#: flowview_databases.php:1507 flowview_devices.php:706
+#: flowview_databases.php:907 flowview_databases.php:1282
+#: flowview_databases.php:1574 flowview_devices.php:706
 #: flowview_filters.php:254 flowview_schedules.php:471
 msgid "Set/Refresh Filters"
 msgstr "הגדר / רענן מסננים"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474 functions.php:597
 msgid "Clear"
 msgstr "נקה"
 
-#: flowview_databases.php:841 flowview_databases.php:1216
-#: flowview_databases.php:1508 flowview_devices.php:707
+#: flowview_databases.php:908 flowview_databases.php:1283
+#: flowview_databases.php:1575 flowview_devices.php:707
 #: flowview_filters.php:257 flowview_schedules.php:474
 msgid "Clear Filters"
 msgstr "מחיקת מסננים"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge"
 msgstr "מחק"
 
-#: flowview_databases.php:842 flowview_databases.php:1217
+#: flowview_databases.php:909 flowview_databases.php:1284
 msgid "Purge the DNS Cache"
 msgstr "ניקוי מטמון ה- DNS"
 
-#: flowview_databases.php:997
+#: flowview_databases.php:1064
 msgid "Not Specified"
 msgstr "לא צוין"
 
-#: flowview_databases.php:1013
+#: flowview_databases.php:1080
 msgid "No Matching Entries Found"
 msgstr "לא נמצאו ערכים תואמים"
 
-#: flowview_databases.php:1073
+#: flowview_databases.php:1140
 #, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
@@ -1134,18 +1217,18 @@ msgstr[1] "לחץ על 'המשך' כדי למחוק את התזמונים הבא
 msgstr[2] ""
 msgstr[3] ""
 
-#: flowview_databases.php:1078 flowview_devices.php:222
+#: flowview_databases.php:1145 flowview_devices.php:222
 #: flowview_filters.php:164 flowview_schedules.php:262 functions.php:833
 #: functions.php:843
 msgid "Cancel"
 msgstr "ביטול"
 
-#: flowview_databases.php:1078 flowview_devices.php:214
+#: flowview_databases.php:1145 flowview_devices.php:214
 #: flowview_filters.php:156 flowview_schedules.php:254 functions.php:842
 msgid "Continue"
 msgstr "המשך"
 
-#: flowview_databases.php:1078
+#: flowview_databases.php:1145
 msgid "Delete DNS Entry"
 msgid_plural "Delete DNS Entries"
 msgstr[0] "מחיקת ערך DNS"
@@ -1153,136 +1236,136 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: flowview_databases.php:1152
+#: flowview_databases.php:1219
 #, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "לוחות זמנים של זרימה"
 
-#: flowview_databases.php:1167 flowview_databases.php:1173
-#: flowview_databases.php:1372
+#: flowview_databases.php:1234 flowview_databases.php:1240
+#: flowview_databases.php:1439
 msgid "Verified"
 msgstr "מאומת"
 
-#: flowview_databases.php:1172 flowview_databases.php:1372
+#: flowview_databases.php:1239 flowview_databases.php:1439
 msgid "Unverified"
 msgstr "לא מאומת"
 
-#: flowview_databases.php:1323
+#: flowview_databases.php:1390
 msgid "This is the IP Address of the Cache entry."
 msgstr "זוהי כתובת ה- IP של ערך המטמון."
 
-#: flowview_databases.php:1326
+#: flowview_databases.php:1393
 msgid "DNS Hostname"
 msgstr "שם מארח DNS"
 
-#: flowview_databases.php:1329
+#: flowview_databases.php:1396
 msgid "The DNS Name assigned to the IP Address."
 msgstr "שם ה- DNS שהוקצה לכתובת ה- IP."
 
-#: flowview_databases.php:1335
+#: flowview_databases.php:1402
 msgid "The source of the DNS Hostname.  It can either be DNS, Static Lookup or ARIN."
 msgstr "המקור של DNS Hostname.  זה יכול להיות DNS, בדיקת מידע סטטית או ARIN."
 
-#: flowview_databases.php:1338
+#: flowview_databases.php:1405
 msgid "Arin Verified"
 msgstr "ארין אומת"
 
-#: flowview_databases.php:1341
+#: flowview_databases.php:1408
 msgid "The Arin information for this IP Address is verified, or it's a Local Domain IP Address."
 msgstr "פרטי Arin עבור כתובת IP זו מאומתים, או שזוהי כתובת IP של תחום מקומי."
 
-#: flowview_databases.php:1344
+#: flowview_databases.php:1411
 msgid "CIDR ID"
 msgstr "מזהה CIDR"
 
-#: flowview_databases.php:1347
+#: flowview_databases.php:1414
 msgid "The Arin primary key.  This is not official Arin information."
 msgstr "המפתח הראשי של ארין.  זה לא מידע רשמי של ארין."
 
-#: flowview_databases.php:1350
+#: flowview_databases.php:1417
 msgid "Autonomous System ID"
 msgstr "מזהה מערכת אוטונומית"
 
-#: flowview_databases.php:1353
+#: flowview_databases.php:1420
 msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "מוצא ארין AS.  זהו מידע רשמי של Arin AS."
 
-#: flowview_databases.php:1356
+#: flowview_databases.php:1423
 #, fuzzy
 msgid "Updated Time"
 msgstr "עדכון"
 
-#: flowview_databases.php:1359
+#: flowview_databases.php:1426
 msgid "This is the time that the DNS cache was entered or last updated."
 msgstr "זהו הזמן שבו מטמון ה- DNS הוזן או עודכן לאחרונה."
 
-#: flowview_databases.php:1380
+#: flowview_databases.php:1447
 msgid "No DNS Cache Entries Found"
 msgstr "לא נמצאו ערכי מטמון DNS"
 
-#: flowview_databases.php:1444
+#: flowview_databases.php:1511
 #, fuzzy
 #| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "FlowView מאזינים"
 
-#: flowview_databases.php:1459
+#: flowview_databases.php:1526
 #, fuzzy
 msgid "IP Version"
 msgstr "גרסה"
 
-#: flowview_databases.php:1464
+#: flowview_databases.php:1531
 msgid "IPv4"
 msgstr "IPv4"
 
-#: flowview_databases.php:1465
+#: flowview_databases.php:1532
 #, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
-#: flowview_databases.php:1622
+#: flowview_databases.php:1689
 msgid "Route"
 msgstr "אין מסלול נמצאה התאמת השיטה URL ובקשה"
 
-#: flowview_databases.php:1624
+#: flowview_databases.php:1691
 msgid "This is the published Internet Route."
 msgstr "זהו מסלול האינטרנט שפורסם."
 
-#: flowview_databases.php:1627
+#: flowview_databases.php:1694
 #, fuzzy
 #| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "מספר הכרטיס"
 
-#: flowview_databases.php:1630
+#: flowview_databases.php:1697
 msgid "The Autonomous System Number for the route."
 msgstr "מספר המערכת האוטונומית עבור המסלול."
 
-#: flowview_databases.php:1633
+#: flowview_databases.php:1700
 msgid "Route Description"
 msgstr "תיאור המסלול"
 
-#: flowview_databases.php:1636
+#: flowview_databases.php:1703
 msgid "The Descrption logged by the Route Maintainer."
 msgstr "ה- Descrption נרשם על ידי מתחזק המסלול."
 
-#: flowview_databases.php:1642
+#: flowview_databases.php:1709
 msgid "The source database used to publish the route."
 msgstr "מסד הנתונים המקורי המשמש לפרסום המסלול."
 
-#: flowview_databases.php:1645
+#: flowview_databases.php:1712
 msgid "Maintained By"
 msgstr "מתוחזק על ידי"
 
-#: flowview_databases.php:1648
+#: flowview_databases.php:1715
 msgid "The Internet Carrier who is maintaining the route for the customer."
 msgstr "ספק האינטרנט שמתחזק את המסלול עבור הלקוח."
 
-#: flowview_databases.php:1654
+#: flowview_databases.php:1721
 msgid "The last time the information on this route was modified."
 msgstr "בפעם האחרונה שונה המידע על מסלול זה."
 
-#: flowview_databases.php:1675
+#: flowview_databases.php:1742
 msgid "No Matching Routes Found"
 msgstr "לא נמצאו מסלולים תואמים"
 
