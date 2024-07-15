@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 20:09-0400\n"
-"PO-Revision-Date: 2024-07-14 15:32-0400\n"
+"PO-Revision-Date: 2024-07-14 20:11-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: bg_BG\n"
@@ -133,26 +133,18 @@ msgid "Show IP Accounting Emulation"
 msgstr "Показване на емулация на IP счетоводство"
 
 #: arrays.php:69
-#, fuzzy
-#| msgid "Any Part in Range"
 msgid "Any Part in Range (slow)"
 msgstr "Всяка част в обхвата"
 
 #: arrays.php:70
-#, fuzzy
-#| msgid "End Time in Range"
 msgid "End Time in Range (fast)"
 msgstr "Краен час"
 
 #: arrays.php:71
-#, fuzzy
-#| msgid "Start Time in Range"
 msgid "Start Time in Range (fast)"
 msgstr "Начален час"
 
 #: arrays.php:72
-#, fuzzy
-#| msgid "Entirely in Range"
 msgid "Entirely in Range (slow)"
 msgstr "Изцяло в обхват"
 
@@ -343,8 +335,6 @@ msgid "The Listener to use for the Filter."
 msgstr "Слушателят, който да се използва за филтъра."
 
 #: arrays.php:607
-#, fuzzy
-#| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "ИД на шаблон"
 
@@ -353,8 +343,6 @@ msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID'
 msgstr "ИД на шаблон за поток само за v9 и IPFIX потоци.  Обърнете внимание, че ИД на шаблон може да се различава от производител до производител."
 
 #: arrays.php:615
-#, fuzzy
-#| msgid "IP Address"
 msgid "Stream Address"
 msgstr "IP Адрес"
 
@@ -607,8 +595,6 @@ msgid "CIDR/Routes"
 msgstr "CIDR/Маршрути"
 
 #: arrays.php:868
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Numbers"
 msgstr "Числа"
 
@@ -629,7 +615,6 @@ msgid "Domains"
 msgstr "Домейни"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
 msgstr "Филтърът е запазен"
 
@@ -642,8 +627,6 @@ msgid "Network"
 msgstr "Мрежа"
 
 #: arrays.php:932
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Routers"
 msgstr "Интернет контрол"
 
@@ -674,7 +657,6 @@ msgstr "Филтърът на потока \"%s\" не може да бъде и
 
 #: flowview.php:127
 #, fuzzy, php-format
-#| msgid "The Filter has been Deleted"
 msgid "Flow Filter '%s' Deleted."
 msgstr "Филтърът е изтрит"
 
@@ -696,67 +678,46 @@ msgid "Authorized Agent Details"
 msgstr "Данни за упълномощен агент"
 
 #: flowview_databases.php:205
-#, fuzzy
-#| msgid "CIDR/Routes"
 msgid "CIDR/Route"
 msgstr "CIDR/Маршрути"
 
 #: flowview_databases.php:210
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Number"
 msgstr "Числа"
 
 #: flowview_databases.php:215
-#, fuzzy
-#| msgid "AS Blocks"
 msgid "AS Block"
 msgstr "AS блокове"
 
 #: flowview_databases.php:220
-#, fuzzy
-#| msgid "AS Sets"
 msgid "AS Set"
-msgstr "AS комплекти"
+msgstr "Не е зададен"
 
 #: flowview_databases.php:225
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Route Set"
 msgstr "Набори от маршрути"
 
 #: flowview_databases.php:230
-#, fuzzy
-#| msgid "Domains"
 msgid "Domain"
-msgstr "Домейни"
+msgstr "Домейн"
 
 #: flowview_databases.php:235
-#, fuzzy
 msgid "Filter Set"
 msgstr "Филтърът е запазен"
 
 #: flowview_databases.php:240
-#, fuzzy
-#| msgid "Peering Sets"
 msgid "Peering Set"
 msgstr "Пиъринг сетове"
 
 #: flowview_databases.php:250
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Router"
 msgstr "Интернет контрол"
 
 #: flowview_databases.php:255
-#, fuzzy
-#| msgid "Incident Response Teams"
 msgid "Incident Response Team"
 msgstr "Екипи за реагиране при инциденти"
 
 #: flowview_databases.php:260
-#, fuzzy
-#| msgid "Auth Agents"
 msgid "Auth Agent"
 msgstr "Агенти за удостоверяване"
 
@@ -765,20 +726,14 @@ msgid "Organization"
 msgstr "Организация"
 
 #: flowview_databases.php:270
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
-msgstr "Роли"
+msgstr "Роля"
 
 #: flowview_databases.php:275
-#, fuzzy
-#| msgid "Persons"
 msgid "Person"
-msgstr "Души"
+msgstr "Човек"
 
 #: flowview_databases.php:280
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Router Set"
 msgstr "Набори от маршрути"
 
@@ -827,8 +782,6 @@ msgid "Country"
 msgstr "Държава"
 
 #: flowview_databases.php:350
-#, fuzzy
-#| msgid "Email"
 msgid "Abuse Email"
 msgstr "Имейл"
 
@@ -885,7 +838,6 @@ msgid "Member of"
 msgstr "Потребител от"
 
 #: flowview_databases.php:420
-#, fuzzy
 msgid "Updates Email"
 msgstr "Обновяване"
 
@@ -902,20 +854,14 @@ msgid "MNT Irt"
 msgstr "МНТ Ирт"
 
 #: flowview_databases.php:440
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "Числа"
 
 #: flowview_databases.php:445
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "Порт (и) на източника"
 
 #: flowview_databases.php:450
-#, fuzzy
-#| msgid "Enable"
 msgid "Pingable"
 msgstr "Включи"
 
@@ -924,8 +870,6 @@ msgid "Alias"
 msgstr "Псевдоним"
 
 #: flowview_databases.php:460
-#, fuzzy
-#| msgid "Graph Type"
 msgid "Org Type"
 msgstr "Тип на графиката"
 
@@ -946,8 +890,6 @@ msgid "Holes"
 msgstr "Дупки"
 
 #: flowview_databases.php:485
-#, fuzzy
-#| msgid "Default"
 msgid "MP Default"
 msgstr "По подразбиране"
 
@@ -964,8 +906,6 @@ msgid "Organization Name"
 msgstr "Име на организацията"
 
 #: flowview_databases.php:510
-#, fuzzy
-#| msgid "Name"
 msgid "AS Name"
 msgstr "Име:"
 
@@ -982,19 +922,14 @@ msgid "Aggr MTD"
 msgstr "Аггр МТД"
 
 #: flowview_databases.php:530
-#, fuzzy
 msgid "AS Type"
 msgstr "Тип"
 
 #: flowview_databases.php:535
-#, fuzzy
-#| msgid "Filter"
 msgid "MP Filter"
 msgstr "Филтър"
 
 #: flowview_databases.php:540
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
 msgstr "По подразбиране"
 
@@ -1003,8 +938,6 @@ msgid "Assignment Size"
 msgstr "Размер на присвояване"
 
 #: flowview_databases.php:550
-#, fuzzy
-#| msgid "Report"
 msgid "Export Comps"
 msgstr "Отчет"
 
@@ -1013,8 +946,6 @@ msgid "RS In"
 msgstr "RS В"
 
 #: flowview_databases.php:560
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
 msgstr "Име на поле"
 
@@ -1071,13 +1002,10 @@ msgid "Origin AS"
 msgstr "Произход AS"
 
 #: flowview_databases.php:635
-#, fuzzy
-#| msgid "Report"
 msgid "MP Export"
 msgstr "Отчет"
 
 #: flowview_databases.php:640
-#, fuzzy
 msgid "Encyption"
 msgstr "Краен срок"
 
@@ -1090,13 +1018,10 @@ msgid "Geo Index"
 msgstr "Гео индекс"
 
 #: flowview_databases.php:655
-#, fuzzy
 msgid "Interface Addr"
 msgstr "интерфейс"
 
 #: flowview_databases.php:660
-#, fuzzy
-#| msgid "Report"
 msgid "Export Via"
 msgstr "Отчет"
 
@@ -1129,7 +1054,6 @@ msgid "Geo Location"
 msgstr "Геолокация"
 
 #: flowview_databases.php:700
-#, fuzzy
 msgid "Local AS"
 msgstr "Местен"
 
@@ -1208,7 +1132,6 @@ msgid "No Matching Entries Found"
 msgstr "Не са намерени съвпадащи записи"
 
 #: flowview_databases.php:1140
-#, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "Кликнете върху „Напред“, за да изтриете следните графици."
@@ -1232,7 +1155,6 @@ msgstr[0] "Изтриване на DNS запис"
 msgstr[1] "Изтриване на DNS записи"
 
 #: flowview_databases.php:1219
-#, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "Разписания за FlowView"
 
@@ -1298,13 +1220,10 @@ msgid "No DNS Cache Entries Found"
 msgstr "Не са намерени записи в DNS кеша"
 
 #: flowview_databases.php:1511
-#, fuzzy
-#| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "Слушатели на FlowView"
 
 #: flowview_databases.php:1526
-#, fuzzy
 msgid "IP Version"
 msgstr "Версия"
 
@@ -1313,7 +1232,6 @@ msgid "IPv4"
 msgstr "ИПв4"
 
 #: flowview_databases.php:1532
-#, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
@@ -1326,8 +1244,6 @@ msgid "This is the published Internet Route."
 msgstr "Това е публикуваният Интернет маршрут."
 
 #: flowview_databases.php:1694
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "Номер на порт"
 
@@ -1392,20 +1308,14 @@ msgid "Port this collector will listen on."
 msgstr "Портът, който този колектор ще слуша."
 
 #: flowview_devices.php:76
-#, fuzzy
-#| msgid "The Listener to use for the Filter."
 msgid "The IP Protocol to use for this listener."
 msgstr "Слушателят, който да се използва за филтъра."
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "TCP Protocol"
 msgstr "IP протокол"
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "UDP Protocol"
 msgstr "IP протокол"
 
@@ -1540,7 +1450,6 @@ msgid "The number of inbound connections from various sources."
 msgstr "Броят на входящите връзки от различни източници."
 
 #: flowview_devices.php:792
-#, fuzzy
 msgid "Stream Versions"
 msgstr "Версия"
 
@@ -1817,7 +1726,6 @@ msgstr "Нагоре Проба"
 
 #: functions.php:585
 #, fuzzy, php-format
-#| msgid "Top 2 Samples"
 msgid "Top %d Samples"
 msgstr "Топ 2 проби"
 
@@ -1838,7 +1746,6 @@ msgid "Clear Filter"
 msgstr "Изчистване на филтрите"
 
 #: functions.php:598
-#, fuzzy
 msgid "Create new Flow Filter"
 msgstr "Колко често да се създава нов поточен файл."
 
@@ -1851,8 +1758,6 @@ msgid "Edit"
 msgstr "Редактирай"
 
 #: functions.php:599
-#, fuzzy
-#| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "Редактиране на текущия филтър"
 
@@ -1861,8 +1766,6 @@ msgid "Save"
 msgstr "Запази"
 
 #: functions.php:600
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "Отпечатване на отчети"
 
@@ -1871,8 +1774,6 @@ msgid "Save As"
 msgstr "Запис като"
 
 #: functions.php:601
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the existing Flow Filter as new Filter"
 msgstr "Отпечатване на отчети"
 
@@ -1885,8 +1786,6 @@ msgid "Rename the Flow Filter"
 msgstr "Преименуване на филтъра за поток"
 
 #: functions.php:603
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "Отпечатване на отчети"
 
@@ -1977,8 +1876,6 @@ msgid "Table"
 msgstr "Таблица"
 
 #: functions.php:827
-#, fuzzy
-#| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "Филтър"
 
@@ -1987,8 +1884,6 @@ msgid "New Name"
 msgstr "Ново име"
 
 #: functions.php:838
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "Отпечатване на отчети"
 
@@ -2046,7 +1941,6 @@ msgid "Rename Layout"
 msgstr "Преименуване на оформление"
 
 #: functions.php:984
-#, fuzzy
 msgid " <new>"
 msgstr "Нов"
 
@@ -2387,8 +2281,6 @@ msgid "(actions)"
 msgstr "Действия"
 
 #: setup.php:357
-#, fuzzy
-#| msgid "Hostname Resolution"
 msgid "Name Resolution"
 msgstr "Резолюция на име на хост"
 
@@ -2405,8 +2297,6 @@ msgid "Use Local Server"
 msgstr "Използвайте локален сървър"
 
 #: setup.php:367
-#, fuzzy
-#| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "Използвайте DNS сървър по-долу"
 
@@ -2415,7 +2305,6 @@ msgid "Don't Resolve DNS"
 msgstr "Не разрешавайте DNS"
 
 #: setup.php:373
-#, fuzzy
 msgid "Local Domain Name"
 msgstr "Изолирайте домейн имената"
 
@@ -2436,8 +2325,6 @@ msgid "Use CIDR or Non-CIDR"
 msgstr "Използвайте CIDR или не-CIDR"
 
 #: setup.php:390
-#, fuzzy
-#| msgid "Use Arin to Find Unregistered Domains"
 msgid "Use Arin to find Domains and AS Numbers"
 msgstr "Използвайте Arin за намиране на нерегистрирани домейни"
 
@@ -2458,7 +2345,6 @@ msgid "whois.radb.net"
 msgstr "whois.radb.net"
 
 #: setup.php:405
-#, fuzzy
 msgid "Whois Binary Path"
 msgstr "Двоичен път на инструментите за поток"
 
@@ -2564,8 +2450,6 @@ msgid "%d Threads"
 msgstr "%d нишки"
 
 #: setup.php:496
-#, fuzzy
-#| msgid "Maximum Rows"
 msgid "Maximum Run Time"
 msgstr "Максимален брой редове"
 
@@ -2598,12 +2482,12 @@ msgid "%d Hours"
 msgstr "%d часа"
 
 #: setup.php:517
-#, fuzzy, php-format
+#, php-format
 msgid "%d Day"
 msgstr "% d дни"
 
 #: setup.php:518
-#, fuzzy, php-format
+#, php-format
 msgid "%d Days"
 msgstr "% d дни"
 
@@ -2628,7 +2512,6 @@ msgid "This should be the port of the Read-Only-Service (readconnroute) service 
 msgstr "Това трябва да бъде портът на услугата и маршрутизатора само за четене (readconnroute)."
 
 #: setup.php:543
-#, fuzzy
 msgid "Flowview"
 msgstr "FlowView"
 

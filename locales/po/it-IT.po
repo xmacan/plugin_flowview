@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 20:09-0400\n"
-"PO-Revision-Date: 2024-07-14 15:43-0400\n"
+"PO-Revision-Date: 2024-07-14 20:25-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -133,26 +133,18 @@ msgid "Show IP Accounting Emulation"
 msgstr "Mostra emulazione contabilità IP"
 
 #: arrays.php:69
-#, fuzzy
-#| msgid "Any Part in Range"
 msgid "Any Part in Range (slow)"
 msgstr "Qualsiasi parte nell'intervallo"
 
 #: arrays.php:70
-#, fuzzy
-#| msgid "End Time in Range"
 msgid "End Time in Range (fast)"
 msgstr "Ora di fine"
 
 #: arrays.php:71
-#, fuzzy
-#| msgid "Start Time in Range"
 msgid "Start Time in Range (fast)"
 msgstr "Ora Inizio"
 
 #: arrays.php:72
-#, fuzzy
-#| msgid "Entirely in Range"
 msgid "Entirely in Range (slow)"
 msgstr "Interamente in gamma"
 
@@ -343,8 +335,6 @@ msgid "The Listener to use for the Filter."
 msgstr "L'ascoltatore da utilizzare per il filtro."
 
 #: arrays.php:607
-#, fuzzy
-#| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "ID template"
 
@@ -353,8 +343,6 @@ msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID'
 msgstr "L'ID del modello di flusso solo per i flussi v9 e IPFIX.  Tieni presente che gli ID modello possono differire da produttore a produttore."
 
 #: arrays.php:615
-#, fuzzy
-#| msgid "IP Address"
 msgid "Stream Address"
 msgstr "Indirizzo IP"
 
@@ -607,8 +595,6 @@ msgid "CIDR/Routes"
 msgstr "CIDR/Rotte"
 
 #: arrays.php:868
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Numbers"
 msgstr "Numeri"
 
@@ -629,7 +615,6 @@ msgid "Domains"
 msgstr "Domini"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
 msgstr "Filtro salvato"
 
@@ -642,8 +627,6 @@ msgid "Network"
 msgstr "Rete"
 
 #: arrays.php:932
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Routers"
 msgstr "Controllo di Internet"
 
@@ -673,10 +656,9 @@ msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
 msgstr "Impossibile eliminare il filtro di flusso '%s' in quanto è in uso in un report pianificato."
 
 #: flowview.php:127
-#, fuzzy, php-format
-#| msgid "The Filter has been Deleted"
+#, php-format
 msgid "Flow Filter '%s' Deleted."
-msgstr "Il filtro è stato eliminato"
+msgstr "Filtro di flusso '%s' eliminato."
 
 #: flowview_databases.php:33 flowview_devices.php:35 flowview_filters.php:39
 #: flowview_schedules.php:37 functions.php:603
@@ -696,67 +678,46 @@ msgid "Authorized Agent Details"
 msgstr "Dettagli dell'agente autorizzato"
 
 #: flowview_databases.php:205
-#, fuzzy
-#| msgid "CIDR/Routes"
 msgid "CIDR/Route"
 msgstr "CIDR/Rotte"
 
 #: flowview_databases.php:210
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Number"
 msgstr "Numeri"
 
 #: flowview_databases.php:215
-#, fuzzy
-#| msgid "AS Blocks"
 msgid "AS Block"
 msgstr "Blocchi AS"
 
 #: flowview_databases.php:220
-#, fuzzy
-#| msgid "AS Sets"
 msgid "AS Set"
 msgstr "Set AS"
 
 #: flowview_databases.php:225
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Route Set"
 msgstr "Set di percorsi"
 
 #: flowview_databases.php:230
-#, fuzzy
-#| msgid "Domains"
 msgid "Domain"
 msgstr "Domini"
 
 #: flowview_databases.php:235
-#, fuzzy
 msgid "Filter Set"
 msgstr "Filtro salvato"
 
 #: flowview_databases.php:240
-#, fuzzy
-#| msgid "Peering Sets"
 msgid "Peering Set"
 msgstr "Set di peering"
 
 #: flowview_databases.php:250
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Router"
 msgstr "Controllo di Internet"
 
 #: flowview_databases.php:255
-#, fuzzy
-#| msgid "Incident Response Teams"
 msgid "Incident Response Team"
 msgstr "Team di risposta agli incidenti"
 
 #: flowview_databases.php:260
-#, fuzzy
-#| msgid "Auth Agents"
 msgid "Auth Agent"
 msgstr "Agenti di autenticazione"
 
@@ -765,20 +726,14 @@ msgid "Organization"
 msgstr "Organizzazione"
 
 #: flowview_databases.php:270
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "Ruoli"
 
 #: flowview_databases.php:275
-#, fuzzy
-#| msgid "Persons"
 msgid "Person"
 msgstr "Persone"
 
 #: flowview_databases.php:280
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Router Set"
 msgstr "Set di percorsi"
 
@@ -827,8 +782,6 @@ msgid "Country"
 msgstr "Nazione"
 
 #: flowview_databases.php:350
-#, fuzzy
-#| msgid "Email"
 msgid "Abuse Email"
 msgstr "Email"
 
@@ -885,7 +838,6 @@ msgid "Member of"
 msgstr "Membro di"
 
 #: flowview_databases.php:420
-#, fuzzy
 msgid "Updates Email"
 msgstr "Aggiorna"
 
@@ -902,14 +854,10 @@ msgid "MNT Irt"
 msgstr "MNT Irt"
 
 #: flowview_databases.php:440
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "Numeri"
 
 #: flowview_databases.php:445
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "Porta(i) di origine"
 
@@ -922,8 +870,6 @@ msgid "Alias"
 msgstr "Alias"
 
 #: flowview_databases.php:460
-#, fuzzy
-#| msgid "Graph Type"
 msgid "Org Type"
 msgstr "Tipo di grafico"
 
@@ -944,8 +890,6 @@ msgid "Holes"
 msgstr "Buchi"
 
 #: flowview_databases.php:485
-#, fuzzy
-#| msgid "Default"
 msgid "MP Default"
 msgstr "Predefinito"
 
@@ -962,8 +906,6 @@ msgid "Organization Name"
 msgstr "Nome dell’Organizzazione"
 
 #: flowview_databases.php:510
-#, fuzzy
-#| msgid "Name"
 msgid "AS Name"
 msgstr "Nome: "
 
@@ -984,14 +926,10 @@ msgid "AS Type"
 msgstr "Tipo AS"
 
 #: flowview_databases.php:535
-#, fuzzy
-#| msgid "Filter"
 msgid "MP Filter"
 msgstr "Filtro"
 
 #: flowview_databases.php:540
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
 msgstr "Predefinito"
 
@@ -1000,8 +938,6 @@ msgid "Assignment Size"
 msgstr "Dimensione dell'incarico"
 
 #: flowview_databases.php:550
-#, fuzzy
-#| msgid "Report"
 msgid "Export Comps"
 msgstr "Segnala"
 
@@ -1010,8 +946,6 @@ msgid "RS In"
 msgstr "RS In"
 
 #: flowview_databases.php:560
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
 msgstr "Campo Nome"
 
@@ -1068,13 +1002,10 @@ msgid "Origin AS"
 msgstr "Origine AS"
 
 #: flowview_databases.php:635
-#, fuzzy
-#| msgid "Report"
 msgid "MP Export"
 msgstr "Segnala"
 
 #: flowview_databases.php:640
-#, fuzzy
 msgid "Encyption"
 msgstr "Scadenza"
 
@@ -1087,13 +1018,10 @@ msgid "Geo Index"
 msgstr "Indice geografico"
 
 #: flowview_databases.php:655
-#, fuzzy
 msgid "Interface Addr"
 msgstr "Interfaccia"
 
 #: flowview_databases.php:660
-#, fuzzy
-#| msgid "Report"
 msgid "Export Via"
 msgstr "Segnala"
 
@@ -1126,7 +1054,6 @@ msgid "Geo Location"
 msgstr "Geolocalizzazione"
 
 #: flowview_databases.php:700
-#, fuzzy
 msgid "Local AS"
 msgstr "Locale"
 
@@ -1205,7 +1132,6 @@ msgid "No Matching Entries Found"
 msgstr "Nessuna voce corrispondente trovata"
 
 #: flowview_databases.php:1140
-#, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "Fare clic su \"Continua\" per eliminare il seguente/i Programma(i)."
@@ -1229,7 +1155,6 @@ msgstr[0] "Elimina voce DNS"
 msgstr[1] "Elimina voci DNS"
 
 #: flowview_databases.php:1219
-#, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "Orari FlowView"
 
@@ -1283,7 +1208,6 @@ msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "L'Arin Origin AS.  Queste sono informazioni ufficiali di Arin AS."
 
 #: flowview_databases.php:1423
-#, fuzzy
 msgid "Updated Time"
 msgstr "Aggiorna"
 
@@ -1296,13 +1220,10 @@ msgid "No DNS Cache Entries Found"
 msgstr "Nessuna voce della cache DNS trovata"
 
 #: flowview_databases.php:1511
-#, fuzzy
-#| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "Ascoltatori FlowView"
 
 #: flowview_databases.php:1526
-#, fuzzy
 msgid "IP Version"
 msgstr "Versione"
 
@@ -1311,7 +1232,6 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: flowview_databases.php:1532
-#, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
@@ -1324,8 +1244,6 @@ msgid "This is the published Internet Route."
 msgstr "Questa è la rotta Internet pubblicata."
 
 #: flowview_databases.php:1694
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "Porta Numero"
 
@@ -1390,20 +1308,14 @@ msgid "Port this collector will listen on."
 msgstr "Porta che questo collezionista ascoltera'."
 
 #: flowview_devices.php:76
-#, fuzzy
-#| msgid "The Listener to use for the Filter."
 msgid "The IP Protocol to use for this listener."
 msgstr "L'ascoltatore da utilizzare per il filtro."
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "TCP Protocol"
 msgstr "Protocollo IP"
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "UDP Protocol"
 msgstr "Protocollo IP"
 
@@ -1538,7 +1450,6 @@ msgid "The number of inbound connections from various sources."
 msgstr "Il numero di connessioni in entrata da varie origini."
 
 #: flowview_devices.php:792
-#, fuzzy
 msgid "Stream Versions"
 msgstr "Versione"
 
@@ -1814,10 +1725,9 @@ msgid "Top Sample"
 msgstr "Campione superiore"
 
 #: functions.php:585
-#, fuzzy, php-format
-#| msgid "Top 2 Samples"
+#, php-format
 msgid "Top %d Samples"
-msgstr "Top 2 Campioni"
+msgstr "I migliori esempi %d"
 
 #: functions.php:590
 msgid "Show only Domains on Charts Below"
@@ -1836,7 +1746,6 @@ msgid "Clear Filter"
 msgstr "Cancellare Filtro"
 
 #: functions.php:598
-#, fuzzy
 msgid "Create new Flow Filter"
 msgstr "Con quale frequenza creare un nuovo file di flusso."
 
@@ -1849,8 +1758,6 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: functions.php:599
-#, fuzzy
-#| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "Modifica filtro corrente"
 
@@ -1859,8 +1766,6 @@ msgid "Save"
 msgstr "Salva"
 
 #: functions.php:600
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "Stampa i rapporti"
 
@@ -1869,8 +1774,6 @@ msgid "Save As"
 msgstr "Salva come"
 
 #: functions.php:601
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the existing Flow Filter as new Filter"
 msgstr "Stampa i rapporti"
 
@@ -1883,8 +1786,6 @@ msgid "Rename the Flow Filter"
 msgstr "Rinominare il filtro di flusso"
 
 #: functions.php:603
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "Stampa i rapporti"
 
@@ -1975,20 +1876,14 @@ msgid "Table"
 msgstr "Tabella"
 
 #: functions.php:827
-#, fuzzy
-#| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "Nuovo filtro"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
 msgstr "Campo Nome"
 
 #: functions.php:838
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "Stampa i rapporti"
 
@@ -2046,7 +1941,6 @@ msgid "Rename Layout"
 msgstr "Rinomina layout"
 
 #: functions.php:984
-#, fuzzy
 msgid " <new>"
 msgstr "new"
 
@@ -2387,8 +2281,6 @@ msgid "(actions)"
 msgstr "Azioni"
 
 #: setup.php:357
-#, fuzzy
-#| msgid "Hostname Resolution"
 msgid "Name Resolution"
 msgstr "Risoluzione"
 
@@ -2405,8 +2297,6 @@ msgid "Use Local Server"
 msgstr "Utilizzare il server locale"
 
 #: setup.php:367
-#, fuzzy
-#| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "Usa il server DNS qui sotto"
 
@@ -2415,7 +2305,6 @@ msgid "Don't Resolve DNS"
 msgstr "Non risolvere i DNS"
 
 #: setup.php:373
-#, fuzzy
 msgid "Local Domain Name"
 msgstr "Nomi a dominio di striscia"
 
@@ -2436,8 +2325,6 @@ msgid "Use CIDR or Non-CIDR"
 msgstr "Usa CIDR o non CIDR"
 
 #: setup.php:390
-#, fuzzy
-#| msgid "Use Arin to Find Unregistered Domains"
 msgid "Use Arin to find Domains and AS Numbers"
 msgstr "Usa Arin per trovare domini non registrati"
 
@@ -2458,7 +2345,6 @@ msgid "whois.radb.net"
 msgstr "whois.radb.net"
 
 #: setup.php:405
-#, fuzzy
 msgid "Whois Binary Path"
 msgstr "Percorso binario degli strumenti di flusso"
 
@@ -2564,8 +2450,6 @@ msgid "%d Threads"
 msgstr "%d discussioni"
 
 #: setup.php:496
-#, fuzzy
-#| msgid "Maximum Rows"
 msgid "Maximum Run Time"
 msgstr "Righe massime"
 
@@ -2580,7 +2464,7 @@ msgstr "%d Minuto"
 
 #: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
 #: setup.php:506
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minutes"
 msgstr "%d Minuti"
 
@@ -2628,7 +2512,6 @@ msgid "This should be the port of the Read-Only-Service (readconnroute) service 
 msgstr "Deve essere la porta del servizio di sola lettura (readconnroute) e del router."
 
 #: setup.php:543
-#, fuzzy
 msgid "Flowview"
 msgstr "FlowView"
 

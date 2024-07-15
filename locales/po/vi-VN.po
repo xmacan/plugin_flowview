@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 20:09-0400\n"
-"PO-Revision-Date: 2024-07-14 15:49-0400\n"
+"PO-Revision-Date: 2024-07-14 20:38-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -133,26 +133,18 @@ msgid "Show IP Accounting Emulation"
 msgstr "Hiển thị mô phỏng kế toán IP"
 
 #: arrays.php:69
-#, fuzzy
-#| msgid "Any Part in Range"
 msgid "Any Part in Range (slow)"
 msgstr "Bất kỳ phần nào trong phạm vi"
 
 #: arrays.php:70
-#, fuzzy
-#| msgid "End Time in Range"
 msgid "End Time in Range (fast)"
 msgstr "Thời gian kết thúc"
 
 #: arrays.php:71
-#, fuzzy
-#| msgid "Start Time in Range"
 msgid "Start Time in Range (fast)"
 msgstr "Thời gian bắt đầu"
 
 #: arrays.php:72
-#, fuzzy
-#| msgid "Entirely in Range"
 msgid "Entirely in Range (slow)"
 msgstr "Hoàn toàn trong phạm vi"
 
@@ -343,8 +335,6 @@ msgid "The Listener to use for the Filter."
 msgstr "Trình nghe để sử dụng cho Bộ lọc."
 
 #: arrays.php:607
-#, fuzzy
-#| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "Mã ID mẫu, template"
 
@@ -353,8 +343,6 @@ msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID'
 msgstr "ID mẫu luồng chỉ dành cho luồng v9 và IPFIX.  Lưu ý rằng ID mẫu có thể khác nhau giữa các nhà sản xuất."
 
 #: arrays.php:615
-#, fuzzy
-#| msgid "IP Address"
 msgid "Stream Address"
 msgstr "Địa chỉ IP"
 
@@ -607,8 +595,6 @@ msgid "CIDR/Routes"
 msgstr "CIDR/Tuyến đường"
 
 #: arrays.php:868
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Numbers"
 msgstr "Số"
 
@@ -629,7 +615,6 @@ msgid "Domains"
 msgstr "Miền"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
 msgstr "Bộ lọc đã lưu"
 
@@ -642,8 +627,6 @@ msgid "Network"
 msgstr "Mạng"
 
 #: arrays.php:932
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Routers"
 msgstr "Kiểm soát Internet"
 
@@ -673,10 +656,9 @@ msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
 msgstr "Không thể xóa bộ lọc luồng '%s' khi nó được sử dụng trong Báo cáo theo lịch."
 
 #: flowview.php:127
-#, fuzzy, php-format
-#| msgid "The Filter has been Deleted"
+#, php-format
 msgid "Flow Filter '%s' Deleted."
-msgstr "Bộ lọc đã bị xóa"
+msgstr "Bộ lọc luồng '%s' Đã xóa."
 
 #: flowview_databases.php:33 flowview_devices.php:35 flowview_filters.php:39
 #: flowview_schedules.php:37 functions.php:603
@@ -696,67 +678,46 @@ msgid "Authorized Agent Details"
 msgstr "Chi tiết đại lý ủy quyền"
 
 #: flowview_databases.php:205
-#, fuzzy
-#| msgid "CIDR/Routes"
 msgid "CIDR/Route"
 msgstr "CIDR/Tuyến đường"
 
 #: flowview_databases.php:210
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Number"
 msgstr "Số"
 
 #: flowview_databases.php:215
-#, fuzzy
-#| msgid "AS Blocks"
 msgid "AS Block"
 msgstr "Khối AS"
 
 #: flowview_databases.php:220
-#, fuzzy
-#| msgid "AS Sets"
 msgid "AS Set"
-msgstr "Bộ AS"
+msgstr "Chưa thiết lập"
 
 #: flowview_databases.php:225
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Route Set"
 msgstr "Bộ lộ trình"
 
 #: flowview_databases.php:230
-#, fuzzy
-#| msgid "Domains"
 msgid "Domain"
-msgstr "Miền"
+msgstr "Tên miền"
 
 #: flowview_databases.php:235
-#, fuzzy
 msgid "Filter Set"
 msgstr "Bộ lọc đã lưu"
 
 #: flowview_databases.php:240
-#, fuzzy
-#| msgid "Peering Sets"
 msgid "Peering Set"
 msgstr "Bộ ngang hàng"
 
 #: flowview_databases.php:250
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Router"
 msgstr "Kiểm soát Internet"
 
 #: flowview_databases.php:255
-#, fuzzy
-#| msgid "Incident Response Teams"
 msgid "Incident Response Team"
 msgstr "Đội ứng phó sự cố"
 
 #: flowview_databases.php:260
-#, fuzzy
-#| msgid "Auth Agents"
 msgid "Auth Agent"
 msgstr "Đại lý Auth"
 
@@ -765,20 +726,14 @@ msgid "Organization"
 msgstr "Tổ chức"
 
 #: flowview_databases.php:270
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "Vai trò"
 
 #: flowview_databases.php:275
-#, fuzzy
-#| msgid "Persons"
 msgid "Person"
 msgstr "Người"
 
 #: flowview_databases.php:280
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Router Set"
 msgstr "Bộ lộ trình"
 
@@ -827,8 +782,6 @@ msgid "Country"
 msgstr "Quốc gia"
 
 #: flowview_databases.php:350
-#, fuzzy
-#| msgid "Email"
 msgid "Abuse Email"
 msgstr "Email"
 
@@ -881,12 +834,10 @@ msgid "MNT Routes"
 msgstr "Các tuyến MNT"
 
 #: flowview_databases.php:415
-#, fuzzy
 msgid "Member of"
 msgstr "Thành viên"
 
 #: flowview_databases.php:420
-#, fuzzy
 msgid "Updates Email"
 msgstr "Cập nhật"
 
@@ -903,20 +854,14 @@ msgid "MNT Irt"
 msgstr "MNT Irt"
 
 #: flowview_databases.php:440
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "Số"
 
 #: flowview_databases.php:445
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "Cổng nguồn"
 
 #: flowview_databases.php:450
-#, fuzzy
-#| msgid "Enable"
 msgid "Pingable"
 msgstr "Bật"
 
@@ -945,8 +890,6 @@ msgid "Holes"
 msgstr "Lỗ"
 
 #: flowview_databases.php:485
-#, fuzzy
-#| msgid "Default"
 msgid "MP Default"
 msgstr "Mặc định"
 
@@ -963,8 +906,6 @@ msgid "Organization Name"
 msgstr "Tên tổ chức"
 
 #: flowview_databases.php:510
-#, fuzzy
-#| msgid "Name"
 msgid "AS Name"
 msgstr "Tên:"
 
@@ -985,14 +926,10 @@ msgid "AS Type"
 msgstr "Loại AS"
 
 #: flowview_databases.php:535
-#, fuzzy
-#| msgid "Filter"
 msgid "MP Filter"
 msgstr "Bộ lọc"
 
 #: flowview_databases.php:540
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
 msgstr "Mặc định"
 
@@ -1001,8 +938,6 @@ msgid "Assignment Size"
 msgstr "Kích thước bài tập"
 
 #: flowview_databases.php:550
-#, fuzzy
-#| msgid "Report"
 msgid "Export Comps"
 msgstr "Báo cáo"
 
@@ -1011,8 +946,6 @@ msgid "RS In"
 msgstr "RS vào"
 
 #: flowview_databases.php:560
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
 msgstr "Tên trường"
 
@@ -1069,13 +1002,10 @@ msgid "Origin AS"
 msgstr "Nguồn gốc AS"
 
 #: flowview_databases.php:635
-#, fuzzy
-#| msgid "Report"
 msgid "MP Export"
 msgstr "Báo cáo"
 
 #: flowview_databases.php:640
-#, fuzzy
 msgid "Encyption"
 msgstr "Hết hạn"
 
@@ -1088,13 +1018,10 @@ msgid "Geo Index"
 msgstr "Chỉ số địa lý"
 
 #: flowview_databases.php:655
-#, fuzzy
 msgid "Interface Addr"
 msgstr "Giao diện"
 
 #: flowview_databases.php:660
-#, fuzzy
-#| msgid "Report"
 msgid "Export Via"
 msgstr "Báo cáo"
 
@@ -1127,7 +1054,6 @@ msgid "Geo Location"
 msgstr "Địa điểm"
 
 #: flowview_databases.php:700
-#, fuzzy
 msgid "Local AS"
 msgstr "Địa phương"
 
@@ -1206,7 +1132,6 @@ msgid "No Matching Entries Found"
 msgstr "Không tìm thấy mục nhập phù hợp"
 
 #: flowview_databases.php:1140
-#, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "Nhấp vào 'Tiếp tục' để xóa (các) Lịch biểu sau."
@@ -1228,7 +1153,6 @@ msgid_plural "Delete DNS Entries"
 msgstr[0] "Xóa mục nhập DNS"
 
 #: flowview_databases.php:1219
-#, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "Lịch trình FlowView"
 
@@ -1294,13 +1218,10 @@ msgid "No DNS Cache Entries Found"
 msgstr "Không tìm thấy mục nhập bộ nhớ cache DNS"
 
 #: flowview_databases.php:1511
-#, fuzzy
-#| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "Trình nghe FlowView"
 
 #: flowview_databases.php:1526
-#, fuzzy
 msgid "IP Version"
 msgstr "Phiên bản"
 
@@ -1321,8 +1242,6 @@ msgid "This is the published Internet Route."
 msgstr "Đây là Tuyến đường Internet được xuất bản."
 
 #: flowview_databases.php:1694
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "Mã cổng"
 
@@ -1387,20 +1306,14 @@ msgid "Port this collector will listen on."
 msgstr "Cổng nhà sưu tập này sẽ lắng nghe."
 
 #: flowview_devices.php:76
-#, fuzzy
-#| msgid "The Listener to use for the Filter."
 msgid "The IP Protocol to use for this listener."
 msgstr "Trình nghe để sử dụng cho Bộ lọc."
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "TCP Protocol"
 msgstr "Giao thức IP"
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "UDP Protocol"
 msgstr "Giao thức IP"
 
@@ -1535,7 +1448,6 @@ msgid "The number of inbound connections from various sources."
 msgstr "Số lượng kết nối đến từ nhiều nguồn khác nhau."
 
 #: flowview_devices.php:792
-#, fuzzy
 msgid "Stream Versions"
 msgstr "Phiên bản"
 
@@ -1811,10 +1723,9 @@ msgid "Top Sample"
 msgstr "Mẫu hàng đầu"
 
 #: functions.php:585
-#, fuzzy, php-format
-#| msgid "Top 2 Samples"
+#, php-format
 msgid "Top %d Samples"
-msgstr "Top 2 mẫu"
+msgstr "%d mẫu hàng đầu"
 
 #: functions.php:590
 msgid "Show only Domains on Charts Below"
@@ -1833,7 +1744,6 @@ msgid "Clear Filter"
 msgstr "Xóa bộ lọc"
 
 #: functions.php:598
-#, fuzzy
 msgid "Create new Flow Filter"
 msgstr "Tần suất để tạo một tệp Flow mới."
 
@@ -1846,8 +1756,6 @@ msgid "Edit"
 msgstr "Sửa"
 
 #: functions.php:599
-#, fuzzy
-#| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "Chỉnh sửa Bộ lọc Hiện tại"
 
@@ -1856,8 +1764,6 @@ msgid "Save"
 msgstr "Lưu"
 
 #: functions.php:600
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "Báo cáo in"
 
@@ -1866,8 +1772,6 @@ msgid "Save As"
 msgstr "Lưu thành"
 
 #: functions.php:601
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the existing Flow Filter as new Filter"
 msgstr "Báo cáo in"
 
@@ -1880,8 +1784,6 @@ msgid "Rename the Flow Filter"
 msgstr "Đổi tên bộ lọc luồng"
 
 #: functions.php:603
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "Báo cáo in"
 
@@ -1972,8 +1874,6 @@ msgid "Table"
 msgstr "Bảng"
 
 #: functions.php:827
-#, fuzzy
-#| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "Bộ lọc mới"
 
@@ -1982,8 +1882,6 @@ msgid "New Name"
 msgstr "新しい名前"
 
 #: functions.php:838
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "Báo cáo in"
 
@@ -2381,8 +2279,6 @@ msgid "(actions)"
 msgstr "Hành động"
 
 #: setup.php:357
-#, fuzzy
-#| msgid "Hostname Resolution"
 msgid "Name Resolution"
 msgstr "Resolution - Độ phân giải"
 
@@ -2399,8 +2295,6 @@ msgid "Use Local Server"
 msgstr "Sử dụng máy chủ cục bộ"
 
 #: setup.php:367
-#, fuzzy
-#| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "Sử dụng máy chủ DNS bên dưới"
 
@@ -2409,7 +2303,6 @@ msgid "Don't Resolve DNS"
 msgstr "Không giải quyết DNS"
 
 #: setup.php:373
-#, fuzzy
 msgid "Local Domain Name"
 msgstr "Dải tên miền"
 
@@ -2430,8 +2323,6 @@ msgid "Use CIDR or Non-CIDR"
 msgstr "Sử dụng CIDR hoặc Non-CIDR"
 
 #: setup.php:390
-#, fuzzy
-#| msgid "Use Arin to Find Unregistered Domains"
 msgid "Use Arin to find Domains and AS Numbers"
 msgstr "Sử dụng Arin để tìm các tên miền chưa đăng ký"
 
@@ -2452,7 +2343,6 @@ msgid "whois.radb.net"
 msgstr "whois.radb.net"
 
 #: setup.php:405
-#, fuzzy
 msgid "Whois Binary Path"
 msgstr "Công cụ lưu lượng Đường dẫn nhị phân"
 
@@ -2558,8 +2448,6 @@ msgid "%d Threads"
 msgstr "Chủ đề %d"
 
 #: setup.php:496
-#, fuzzy
-#| msgid "Maximum Rows"
 msgid "Maximum Run Time"
 msgstr "Hàng tối đa"
 
@@ -2587,8 +2475,7 @@ msgid "How long should FlowView hold onto Cached Query results before purging th
 msgstr "FlowView nên giữ kết quả Truy vấn được lưu trong bộ nhớ cache trong bao lâu trước khi xóa chúng?"
 
 #: setup.php:515 setup.php:516
-#, fuzzy, php-format
-#| msgid "Every %d Hours"
+#, php-format
 msgid "%d Hours"
 msgstr "%d giờ"
 
@@ -2623,7 +2510,6 @@ msgid "This should be the port of the Read-Only-Service (readconnroute) service 
 msgstr "Đây phải là cổng của dịch vụ và bộ định tuyến Read-Only-Service (readconnroute)."
 
 #: setup.php:543
-#, fuzzy
 msgid "Flowview"
 msgstr "FlowView"
 

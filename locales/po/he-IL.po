@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 20:09-0400\n"
-"PO-Revision-Date: 2024-07-14 15:42-0400\n"
+"PO-Revision-Date: 2024-07-14 20:23-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: he_IL\n"
@@ -133,26 +133,18 @@ msgid "Show IP Accounting Emulation"
 msgstr "הצג הדמיית חשבונאות IP"
 
 #: arrays.php:69
-#, fuzzy
-#| msgid "Any Part in Range"
 msgid "Any Part in Range (slow)"
 msgstr "כל חלק בטווח"
 
 #: arrays.php:70
-#, fuzzy
-#| msgid "End Time in Range"
 msgid "End Time in Range (fast)"
 msgstr "שעת סיום"
 
 #: arrays.php:71
-#, fuzzy
-#| msgid "Start Time in Range"
 msgid "Start Time in Range (fast)"
 msgstr "שעת התחלה"
 
 #: arrays.php:72
-#, fuzzy
-#| msgid "Entirely in Range"
 msgid "Entirely in Range (slow)"
 msgstr "לגמרי בטווח"
 
@@ -343,8 +335,6 @@ msgid "The Listener to use for the Filter."
 msgstr "המאזין לשימוש עבור המסנן."
 
 #: arrays.php:607
-#, fuzzy
-#| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "מזהה תבנית"
 
@@ -353,8 +343,6 @@ msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID'
 msgstr "מזהה תבנית Flow עבור זרימות v9 ו- IPFIX בלבד.  שים לב שמזהי התבנית עשויים להיות שונים מיצרן ליצרן."
 
 #: arrays.php:615
-#, fuzzy
-#| msgid "IP Address"
 msgid "Stream Address"
 msgstr "כתובת IP"
 
@@ -607,8 +595,6 @@ msgid "CIDR/Routes"
 msgstr "CIDR/מסלולים"
 
 #: arrays.php:868
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Numbers"
 msgstr "מספרים"
 
@@ -629,7 +615,6 @@ msgid "Domains"
 msgstr "שמות מתחם"
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
 msgstr "המסנן נשמר"
 
@@ -642,8 +627,6 @@ msgid "Network"
 msgstr "רשת"
 
 #: arrays.php:932
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Routers"
 msgstr "בקרת אינטרנט"
 
@@ -673,10 +656,9 @@ msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
 msgstr "אין אפשרות למחוק את מסנן הזרימה '%s' כפי שהוא נמצא בשימוש בדוח מתוזמן."
 
 #: flowview.php:127
-#, fuzzy, php-format
-#| msgid "The Filter has been Deleted"
+#, php-format
 msgid "Flow Filter '%s' Deleted."
-msgstr "המסנן נמחק"
+msgstr "מסנן זרימה '%s' נמחק."
 
 #: flowview_databases.php:33 flowview_devices.php:35 flowview_filters.php:39
 #: flowview_schedules.php:37 functions.php:603
@@ -696,67 +678,46 @@ msgid "Authorized Agent Details"
 msgstr "פרטי סוכן מורשה"
 
 #: flowview_databases.php:205
-#, fuzzy
-#| msgid "CIDR/Routes"
 msgid "CIDR/Route"
 msgstr "CIDR/מסלולים"
 
 #: flowview_databases.php:210
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Number"
 msgstr "מספרים"
 
 #: flowview_databases.php:215
-#, fuzzy
-#| msgid "AS Blocks"
 msgid "AS Block"
 msgstr "כבלוקים"
 
 #: flowview_databases.php:220
-#, fuzzy
-#| msgid "AS Sets"
 msgid "AS Set"
-msgstr "ערכות AS"
+msgstr "לא מוגדר"
 
 #: flowview_databases.php:225
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Route Set"
 msgstr "ערכות מסלולים"
 
 #: flowview_databases.php:230
-#, fuzzy
-#| msgid "Domains"
 msgid "Domain"
-msgstr "שמות מתחם"
+msgstr "דומיין"
 
 #: flowview_databases.php:235
-#, fuzzy
 msgid "Filter Set"
 msgstr "המסנן נשמר"
 
 #: flowview_databases.php:240
-#, fuzzy
-#| msgid "Peering Sets"
 msgid "Peering Set"
 msgstr "ערכות עמיתים"
 
 #: flowview_databases.php:250
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Router"
 msgstr "בקרת אינטרנט"
 
 #: flowview_databases.php:255
-#, fuzzy
-#| msgid "Incident Response Teams"
 msgid "Incident Response Team"
 msgstr "צוותי תגובה לאירועים"
 
 #: flowview_databases.php:260
-#, fuzzy
-#| msgid "Auth Agents"
 msgid "Auth Agent"
 msgstr "סוכני Auth"
 
@@ -765,20 +726,14 @@ msgid "Organization"
 msgstr "ארגון"
 
 #: flowview_databases.php:270
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
-msgstr "תפקידים "
+msgstr "תפקיד"
 
 #: flowview_databases.php:275
-#, fuzzy
-#| msgid "Persons"
 msgid "Person"
-msgstr "אנשים"
+msgstr "אדם"
 
 #: flowview_databases.php:280
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Router Set"
 msgstr "ערכות מסלולים"
 
@@ -827,8 +782,6 @@ msgid "Country"
 msgstr "מדינה"
 
 #: flowview_databases.php:350
-#, fuzzy
-#| msgid "Email"
 msgid "Abuse Email"
 msgstr "אימייל"
 
@@ -881,12 +834,10 @@ msgid "MNT Routes"
 msgstr "מסלולי MNT"
 
 #: flowview_databases.php:415
-#, fuzzy
 msgid "Member of"
 msgstr "משתמש"
 
 #: flowview_databases.php:420
-#, fuzzy
 msgid "Updates Email"
 msgstr "עדכון"
 
@@ -903,20 +854,14 @@ msgid "MNT Irt"
 msgstr "MNT Irt"
 
 #: flowview_databases.php:440
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "מספרים"
 
 #: flowview_databases.php:445
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "מקור דומיין"
 
 #: flowview_databases.php:450
-#, fuzzy
-#| msgid "Enable"
 msgid "Pingable"
 msgstr "אפשר"
 
@@ -925,8 +870,6 @@ msgid "Alias"
 msgstr "כינוי"
 
 #: flowview_databases.php:460
-#, fuzzy
-#| msgid "Graph Type"
 msgid "Org Type"
 msgstr "סוג גרף סטטיסטיקה"
 
@@ -947,8 +890,6 @@ msgid "Holes"
 msgstr "חורים"
 
 #: flowview_databases.php:485
-#, fuzzy
-#| msgid "Default"
 msgid "MP Default"
 msgstr "ברירת מחדל"
 
@@ -965,8 +906,6 @@ msgid "Organization Name"
 msgstr "שם ארגון"
 
 #: flowview_databases.php:510
-#, fuzzy
-#| msgid "Name"
 msgid "AS Name"
 msgstr "שם: "
 
@@ -987,14 +926,10 @@ msgid "AS Type"
 msgstr "כסוג"
 
 #: flowview_databases.php:535
-#, fuzzy
-#| msgid "Filter"
 msgid "MP Filter"
 msgstr "סינון"
 
 #: flowview_databases.php:540
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
 msgstr "ברירת מחדל"
 
@@ -1003,8 +938,6 @@ msgid "Assignment Size"
 msgstr "גודל המשימה"
 
 #: flowview_databases.php:550
-#, fuzzy
-#| msgid "Report"
 msgid "Export Comps"
 msgstr "דו\"ח"
 
@@ -1013,8 +946,6 @@ msgid "RS In"
 msgstr "RS ב"
 
 #: flowview_databases.php:560
-#, fuzzy
-#| msgid "Field Name"
 msgid "Net Name"
 msgstr "שדה שם"
 
@@ -1071,13 +1002,10 @@ msgid "Origin AS"
 msgstr "מקור כ"
 
 #: flowview_databases.php:635
-#, fuzzy
-#| msgid "Report"
 msgid "MP Export"
 msgstr "דו\"ח"
 
 #: flowview_databases.php:640
-#, fuzzy
 msgid "Encyption"
 msgstr "תאריך תפוגה"
 
@@ -1090,13 +1018,10 @@ msgid "Geo Index"
 msgstr "אינדקס גאוגרפי"
 
 #: flowview_databases.php:655
-#, fuzzy
 msgid "Interface Addr"
 msgstr "ממשק"
 
 #: flowview_databases.php:660
-#, fuzzy
-#| msgid "Report"
 msgid "Export Via"
 msgstr "דו\"ח"
 
@@ -1125,12 +1050,10 @@ msgid "Signature"
 msgstr "חתימה"
 
 #: flowview_databases.php:695
-#, fuzzy
 msgid "Geo Location"
 msgstr "סיבוב"
 
 #: flowview_databases.php:700
-#, fuzzy
 msgid "Local AS"
 msgstr "מקומי"
 
@@ -1209,7 +1132,6 @@ msgid "No Matching Entries Found"
 msgstr "לא נמצאו ערכים תואמים"
 
 #: flowview_databases.php:1140
-#, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "לחץ על 'המשך' כדי למחוק את התזמונים הבאים."
@@ -1237,7 +1159,6 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: flowview_databases.php:1219
-#, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "לוחות זמנים של זרימה"
 
@@ -1291,7 +1212,6 @@ msgid "The Arin Origin AS.  This is official Arin AS information."
 msgstr "מוצא ארין AS.  זהו מידע רשמי של Arin AS."
 
 #: flowview_databases.php:1423
-#, fuzzy
 msgid "Updated Time"
 msgstr "עדכון"
 
@@ -1304,13 +1224,10 @@ msgid "No DNS Cache Entries Found"
 msgstr "לא נמצאו ערכי מטמון DNS"
 
 #: flowview_databases.php:1511
-#, fuzzy
-#| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "FlowView מאזינים"
 
 #: flowview_databases.php:1526
-#, fuzzy
 msgid "IP Version"
 msgstr "גרסה"
 
@@ -1319,7 +1236,6 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: flowview_databases.php:1532
-#, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
@@ -1332,8 +1248,6 @@ msgid "This is the published Internet Route."
 msgstr "זהו מסלול האינטרנט שפורסם."
 
 #: flowview_databases.php:1694
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "מספר הכרטיס"
 
@@ -1398,20 +1312,14 @@ msgid "Port this collector will listen on."
 msgstr "נמל אספן זה יקשיב."
 
 #: flowview_devices.php:76
-#, fuzzy
-#| msgid "The Listener to use for the Filter."
 msgid "The IP Protocol to use for this listener."
 msgstr "המאזין לשימוש עבור המסנן."
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "TCP Protocol"
 msgstr "פרוטוקול IP"
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "UDP Protocol"
 msgstr "פרוטוקול IP"
 
@@ -1546,7 +1454,6 @@ msgid "The number of inbound connections from various sources."
 msgstr "מספר החיבורים הנכנסים ממקורות שונים."
 
 #: flowview_devices.php:792
-#, fuzzy
 msgid "Stream Versions"
 msgstr "גרסה"
 
@@ -1822,10 +1729,9 @@ msgid "Top Sample"
 msgstr "מדגם ראשון"
 
 #: functions.php:585
-#, fuzzy, php-format
-#| msgid "Top 2 Samples"
+#, php-format
 msgid "Top %d Samples"
-msgstr "למעלה 2 דוגמאות"
+msgstr "%d הדוגמאות המובילות"
 
 #: functions.php:590
 msgid "Show only Domains on Charts Below"
@@ -1844,7 +1750,6 @@ msgid "Clear Filter"
 msgstr "איפוס סינון"
 
 #: functions.php:598
-#, fuzzy
 msgid "Create new Flow Filter"
 msgstr "כמה פעמים ליצור קובץ זרימה חדש."
 
@@ -1857,8 +1762,6 @@ msgid "Edit"
 msgstr "ערוך"
 
 #: functions.php:599
-#, fuzzy
-#| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "ערוך את המסנן הנוכחי"
 
@@ -1867,8 +1770,6 @@ msgid "Save"
 msgstr "שמור"
 
 #: functions.php:600
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "הדפס דוחות"
 
@@ -1877,8 +1778,6 @@ msgid "Save As"
 msgstr "שמירה בשם"
 
 #: functions.php:601
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the existing Flow Filter as new Filter"
 msgstr "הדפס דוחות"
 
@@ -1891,8 +1790,6 @@ msgid "Rename the Flow Filter"
 msgstr "שינוי שם מסנן הזרימה"
 
 #: functions.php:603
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "הדפס דוחות"
 
@@ -1983,20 +1880,14 @@ msgid "Table"
 msgstr "טבלה"
 
 #: functions.php:827
-#, fuzzy
-#| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "סינון"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
 msgstr "שדה שם"
 
 #: functions.php:838
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "הדפס דוחות"
 
@@ -2394,8 +2285,6 @@ msgid "(actions)"
 msgstr "פעולות"
 
 #: setup.php:357
-#, fuzzy
-#| msgid "Hostname Resolution"
 msgid "Name Resolution"
 msgstr "רזולוציה"
 
@@ -2412,8 +2301,6 @@ msgid "Use Local Server"
 msgstr "השתמש בשרת מקומי"
 
 #: setup.php:367
-#, fuzzy
-#| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "השתמש שרת DNS להלן"
 
@@ -2422,7 +2309,6 @@ msgid "Don't Resolve DNS"
 msgstr "אין לפתור DNS"
 
 #: setup.php:373
-#, fuzzy
 msgid "Local Domain Name"
 msgstr "רצועת שמות מתחם"
 
@@ -2443,8 +2329,6 @@ msgid "Use CIDR or Non-CIDR"
 msgstr "שימוש ב-CIDR או ללא CIDR"
 
 #: setup.php:390
-#, fuzzy
-#| msgid "Use Arin to Find Unregistered Domains"
 msgid "Use Arin to find Domains and AS Numbers"
 msgstr "שימוש ב-Arin לאיתור דומיינים לא רשומים"
 
@@ -2465,7 +2349,6 @@ msgid "whois.radb.net"
 msgstr "whois.radb.net"
 
 #: setup.php:405
-#, fuzzy
 msgid "Whois Binary Path"
 msgstr "זרימת כלים נתיב בינארי"
 
@@ -2571,8 +2454,6 @@ msgid "%d Threads"
 msgstr "%d אשכולות"
 
 #: setup.php:496
-#, fuzzy
-#| msgid "Maximum Rows"
 msgid "Maximum Run Time"
 msgstr "מקסימום שורות"
 
@@ -2587,7 +2468,7 @@ msgstr "‫%d דקה"
 
 #: setup.php:501 setup.php:502 setup.php:503 setup.php:504 setup.php:505
 #: setup.php:506
-#, fuzzy, php-format
+#, php-format
 msgid "%d Minutes"
 msgstr "דקות %d"
 
@@ -2600,13 +2481,12 @@ msgid "How long should FlowView hold onto Cached Query results before purging th
 msgstr "כמה זמן על FlowView לשמור על תוצאות שאילתת Cached לפני מחיקתן?"
 
 #: setup.php:515 setup.php:516
-#, fuzzy, php-format
-#| msgid "Every %d Hours"
+#, php-format
 msgid "%d Hours"
 msgstr "%d לפני מספר ימים"
 
 #: setup.php:517
-#, fuzzy, php-format
+#, php-format
 msgid "%d Day"
 msgstr "%d ימים"
 
@@ -2636,7 +2516,6 @@ msgid "This should be the port of the Read-Only-Service (readconnroute) service 
 msgstr "זו צריכה להיות היציאה של שירות לקריאה בלבד (readconnroute) ונתב."
 
 #: setup.php:543
-#, fuzzy
 msgid "Flowview"
 msgstr "תזרים"
 

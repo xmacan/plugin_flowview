@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2024-07-14 20:09-0400\n"
-"PO-Revision-Date: 2024-07-14 15:45-0400\n"
+"PO-Revision-Date: 2024-07-14 20:27-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko_KR\n"
@@ -133,26 +133,18 @@ msgid "Show IP Accounting Emulation"
 msgstr "IP 계정 에뮬레이션 표시"
 
 #: arrays.php:69
-#, fuzzy
-#| msgid "Any Part in Range"
 msgid "Any Part in Range (slow)"
 msgstr "범위 내의 모든 부분"
 
 #: arrays.php:70
-#, fuzzy
-#| msgid "End Time in Range"
 msgid "End Time in Range (fast)"
 msgstr "종료"
 
 #: arrays.php:71
-#, fuzzy
-#| msgid "Start Time in Range"
 msgid "Start Time in Range (fast)"
 msgstr "시작 시간"
 
 #: arrays.php:72
-#, fuzzy
-#| msgid "Entirely in Range"
 msgid "Entirely in Range (slow)"
 msgstr "완전히 범위 내"
 
@@ -343,8 +335,6 @@ msgid "The Listener to use for the Filter."
 msgstr "필터에 사용할 리스너입니다."
 
 #: arrays.php:607
-#, fuzzy
-#| msgid "Template ID"
 msgid "Flow Template ID"
 msgstr "템플릿 ID"
 
@@ -353,8 +343,6 @@ msgid "The Flow Template ID for v9 and IPFIX Flows only.  Note that Template ID'
 msgstr "v9 및 IPFIX 플로우에만 대한 플로우 템플릿 ID입니다.  템플릿 ID는 제조업체마다 다를 수 있습니다."
 
 #: arrays.php:615
-#, fuzzy
-#| msgid "IP Address"
 msgid "Stream Address"
 msgstr "IP 주소"
 
@@ -607,8 +595,6 @@ msgid "CIDR/Routes"
 msgstr "CIDR/경로"
 
 #: arrays.php:868
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Numbers"
 msgstr "번호"
 
@@ -629,7 +615,6 @@ msgid "Domains"
 msgstr "WooCommerce 다국어는 쿠키를 사용하여 도메인의 언어를 사용할 때 바구니 정보를 이해하고 도메인 간에 데이터를 전송합니다."
 
 #: arrays.php:908
-#, fuzzy
 msgid "Filter Sets"
 msgstr "저장된 필터"
 
@@ -642,8 +627,6 @@ msgid "Network"
 msgstr "네트워크"
 
 #: arrays.php:932
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Routers"
 msgstr "인터넷 제어"
 
@@ -673,10 +656,9 @@ msgid "Unable to Delete Flow Filter '%s' as its in use in a Scheduled Report."
 msgstr "예약된 보고서에서 사용 중인 흐름 필터 '%s'를 삭제할 수 없습니다."
 
 #: flowview.php:127
-#, fuzzy, php-format
-#| msgid "The Filter has been Deleted"
+#, php-format
 msgid "Flow Filter '%s' Deleted."
-msgstr "필터가 삭제되었습니다."
+msgstr "플로우 필터 '%s'이(가) 삭제되었습니다."
 
 #: flowview_databases.php:33 flowview_devices.php:35 flowview_filters.php:39
 #: flowview_schedules.php:37 functions.php:603
@@ -696,67 +678,46 @@ msgid "Authorized Agent Details"
 msgstr "공인 대리인 세부 정보"
 
 #: flowview_databases.php:205
-#, fuzzy
-#| msgid "CIDR/Routes"
 msgid "CIDR/Route"
 msgstr "CIDR/경로"
 
 #: flowview_databases.php:210
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "Autonomous Number"
 msgstr "번호"
 
 #: flowview_databases.php:215
-#, fuzzy
-#| msgid "AS Blocks"
 msgid "AS Block"
 msgstr "AS 블록"
 
 #: flowview_databases.php:220
-#, fuzzy
-#| msgid "AS Sets"
 msgid "AS Set"
-msgstr "AS 세트"
+msgstr "설정되지 않음"
 
 #: flowview_databases.php:225
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Route Set"
 msgstr "경로 집합"
 
 #: flowview_databases.php:230
-#, fuzzy
-#| msgid "Domains"
 msgid "Domain"
-msgstr "WooCommerce 다국어는 쿠키를 사용하여 도메인의 언어를 사용할 때 바구니 정보를 이해하고 도메인 간에 데이터를 전송합니다."
+msgstr "도메인"
 
 #: flowview_databases.php:235
-#, fuzzy
 msgid "Filter Set"
 msgstr "저장된 필터"
 
 #: flowview_databases.php:240
-#, fuzzy
-#| msgid "Peering Sets"
 msgid "Peering Set"
 msgstr "피어링 세트"
 
 #: flowview_databases.php:250
-#, fuzzy
-#| msgid "Internet Control"
 msgid "Internet Router"
 msgstr "인터넷 제어"
 
 #: flowview_databases.php:255
-#, fuzzy
-#| msgid "Incident Response Teams"
 msgid "Incident Response Team"
 msgstr "인시던트 대응 팀"
 
 #: flowview_databases.php:260
-#, fuzzy
-#| msgid "Auth Agents"
 msgid "Auth Agent"
 msgstr "인증 에이전트"
 
@@ -765,20 +726,14 @@ msgid "Organization"
 msgstr "조직"
 
 #: flowview_databases.php:270
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "역할"
 
 #: flowview_databases.php:275
-#, fuzzy
-#| msgid "Persons"
 msgid "Person"
-msgstr "인원"
+msgstr "사람"
 
 #: flowview_databases.php:280
-#, fuzzy
-#| msgid "Route Sets"
 msgid "Router Set"
 msgstr "경로 집합"
 
@@ -827,8 +782,6 @@ msgid "Country"
 msgstr "국가"
 
 #: flowview_databases.php:350
-#, fuzzy
-#| msgid "Email"
 msgid "Abuse Email"
 msgstr "이메일"
 
@@ -881,12 +834,10 @@ msgid "MNT Routes"
 msgstr "MNT 노선"
 
 #: flowview_databases.php:415
-#, fuzzy
 msgid "Member of"
 msgstr "회원"
 
 #: flowview_databases.php:420
-#, fuzzy
 msgid "Updates Email"
 msgstr "업데이트"
 
@@ -903,20 +854,14 @@ msgid "MNT Irt"
 msgstr "MNT Irt"
 
 #: flowview_databases.php:440
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "MP Members"
 msgstr "번호"
 
 #: flowview_databases.php:445
-#, fuzzy
-#| msgid "Source Domain"
 msgid "Sub Domain"
 msgstr "소스 포트"
 
 #: flowview_databases.php:450
-#, fuzzy
-#| msgid "Enable"
 msgid "Pingable"
 msgstr "활성화"
 
@@ -925,8 +870,6 @@ msgid "Alias"
 msgstr "별칭"
 
 #: flowview_databases.php:460
-#, fuzzy
-#| msgid "Graph Type"
 msgid "Org Type"
 msgstr "그래프 유형"
 
@@ -947,8 +890,6 @@ msgid "Holes"
 msgstr "구멍"
 
 #: flowview_databases.php:485
-#, fuzzy
-#| msgid "Default"
 msgid "MP Default"
 msgstr "기본값"
 
@@ -965,8 +906,6 @@ msgid "Organization Name"
 msgstr "기업명"
 
 #: flowview_databases.php:510
-#, fuzzy
-#| msgid "Name"
 msgid "AS Name"
 msgstr "이름:"
 
@@ -983,19 +922,14 @@ msgid "Aggr MTD"
 msgstr "어그르 MTD"
 
 #: flowview_databases.php:530
-#, fuzzy
 msgid "AS Type"
 msgstr "유형"
 
 #: flowview_databases.php:535
-#, fuzzy
-#| msgid "Filter"
 msgid "MP Filter"
 msgstr "필터"
 
 #: flowview_databases.php:540
-#, fuzzy
-#| msgid "Default"
 msgid "Default Route"
 msgstr "기본값"
 
@@ -1004,8 +938,6 @@ msgid "Assignment Size"
 msgstr "할당 크기"
 
 #: flowview_databases.php:550
-#, fuzzy
-#| msgid "Report"
 msgid "Export Comps"
 msgstr "보고서"
 
@@ -1070,13 +1002,10 @@ msgid "Origin AS"
 msgstr "오리진 AS"
 
 #: flowview_databases.php:635
-#, fuzzy
-#| msgid "Report"
 msgid "MP Export"
 msgstr "보고서"
 
 #: flowview_databases.php:640
-#, fuzzy
 msgid "Encyption"
 msgstr "만료"
 
@@ -1089,13 +1018,10 @@ msgid "Geo Index"
 msgstr "지역 색인"
 
 #: flowview_databases.php:655
-#, fuzzy
 msgid "Interface Addr"
 msgstr "인터페이스"
 
 #: flowview_databases.php:660
-#, fuzzy
-#| msgid "Report"
 msgid "Export Via"
 msgstr "보고서"
 
@@ -1128,7 +1054,6 @@ msgid "Geo Location"
 msgstr "지리적 위치"
 
 #: flowview_databases.php:700
-#, fuzzy
 msgid "Local AS"
 msgstr "로컬"
 
@@ -1207,7 +1132,6 @@ msgid "No Matching Entries Found"
 msgstr "일치하는 항목을 찾을 수 없습니다."
 
 #: flowview_databases.php:1140
-#, fuzzy
 msgid "Click 'Continue' to delete the following DNS Cache Entriy."
 msgid_plural "Click 'Continue' to delete all following DNS Cache Entries."
 msgstr[0] "다음 일정을 삭제하려면 '계속'을 클릭하십시오."
@@ -1229,7 +1153,6 @@ msgid_plural "Delete DNS Entries"
 msgstr[0] "DNS 항목 삭제"
 
 #: flowview_databases.php:1219
-#, fuzzy
 msgid "Flowview DNS Cache Entries"
 msgstr "FlowView 일정"
 
@@ -1295,13 +1218,10 @@ msgid "No DNS Cache Entries Found"
 msgstr "DNS 캐시 항목을 찾을 수 없습니다."
 
 #: flowview_databases.php:1511
-#, fuzzy
-#| msgid "No Flowview Listeners"
 msgid "Flowview Internet Routes"
 msgstr "FlowView Listener"
 
 #: flowview_databases.php:1526
-#, fuzzy
 msgid "IP Version"
 msgstr "버전"
 
@@ -1310,7 +1230,6 @@ msgid "IPv4"
 msgstr "IPv4 (IPv4)"
 
 #: flowview_databases.php:1532
-#, fuzzy
 msgid "IPv6"
 msgstr "IPv6"
 
@@ -1323,8 +1242,6 @@ msgid "This is the published Internet Route."
 msgstr "게시된 인터넷 경로입니다."
 
 #: flowview_databases.php:1694
-#, fuzzy
-#| msgid "AS Numbers"
 msgid "AS Number"
 msgstr "티켓 번호"
 
@@ -1389,20 +1306,14 @@ msgid "Port this collector will listen on."
 msgstr "이 컬렉터가 듣는 포트."
 
 #: flowview_devices.php:76
-#, fuzzy
-#| msgid "The Listener to use for the Filter."
 msgid "The IP Protocol to use for this listener."
 msgstr "필터에 사용할 리스너입니다."
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "TCP Protocol"
 msgstr "IP 프로토콜"
 
 #: flowview_devices.php:78
-#, fuzzy
-#| msgid "IP Protocol"
 msgid "UDP Protocol"
 msgstr "IP 프로토콜"
 
@@ -1537,7 +1448,6 @@ msgid "The number of inbound connections from various sources."
 msgstr "다양한 소스의 인바운드 연결 수입니다."
 
 #: flowview_devices.php:792
-#, fuzzy
 msgid "Stream Versions"
 msgstr "버전"
 
@@ -1813,10 +1723,9 @@ msgid "Top Sample"
 msgstr "상위 샘플"
 
 #: functions.php:585
-#, fuzzy, php-format
-#| msgid "Top 2 Samples"
+#, php-format
 msgid "Top %d Samples"
-msgstr "상위 2 개 샘플"
+msgstr "상위 %d개 샘플"
 
 #: functions.php:590
 msgid "Show only Domains on Charts Below"
@@ -1835,7 +1744,6 @@ msgid "Clear Filter"
 msgstr "필터 지우기"
 
 #: functions.php:598
-#, fuzzy
 msgid "Create new Flow Filter"
 msgstr "새 Flow File 생성 빈도."
 
@@ -1848,8 +1756,6 @@ msgid "Edit"
 msgstr "편집"
 
 #: functions.php:599
-#, fuzzy
-#| msgid "Edit Current Filter"
 msgid "Edit the Flow Filter"
 msgstr "현재 필터 편집"
 
@@ -1858,8 +1764,6 @@ msgid "Save"
 msgstr "저장"
 
 #: functions.php:600
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the Flow Filter"
 msgstr "보고서 인쇄"
 
@@ -1868,8 +1772,6 @@ msgid "Save As"
 msgstr "다른 이름으로 저장"
 
 #: functions.php:601
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Save the existing Flow Filter as new Filter"
 msgstr "보고서 인쇄"
 
@@ -1882,8 +1784,6 @@ msgid "Rename the Flow Filter"
 msgstr "흐름 필터 이름 바꾸기"
 
 #: functions.php:603
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete the Flow Filter"
 msgstr "보고서 인쇄"
 
@@ -1974,20 +1874,14 @@ msgid "Table"
 msgstr "테이블"
 
 #: functions.php:827
-#, fuzzy
-#| msgid "New Filter"
 msgid "Save Flow Filter"
 msgstr "필터"
 
 #: functions.php:829
-#, fuzzy
-#| msgid "Field Name"
 msgid "New Name"
 msgstr "Field Name"
 
 #: functions.php:838
-#, fuzzy
-#| msgid "Select a Filter"
 msgid "Delete Flow Filter"
 msgstr "보고서 인쇄"
 
@@ -2045,7 +1939,6 @@ msgid "Rename Layout"
 msgstr "레이아웃 이름 바꾸기"
 
 #: functions.php:984
-#, fuzzy
 msgid " <new>"
 msgstr "신규"
 
@@ -2386,8 +2279,6 @@ msgid "(actions)"
 msgstr "작업"
 
 #: setup.php:357
-#, fuzzy
-#| msgid "Hostname Resolution"
 msgid "Name Resolution"
 msgstr "해상도"
 
@@ -2404,8 +2295,6 @@ msgid "Use Local Server"
 msgstr "로컬 서버 사용"
 
 #: setup.php:367
-#, fuzzy
-#| msgid "Use DNS Server Below"
 msgid "Use DNS Servers under Mail/Reporting/DNS"
 msgstr "아래의 DNS 서버 사용"
 
@@ -2414,7 +2303,6 @@ msgid "Don't Resolve DNS"
 msgstr "DNS를 해결하지 마십시오."
 
 #: setup.php:373
-#, fuzzy
 msgid "Local Domain Name"
 msgstr "도메인 이름 제거"
 
@@ -2435,8 +2323,6 @@ msgid "Use CIDR or Non-CIDR"
 msgstr "CIDR 또는 비 CIDR 사용"
 
 #: setup.php:390
-#, fuzzy
-#| msgid "Use Arin to Find Unregistered Domains"
 msgid "Use Arin to find Domains and AS Numbers"
 msgstr "Arian을 사용하여 등록되지 않은 도메인 찾기"
 
@@ -2457,7 +2343,6 @@ msgid "whois.radb.net"
 msgstr "whois.radb.net"
 
 #: setup.php:405
-#, fuzzy
 msgid "Whois Binary Path"
 msgstr "흐름 도구 이진 경로"
 
@@ -2563,8 +2448,6 @@ msgid "%d Threads"
 msgstr "%d 스레드"
 
 #: setup.php:496
-#, fuzzy
-#| msgid "Maximum Rows"
 msgid "Maximum Run Time"
 msgstr "최대 행"
 
@@ -2597,7 +2480,7 @@ msgid "%d Hours"
 msgstr "%d 시간"
 
 #: setup.php:517
-#, fuzzy, php-format
+#, php-format
 msgid "%d Day"
 msgstr "%d일"
 
@@ -2627,7 +2510,6 @@ msgid "This should be the port of the Read-Only-Service (readconnroute) service 
 msgstr "이 포트는 Read-Only-Service(readconnroute) 서비스 및 라우터의 포트여야 합니다."
 
 #: setup.php:543
-#, fuzzy
 msgid "Flowview"
 msgstr "FlowView"
 
