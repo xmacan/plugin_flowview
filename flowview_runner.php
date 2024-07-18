@@ -128,8 +128,17 @@ if ($shard_id === false) {
 	 * then get the query information from the database.
 	 */
 	$threads = read_config_option('flowview_parallel_threads');
-	$query   = flowview_db_fetch_row_prepared('SELECT * FROM parallel_database_query WHERE id = ?', array($query_id));
-	$shards  = flowview_db_fetch_cell_prepared('SELECT COUNT(*) FROM parallel_database_query_shard WHERE query_id = ?', array($query_id));
+
+	$query   = flowview_db_fetch_row_prepared('SELECT *
+		FROM parallel_database_query
+		WHERE id = ?',
+		array($query_id));
+
+	$shards  = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
+		FROM parallel_database_query_shard
+		WHERE query_id = ?',
+		array($query_id));
+
 	$running = 0;
 	$start   = microtime(true);
 

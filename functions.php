@@ -559,8 +559,13 @@ function flowview_display_filter() {
 						<select id='device_id' name='device_id'>
 							<option value='-1'><?php print __('Select a Listener', 'flowview');?></option>
 							<?php
-							$listeners = flowview_db_fetch_assoc('SELECT id, name
-								FROM plugin_flowview_devices
+							$listeners = flowview_db_fetch_assoc('SELECT DISTINCT id, name
+								FROM (
+									SELECT 0 AS id, "' . __esc('All', 'flowview') . '" AS name
+									UNION
+									SELECT id, name
+									FROM plugin_flowview_devices
+								) AS rs
 								ORDER BY name');
 
 							if (cacti_sizeof($listeners)) {
@@ -1646,7 +1651,7 @@ function plugin_flowview_run_schedule($id) {
 		WHERE id = ?',
 		array($schedule['query_id']));
 
-	// Get the timespan from the query
+	/* get the timespan from the query */
 	get_timespan($span, time(), $query['timespan'], read_user_setting('first_weekdayid'));
 
 	$start = $span['begin_now'];
@@ -1739,10 +1744,11 @@ function get_flowview_session_key($id, $start, $end) {
 	}
 }
 
-/** purge_flowview_session()
+/**
+ * purge_flowview_session - This function manages the Cacti session
+ * to prevent it from growing too large with session data
  *
- *  This function removes expired sessions from the users session
- *
+ * @return null
  */
 function purge_flowview_sessions() {
 	$now = time();
@@ -1762,10 +1768,20 @@ function purge_flowview_sessions() {
 	//cacti_log('There are currently ' . $i . ' sessions cached.');
 }
 
-/** load_data_for_filter($id, $start, $end)
+/**
+ * load_data_for_filter - This function will run the query against the
+ * database of pull it from a saved session.
  *
- *  This function will run the query against the database of pull it from a saved session.
+ * @param  int         The query to load without overrides
+ * @param  bool|string The start date for the query in Y-m-d H:i:s
+ *                     format.  If false, it will calculate the
+ *                     time from the query default.
+ * @param  bool|string The end date for the query in Y-m-d H:i:s
+ *                     format.  If false, it will calculate the
+ *                     time from the query default.
  *
+ * @return array       The query results either from the cache
+ *                     or from the results of the query.
  */
 function load_data_for_filter($id = 0, $start = false, $end = false) {
 	global $config;
@@ -1797,9 +1813,17 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
 	return $data;
 }
 
-/** get_numeric_filter($sql_where, $value, $column)
+/**
+ * get_numeric_filter - This function constructs a $sql_where
+ * from numeric data.
  *
- *  This function constructs a $sql_where from numeric data
+ * @param  string    The sql where clause to append
+ * @param  array     An array of parameters to append for the query
+ * @param  string    The value to match
+ * @param  string    The column to match
+ *
+ * @return string    The updated sql where clause
+ * @return byref     The updated sql params.
  *
  */
 function get_numeric_filter($sql_where, &$sql_params, $value, $column) {
@@ -1831,10 +1855,18 @@ function get_numeric_filter($sql_where, &$sql_params, $value, $column) {
 	return $sql_where;
 }
 
-/** get_ip_filter($sql_where, $value, $column)
+/**
+ * get_ip_filter - This function constructs a sql _where from
+ * the ip ranges.  This function accepts ip addresses or ranges
+ * using the CIDR format.
  *
- *  This function constructs a $sql_where from ip ranges
+ * @param  string    The sql where clause to append
+ * @param  array     An array of parameters to append for the query
+ * @param  string    The value to match
+ * @param  string    The column to match
  *
+ * @return string    The updated sql where clause
+ * @return byref     The updated sql params.
  */
 function get_ip_filter($sql_where, &$sql_params, $value, $column) {
 	$sql_where = trim($sql_where);
@@ -1944,10 +1976,33 @@ function get_date_filter($sql_range, &$sql_range_params, $start, $end, $range_ty
 	return $sql_range;
 }
 
-/** get_tables_for_query($start, $end)
+/**
+ * get_tables_for_query - This function creates an array
+ * of tables for a query and returns them to the caller.
+ * This list of tables depends on the start and end times
+ * if the end time is null, it means current time.
  *
- *  This function creates an array of tables for a query
+ * The table names will be constructed by looking first
+ * at the partitioning scheme selected and then constructing
+ * the table names.  The tables are constructed through
+ * a suffix that includes the YYYYDDDHH or for example:
  *
+ * For hourly partitioning we use:
+ *
+ * plugin_flowview_raw_202416412
+ *                     |   |  |
+ *                     Yr  DoY Hr
+ *
+ * For daily partitioning we use:
+ *
+ * plugin_flowview_raw_2024164
+ *                     |   |
+ *                     Yr  DoY
+ *
+ * @param  int       The unix timestamp of the range start
+ * @param  bool|int  The unix timestamp of the range end or null
+ *
+ * @return array     An array of table names
  */
 function get_tables_for_query($start, $end = null) {
 	global $config, $graph_timespans;
@@ -2008,10 +2063,9 @@ function get_tables_for_query($start, $end = null) {
 	return $inc_tables;
 }
 
-/** flowview_get_chartdata()
- *
- *  This function returns chart data from the session
- *
+/**
+ * flowview_get_chartdata() - This function returns chart
+ * data from the session.
  */
 function flowview_get_chartdata() {
 	$query_id = get_filter_request_var('query');
@@ -2105,10 +2159,14 @@ function flowview_get_chartdata() {
 	exit;
 }
 
-/** get_category_columns($statistics, $domain)
+/**
+ * get_category_columns - This function helps construct the
+ * columns required for a query
  *
- *  This function helps construct the columns required for a query
+ * @param  string   The report to get columns for
+ * @param  string   The domain to include
  *
+ * @return array    The columns
  */
 function get_category_columns($statistics, $domain) {
 	$category = array();
@@ -2202,12 +2260,26 @@ function get_category_columns($statistics, $domain) {
 	return $category;
 }
 
-/** run_flow_query($session, $query_id, $start, $end)
+/**
+ * run_flow_query - This function will take the combination of
+ * request variables and data stored in the table
+ * plugin_flowview_query to gather data for calling function.
  *
- *  This function either retries a query from the cache or runs
- *  the flow query in the case where the session does not exist
- *  or a Schedule is being run.
+ * The current instantiation of the function includes a session
+ * cache that was used previously to speed up the gathering
+ * of data for the various rendering functions such as bar
+ * charts. This legacy functionality is commented out for now
+ * as it generates a rather large session file over time.
  *
+ * @param  bool    Direction as to whether or not to use the session
+ *                 cache.  If true, the cache can be used.
+ * @param  int     The ID of the query stored in the flowview
+ *                 filter table
+ * @param  int     The unix timestamp of the query range start
+ * @param  int     The unix timestamp of the query range end
+ *
+ * @return bool|array Either the results or false if there was
+ *                    an error.
  */
 function run_flow_query($session, $query_id, $start, $end) {
 	global $config, $graph_timespans;
@@ -2216,7 +2288,6 @@ function run_flow_query($session, $query_id, $start, $end) {
 		return false;
 	}
 
-	$key  = get_flowview_session_key($query_id, $start, $end);
 	$time = time();
 
 	$sql_where        = '';
@@ -2224,11 +2295,12 @@ function run_flow_query($session, $query_id, $start, $end) {
 	$sql_range        = '';
 	$sql_range_params = array();
 
+	$key  = get_flowview_session_key($query_id, $start, $end);
 	if ($session && isset($_SESSION['sess_flowdata'][$key])) {
 		return $_SESSION['sess_flowdata'][$key]['data'];
 	}
 
-	// Close session to allow offpage navigation
+	/* close session to allow offpage navigation */
 	cacti_session_close();
 
 	include($config['base_path'] . '/plugins/flowview/arrays.php');
@@ -2243,6 +2315,12 @@ function run_flow_query($session, $query_id, $start, $end) {
 		WHERE id = ?',
 		array($query_id));
 
+	/*-------------------------------------------------------------*/
+	/* Overrides - These variables can be overridden by the user   */
+	/* in the user interface.                                      */
+	/*-------------------------------------------------------------*/
+
+	/* date range override */
 	if (isset_request_var('includeif') && get_request_var('includeif') > 0) {
 		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end, get_request_var('includeif'));
 	} elseif ($data['includeif'] > 0) {
@@ -2251,7 +2329,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end);
 	}
 
-	// Handle Limit Override
+	/* limit override */
 	if (isset_request_var('cutofflines') && get_request_var('cutofflines') != 999999) {
 		$lines = get_request_var('cutofflines');
 	} elseif (isset_request_var('cutofflines') && get_request_var('cutofflines') == 999999) {
@@ -2264,13 +2342,14 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$lines = 20;
 	}
 
+	/* limits override */
 	if (get_request_var('exclude') > 0) {
 		$sql_limit = 'LIMIT ' . get_filter_request_var('exclude') .  ',' . $lines;
 	} else {
 		$sql_limit = 'LIMIT ' . $lines;
 	}
 
-	// Handle Octets Override
+	/* octets override */
 	if (isset_request_var('cutoffoctets') && get_filter_request_var('cutoffoctets') > 0) {
 		$sql_having = 'HAVING bytes > ' . get_filter_request_var('cutoffoctets');
 	} elseif ($data['cutoffoctets'] > 0) {
@@ -2279,10 +2358,39 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql_having = '';
 	}
 
-	/* device id filter */
-	if (isset($data['device_id']) && $data['device_id'] > 0) {
+	/* device id override */
+	if (isset_request_var('device_id') && get_filter_request_var('device_id') >= 0) {
+		if (get_request_var('device_id') > 0) {
+			$sql_where = get_numeric_filter($sql_where, $sql_params, get_request_var('device_id'), 'listener_id');
+		}
+	} elseif (isset($data['device_id']) && $data['device_id'] > 0) {
 		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['device_id'], 'listener_id');
 	}
+
+	/* report override */
+	if (isset_request_var('report')) {
+		$report  = get_nfilter_request_var('report');
+		$nreport = trim(get_nfilter_request_var('report'), 'sp');
+		if (strpos($report, 's') !== false && is_numeric($nreport)) {
+			$data['statistics'] = $nreport;
+			$data['printed']    = 0;
+		} elseif (strpos($report, 'p') !== false && is_numeric($nreport)) {
+			$data['printed']    = $nreport;
+			$data['statistics'] = 0;
+		}
+	} elseif (!sizeof($data)) {
+		return false;
+	}
+
+	/* sort field override */
+	if (isset_request_var('sortfield')) {
+		$data['sortfield'] = get_request_var('sortfield');
+	}
+
+	/*-------------------------------------------------------------*/
+	/* Non-Overrides - These variables can not be overridden       */
+	/* in the user interface.                                      */
+	/*-------------------------------------------------------------*/
 
 	/* ex_addr filter */
 	if (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '') {
@@ -2350,25 +2458,12 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['tosfields'], 'tos');
 	}
 
-	// Handle Report Override
-	if (isset_request_var('report')) {
-		$report  = get_nfilter_request_var('report');
-		$nreport = trim(get_nfilter_request_var('report'), 'sp');
-		if (strpos($report, 's') !== false && is_numeric($nreport)) {
-			$data['statistics'] = $nreport;
-			$data['printed']    = 0;
-		} elseif (strpos($report, 'p') !== false && is_numeric($nreport)) {
-			$data['printed']    = $nreport;
-			$data['statistics'] = 0;
-		}
-	} elseif (!sizeof($data)) {
-		return false;
-	}
-
-	// Handle Sort Field Override
-	if (isset_request_var('sortfield')) {
-		$data['sortfield'] = get_request_var('sortfield');
-	}
+	/*-------------------------------------------------------------*/
+	/* Query construction phase.  For each report, construct the   */
+	/* inner query (map phase) and the outer query (reduce phase)  */
+	/* the will pull the results from the database, either in      */
+	/* parallel (the new default), or as a single union query      */
+	/*-------------------------------------------------------------*/
 
 	$sql = '';
 
@@ -3158,12 +3253,14 @@ function run_flow_query($session, $query_id, $start, $end) {
 			$output['title'] = $title;
 
 			if ($session) {
-				cacti_session_start();
+				if (1 == 0) {
+					cacti_session_start();
 
-				$_SESSION['sess_flowdata'][$key]['data']    = $output;
-				$_SESSION['sess_flowdata'][$key]['timeout'] = $time + 600;
+					$_SESSION['sess_flowdata'][$key]['data']    = $output;
+					$_SESSION['sess_flowdata'][$key]['timeout'] = $time + 600;
 
-				cacti_session_close();
+					cacti_session_close();
+				}
 			}
 
 			return $output;
@@ -3215,7 +3312,57 @@ function flowview_convert_yeardayhour_to_date($range, $year, $day, $hour = 0) {
 		'end_time'   => $end_time
 	);
 }
-
+/**
+ * parallel_database_query_request - Given a series of tables and
+ * and inner (map phase) and outer (reduce phase) SQL queries,
+ * create a series of shards requests to break the larger query into multiple
+ * components to be used as a map reduce construct.
+ *
+ * Currently, this request design does not work with classic partitioned
+ * tables.  In a later version of the parallel query we will support
+ * querying from a single table constructed of multiple partitions
+ * so long as we can quickly find the range of partitions that need
+ * to be queried for data.
+ *
+ * The $stru_inner and $stru_outer have a very specific layout that follows
+ * the pattern below.  The current version of the parallel query is designed
+ * primarily for time related event data like syslog, and netflow data.
+ * any other Time Series data requests would benefit from this API as the
+ * speedups are almost linear.
+ *
+ * The $stru_inner syntax is as follows and documented on the right
+ *
+ * $stru_inner = array(
+ *   'sql_query'        => $sql_inner,         // The SQL query using prepared format WHERE a = ?
+ *   'sql_where'        => $sql_where,         // The SQL where for the query separated from the sql_query
+ *   'sql_range'        => $sql_range,         // The SQL where of the query that includes the time range
+ *   'sql_having'       => '',                 // Optional - The SQL having clause to apply
+ *   'sql_order'        => '',                 // Optional - The SQL order to apply
+ *   'sql_limit'        => '',                 // Optional - The SQL limit to apply
+ *   'sql_groupby'      => $sql_inner_groupby, // The SQL Group By to apply
+ *   'sql_params'       => $sql_params,        // An array of SQL prepared parameters
+ *   'sql_range_params' => $sql_range_params,  // An array of SQL range parameters
+ *   'sql_start_time'   => $start,             // The start time of the query for table reduction
+ *   'sql_end_time'     => $end                // The end time of the query for table reduction
+ *
+ * The $stru_outer syntax is below.  You will notice that the time dimension is removed here, but
+ * much of the other attributes are intact and have the same meanings as above.
+ *
+ * $stru_outer = array(
+ *   'sql_query'        => $sql_query,
+ *   'sql_where'        => '',
+ *   'sql_having'       => $sql_having,
+ *   'sql_groupby'      => $sql_groupby,
+ *   'sql_order'        => $sql_order,
+ *   'sql_limit'        => $sql_limit,
+ *   'sql_params'       => array()
+ *
+ * @param  array    An array of tables to use for the map query
+ * @param  array    An array of map query parameters
+ * @param  array    An array of reduce query parameters
+ *
+ * @return int      A request id that will be used in the run phase
+ */
 function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	$save = array();
 
@@ -3228,7 +3375,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	/**
 	 * Prepare the inner SQL for md5sum calculations.  We have two
 	 * md5's, one for the query itself, and another for the tables
-	 * that match the query criterial without the time range.
+	 * that match the query criteria without the time range.
 	 *
 	 * This ensures that if there is a time range that is in scope
 	 * and the data has already been cached, for that exact query
@@ -3239,7 +3386,8 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	$map_query        = $stru_inner;
 	$sql_start_time   = $stru_inner['sql_start_time'];
 	$sql_end_time     = $stru_inner['sql_end_time'];
-	$query_md5        = md5(json_encode(array_merge($stru_inner, $stru_outer)));
+	$md5_array        = array($stru_inner, $stru_outer);
+	$query_md5        = md5(json_encode($md5_array));
 
 	unset($map_query['sql_range']);
 	unset($map_query['sql_range_params']);
@@ -3251,7 +3399,11 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 	$table_md5 = md5($map_query);
 
-	$request_id   = db_fetch_cell_prepared('SELECT id FROM parallel_database_query WHERE md5sum = ?', array($query_md5));
+	$request_id = db_fetch_cell_prepared('SELECT id
+		FROM parallel_database_query
+		WHERE md5sum = ?',
+		array($query_md5));
+
 	$time_to_live = read_config_option('flowview_parallel_time_to_live');
 
 	if (empty($time_to_live)) {
@@ -3349,6 +3501,18 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 	return $request_id;
 }
 
+/**
+ * parallel_database_query_run - Runs a parallel query by calling the flowview_running.php
+ * in background.  If the data is already cached, then the number of pending request
+ * will be zero and the flowview_runner.php will not be called and the results will
+ * be pulled from the parallel_database_query tabbles 'results' column.
+ *
+ * @param  array   An array of requests to execut the parallel database.  In the case
+ *                 where it takes multiple requests to form a proper UNION of data
+ *                 there will be more than one request.
+ *
+ * @return array   An array of query results in the order for which they were requested
+ */
 function parallel_database_query_run($requests) {
 	global $config, $debug;
 
@@ -3364,7 +3528,9 @@ function parallel_database_query_run($requests) {
 
 		if ($pending > 0) {
 			db_debug('Launching FlowView Database Query Process ' . $query_id);
+
 			cacti_log('NOTE: Launching FlowView Database Query Process ' . $query_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
+
 			exec_background($php_binary, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id" . ($debug ? ' --debug':''), $redirect);
 		} else {
 			db_debug('Not Luanching FlowView Database Query Process ' . $query_id . ' as it has already completed or is running.');
@@ -3376,7 +3542,7 @@ function parallel_database_query_run($requests) {
 	$start = time();
 	$total_time = 0;
 
-	while (true && $total_time < $max_time) {
+	while ($total_time < $max_time) {
 		$running = db_fetch_cell('SELECT COUNT(*)
 			FROM parallel_database_query
 			WHERE ID IN(' . implode(', ', $requests) . ')
@@ -3399,7 +3565,8 @@ function parallel_database_query_run($requests) {
 	if (cacti_sizeof($requests) == 1) {
 		return json_decode(flowview_db_fetch_cell_prepared('SELECT results
 			FROM parallel_database_query
-			WHERE id = ?', array($query_id)), true);
+			WHERE id = ?',
+			array($query_id)), true);
 	} else {
 		$reduce_query = flowview_db_fetch_cell_prepared('SELECT reduce_query
 			FROM parallel_database_query
@@ -3432,6 +3599,30 @@ function parallel_database_query_run($requests) {
 	}
 }
 
+/**
+ * parallel_database_query_create_reduce_table - Based upon the request ID and the
+ * base table as well as the query parameters, construct a valid temporary table
+ * to hold the map query results that will be reduced in a subsequent step.
+ *
+ * This function is pretty simplistic at this point in time.  It assumes that
+ * the map query has aliases for all the columns and those aliases should match
+ * the names in the base table provided as the third parameter.  With that
+ * it will create a table to hold the map data using that structure.
+ *
+ * This is a rather simplistic approach.  In a future release, we will look
+ * both at the base table, but also we will look at the consolidation functions
+ * that the user has requested, for example SUM(), MIN(), MAX() can retain
+ * the column type of the underlying table, but a AVG() or STDDEV() consolidation
+ * functions should always be converted to a float.  This can also be done
+ * with a CAST() function call in the reduce phase, but it would be convenient
+ * to do this automatically in this function.
+ *
+ * @param  int     The parallel query request id
+ * @param  string  The SQL map query to run
+ * @param  string  The base table to inspect for column types
+ *
+ * @return string  The name of the table that was created to hold the map data
+ */
 function parallel_database_query_create_reduce_table($request_id, $sql_query, $table) {
 	$table_name = "parallel_database_query_map_$request_id";
 
@@ -4502,122 +4693,6 @@ function flowview_report_session() {
 
 	validate_store_request_vars($filters, 'sess_fvw');
 	/* ================= input validation ================= */
-}
-
-/** flowview_viewchart()
- *
- *  This function is taken from Slowlog.  Given
- *  a title, chart type and chart data, it will
- *  print the required syntax for the Callback
- *  from the chart page to operate correctly.
- */
-function flowview_viewchart() {
-	global $config;
-
-	// Load up the data array
-	if (isset($_SESSION['sess_flowdata'])) {
-		$data = $_SESSION['sess_flowdata'];
-	} else {
-		$data = array();
-	}
-
-	// $data['data']  - Array of columns
-	// $data['table'] - String formatted html table
-
-	$chart_type = 'bar';
-	$column     = get_nfilter_request_var('type');
-	$query      = get_filter_request_var('query');
-
-	switch($column) {
-	case 'flows':
-		$unit = ucfirst($column);
-		$suffix = __('Total Flows', 'flowview');
-
-		break;
-	case 'bytes':
-		$unit = ucfirst($column);
-		$suffix = __('Bytes Exchanged', 'flowview');
-		break;
-	case 'packets':
-		$unit = ucfirst($column);
-		$suffix = __('Packets Examined', 'flowview');
-		break;
-	}
-
-	$columns = $_SESSION['flowview_flows'][$sessionid]['columns'];
-	$data    = $_SESSION['flowview_flows'][$sessionid]['data'];
-
-	foreach ($columns as $key => $cdata) {
-		if (strtolower($cdata) == $column) {
-			$column = $key;
-		}
-	}
-
-	if (cacti_sizeof($data)) {
-		$elements = array();
-		$legend   = array();
-		$maxvalue = 0;
-
-		if (isset_request_var('exclude') && get_filter_request_var('exclude') > 0) {
-			for($i = 0; $i < get_request_var('exclude'); $i++) {
-				array_shift($data);
-			}
-		}
-
-		foreach($data as $row) {
-			if ($maxvalue < $row[$column]) {
-				$maxvalue = $row[$column];
-				$scaling  = flowview_autoscale($row[$column]);
-			}
-		}
-
-		$maxvalue  = flowview_getmax($maxvalue);
-		$autorange = flowview_autoscale($maxvalue);
-		$maxvalue  = $maxvalue / $autorange[0];
-
-		$i = 0;
-		foreach($data as $row) {
-			$elements[$i] = new bar_value(round($row[$column]/$autorange[0], 3));
-			$elements[$i]->set_colour(flowview_get_color());
-			$elements[$i]->set_tooltip($unit . ': #val# ' . $autorange[1]);
-			if (cacti_sizeof($row) == 4) {
-				$legend[] = flowview_get_domain($row[0], get_request_var('domains'));
-			} else {
-				$legend[] = flowview_get_domain($row[0], get_request_var('domains')) . " -\n" . flowview_get_domain($row[1], get_request_var('domains'));
-			}
-			$i++;
-		}
-
-		$bar = new bar_glass();
-		$bar->set_values($elements);
-
-		$title = new title($title . ' (' . $suffix . ')');
-		$title->set_style('{font-size: 18px; color: #444444; text-align: center;}');
-
-		$x_axis_labels = new x_axis_labels();
-		$x_axis_labels->set_size(10);
-		$x_axis_labels->rotate(45);
-		$x_axis_labels->set_labels($legend);
-
-		$x_axis = new x_axis();
-		//$x_axis->set_3d( 3 );
-		$x_axis->set_colours('#909090', '#909090');
-		$x_axis->set_labels( $x_axis_labels );
-
-		$y_axis = new y_axis();
-		$y_axis->set_offset(true);
-		$y_axis->set_colours('#909090', '#909090');
-		$y_axis->set_range(0, $maxvalue, $maxvalue/10);
-		$y_axis->set_label_text('#val# ' . $autorange[1]);
-
-		$chart = new open_flash_chart();
-		$chart->set_title($title);
-		$chart->add_element($bar);
-		$chart->set_x_axis($x_axis);
-		$chart->add_y_axis($y_axis);
-		$chart->set_bg_colour('#F0F0F0');
-		print $chart->toString();
-	}
 }
 
 function flowview_check_local_iprange($ip) {
