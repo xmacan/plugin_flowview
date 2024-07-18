@@ -139,6 +139,20 @@ if ($shard_id === false) {
 		WHERE query_id = ?',
 		array($query_id));
 
+	$tables = array_rekey(
+		flowview_db_fetch_assoc_prepared('SELECT map_table
+			FROM parallel_database_query_shard
+			WHERE query_id = ?',
+			array($query_id)),
+		'map_table', 'map_table'
+	);
+
+	$total_size = flowview_db_fetch_cell('SELECT SUM(data_length+index_length)
+		FROM information_schema.TABLES
+		WHERE TABLE_NAME IN ("' . implode('","', $tables) . '")');
+
+	$total_size /= 1000 * 1000 * 1000;
+
 	$running = 0;
 	$start   = microtime(true);
 
@@ -203,7 +217,7 @@ if ($shard_id === false) {
 
 		$end = microtime(true);
 
-		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d Cached:%d', $end - $start, $threads, $shards, $cached), false, 'FLOWVIEW');
+		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d Cached:%d TotalSize:%0.2fGB', $end - $start, $threads, $shards, $cached, $total_size), false, 'FLOWVIEW');
 	}
 } else {
 	/* we will warn if the process is taking extra long */
