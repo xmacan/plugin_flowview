@@ -3197,6 +3197,13 @@ function run_flow_query($session, $query_id, $start, $end) {
 			} elseif ($data['statistics'] == 99) {
 				$total = 0;
 				$i = 0;
+
+				/**
+				 * the parallel query function returns an associative
+				 * array, convert it to a row.
+				 */
+				$results = $results[0];
+
 				foreach($sql_array as $c) {
 					$total += $results[$c['name']];
 				}
@@ -3628,6 +3635,7 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 
 	$sql_create = "CREATE TABLE IF NOT EXISTS $table_name (";
 
+	/* get the columns from the base table */
 	$columns = array_rekey(
 		flowview_db_fetch_assoc_prepared('SELECT *
 			FROM INFORMATION_SCHEMA.COLUMNS
@@ -3636,18 +3644,57 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 		'COLUMN_NAME', array('DATA_TYPE', 'COLUMN_TYPE', 'IS_NULLABLE', 'COLUMN_DEFAULT')
 	);
 
+	/* simple tokenization of the SQL query */
+	$column_data = explode(',', $sql_query);
 	$i = 0;
-	foreach($columns as $column => $attrib) {
-		if (stripos($sql_query, $column) !== false) {
-			$sql_create .= ($i > 0 != '' ? ', ':'') .
-				'`' . $column . '` ' .
-				$attrib['COLUMN_TYPE'] .
-				($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
-				($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
+	foreach($column_data as $c) {
+		$parts   = explode(' ', $c);
+		$colname = end($parts);
+		cacti_log("The column is $colname");
 
-			$i++;
+		if (isset($columns[$colname])) {
+			$sql_create .= ($i > 0 != '' ? ', ':'') .
+				'`' . $colname . '` ' .
+				$columns[$colname]['COLUMN_TYPE'] .
+				($columns[$colname]['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
+				($columns[$colname]['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $columns[$colname]['COLUMN_DEFAULT'] . '"':'');
+		} else {
+			$found = false;
+
+			foreach($columns as $column => $attrib) {
+				if (stripos($c, $column) !== false) {
+					$sql_create .= ($i > 0 != '' ? ', ':'') .
+						'`' . $colname . '` ' .
+						$attrib['COLUMN_TYPE'] .
+						($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
+						($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
+
+					$found = true;
+					break;
+				}
+			}
+
+			if (!$found) {
+				$sql_create .= ($i > 0 != '' ? ', ':'') .
+					'`' . $colname . '` bigint unsigned NOT NULL default "0"';
+			}
 		}
+
+		$i++;
 	}
+
+//	$i = 0;
+//	foreach($columns as $column => $attrib) {
+//		if (stripos($sql_query, $column) !== false) {
+//			$sql_create .= ($i > 0 != '' ? ', ':'') .
+//				'`' . $column . '` ' .
+//				$attrib['COLUMN_TYPE'] .
+//				($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
+//				($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
+//
+//			$i++;
+//		}
+//	}
 
 	$sql_create .= ') ENGINE=InnoDB COMMENT="Holds Parallel Query Results"';
 
