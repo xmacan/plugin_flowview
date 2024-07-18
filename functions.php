@@ -3650,7 +3650,6 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 	foreach($column_data as $c) {
 		$parts   = explode(' ', $c);
 		$colname = end($parts);
-		cacti_log("The column is $colname");
 
 		if (isset($columns[$colname])) {
 			$sql_create .= ($i > 0 != '' ? ', ':'') .
