@@ -4403,13 +4403,16 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 		$suffix = '';
 	}
 
+	/* initializae the arin info */
+	$arin_id  = 0;
+	$arin_ver = 0;
+
 	/* check for private ranges first */
 	$dns_name = flowview_check_for_private_network($ip);
 	if ($ip != $dns_name) {
 		$priv_dns_name = gethostbyaddr($ip);
 		$local_range   = flowview_check_local_iprange($ip);
 		$arin_ver      = 1;
-		$arin_id       = 0;
 
 		if ($priv_dns_name == $ip || $priv_dns_name === false) {
 			if ($local_range) {
@@ -4485,8 +4488,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 			if (isset($resp->answer[0])) {
 				if (property_exists($resp->answer[0], 'ptrdname')) {
 					$dns_name = $resp->answer[0]->ptrdname;
-					$arin_id  = 0;
-					$arin_ver = 0;
 
 					if (read_config_option('flowview_use_arin') == 'on') {
 						$data = flowview_get_owner_from_arin($ip);
@@ -4530,17 +4531,12 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					$arin_id  = $data['arin_id'];
 				} else {
 					$dns_name = false;
-					$arin_id  = 0;
 				}
 			} else {
 				$dns_name = $ip;
 			}
 
 			if ($ip != $dns_name && $dns_name !== false) {
-				/* good dns_name */
-				$arin_id  = 0;
-				$arin_ver = 0;
-
 				if (read_config_option('flowview_use_arin') == 'on') {
 					$data = flowview_get_owner_from_arin($ip);
 
@@ -4564,10 +4560,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 				return $dns_name;
 			} else {
 				$dns_name = 'ip-' . str_replace('.', '-', $ip) . '.arin-error.net';
-
-				/* bad dns_name */
-				$arin_id  = 0;
-				$arin_ver = 0;
 
 				/* error - return the hostname we constructed (without the . on the end) */
 				flowview_db_execute_prepared('INSERT INTO plugin_flowview_dnscache
@@ -4636,7 +4628,6 @@ function flowview_get_dns_from_ip($ip, $timeout = 1000) {
 					$arin_id  = $data['arin_id'];
 				} else {
 					$dns_name = false;
-					$arin_id  = 0;
 				}
 			} else {
 				$dns_name = $ip;
