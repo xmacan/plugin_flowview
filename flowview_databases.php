@@ -96,8 +96,6 @@ function flowview_get_item_details() {
 	html_end_box();
 
 	if ($response['mnt_by_present'] == true) {
-		html_start_box(__('Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
-
 		$sql_params   = array();
 		$sql_params[] = $response['mnt_by'];
 		$sql_params[] = $response['mnt_by_source'];
@@ -109,10 +107,12 @@ function flowview_get_item_details() {
 			LIMIT 1", $sql_params);
 
 		if (cacti_sizeof($details)) {
-			flowview_print_details($cols, $details);
-		}
+			html_start_box(__('Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
 
-		html_end_box();
+			flowview_print_details($cols, $details);
+
+			html_end_box();
+		}
 	}
 
 	ob_get_flush();
@@ -719,8 +719,6 @@ function view_db_table($tab, &$tabs) {
 
 	$display_text = get_all_columns();
 
-	//print '<pre>';print_r($display_text);print '</pre>';exit;
-
 	$table_det     = $tabs[$tab];
 	$columns       = array_map('trim', explode(',', $table_det['columns']));
 	$search        = array_map('trim', explode(',', $table_det['search']));
@@ -732,6 +730,7 @@ function view_db_table($tab, &$tabs) {
 	/* create display text for column */
 	if (isset($tabs[$tab])) {
 		$i = 0;
+
 		foreach($columns as $key => $c) {
 			$c = trim($c);
 
@@ -912,15 +911,6 @@ function view_db_table($tab, &$tabs) {
 				</tr>
 			</table>
 			</form>
-			<style>
-			div.ui-tooltip {
-				max-width: 800px !important;
-				width: 800px !important;
-				max-height:500px !important;
-				height:400px !important;
-				overflow-y:scroll !important;
-			}
-			</style>
 			<script type='text/javascript'>
 
 			var tab='<?php print $tab;?>';
@@ -945,10 +935,6 @@ function view_db_table($tab, &$tabs) {
 				loadPageNoHeader(strURL);
 			}
 
-			function closeTip() {
-				$(document).tooltip('close');
-			}
-
 			function initializeTips() {
 				// Servers need tooltips
 				$('table[id^="flowview_databases_"]').tooltip({
@@ -969,6 +955,12 @@ function view_db_table($tab, &$tabs) {
 							at: 'right+15 center',
 							of: event
 						});
+
+						ui.tooltip.css('width', '800px');
+						ui.tooltip.css('max-width', '800px');
+						ui.tooltip.css('height', '400px');
+						ui.tooltip.css('max-height', '400px');
+						ui.tooltip.css('overflow-y', 'scroll');
 					},
 					close: function(event, ui) {
 						ui.tooltip.hover(
@@ -1087,7 +1079,7 @@ function view_db_table($tab, &$tabs) {
 	}
 
 	/* location for tooltips */
-	print "<div class='database' style='width:1024px></div>";
+	print "<div id='database' class='database' style='width:1024px'></div>";
 }
 
 function form_actions() {
