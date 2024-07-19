@@ -45,7 +45,7 @@ switch(get_request_var('action')) {
 		save_filter_form();
 		break;
 	case 'saveasfilter':
-		print "Hello";
+		save_filter_as();
 
 		break;
 	case 'renamefilter':
@@ -78,8 +78,7 @@ switch(get_request_var('action')) {
 		flowview_request_vars();
 
 		$title = load_session_for_filter();
-
-		$data = load_data_for_filter();
+		$data  = load_data_for_filter();
 
 		flowview_display_filter($data);
 
@@ -96,6 +95,93 @@ switch(get_request_var('action')) {
 }
 
 exit;
+
+function save_filter_as() {
+	if (isset_request_var('query') && get_filter_request_var('query') > 0) {
+		$save = db_fetch_row_prepared('SELECT *
+			FROM plugin_flowview_queries
+			WHERE id = ?',
+			array(get_request_var('query')));
+
+		if (cacti_sizeof($save)) {
+			$save['name'] = get_request_var('sname');
+
+			if (isset_request_var('report')) {
+				$report = get_request_var('report');
+
+				if (strpos($report, 's') !== false) {
+					$report = trim($report, "s \n\t\r");
+
+					$save['printed']    = 0;
+					$save['statistics'] = $report;
+				} else {
+					$report = trim($report, "r \n\t\r");
+
+					$save['printed']    = $report;
+					$save['statistics'] = 0;
+				}
+			}
+
+			$overrides = array(
+				'device_id',
+				'excluded',
+				'sortfield',
+				'cutofflines',
+				'cutoffoctets',
+				'predefined_timespan',
+				'graph_type',
+				'graph_height',
+			);
+
+			foreach($overrides as $variable) {
+				if (isset_request_var($variable)) {
+					if ($variable == 'predefined_timespan') {
+						$save['timespan'] = get_request_var($variable);
+					} else {
+						$save[$variable]  = get_request_var($variable);
+					}
+				}
+			}
+
+			$checkbox_overrides = array(
+				'table',
+				'bytes',
+				'packets',
+				'flows'
+			);
+
+			foreach($checkbox_overrides as $variable) {
+				if (isset_request_var($variable)) {
+					$save["panel_$variable"] = 'on';
+				} else {
+					$save["panel_$variable"] = '';
+				}
+			}
+
+			$save['id'] = 0;
+
+			$new_id = flowview_sql_save($save, 'plugin_flowview_queries');
+
+			if ($new_id > 0) {
+				raise_message(1);
+				header("Location: flowview.php?action=view&header=false&query=$new_id");
+				exit;
+			} else {
+				raise_message(2);
+				header("Location: flowview.php?action=view&header=false");
+				exit;
+			}
+		} else {
+			raise_message('bad_query', __('Flowview Query provided does not exist.  Please submit with a valid query.', 'flowview'), MESSAGE_LEVEL_ERROR);
+			header('Location: flowview.php?action=view&header=false');
+			exit;
+		}
+	} else {
+		raise_message('bad_query', __('Invalid source Query provided.  Please submit with a valid query.', 'flowview'), MESSAGE_LEVEL_ERROR);
+		header('Location: flowview.php?action=view&header=false');
+		exit;
+	}
+}
 
 function rename_filter() {
 	$name  = get_nfilter_request_var('sname');
@@ -135,7 +221,7 @@ function load_session_for_filter() {
 		}
 	}
 
-	if ((isset_request_var('query') && get_filter_request_var('query') > 0)) {
+	if (isset_request_var('query') && get_filter_request_var('query') > 0) {
 		// Handle Report Column
 		if (isset_request_var('report')) {
 			if (get_nfilter_request_var('report') != '0' && trim(get_nfilter_request_var('report'), 'sp') != '0') {

@@ -28,7 +28,7 @@ function display_tabs($id) {
 	$streams = listener_has_templates($id);
 
 	/* present a tabbed interface */
-	$tabs['general']   = array('url' => 'flowview_devices.php', 'name' => __('General', 'flowview'));
+	$tabs['general'] = array('url' => 'flowview_devices.php', 'name' => __('General', 'flowview'));
 
 	if ($streams) {
 		$tabs['templates'] = array('url' => 'flowview_devices.php', 'name' => __('Templates', 'flowview'));
@@ -448,17 +448,33 @@ function save_filter() {
 		} else {
 			header('Location: ' . html_escape(get_nfilter_request_var('return') . '?query=' . (empty($id) ? get_filter_request_var('id') : $id)));
 		}
+
 		exit;
 	}
 
 	raise_message(1);
+
+	flowview_purge_query_caches($id);
 
 	if (!isset_request_var('return') || get_request_var('return') == '') {
 		header('Location: flowview_filters.php?action=edit&id=' . $id . '&header=false');
 	} else {
 		header('Location: ' . html_escape(get_nfilter_request_var('return') . '?query=' . (empty($id) ? get_filter_request_var('id') : $id)));
 	}
+
 	exit;
+}
+
+function flowview_purge_query_caches($id) {
+	if (isset($_SESSION['sess_flowdata']) && cacti_sizeof($_SESSION['sess_flowdata'])) {
+		foreach($_SESSION['sess_flowdata'] as $key => $data) {
+			$parts = explode('_', $key, 2);
+
+			if ($parts[0] == $id) {
+				unset($_SESSION['sess_flowdata'][$key]);
+			}
+		}
+	}
 }
 
 function flowview_delete_filter() {
@@ -729,7 +745,7 @@ function flowview_display_filter() {
 						<?php print __('Timespan', 'flowview');?>
 					</td>
 					<td>
-						<select id='predefined_timespan' name='predevined_timespan' onChange='applyTimespan()'>
+						<select id='predefined_timespan' name='predefined_timespan' onChange='applyTimespan()'>
 							<?php
 							if (cacti_sizeof($graph_timespans)) {
 								foreach($graph_timespans as $key => $value) {
@@ -1738,9 +1754,9 @@ function get_flowview_session_key($id, $start, $end) {
 			get_request_var('cutoffoctets')  . '_' .
 			get_request_var('exclude');
 
-		return md5($key);
+		return $id . '_' . md5($key);
 	} else {
-		return md5($id . '_' . $start . '_' . $end);
+		return $id . '_' . md5($id . '_' . $start . '_' . $end);
 	}
 }
 
@@ -1757,15 +1773,12 @@ function purge_flowview_sessions() {
 	if (isset($_SESSION['sess_flowdata']) && cacti_sizeof($_SESSION['sess_flowdata'])) {
 		foreach($_SESSION['sess_flowdata'] as $key => $data) {
 			if ($now > $data['timeout']) {
-				//cacti_log('Purging Session:' . $key);
 				unset($_SESSION['sess_flowdata'][$key]);
 			}
 
 			$i++;
 		}
 	}
-
-	//cacti_log('There are currently ' . $i . ' sessions cached.');
 }
 
 /**
@@ -1794,9 +1807,23 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
 	if ($id > 0) {
 		$session = false;
 	} elseif (isset_request_var('query') && get_request_var('query') > 0) {
-		$id      = get_request_var('query');
-		$start   = strtotime(get_request_var('date1'));
-		$end     = strtotime(get_request_var('date2'));
+		$id = get_request_var('query');
+
+		if (!isset_request_var('date1') || get_request_var('date1') == '') {
+			$timespan = flowview_db_fetch_cell_prepared('SELECT timespan
+				FROM plugin_flowview_queries
+				WHERE id = ?',
+				array($id));
+
+			$span = array();
+			get_timespan($span, time(), $timespan, read_user_setting('first_weekdayid'));
+			set_request_var('date1', $span['current_value_date1']);
+			set_request_var('date2', $span['current_value_date2']);
+		}
+
+		$start = strtotime(get_request_var('date1'));
+		$end   = strtotime(get_request_var('date2'));
+
 		$session = true;
 
 		purge_flowview_sessions();
@@ -3682,22 +3709,7 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 		$i++;
 	}
 
-//	$i = 0;
-//	foreach($columns as $column => $attrib) {
-//		if (stripos($sql_query, $column) !== false) {
-//			$sql_create .= ($i > 0 != '' ? ', ':'') .
-//				'`' . $column . '` ' .
-//				$attrib['COLUMN_TYPE'] .
-//				($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
-//				($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
-//
-//			$i++;
-//		}
-//	}
-
 	$sql_create .= ') ENGINE=InnoDB COMMENT="Holds Parallel Query Results"';
-
-	//cacti_log($sql_create);
 
 	flowview_db_execute($sql_create);
 
@@ -5324,6 +5336,7 @@ function flowview_get_owner_from_arin($host) {
 		$ch = curl_init();
 	} else {
 		cacti_log('ERROR: Unable to query Arin ensure php-curl is installed', true, 'FLOWVIEW');
+
 		return false;
 	}
 
