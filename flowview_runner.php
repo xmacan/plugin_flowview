@@ -147,11 +147,42 @@ if ($shard_id === false) {
 		'map_table', 'map_table'
 	);
 
-	$total_size = flowview_db_fetch_cell('SELECT SUM(data_length+index_length)
-		FROM information_schema.TABLES
-		WHERE TABLE_NAME IN ("' . implode('","', $tables) . '")');
+	$map_range     = json_decode($query['map_range_params'], true);
+	$cached_tables = array_rekey(
+		flowview_db_fetch_assoc_prepared('SELECT map_table
+			FROM parallel_database_query_shard_cache
+			WHERE md5sum = ?
+			AND min_date BETWEEN ? AND ?
+			AND max_date BETWEEN ? AND ?',
+			array(
+				$query['md5sum_tables'],
+				$map_range[0],
+				$map_range[1],
+				$map_range[0],
+				$map_range[1],
+			)
+		),
+		'map_table', 'map_table'
+	);
 
-	$total_size /= 1000 * 1000 * 1000;
+	if (cacti_sizeof($tables)) {
+		$total_size = flowview_db_fetch_cell('SELECT SUM(data_length+index_length)
+			FROM information_schema.TABLES
+			WHERE TABLE_NAME IN ("' . implode('","', $tables) . '")');
+	} else {
+		$total_size = 0;
+	}
+
+	if (cacti_sizeof($cached_tables)) {
+		$cached_size = flowview_db_fetch_cell('SELECT SUM(data_length+index_length)
+			FROM information_schema.TABLES
+			WHERE TABLE_NAME IN ("' . implode('","', $cached_tables) . '")');
+	} else {
+		$cached_size = 0;
+	}
+
+	$total_size  /= 1000 * 1000 * 1000;
+	$cached_size /= 1000 * 1000 * 1000;
 
 	$running = 0;
 	$start   = microtime(true);
@@ -217,7 +248,7 @@ if ($shard_id === false) {
 
 		$end = microtime(true);
 
-		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d Cached:%d TotalSize:%0.2fGB', $end - $start, $threads, $shards, $cached, $total_size), false, 'FLOWVIEW');
+		cacti_log(sprintf('PARALLEL STATS: Time:%0.3f Threads:%d Shards:%d Cached:%d TotalSize:%0.2fGB CachedSize:%0.2fGB', $end - $start, $threads, $shards, $cached, $total_size, $cached_size), false, 'FLOWVIEW');
 	}
 } else {
 	/* we will warn if the process is taking extra long */
