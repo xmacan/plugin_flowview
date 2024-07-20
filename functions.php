@@ -1806,9 +1806,21 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
 
 	if ($id > 0) {
 		$session = false;
+
+		if ($start == false || $end == false) {
+			$timespan = flowview_db_fetch_cell_prepared('SELECT timespan
+				FROM plugin_flowview_queries
+				WHERE id = ?',
+				array($id));
+
+			$span = array();
+			get_timespan($span, time(), $timespan, read_user_setting('first_weekdayid'));
+
+			$start = strtotime($span['current_value_date1']);
+			$end   = strtotime($span['current_value_date2']);
+		}
 	} elseif (isset_request_var('query') && get_request_var('query') > 0) {
 		$id = get_request_var('query');
-
 		if (!isset_request_var('date1') || get_request_var('date1') == '') {
 			$timespan = flowview_db_fetch_cell_prepared('SELECT timespan
 				FROM plugin_flowview_queries
