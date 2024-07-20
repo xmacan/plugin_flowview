@@ -55,7 +55,7 @@ function plugin_flowview_uninstall() {
 		flowview_db_fetch_assoc('SELECT TABLE_NAME
 			FROM information_schema.TABLES
 			WHERE TABLE_NAME LIKE "plugin_flowview%"
-			OR TABLE_NAME LIKE "parallel_database%"'
+			OR TABLE_NAME LIKE "parallel_database%"'),
 		'TABLE_NAME', 'TABLE_NAME'
 	);
 
