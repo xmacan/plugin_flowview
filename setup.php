@@ -49,17 +49,14 @@ function plugin_flowview_install() {
 }
 
 function plugin_flowview_uninstall() {
-	// Do any extra Uninstall stuff here
-	$tables = array(
-		'plugin_flowview_arin_information',
-		'plugin_flowview_device_streams',
-		'plugin_flowview_device_templates',
-		'plugin_flowview_devices',
-		'plugin_flowview_dnscache',
-		'plugin_flowview_ports',
-		'plugin_flowview_queries',
-		'plugin_flowview_irr_route',
-		'plugin_flowview_schedules'
+	flowview_connect();
+
+	$tables = array_rekey(
+		flowview_db_fetch_assoc('SELECT TABLE_NAME
+			FROM information_schema.TABLES
+			WHERE TABLE_NAME LIKE "plugin_flowview%"
+			OR TABLE_NAME LIKE "parallel_database%"'
+		'TABLE_NAME', 'TABLE_NAME'
 	);
 
 	flowview_drop_table($tables);
