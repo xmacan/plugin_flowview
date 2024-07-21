@@ -444,7 +444,7 @@ function flowview_config_settings() {
 				0 => __('Daily', 'flowview'),
 				1 => __('Hourly', 'flowview')
 			),
-			'default' => 0
+			'default' => 1
 		),
 		'flowview_engine' => array(
 			'friendly_name' => __('Storage Engine for Raw Tables', 'flowview'),
