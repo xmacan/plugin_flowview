@@ -4732,7 +4732,7 @@ function flowview_report_session() {
 		),
 		'table' => array(
 			'filter' => FILTER_CALLBACK,
-			'default' => 'true',
+			'default' => '',
 			'options' => array('options' => 'sanitize_search_string')
 		),
 		'packets' => array(

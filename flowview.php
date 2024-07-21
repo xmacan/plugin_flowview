@@ -40,6 +40,7 @@ ini_set('memory_limit', '-1');
 switch(get_request_var('action')) {
 	case 'save':
 		save_filter();
+
 		break;
 	case 'savefilter':
 		save_filter_form();
@@ -58,20 +59,25 @@ switch(get_request_var('action')) {
 		break;
 	case 'sort_filter':
 		sort_filter();
+
 		break;
 	case 'updatesess':
 		flowview_request_vars();
+
 		break;
 	case 'chartdata':
 		flowview_request_vars();
 		flowview_get_chartdata();
+
 		break;
 	case 'gettimespan':
 		flowview_request_vars();
 		flowview_gettimespan();
+
 		break;
 	case 'query':
 		load_session_for_filter();
+
 	default:
 		general_header();
 
@@ -215,12 +221,20 @@ function delete_filter() {
 }
 
 function load_session_for_filter() {
+	/**
+	 * Take the last session filter settings
+	 * only when the user not changes the session.
+	 */
 	if (!isset_request_var('query')) {
 		if (isset($_SESSION['sess_last_flowview_filter'])) {
 			$_REQUEST = $_SESSION['sess_last_flowview_filter'];
 		}
 	}
 
+	/**
+	 * If the query request variable is set, we will take from the database
+	 * settings first, and then overlay others only if they are set
+	 */
 	if (isset_request_var('query') && get_filter_request_var('query') > 0) {
 		// Handle Report Column
 		if (isset_request_var('report')) {
@@ -304,6 +318,21 @@ function load_session_for_filter() {
 					case 'device_id':
 						if (!isset_request_var('device_id') || get_nfilter_request_var('device_id') == '-1') {
 							set_request_var('device_id', $value);
+						}
+
+						break;
+					case 'panel_table':
+					case 'panel_bytes':
+					case 'panel_packets':
+					case 'panel_flows':
+						if (!isset_request_var($column)) {
+							$column = str_replace('panel_', '', $column);
+
+							if ($value == 'on') {
+								set_request_var($column, 'true');
+							} else {
+								set_request_var($column, 'false');
+							}
 						}
 
 						break;
@@ -418,7 +447,7 @@ function flowview_request_vars() {
 		'table' => array(
 			'filter' => FILTER_VALIDATE_REGEXP,
 			'options' => array('options' => array('regexp' => '(true|false)')),
-			'default' => 'true'
+			'default' => 'false'
 		),
 		'bytes' => array(
 			'filter' => FILTER_VALIDATE_REGEXP,
