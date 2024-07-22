@@ -239,7 +239,7 @@ if ($maint) {
 
 	if (cacti_sizeof($cache)) {
 		foreach($cache as $entry) {
-			if ($partition == '') {
+			if ($entry['map_partition'] == '') {
 				if (!flowview_db_table_exists($entry['map_table'])) {
 					flowview_db_execute_prepared('DELETE FROM parallel_database_query_shard_cache
 						WHERE md5sum = ?
