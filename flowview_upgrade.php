@@ -208,6 +208,29 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds ARIN Records Downloaded for Caching'");
 
+		db_execute("CREATE TABLE IF NOT EXISTS `report_log` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`source` varchar(20) NOT NULL DEFAULT '',
+			`source_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`report_raw_data` longblob NOT NULL DEFAULT '',
+			`report_raw_output` longblob NOT NULL DEFAULT '',
+			`report_txt_output` longblob NOT NULL DEFAULT '',
+			`report_html_type` varchar(5) NOT NULL DEFAULT '',
+			`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
+			`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`to_emails` varchar(512) NOT NULL DEFAULT '',
+			`cc_emails` varchar(512) NOT NULL DEFAULT '',
+			`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+			`send_type` int(10) unsigned NOT NULL DEFAULT 0,
+			`send_time` timestamp NOT NULL DEFAULT current_timestamp(),
+			`send_by` varchar(20) NOT NULL DEFAULT '',
+			`send_id` int(11) NOT NULL DEFAULT -1,
+			PRIMARY KEY (`id`),
+			KEY `source` (`source`),
+			KEY `source_id` (`source_id`))
+			ENGINE=InnoDB
+			COMMENT='Holds All Cacti Report Output'");
+
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
 

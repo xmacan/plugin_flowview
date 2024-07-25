@@ -174,6 +174,7 @@ function actions_schedules () {
 				}
 			} elseif (get_nfilter_request_var('drp_action') == '2') {
 				$php = read_config_option('path_php_binary');
+
 				foreach($selected_items as $item) {
 					$title = flowview_db_fetch_cell_prepared('SELECT title
 						FROM plugin_flowview_schedules
