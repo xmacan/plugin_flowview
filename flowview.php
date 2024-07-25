@@ -400,8 +400,9 @@ function flowview_request_vars() {
     /* ================= input validation and session storage ================= */
     $filters = array(
 		'sortfield' => array(
-			'filter' => FILTER_VALIDATE_INT,
-			'default' => ''
+			'filter' => FILTER_CALLBACK,
+			'options' => array('options' => 'sanitize_search_string'),
+			'default' => 'bytes'
 		),
 		'sortvalue' => array(
 			'filter' => FILTER_CALLBACK,

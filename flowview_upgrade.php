@@ -164,6 +164,7 @@ function flowview_upgrade($current, $old) {
 		flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_session_cache_details');
 
 		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN protocols varchar(32) default ""');
+		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN sortfield varchar(15) default "bytes"');
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id')) {
 			cacti_log("Adding device_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
@@ -309,6 +310,7 @@ function flowview_upgrade($current, $old) {
 			`cached_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`map_table` varchar(40) NOT NULL DEFAULT '',
+			`map_create` varchar(512) NOT NULL DEFAULT '',
 			`map_query` blob NOT NULL DEFAULT '',
 			`map_range` varchar(128) NOT NULL DEFAULT '',
 			`map_range_params` varchar(128) NOT NULL DEFAULT '',
@@ -353,6 +355,11 @@ function flowview_upgrade($current, $old) {
 		if (flowview_db_column_exists('parallel_database_query', 'cached_shards')) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN cached_shards int(10) unsigned NOT NULL DEFAULT 0 AFTER total_shards");
+		}
+
+		if (!flowview_db_column_exists('parallel_database_query', 'map_create')) {
+			flowview_db_execute("ALTER TABLE `parallel_database_query`
+				ADD COLUMN map_create varchar(512) NOT NULL DEFAULT '' AFTER map_table");
 		}
 
 		if (flowview_db_column_exists('parallel_database_query_shard', 'full_scan')) {

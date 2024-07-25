@@ -351,196 +351,197 @@ $flow_fieldids = array(
 
 $stat_columns_array = array(
 	2  => array(
-		__('Source Domain', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_rdomain' => __('Source Domain', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	3  => array(
-		__('Destination Domain', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_rdomain' => __('Destination Domain', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	4 => array(
-		__('Source Domain', 'flowview'),
-		__('Destination Domain', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_rdomain' => __('Source Domain', 'flowview'),
+		'src_rdomain' => __('Destination Domain', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	5  => array(
-		__('Port', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_port'    => __('Port', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	6  => array(
-		__('Port', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_port'    => __('Port', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	7  => array(
-		__('Port', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_port'    => __('Source Port', 'flowview'),
+		'dst_port'    => __('Destination Port', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	8  => array(
-		__('Destination IP', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_addr'    => __('Destination IP', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	9  => array(
-		__('Source IP', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_addr'    => __('Source IP', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	10 => array(
-		__('Source IP', 'flowview'),
-		__('Dest IP', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_addr'    => __('Source IP', 'flowview'),
+		'dst_addr'    => __('Dest IP', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	11 => array(
-		__('IP Address', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_addr'    => __('IP Address', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	12 => array(
-		__('Protocol', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'protocol'    => __('Protocol', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	17 => array(
-		__('Input IF', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_if'      => __('Source IF', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	18 => array(
-		__('Output IF', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_if'      => __('Destination IF', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	19 => array(
-		__('Source AS', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_as'      => __('Source AS', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	20 => array(
-		__('Destination AS', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_as'      => __('Destination AS', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	21 => array(
-		__('Source AS', 'flowview'),
-		__('Destination AS', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_as'      => __('Source AS', 'flowview'),
+		'dst_as'      => __('Destination AS', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	22 => array(
-		__('TOS', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'tos'         =>__('TOS', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	23 => array(
-		__('Input IF', 'flowview'),
-		__('Output IF', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_if'      => __('Source IF', 'flowview'),
+		'dst_if'      => __('Destination IF', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	24 => array(
-		__('Source Prefix', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_prefix'  => __('Source Prefix', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	25 => array(
-		__('Destination Prefix', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'dst_prefix'  => __('Destination Prefix', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	26 => array(
-		__('Source Prefix', 'flowview'),
-		__('Destingation Prefix', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_prefix'  => __('Source Prefix', 'flowview'),
+		'dst_prefix'  => __('Destingation Prefix', 'flowview'),
+		'flows'       => __('Flows', 'flowview'),
+		'bytes'       => __('Bytes', 'flowview'),
+		'packets'     => __('Packets', 'flowview')
 	),
 	99 => array(
-		__('N/A', 'flowview')
+		'-1'          => __('N/A', 'flowview')
 	)
 );
 
 $print_columns_array = array(
 	1  => array(
-		__('Source IF', 'flowview'),
-		__('Source IP', 'flowview'),
-		__('Destination IF', 'flowview'),
-		__('Destination IP', 'flowview'),
-		__('Protocol', 'flowview'),
-		__('Source Port', 'flowview'),
-		__('Destination Port', 'flowview'),
-		__('Packets', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Start Time', 'flowview'),
-		__('End Time', 'flowview'),
-		__('Active', 'flowview'),
-		__('B/Pk', 'flowview'),
-		__('Ts', 'flowview'),
-		__('Fl', 'flowview')
+		'src_if'     => __('Source IF', 'flowview'),
+		'src_addr'   => __('Source IP', 'flowview'),
+		'dst_if'     => __('Destination IF', 'flowview'),
+		'dst_addr'   => __('Destination IP', 'flowview'),
+		'protocol'   => __('Protocol', 'flowview'),
+		'src_port'   => __('Source Port', 'flowview'),
+		'dst_port'   => __('Destination Port', 'flowview'),
+		'packets'    => __('Packets', 'flowview'),
+		'bytes'      => __('Bytes', 'flowview'),
+		'start_time' => __('Start Time', 'flowview'),
+		'end_time'   => __('End Time', 'flowview'),
+		'active'     => __('Active', 'flowview'),
+		'bpp'        => __('B/Pk', 'flowview'),
+		'tos'        => __('Ts', 'flowview'),
+		'flags'      => __('Fl', 'flowview')
 	),
 	4  => array(
-		__('Source IP', 'flowview'),
-		__('Destination IP', 'flowview'),
-		__('Protocol', 'flowview'),
-		__('Source AS', 'flowview'),
-		__('Destination AS', 'flowview'),
-		__('Bytes', 'flowview'),
-		__('Packets', 'flowview')
+		'src_addr'   => __('Source IP', 'flowview'),
+		'dst_addr'   => __('Destination IP', 'flowview'),
+		'protocol'   => __('Protocol', 'flowview'),
+		'src_as'     => __('Source AS', 'flowview'),
+		'dst_as'     => __('Destination AS', 'flowview'),
+		'bytes'      => __('Bytes', 'flowview'),
+		'packets'    => __('Packets', 'flowview')
 	),
 	5  => array(
-		__('Start Time', 'flowview'),
-		__('End Time', 'flowview'),
-		__('Source IF', 'flowview'),
-		__('Source IP', 'flowview'),
-		__('Source Port', 'flowview'),
-		__('Destination IF', 'flowview'),
-		__('Destination IP', 'flowview'),
-		__('Destination Port', 'flowview'),
-		__('Protocol', 'flowview'),
-		__('Flags', 'flowview'),
-		__('Packets', 'flowview'),
-		__('Bytes', 'flowview')
+		'start_time' => __('Start Time', 'flowview'),
+		'end_time'   => __('End Time', 'flowview'),
+		'src_if'     => __('Source IF', 'flowview'),
+		'src_addr'   => __('Source IP', 'flowview'),
+		'src_port'   => __('Source Port', 'flowview'),
+		'dst_if'     => __('Destination IF', 'flowview'),
+		'dst_addr'   => __('Destination IP', 'flowview'),
+		'dst_port'   => __('Destination Port', 'flowview'),
+		'protocol'   => __('Protocol', 'flowview'),
+		'flags'      => __('Flags', 'flowview'),
+		'packets'    => __('Packets', 'flowview'),
+		'bytes'      => __('Bytes', 'flowview')
 	),
 	6  => array(
-		__('Source', 'flowview'),
-		__('Destination', 'flowview'),
-		__('Packets', 'flowview'),
-		__('Bytes', 'flowview')
+		'src_addr'   => __('Source', 'flowview'),
+		'dst_addr'   => __('Destination', 'flowview'),
+		'packets'    => __('Packets', 'flowview'),
+		'bytes'      => __('Bytes', 'flowview')
 	),
 	7  => array(
-		__('Source', 'flowview'),
-		__('Destination', 'flowview'),
-		__('Source Port', 'flowview'),
-		__('Destination Port', 'flowview'),
-		__('Flows', 'flowview'),
-		__('Packets', 'flowview'),
-		__('Bytes', 'flowview')
+		'src_addr'   => __('Source', 'flowview'),
+		'dst_addr'   => __('Destination', 'flowview'),
+		'src_port'   => __('Source Port', 'flowview'),
+		'dst_port'   => __('Destination Port', 'flowview'),
+		'flows'      => __('Flows', 'flowview'),
+		'packets'    => __('Packets', 'flowview'),
+		'bytes'      => __('Bytes', 'flowview')
 	)
 );
 

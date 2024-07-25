@@ -151,10 +151,6 @@ foreach($tables as $table) {
 	}
 }
 
-if (flowview_db_table_exists('parallel_database_query')) {
-	flowview_db_execute('DELETE FROM parallel_database_query WHERE time_to_live < UNIX_TIMESTAMP()');
-}
-
 $raw_engine = read_config_option('flowview_engine');
 if ($raw_engine == '') {
 	$raw_engine = 'Aria';
@@ -177,6 +173,9 @@ if (cacti_sizeof($last_tables)) {
 
 set_config_option('flowview_last_sequence', $sequence);
 set_config_option('flowview_last_table', $nlast_table);
+
+/* prune expired query results */
+parallel_database_query_expire();
 
 if ($maint) {
 	flowview_debug('Performing Table Maintenance');
