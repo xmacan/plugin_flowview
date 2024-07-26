@@ -2946,7 +2946,6 @@ function run_flow_query($session, $query_id, $start, $end) {
 			$sql_inner1         = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner1);
 			$sql_inner2         = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner2);
 			$sql_query          = str_replace(array("\n", "\t"), array(' ', ''), $sql_query);
-			$sql_groupby        = str_replace(array("\n", "\t"), array(' ', ''), $sql_groupby);
 			$sql_inner_groupby1 = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner_groupby1);
 			$sql_inner_groupby2 = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner_groupby2);
 		}
