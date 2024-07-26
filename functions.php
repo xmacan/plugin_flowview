@@ -2647,10 +2647,10 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 8:
-					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, src_addr, dst_domain, src_domain,
+					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, dst_domain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
-					$sql_inner = 'SELECT dst_addr, src_addr, dst_domain, src_domain,
+					$sql_inner = 'SELECT dst_addr, dst_domain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_groupby       = 'GROUP BY INET6_NTOA(dst_addr)';
