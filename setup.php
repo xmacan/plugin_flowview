@@ -525,7 +525,7 @@ function flowview_config_settings() {
 			'friendly_name' => __('Leverage MaxScale to Distribute Query Shards', 'syslog'),
 			'description' => __('If you have multiple service acting as slaves for MaxScale, you can increase the speed of querying by distributing the parallel queries to multiple MariaDB backend servers.', 'flowview'),
 			'method' => 'checkbox',
-			'default' => 'on'
+			'default' => ''
 		),
 		'flowview_maxscale_port' => array(
 			'friendly_name' => __('MaxScale Read-Only Port', 'monitor'),
