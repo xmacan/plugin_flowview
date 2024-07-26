@@ -333,7 +333,7 @@ function flowview_upgrade($current, $old) {
 			`cached_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`finished_shards` int(10) unsigned NOT NULL DEFAULT 0,
 			`map_table` varchar(40) NOT NULL DEFAULT '',
-			`map_create` varchar(512) NOT NULL DEFAULT '',
+			`map_create` blob NOT NULL DEFAULT '',
 			`map_query` blob NOT NULL DEFAULT '',
 			`map_range` varchar(128) NOT NULL DEFAULT '',
 			`map_range_params` varchar(128) NOT NULL DEFAULT '',
@@ -382,7 +382,10 @@ function flowview_upgrade($current, $old) {
 
 		if (!flowview_db_column_exists('parallel_database_query', 'map_create')) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
-				ADD COLUMN map_create varchar(512) NOT NULL DEFAULT '' AFTER map_table");
+				ADD COLUMN map_create blob NOT NULL DEFAULT '' AFTER map_table");
+		} else {
+			flowview_db_execute("ALTER TABLE `parallel_database_query`
+				MODIFY COLUMN map_create blob NOT NULL DEFAULT ''");
 		}
 
 		if (flowview_db_column_exists('parallel_database_query_shard', 'full_scan')) {

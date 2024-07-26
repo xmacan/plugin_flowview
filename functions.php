@@ -2518,6 +2518,8 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 	if (cacti_sizeof($data)) {
 		if ($data['statistics'] > 0) {
+			$request_type = 'statistics';
+
 			if ($data['statistics'] == 99) {
 				$sortvalue = __('N/A', 'flowview');
 			} elseif (isset($stat_columns_array[$data['statistics']][$data['sortfield']])) {
@@ -2824,6 +2826,8 @@ function run_flow_query($session, $query_id, $start, $end) {
 				}
 			}
 		} elseif ($data['printed'] > 0) {
+			$request_type = 'printed';
+
 			if (isset($print_columns_array[$data['printed']][$data['sortfield']])) {
 				$sortvalue = $print_columns_array[$data['printed']][$data['sortfield']];
 			}
@@ -2832,6 +2836,20 @@ function run_flow_query($session, $query_id, $start, $end) {
 				$data['sortfield'] = 'bytes';
 			}
 
+			/**
+			 * For printed reports, we have to be careful as they return several million rows.  So, to
+			 * to work around this, we will only return the top X matching to reduce the load on the
+			 * main database and to reduce the call time.  We will limit to the first 100 which accomodates
+			 * the top and lower clip levels.
+			 *
+			 * Also, since the sort becomes relevant we have to change the table md5sum to include the sort
+			 * direction.  So, as a result we will have to include that into the request so that the
+			 * caching is enhanced to take into account that attribute.
+			 *
+			 * So, to do this, we set the $sql_limit and the $sql_order on the $stru_inner attributes
+			 * that way we can include that in the table md5sum in order for caching to continue
+			 * to work as expected without crashing the server.
+			 */
 			switch($data['printed']) {
 				case '1':
 					$sql_query = 'SELECT src_if, INET6_NTOA(src_addr) AS src_addr, dst_if, INET6_NTOA(dst_addr) AS dst_addr,
@@ -3029,6 +3047,13 @@ function run_flow_query($session, $query_id, $start, $end) {
 						'sql_params'  => array()
 					);
 
+					if ($request_type == 'printed') {
+						$stru_inner1['sql_limit'] = 'LIMIT 100';
+						$stru_inner1['sql_order'] = $sql_order;
+						$stru_inner2['sql_limit'] = 'LIMIT 100';
+						$stru_inner2['sql_order'] = $sql_order;
+					}
+
 					$requests[] = parallel_database_query_request($tables, $stru_inner1, $stru_outer);
 					$requests[] = parallel_database_query_request($tables, $stru_inner2, $stru_outer);
 				} else {
@@ -3045,6 +3070,11 @@ function run_flow_query($session, $query_id, $start, $end) {
 						'sql_start_time'   => $start,
 						'sql_end_time'     => $end
 					);
+
+					if ($request_type == 'printed') {
+						$stru_inner['sql_limit'] = 'LIMIT 100';
+						$stru_inner['sql_order'] = $sql_order;
+					}
 
 					$stru_outer = array(
 						'sql_query'        => $sql_query,
@@ -3736,7 +3766,7 @@ function parallel_database_query_run($requests) {
 						$sql[] = '(' . $sql_string . ')';
 					}
 
-					cacti_log($sql_prefix . implode(', ', $sql));
+					//cacti_log($sql_prefix . implode(', ', $sql));
 
 					/* insert entries into the intermediary table */
 					flowview_db_execute($sql_prefix . implode(', ', $sql));
@@ -3755,11 +3785,11 @@ function parallel_database_query_run($requests) {
 				{$query['sql_order']}
 				{$query['sql_limit']}";
 
-			cacti_log($final_query);
+			//cacti_log($final_query);
 
 			$results = flowview_db_fetch_assoc_prepared($final_query, $query['sql_params']);
 
-			cacti_log(json_encode($results));
+			//cacti_log(json_encode($results));
 
 			flowview_db_execute("DROP TEMPORARY TABLE $temp_table");
 		} else {
@@ -3825,7 +3855,7 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 				'`' . $colname . '` ' .
 				$columns[$colname]['COLUMN_TYPE'] .
 				($columns[$colname]['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
-				($columns[$colname]['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $columns[$colname]['COLUMN_DEFAULT'] . '"':'');
+				($columns[$colname]['COLUMN_DEFAULT'] != '' ? ' DEFAULT ' . $columns[$colname]['COLUMN_DEFAULT']:'');
 		} else {
 			$found = false;
 
@@ -3835,7 +3865,7 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 						'`' . $colname . '` ' .
 						$attrib['COLUMN_TYPE'] .
 						($attrib['IS_NULLABLE'] == 'NO' ? ' NOT NULL ':'') .
-						($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT "' . $attrib['COLUMN_DEFAULT'] . '"':'');
+						($attrib['COLUMN_DEFAULT'] != '' ? ' DEFAULT ' . $attrib['COLUMN_DEFAULT']:'');
 
 					$found = true;
 					break;
@@ -3851,7 +3881,7 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 		$i++;
 	}
 
-	$sql_create .= ') ENGINE=InnoDB COMMENT="Holds Parallel Query Results"';
+	$sql_create .= ') ENGINE=Aria ROW_FORMAT=page COMMENT="Holds Parallel Query Results"';
 
 	flowview_db_execute($sql_create);
 
