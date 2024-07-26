@@ -2647,10 +2647,10 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 8:
-					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, dst_domain,
+					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, dst_domain, dst_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
-					$sql_inner = 'SELECT dst_addr, dst_domain,
+					$sql_inner = 'SELECT dst_addr, dst_domain, dst_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_groupby       = 'GROUP BY INET6_NTOA(dst_addr)';
@@ -2658,11 +2658,11 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 9:
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr,
-						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain';
+					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_domain, src_rdomain,
+						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
-					$sql_inner = 'SELECT src_addr,
-						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain';
+					$sql_inner = 'SELECT src_addr, src_domain, src_rdomain,
+						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_groupby       = 'GROUP BY INET6_NTOA(src_addr)';
 					$sql_inner_groupby = 'GROUP BY src_addr';
