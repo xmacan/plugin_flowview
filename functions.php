@@ -3543,7 +3543,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 	$table_md5 = md5($map_query);
 
-	$request_id = db_fetch_cell_prepared('SELECT id
+	$request_id = flowview_db_fetch_cell_prepared('SELECT id
 		FROM parallel_database_query
 		WHERE md5sum = ?',
 		array($query_md5));
@@ -3577,7 +3577,7 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 		$table_name = parallel_database_query_create_reduce_table($request_id, $stru_inner['sql_query'], $base_table);
 
-		db_execute_prepared('UPDATE parallel_database_query
+		flowview_db_execute_prepared('UPDATE parallel_database_query
 			SET map_table = ?
 			WHERE id = ?',
 			array($table_name, $request_id));
@@ -3687,7 +3687,7 @@ function parallel_database_query_run($requests) {
 	$total_time = 0;
 
 	while ($total_time < $max_time) {
-		$running = db_fetch_cell('SELECT COUNT(*)
+		$running = flowview_db_fetch_cell('SELECT COUNT(*)
 			FROM parallel_database_query
 			WHERE ID IN(' . implode(', ', $requests) . ')
 			AND status != "complete"');
