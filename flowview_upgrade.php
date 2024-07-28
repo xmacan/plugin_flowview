@@ -208,7 +208,11 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds ARIN Records Downloaded for Caching'");
 
-		db_execute("CREATE TABLE IF NOT EXISTS `report_log` (
+		if (!db_column_exists('sent_by', 'reports_log')) {
+			db_execute('DROP TABLE IF EXISTS report_log');
+		}
+
+		db_execute("CREATE TABLE IF NOT EXISTS `reports_log` (
 			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			`source` varchar(20) NOT NULL DEFAULT '',
 			`source_id` int(10) unsigned NOT NULL DEFAULT 0,
@@ -223,13 +227,54 @@ function flowview_upgrade($current, $old) {
 			`bcc_emails` varchar(512) NOT NULL DEFAULT '',
 			`send_type` int(10) unsigned NOT NULL DEFAULT 0,
 			`send_time` timestamp NOT NULL DEFAULT current_timestamp(),
-			`send_by` varchar(20) NOT NULL DEFAULT '',
-			`send_id` int(11) NOT NULL DEFAULT -1,
+			`run_time` double NOT NULL DEFAULT 0,
+			`sent_by` varchar(20) NOT NULL DEFAULT '',
+			`sent_id` int(11) NOT NULL DEFAULT -1,
 			PRIMARY KEY (`id`),
 			KEY `source` (`source`),
 			KEY `source_id` (`source_id`))
 			ENGINE=InnoDB
 			COMMENT='Holds All Cacti Report Output'");
+
+		db_execute("CREATE TABLE `reports_queued` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`source` varchar(20) NOT NULL DEFAULT '',
+			`source_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`status` varchar(10) NOT NULL DEFAULT 'pending',
+			`start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`run_command` varchar(512) NOT NULL DEFAULT '',
+			`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
+			`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`to_emails` varchar(512) NOT NULL DEFAULT '',
+			`cc_emails` varchar(512) NOT NULL DEFAULT '',
+			`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+			`requested_by` varchar(20) NOT NULL DEFAULT '',
+			`requested_id` int(11) NOT NULL DEFAULT -1,
+			PRIMARY KEY (`id`),
+			KEY `source` (`source`),
+			KEY `source_id` (`source_id`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds Scheduled Reports'");
+
+		db_execute("CREATE TABLE `reports_queued` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`source` varchar(20) NOT NULL DEFAULT '',
+			`source_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`run_command` varchar(512) NOT NULL DEFAULT '',
+			`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
+			`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
+			`to_emails` varchar(512) NOT NULL DEFAULT '',
+			`cc_emails` varchar(512) NOT NULL DEFAULT '',
+			`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+			`requested_by` varchar(20) NOT NULL DEFAULT '',
+			`request_id` int(11) NOT NULL DEFAULT -1,
+			PRIMARY KEY (`id`),
+			KEY `source` (`source`),
+			KEY `source_id` (`source_id`))
+			ENGINE=InnoDB
+			ROW_FORMAT=DYNAMIC
+			COMMENT='Holds Scheduled Reports'");
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');

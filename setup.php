@@ -900,7 +900,7 @@ function flowview_setup_table() {
 		ROW_FORMAT=DYNAMIC
 		COMMENT='Holds Parallel Query Shard Results for Partition Full Scans based upon the md5sum of the Map Query'");
 
-	db_execute("CREATE TABLE IF NOT EXISTS `report_log` (
+	db_execute("CREATE TABLE IF NOT EXISTS `reports_log` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 		`source` varchar(20) NOT NULL DEFAULT '',
 		`source_id` int(10) unsigned NOT NULL DEFAULT 0,
@@ -915,13 +915,35 @@ function flowview_setup_table() {
 		`bcc_emails` varchar(512) NOT NULL DEFAULT '',
 		`send_type` int(10) unsigned NOT NULL DEFAULT 0,
 		`send_time` timestamp NOT NULL DEFAULT current_timestamp(),
-		`send_by` varchar(20) NOT NULL DEFAULT '',
-		`send_id` int(11) NOT NULL DEFAULT -1,
+		`run_time` double NOT NULL DEFAULT 0,
+		`sent_by` varchar(20) NOT NULL DEFAULT '',
+		`sent_id` int(11) NOT NULL DEFAULT -1,
 		PRIMARY KEY (`id`),
 		KEY `source` (`source`),
 		KEY `source_id` (`source_id`))
 		ENGINE=InnoDB
 		COMMENT='Holds All Cacti Report Output'");
+
+	db_execute("CREATE TABLE `reports_queued` (
+		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		`source` varchar(20) NOT NULL DEFAULT '',
+		`source_id` int(10) unsigned NOT NULL DEFAULT 0,
+		`status` varchar(10) NOT NULL DEFAULT 'pending',
+		`start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		`run_command` varchar(512) NOT NULL DEFAULT '',
+		`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
+		`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
+		`to_emails` varchar(512) NOT NULL DEFAULT '',
+		`cc_emails` varchar(512) NOT NULL DEFAULT '',
+		`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+		`requested_by` varchar(20) NOT NULL DEFAULT '',
+		`requested_id` int(11) NOT NULL DEFAULT -1,
+		PRIMARY KEY (`id`),
+		KEY `source` (`source`),
+		KEY `source_id` (`source_id`))
+		ENGINE=InnoDB
+		ROW_FORMAT=DYNAMIC
+		COMMENT='Holds Scheduled Reports'");
 
 	$inserts = file($config['base_path'] . '/plugins/flowview/plugin_flowview_ports.sql');
 
