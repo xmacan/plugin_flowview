@@ -23,9 +23,11 @@
  +-------------------------------------------------------------------------+
 */
 
-chdir('../../');
+chdir(__DIR__ . '/../../');
 include('./include/cli_check.php');
+include_once($config['base_path'] . '/lib/poller.php');
 include_once($config['base_path'] . '/lib/time.php');
+include_once($config['base_path'] . '/plugins/flowview/database.php');
 include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 
@@ -34,13 +36,16 @@ flowview_connect();
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '-1');
 
-$debug = false;
-$maint = false;
-$force = false;
+$debug     = false;
+$maint     = false;
+$force     = false;
+$scheduled = false;
+$report_id = false;
 
 $shortopts = 'VvHh';
 $longopts = array(
-	'schedule::',
+	'scheduled::',
+	'report-id::',
 	'debug',
 	'force',
 	'version',
@@ -59,8 +64,12 @@ foreach($options as $arg => $value) {
 			$debug = true;
 
 			break;
-		case 'schedule':
-			$id = $value;
+		case 'scheduled':
+			$scheduled = true;
+
+			break;
+		case 'report-id':
+			$report_id = $value;
 
 			break;
 		case 'version':
@@ -81,39 +90,115 @@ foreach($options as $arg => $value) {
 	}
 }
 
-/* silently end if the registered process is still running, or process table missing */
-if (!$force) {
-	if (!register_process_start('flowsched', $id, 0, 1200)) {
-		exit(0);
+if ($scheduled == true) {
+	/* silently end if the registered process is still running, or process table missing */
+	if (!$force) {
+		if (!register_process_start('flowsched', 'master', 0, 1200)) {
+			exit(0);
+		}
 	}
-}
 
-$t = time();
-$r = intval($t / 60) * 60;
-$start = microtime(true);
+	$start = microtime(true);
+	$run = 0;
 
-$schedule = flowview_db_fetch_row_prepared('SELECT *
-	FROM plugin_flowview_schedules
-	WHERE id = ?',
-	array($id));
+	$concurrent_processes = read_config_option('reports_concurrent');
+	if (empty($concurrent_processes)) {
+		set_config_option('reports_concurrent', 1);
+		$concurrent_processes = 1;
+	}
 
-if (cacti_sizeof($schedule)) {
-	flowview_db_execute_prepared('UPDATE plugin_flowview_schedules
-		SET lastsent = ?
-		WHERE id = ?',
-		array($r, $id));
+	$reports = db_fetch_assoc_prepared('SELECT *
+		FROM reports_queued
+		WHERE status = ?
+		AND source = ?',
+		array('pending', 'flowview'));
 
-	plugin_flowview_run_schedule($id);
+	while(true) {
+		$running = db_fetch_cell_prepared('SELECT COUNT(*)
+			FROM processes
+			WHERE taskname = ?
+			AND tasktype LIKE ?',
+			array('flowsched', 'child%'));
+
+		if ($running < $concurrent_processes) {
+			$report = db_fetch_row_prepared('SELECT *
+				FROM reports_queued
+				WHERE source = ?
+				AND status = ?
+				LIMIT 1',
+				array('flowview', 'pending'));
+
+			if (cacti_sizeof($report)) {
+				reports_run($report['id']);
+
+				$run++;
+			} else {
+				break;
+			}
+
+			sleep(1);
+		}
+	}
 
 	$end = microtime(true);
 
-	$cacti_stats = sprintf('Time:%01.4f Schedule:%s', round($end-$start,2), $id);
+	cacti_log(sprintf('FLOWVIEW REPORT STATS: Time:%0.2f Reports:%s', $end - $start, $run), false, 'SYSTEM');
 
-	cacti_log('FLOWVIEW SCHEDULE STATS: ' . $cacti_stats , true, 'SYSTEM');
-}
+	if (!$force) {
+		unregister_process('flowsched', 'master', 0);
+	}
+} else {
+	if ($report_id === false) {
+		cacti_log('FATAL: Flowview Schedule Report ID not provided', true, 'FLOWVIEW');
+		exit(1);
+	}
 
-if (!$force) {
-	unregister_process('flowsched', $id, 0);
+	$report = db_fetch_row_prepared('SELECT rq.*
+		FROM reports_queued AS rq
+		WHERE rq.source = ?
+		AND rq.id = ?',
+		array('flowview', $report_id));
+
+	if (cacti_sizeof($report)) {
+		$id = $report['source_id'];
+
+		/* silently end if the registered process is still running, or process table missing */
+		if (!$force) {
+			if (!register_process_start('flowsched', "child_$id", 0, 1200)) {
+				exit(0);
+			}
+		}
+
+		$t = time();
+		$r = intval($t / 60) * 60;
+		$start = microtime(true);
+
+		$schedule = flowview_db_fetch_row_prepared('SELECT *
+			FROM plugin_flowview_schedules
+			WHERE id = ?',
+			array($id));
+
+		if (cacti_sizeof($schedule)) {
+			flowview_db_execute_prepared('UPDATE plugin_flowview_schedules
+				SET lastsent = ?, start = ?
+				WHERE id = ?',
+				array($r, date('Y-m-d H:i:s'), $id));
+
+			plugin_flowview_run_schedule($id, $report_id);
+
+			$end = microtime(true);
+
+			$cacti_stats = sprintf('Time:%01.4f Schedule:%s', round($end-$start,2), $id);
+
+			cacti_log('FLOWVIEW SCHEDULE STATS: ' . $cacti_stats , true, 'SYSTEM');
+		}
+
+		if (!$force) {
+			unregister_process('flowsched', "child_$id", 0);
+		}
+	} else {
+		cacti_log("WARNING: Unable to find Report ID $report_id", false, 'REPORTS');
+	}
 }
 
 function display_version() {

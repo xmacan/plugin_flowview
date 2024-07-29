@@ -103,7 +103,7 @@ function plugin_flowview_check_upgrade($force = false) {
 	if ($current != $old || $force) {
 		$php_binary = read_config_option('path_php_binary');
 
-		exec_background($php_binary . ' ' . $config['base_path'] . '/plugins/flowview/flowview_upgrade.php');
+		exec_background($php_binary, $config['base_path'] . '/plugins/flowview/flowview_upgrade.php');
 
 		db_execute_prepared("UPDATE plugin_config SET
 			version = ?, name = ?, author = ?, webpage = ?
@@ -349,6 +349,37 @@ function flowview_config_settings() {
 
 	$formats = reports_get_format_files();
 
+	if (!isset($settings['poller']['reports_concurrent'])) {
+		$nsettings = array();
+
+		foreach($settings['poller'] as $setting => $data) {
+			if ($setting != 'reports_timeout') {
+				$nsettings[$setting] = $data;
+			} else {
+				$processes = array();
+
+				for($i = 1; $i <= 10; $i++) {
+					if ($i == 1) {
+						$processes[$i] = __('%d Process', $i);
+					} else {
+						$processes[$i] = __('%d Processes', $i);
+					}
+				}
+
+				$nsettings[$setting] = $data;
+				$nsettings['reports_concurrent'] = array(
+					'friendly_name' => __('Report Concurrent Processes (FlowView Only)', 'flowview'),
+					'description'   => __('Select the maximum concurrent reports processes that can be running at any one time.', 'flowview'),
+					'default'       => 1,
+					'method'        => 'drop_array',
+					'array'         => $processes
+				);
+			}
+		}
+
+		$settings['poller'] = $nsettings;
+	}
+
 	$temp = array(
 		'flowview_header' => array(
 			'friendly_name' => __('Name Resolution', 'flowview'),
@@ -528,10 +559,10 @@ function flowview_config_settings() {
 			'default' => ''
 		),
 		'flowview_maxscale_port' => array(
-			'friendly_name' => __('MaxScale Read-Only Port', 'monitor'),
+			'friendly_name' => __('MaxScale Read-Write Split Port', 'monitor'),
 			'method' => 'textbox',
 			'default' => '3307',
-			'description' => __('This should be the port of the Read-Only-Service (readconnroute) service and router.', 'monitor'),
+			'description' => __('This should be the port of the Read-Write-Split-Service (readwrite) service and router.', 'monitor'),
 			'max_length' => 30,
 			'size' => 30
 		),
@@ -568,14 +599,13 @@ function flowview_poller_bottom() {
 
 	$t = time();
 
-	$command_string = trim(read_config_option('path_php_binary'));
+	$php = trim(read_config_option('path_php_binary'));
 
-	if (trim($command_string) == '') {
-		$command_string = 'php';
+	if ($php == '') {
+		$php = 'php';
 	}
 
-	$extra_args = ' -q ' . $config['base_path'] . '/plugins/flowview/flowview_process.php';
-	exec_background($command_string, $extra_args);
+	exec_background($php, $config['base_path'] . '/plugins/flowview/flowview_process.php');
 }
 
 function flowview_determine_config() {
@@ -824,8 +854,10 @@ function flowview_setup_table() {
 		title varchar(128) NOT NULL default '',
 		enabled varchar(3) NOT NULL default 'on',
 		sendinterval bigint(20) unsigned NOT NULL,
+		timeout int(10) unsigned not null default 60,
 		lastsent bigint(20) unsigned NOT NULL,
-		start datetime NOT NULL,
+		start timestamp NOT NULL default '0000-00-00',
+		notification_list int(10) unsigned not null default 0,
 		email text NOT NULL,
 		format_file varchar(128) default '',
 		query_id int(11) unsigned NOT NULL,
@@ -902,17 +934,15 @@ function flowview_setup_table() {
 
 	db_execute("CREATE TABLE IF NOT EXISTS `reports_log` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		`name` varchar(64) NOT NULL DEFAULT '',
 		`source` varchar(20) NOT NULL DEFAULT '',
 		`source_id` int(10) unsigned NOT NULL DEFAULT 0,
-		`report_raw_data` longblob NOT NULL DEFAULT '',
-		`report_raw_output` longblob NOT NULL DEFAULT '',
-		`report_txt_output` longblob NOT NULL DEFAULT '',
-		`report_html_type` varchar(5) NOT NULL DEFAULT '',
-		`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
-		`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
-		`to_emails` varchar(512) NOT NULL DEFAULT '',
-		`cc_emails` varchar(512) NOT NULL DEFAULT '',
-		`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+		`report_output_type` varchar(5) NOT NULL DEFAULT '',
+		`report_raw_data` longblob,
+		`report_raw_output` longblob,
+		`report_txt_output` longblob,
+		`report_html_output` longblob,
+		`notification` blob NOT NULL DEFAULT '',
 		`send_type` int(10) unsigned NOT NULL DEFAULT 0,
 		`send_time` timestamp NOT NULL DEFAULT current_timestamp(),
 		`run_time` double NOT NULL DEFAULT 0,
@@ -926,16 +956,16 @@ function flowview_setup_table() {
 
 	db_execute("CREATE TABLE `reports_queued` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		`name` varchar(64) NOT NULL DEFAULT '',
 		`source` varchar(20) NOT NULL DEFAULT '',
 		`source_id` int(10) unsigned NOT NULL DEFAULT 0,
 		`status` varchar(10) NOT NULL DEFAULT 'pending',
-		`start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		`scheduled_time` timestamp NOT NULL DEFAULT '0000-00-00',
+		`start_time` timestamp NOT NULL DEFAULT '0000-00-00',
 		`run_command` varchar(512) NOT NULL DEFAULT '',
-		`notification_type` int(10) unsigned NOT NULL DEFAULT 0,
-		`notification_type_id` int(10) unsigned NOT NULL DEFAULT 0,
-		`to_emails` varchar(512) NOT NULL DEFAULT '',
-		`cc_emails` varchar(512) NOT NULL DEFAULT '',
-		`bcc_emails` varchar(512) NOT NULL DEFAULT '',
+		`run_timeout` int(10) NOT NULL DEFAULT '60',
+		`notification` blob NOT NULL DEFAULT '',
+		`requeste_type` int(10) unsigned NOT NULL DEFAULT 0,
 		`requested_by` varchar(20) NOT NULL DEFAULT '',
 		`requested_id` int(11) NOT NULL DEFAULT -1,
 		PRIMARY KEY (`id`),

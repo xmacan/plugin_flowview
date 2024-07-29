@@ -94,19 +94,40 @@ if (date('z', $last) != date('z', time())) {
 	$maint = true;
 }
 
-$schedules = flowview_db_fetch_assoc("SELECT *
-	FROM plugin_flowview_schedules
+$schedules = flowview_db_fetch_assoc("SELECT fs.*
+	FROM plugin_flowview_schedules AS fs
+	LEFT JOIN reports_queued AS rq
+	ON rq.source = 'flowview'
+	AND rq.source_id = fs.id
 	WHERE enabled = 'on'
+	AND rq.source_id IS NULL
 	AND ($t - sendinterval > lastsent)");
 
-if (cacti_sizeof($schedules)) {
-	$php = read_config_option('path_php_binary');
+$php = read_config_option('path_php_binary');
 
+if (cacti_sizeof($schedules)) {
 	foreach ($schedules as $s) {
-		flowview_debug('Running Schedule ' . $s['id']);
-		exec_background($php, ' -q ' . $config['base_path'] . '/plugins/flowview/run_schedule.php --schedule=' . $s['id']);
+		$command   = "$php {$config['base_path']}/plugins/flowview/run_schedule.php";
+		$name      = $s['title'];
+		$source    = 'flowview';
+		$source_id = $s['id'];
+
+		$notification = array();
+
+		if ($report['email'] != '') {
+			$notification['email']['to_email'] = $report['email'];
+		}
+
+		if ($report['notification_list'] > 0) {
+			$notification['notification_list']['id'] = $report['notification_list'];
+		}
+
+		reports_queue($name, 1, $source, $source_id, $command, $notification);
 	}
 }
+
+/* run all scheduled reports */
+exec_background($php, $config['base_path'] . '/plugins/flowview/run_schedule.php --scheduled');
 
 $total = flowview_db_fetch_cell('SELECT COUNT(*) FROM plugin_flowview_devices');
 
@@ -253,6 +274,11 @@ if ($maint) {
 	}
 
 	flowview_debug('Total number of cached shards dropped is ' . $dropped);
+
+	db_execute_prepared('DELETE FROM reports_log
+		WHERE send_time < FROM_UNIXTIME(UNIX_TIMESTAMP() - (? * 86400))
+		AND source = "flowview"',
+		array($retention_days));
 
 	/* download a fresh copy of the radb.db.gz and load it */
 	flowview_check_databases();

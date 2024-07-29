@@ -31,7 +31,7 @@ if (function_exists('pcntl_async_signals')) {
 
 ini_set('output_buffering', 'Off');
 
-chdir(__DIR__ . '/../..');
+chdir(__DIR__ . '/../../');
 require('./include/cli_check.php');
 require_once($config['base_path'] . '/lib/poller.php');
 

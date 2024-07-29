@@ -42,6 +42,9 @@
 * feature: Append local domain to locally resolved addresses from the system DNS
 * feature: Show supported or not supported status when viewing Flow Templates
 * feature: Import all Internet Route Registry databases when they change
+* feature: Support Notification Lists for Email
+* feature: Support a Report Generation Timeout
+* feature: Support running Email Reports in Parallel
 * feature#9: Support Pie Charts Instead of Bar
 * feature#97: Add FreeBSD service control
 * feature#111: Add a Template Export Button to make sharing Template information with the Cacti Group Easy
@@ -70,6 +73,7 @@
 * feature#160: Use whois providers such as radb.net to find origin AS when Arin does not provide it
 * feature#163: Restructure the DNS Cache page to include: ASNs, People, Routes, etc. per the Internet Routing Registry format RSP
 * feature#164: Only update the Routes databases if they have changed as recommened at radb.net
+* feature#180: Allow Report Raw Data to be Downloaded
 
 --- 3.3 ---
 

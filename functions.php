@@ -85,6 +85,45 @@ function display_db_tabs() {
 	print '</ul></nav></div>';
 }
 
+function display_sched_tabs() {
+	global $config;
+
+	$base_url = 'flowview_schedules.php';
+
+	$tabs = array(
+		'general' => __('General', 'flowview'),
+		'logs'    => __('Logs', 'flowview')
+	);
+
+	if (!isset_request_var('id')) {
+		unset($tabs['logs']);
+	}
+
+	/* if they were redirected to the page, let's set that up */
+	if (!isset_request_var('tab')) {
+		$current_tab = 'general';
+	} else {
+		$current_tab = get_request_var('tab');
+	}
+
+	/* draw the tabs */
+	print "<div class='tabs'><nav><ul>";
+
+	if (cacti_sizeof($tabs)) {
+		foreach ($tabs as $shortname => $tab) {
+			print '<li><a class="tab ' . (($shortname == $current_tab) ? 'selected"':'"') .
+				" href='" . html_escape($config['url_path'] .
+					'plugins/flowview/' . $base_url .
+					'?tab=' . $shortname .
+					'&action=edit' .
+					'&id=' . get_request_var('id')) .
+				"'>" . html_escape($tab) . '</a></li>';
+		}
+	}
+
+	print '</ul></nav></div>';
+}
+
 function listener_has_templates($id) {
 	$streams = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
 		FROM plugin_flowview_device_streams
@@ -1663,8 +1702,10 @@ function get_port_name($port_num, $port_proto = 6) {
 	}
 }
 
-function plugin_flowview_run_schedule($id) {
+function plugin_flowview_run_schedule($id, $report_id) {
 	global $config;
+
+	$start_time = microtime(true);
 
 	$schedule = flowview_db_fetch_row_prepared('SELECT *
 		FROM plugin_flowview_schedules
@@ -1682,56 +1723,49 @@ function plugin_flowview_run_schedule($id) {
 	$start = $span['begin_now'];
 	$end   = $span['end_now'];
 
-	$fromemail = read_config_option('settings_from_email');
-	if ($fromemail == '') {
-		$fromemail = 'cacti@cactiusers.org';
-	}
-
-	$fromname = read_config_option('settings_from_name');
-	if ($fromname == '') {
-		$fromname = __('Cacti Flowview', 'flowview');
-	}
-
-	$from[0] = $fromemail;
-	$from[1] = $fromname;
-
 	$subject = __('Netflow - %s', $schedule['title'], 'flowview');
 
+	/* format the html output raw without format file first */
 	$body  = '<center>' . PHP_EOL;
 	$body .= '<h1>' . html_escape($schedule['title']) . '</h1>' . PHP_EOL;
 	$body .= '<h2>From ' . date('Y-m-d H:i:s', $start) . ' to ' . date('Y-m-d H:i:s', $end) . '</h2>' . PHP_EOL;
 	$body .= '<h2>Using Query \'' . html_escape($query['name']) . '\'</h2>' . PHP_EOL;
 	$body .= '</center>' . PHP_EOL;
 
+	/* get the data and append to the boby */
 	$data = load_data_for_filter($schedule['query_id'], $start, $end);
 	if ($data !== false) {
 		$body .= $data['table'];
 	}
 
-	$report_tag = '';
-	$theme      = 'modern';
-	$output     = '';
-	$format     = $schedule['format_file'] != '' ? $schedule['format_file']:'default';
+	$body_text = html_escape($schedule['title']) . PHP_EOL . PHP_EOL;
+	$body_text .= 'From ' . date('Y-m-d H:i:s', $start) . ' to ' . date('Y-m-d H:i:s', $end) . PHP_EOL;
+	$body_text .= 'Using Query \'' . html_escape($query['name']) . '\'' . PHP_EOL . PHP_EOL;
 
-	flowview_debug('Loading Format File');
+	if ($data !== false) {
+		$body_text .= implode(', ', array_keys($data['data'][0])) . PHP_EOL;
 
-	$format_ok = reports_load_format_file($format, $output, $report_tag, $theme);
+		foreach($data['data'] as $row) {
+			$body_text .= implode(', ', array_values($row)) . PHP_EOL;
+		}
+	}
 
-	flowview_debug('Format File Loaded, Format is ' . ($format_ok ? 'Ok':'Not Ok') . ', Report Tag is ' . $report_tag);
+	/* process the format file */
+	$report_tag  = '';
+	$theme       = 'modern';
+	$body_html   = '';
+	$format      = $schedule['format_file'] != '' ? $schedule['format_file']:'default';
+	$format_ok   = reports_load_format_file($format, $output, $report_tag, $theme);
 
 	if ($format_ok) {
 		if ($report_tag) {
-			$output = str_replace('<REPORT>', $body, $output);
+			$body_html = str_replace('<REPORT>', $body, $output);
 		} else {
-			$output = $output . PHP_EOL . $body;
+			$body_html = $output . PHP_EOL . $body;
 		}
 	} else {
-		$output = $body;
+		$body_html = $body;
 	}
-
-	flowview_debug('HTML Processed');
-
-	$body_text = strip_tags(str_replace('<br>', "\n", $output));
 
 	$version = db_fetch_cell("SELECT version
 		FROM plugin_config
@@ -1741,7 +1775,139 @@ function plugin_flowview_run_schedule($id) {
     $headers['User-Agent'] = 'Cacti-FlowView-v' . $version;
 	$headers['X-Priority'] = '1';
 
-	mailer($from, $schedule['email'], '', '', '', $subject, $output, $body_text, array(), $headers);
+	reports_log_and_notify($report_id, $start_time, 'html', 'flowview', $id, $subject, $data['data'], $body, $body_html, $body_text, array(), $headers);
+}
+
+function reports_log_and_notify($id, $start_time, $report_type, $source, $source_id, $subject, &$raw_data, &$oput_raw, &$oput_html, &$oput_text, $attachments = array(), $headers = false) {
+	$report = db_fetch_row_prepared('SELECT *
+		FROM reports_queued
+		WHERE id = ?',
+		array($id));
+
+	if ($oput_text == null) {
+		$oput_text = '';
+	}
+
+	$fromemail = read_config_option('settings_from_email');
+	if ($fromemail == '') {
+		$fromemail = 'cacti@cacti.net';
+	}
+
+	$fromname = read_config_option('settings_from_name');
+	if ($fromname == '') {
+		$fromname = __('Cacti %s', ucfirst($source), 'flowview');
+	}
+
+	$from[0] = $fromemail;
+	$from[1] = $fromname;
+
+	if (cacti_sizeof($report)) {
+		if ($report['notification'] != '') {
+			$notifications = json_decode($report['notification'], true);
+
+			foreach($notifications as $type => $data) {
+				switch($type) {
+					case 'email':
+						if (!isset($data['to_email'])) {
+							cacti_log(sprintf("WARNING: Email Report '%s' not sent!  Missing 'to_email' attribute in request", $report['name']), false, 'REPORTS');
+							break;
+						} else {
+							$to_email = $data['to_email'];
+						}
+
+						if (isset($data['cc_email'])) {
+							$cc_email = $data['cc_email'];
+						} else {
+							$cc_email = '';
+						}
+
+						if (isset($data['bcc_email'])) {
+							$bcc_email = $data['bcc_email'];
+						} else {
+							$bcc_email = '';
+						}
+
+						if (isset($data['reply_to'])) {
+							$reply_to = $data['reply_to'];
+						} else {
+							$reply_to = '';
+						}
+
+						mailer($from, $to_email, $cc_email, $bcc_email, $reply_to, $subject, $oput_html, $oput_text, $attachments, $headers);
+
+						break;
+					case 'notification_list':
+						if (!isset($data['id'])) {
+							cacti_log(sprintf("WARNING: Email Report '%s' not sent!  Missing notification list 'id' attribute in request", $report['name']), false, 'REPORTS');
+							break;
+						} else {
+							$list = db_fetch_row_prepared('SELECT *
+								FROM plugin_notify_list
+								WHERE id = ?',
+								array($data['id']));
+
+							if (cacti_sizeof($list)) {
+								/* process the format file */
+								$report_tag  = '';
+								$theme       = 'modern';
+								$output_html = '';
+								$format      = $list['format_file'] != '' ? $list['format_file']:'default';
+
+								$format_ok = reports_load_format_file($format, $output, $report_tag, $theme);
+
+								flowview_debug('Format File Loaded, Format is ' . ($format_ok ? 'Ok':'Not Ok') . ', Report Tag is ' . $report_tag);
+
+								if ($format_ok) {
+									if ($report_tag) {
+										$oput_html = str_replace('<REPORT>', $oput_raw, $output);
+									} else {
+										$oput_html = $output . PHP_EOL . $oput_raw;
+									}
+								} else {
+									$oput_html = $oput_raw;
+								}
+
+								$to_email   = $list['emails'];
+								$cc_emails  = isset($list['cc_emails']) ? $list['cc_emails']:'';
+								$bcc_emails = $list['bcc_emails'];
+								$reply_to   = isset($list['reply_to'])  ? $list['reply_to']:'';
+
+								mailer($from, $to_email, $cc_email, $bcc_email, $reply_to, $subject, $oput_html, $oput_text, $attachments, $headers);
+							} else {
+								cacti_log(sprintf("WARNING: Email Report '%s' not sent!  Unable to locate notification list '%s'", $report['name'], $id), false, 'REPORTS');
+							}
+						}
+
+						break;
+					default:
+						cacti_log(sprintf("WARNING: Email Report '%s' not sent!  Unknown notification type '%s' attribute in request", $report['name'], $type), false, 'REPORTS');
+						break;
+				}
+			}
+		}
+
+		$end_time = microtime(true);
+
+		$save = array();
+
+		$save['id']                 = 0;
+		$save['name']               = $report['name'];
+		$save['source']             = $source;
+		$save['source_id']          = $source_id;
+		$save['report_output_type'] = $report_type;
+		$save['report_raw_data']    = json_encode($raw_data);
+		$save['report_raw_output']  = $oput_raw;
+		$save['report_html_output'] = $oput_html;
+		$save['report_txt_output']  = $oput_text;
+		$save['send_type']          = $report['request_type'];
+		$save['send_time']          = date('Y-m-d H:i:s');
+		$save['run_time']           = $end_time - $start_time;
+		$save['sent_by']            = $report['requested_by'];
+		$save['sent_id']            = $report['requested_id'];
+		$save['notification']       = $report['notification'];
+
+		sql_save($save, 'reports_log');
+	}
 }
 
 function flowview_debug($string) {
@@ -3660,8 +3826,8 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 function parallel_database_query_run($requests) {
 	global $config, $debug;
 
-	$php_binary = read_config_option('path_php_binary');
-	$redirect   = '';
+	$php      = read_config_option('path_php_binary');
+	$redirect = '';
 
 	foreach($requests as $query_id) {
 		$pending = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
@@ -3675,7 +3841,7 @@ function parallel_database_query_run($requests) {
 
 			cacti_log('NOTE: Launching FlowView Database Query Process ' . $query_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
 
-			exec_background($php_binary, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id" . ($debug ? ' --debug':''), $redirect);
+			exec_background($php, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id" . ($debug ? ' --debug':''), $redirect);
 		} else {
 			db_debug('Not Luanching FlowView Database Query Process ' . $query_id . ' as it has already completed or is running.');
 		}
@@ -6340,5 +6506,91 @@ function get_tables_range($begin, $end = null) {
 	}
 
 	return $tables;
+}
+
+function reports_queue($name, $request_type, $source, $source_id, $command, $notification) {
+	if (isset($_SESSION['sess_user_id'])) {
+		$requested_id = $_SESSION['sess_user_id'];
+		$requested_by = db_fetch_cell_prepared('SELECT username
+			FROM user_auth
+			WHERE id = ?',
+			array($requested_id));
+
+		if ($requested_by == '') {
+			$requested_by = 'unknown';
+		}
+	} else {
+		$requested_id = -1;
+		$requested_by = 'system';
+	}
+
+	$save = array();
+
+	$save['id']             = 0;
+	$save['name']           = $name;
+	$save['request_type']   = $request_type;
+	$save['source']         = $source;
+	$save['source_id']      = $source_id;
+	$save['status']         = 'pending';
+	$save['run_command']    = $command;
+	$save['scheduled_time'] = date('Y-m-d H:i:s');
+	$save['notification']   = json_encode($notification);
+	$save['requested_by']   = $requested_by;
+	$save['requested_id']   = $requested_id;
+
+	$id = sql_save($save, 'reports_queued');
+
+	if ($id > 0) {
+		if ($requested_id > 0) {
+			raise_message('report_scheduled', __esc("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_INFO);
+		} else {
+			cacti_log(sprintf("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id), false, 'REPORTS');
+		}
+	} else {
+		if ($requested_id > 0) {
+			raise_message('report_not_scheduled', __("The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_ERROR);
+		} else {
+			cacti_log(sprintf("FATAL: The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id), false, 'REPORTS');
+		}
+	}
+}
+
+function reports_run($id) {
+	global $config;
+
+	include_once($config['base_path'] . '/lib/poller.php');
+
+	$report = db_fetch_row_prepared('SELECT *
+		FROM reports_queued
+		WHERE id = ?',
+		array($id));
+
+	if (cacti_sizeof($report)) {
+		db_execute_prepared('UPDATE reports_queued
+			SET status = ?, start_time = ?
+			WHERE id = ?',
+			array('running', date('Y-m-d H:i:s'), $id));
+	} else {
+		return false;
+	}
+
+	$start = microtime(true);
+
+	$return_code = 0;
+	$output      = array();
+	$command     = $report['run_command'] . " --report-id=$id";
+	$timeout     = $report['run_timeout'];
+
+	cacti_log("The report:$id has command was:$command");
+
+	$last_line = exec_with_timeout($command, $output, $return_code, $timeout);
+
+	$end  = microtime(true);
+
+	$stats = sprintf("FLOWVIEW REPORT STATS: Time:0.2f Report:'%s' Source:%s SourceID:%s", $end-$start, $report['name'], $report['source'], $report['source_id']);
+
+	cacti_log($stats, false, 'SYSTEM');
+
+	db_execute_prepared('DELETE FROM reports_queued WHERE id = ?', array($id));
 }
 
