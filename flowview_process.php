@@ -172,11 +172,7 @@ foreach($tables as $table) {
 	}
 }
 
-$raw_engine = read_config_option('flowview_engine');
-if ($raw_engine == '') {
-	$raw_engine = 'Aria';
-	set_config_option('flowview_engine', $raw_engine);
-}
+$raw_engine  = get_set_default_fast_engine();
 
 $last_tables = flowview_db_fetch_assoc('SELECT TABLE_NAME, ENGINE
 	FROM information_schema.TABLES

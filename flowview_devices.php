@@ -54,8 +54,8 @@ $device_edit = array(
 	),
 	'allowfrom' => array(
 		'method' => 'textbox',
-		'friendly_name' => __('Allowed Host', 'flowview'),
-		'description' => __('IP Address of the device that is allowed to send to this flow collector.  Leave as 0 for any host.', 'flowview'),
+		'friendly_name' => __('Allowed Host Range', 'flowview'),
+		'description' => __('IP Address of the device that is allowed to send to this flow collector.  Leave as 0 for any host.  Note that PHP is finicky about what it allows.  For example CIDR syntax is not permitted.  However, if you need to specify a range, you can use 192.168.1.0 for an entire rage of IP addresses.', 'flowview'),
 		'value' => '|arg1:allowfrom|',
 		'default' => '0',
 		'max_length' => '64',

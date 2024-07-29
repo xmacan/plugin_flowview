@@ -22,6 +22,8 @@
  +-------------------------------------------------------------------------+
 */
 
+$raw_engine = get_set_default_fast_engine();
+
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route` (
 	`route` varchar(40) NOT NULL DEFAULT '',
 	`source` varchar(20) NOT NULL DEFAULT '',
@@ -56,7 +58,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route` (
 	KEY `route` (`route`),
 	KEY `source` (`source`),
 	KEY `origin` (`origin`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	COMMENT='Holds the basic whois database from RADB'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_block` (
@@ -77,9 +79,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_block` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`as_block`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_aut_num` (
 	`aut_num` varchar(20) NOT NULL DEFAULT '',
@@ -117,9 +119,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_aut_num` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`aut_num`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inetnum` (
 	`inetnum` varchar(40) NOT NULL DEFAULT '',
@@ -149,11 +151,11 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inetnum` (
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`inetnum`,`source`),
-	KEY `inetnum` (`inetnum`),
+	KEY `inetnum` (`inetnum`))
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_mntner` (
 	`mntner` varchar(32) NOT NULL DEFAULT '',
@@ -177,9 +179,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_mntner` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`mntner`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_organisation` (
 	`organisation` varchar(32) NOT NULL DEFAULT '',
@@ -193,23 +195,23 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_organisatio
 	`admin_c` varchar(30) NOT NULL DEFAULT '',
 	`tech_c` varchar(30) NOT NULL DEFAULT '',
 	`mnt_ref` varchar(20) NOT NULL DEFAULT '',
-	`mnt_by` varchar(255) NOT NULL DEFAULT '',
+	`mnt_by` varchar(40) NOT NULL DEFAULT '',
 	`changed` varchar(128) NOT NULL DEFAULT '',
 	`phone` varchar(32) NOT NULL DEFAULT '',
-	`notify` varchar(128) NOT NULL DEFAULT '',
+	`notify` varchar(64) NOT NULL DEFAULT '',
 	`fax_no` varchar(32) NOT NULL DEFAULT '',
-	`descr` varchar(255) NOT NULL DEFAULT '',
+	`descr` varchar(128) NOT NULL DEFAULT '',
 	`abuse_mailbox` varchar(32) NOT NULL DEFAULT '',
-	`org` varchar(128) NOT NULL DEFAULT '',
+	`org` varchar(64) NOT NULL DEFAULT '',
 	`abuse_c` varchar(30) NOT NULL DEFAULT '',
 	`created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`organisation`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_person` (
 	`person` varchar(96) NOT NULL DEFAULT '',
@@ -230,9 +232,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_person` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`person`,`source`,`nic_hdl`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_role` (
 	`role` varchar(64) NOT NULL DEFAULT '',
@@ -258,9 +260,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_role` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`role`,`source`,`address`,`nic_hdl`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_domain` (
 	`domain` varchar(64) NOT NULL DEFAULT '',
@@ -286,9 +288,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_domain` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`domain`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_set` (
 	`as_set` varchar(40) NOT NULL DEFAULT '',
@@ -312,9 +314,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_set` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`as_set`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_irt` (
 	`irt` varchar(32) NOT NULL DEFAULT '',
@@ -341,9 +343,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_irt` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`irt`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route_set` (
 	`route_set` varchar(40) NOT NULL DEFAULT '',
@@ -365,9 +367,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route_set` 
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`route_set`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_filter_set` (
 	`filter_set` varchar(32) NOT NULL DEFAULT '',
@@ -388,9 +390,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_filter_set`
 	`mnt_lower` varchar(30) NOT NULL DEFAULT '',
 	PRIMARY KEY (`filter_set`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_peering_set` (
 	`peering_set` varchar(32) NOT NULL DEFAULT '',
@@ -411,9 +413,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_peering_set
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`peering_set`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inet_rtr` (
 	`inet_rtr` varchar(64) NOT NULL DEFAULT '',
@@ -440,9 +442,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inet_rtr` (
 	`created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`inet_rtr`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_rtr_set` (
 	`rtr_set` varchar(64) NOT NULL DEFAULT '',
@@ -464,9 +466,9 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_rtr_set` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`rtr_set`,`source`),
 	KEY `source` (`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
-	COMMENT='Contains information from Various internet registries'");
+	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poetic_form` (
 	`poetic_form` varchar(64) NOT NULL DEFAULT '',
@@ -479,7 +481,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poetic_form
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`poetic_form`,`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
 	COMMENT='Contains information from ripe'");
 
@@ -498,7 +500,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poem` (
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`poem`,`source`))
-	ENGINE=Aria
+	ENGINE=$raw_engine
 	ROW_FORMAT=Dynamic
 	COMMENT='Contains information from ripe'");
 

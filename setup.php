@@ -380,6 +380,28 @@ function flowview_config_settings() {
 		$settings['poller'] = $nsettings;
 	}
 
+	$engines = array(
+		'MyISAM' => __('MyISAM (Fast, Non-Crash Safe)', 'flowview'),
+		'Aria'   => __('Aria (Fast, Crash Safe)', 'flowview'),
+		'InnoDB' => __('InnoDB (Slow, High Concurrency)', 'flowview'),
+	);
+
+	$supported_engines = array_rekey(
+		flowview_db_fetch_assoc("SELECT ENGINE
+			FROM information_schema.ENGINES
+			WHERE ENGINE IN ('MyISAM', 'Aria', 'InnoDB')
+			AND SUPPORT IN ('YES','DEFAULT')"),
+		'ENGINE', 'ENGINE'
+	);
+
+	if (!isset($supported_engines['Aria'])) {
+		unset($engines['Aria']);
+		$default_engine = 'MyISAM';
+	} else {
+		unset($engines['MyISAM']);
+		$default_engine = 'Aria';
+	}
+
 	$temp = array(
 		'flowview_header' => array(
 			'friendly_name' => __('Name Resolution', 'flowview'),
@@ -481,11 +503,8 @@ function flowview_config_settings() {
 			'friendly_name' => __('Storage Engine for Raw Tables', 'flowview'),
 			'description' => __('The Aria Engine is perfect for all but the Live raw table.  The Live raw table will always be InnoDB.  Take your pick.', 'flowview'),
 			'method' => 'drop_array',
-			'array' => array(
-				'Aria'   => __('Aria (Fast, Crash Safe)', 'flowview'),
-				'InnoDB' => __('InnoDB (Slow, High Concurrency)', 'flowview'),
-			),
-			'default' => 'Aria'
+			'array' => $engines,
+			'default' => $default_engine
 		),
 		'flowview_parallel_header' => array(
 			'friendly_name' => __('Parallel Queries', 'flowview'),

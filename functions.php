@@ -1132,7 +1132,6 @@ function flowview_display_filter() {
 			strURL += '&query='+$('#query').val();
 			document.location = strURL;
 			Pace.stop();
-//			applyFilter();
 		}
 
 		if ($('#query').val() == -1) {
@@ -4028,6 +4027,8 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 		'COLUMN_NAME', array('DATA_TYPE', 'COLUMN_TYPE', 'IS_NULLABLE', 'COLUMN_DEFAULT')
 	);
 
+	$raw_engine = get_set_default_fast_engine();
+
 	/* simple tokenization of the SQL query */
 	$column_data = explode(',', $sql_query);
 	$i = 0;
@@ -4066,7 +4067,11 @@ function parallel_database_query_create_reduce_table($request_id, $sql_query, $t
 		$i++;
 	}
 
-	$sql_create .= ') ENGINE=Aria ROW_FORMAT=page COMMENT="Holds Parallel Query Results"';
+	if ($raw_engine == 'Aria') {
+		$sql_create .= ') ENGINE=Aria ROW_FORMAT=PAGE COMMENT="Holds Parallel Query Results"';
+	} else {
+		$sql_create .= ") ENGINE=$raw_engine ROW_FORMAT=Dynamic COMMENT='Holds Parallel Query Results'";
+	}
 
 	flowview_db_execute($sql_create);
 
@@ -6611,3 +6616,35 @@ function reports_run($id) {
 	db_execute_prepared('DELETE FROM reports_queued WHERE id = ?', array($id));
 }
 
+function get_set_default_fast_engine() {
+	$engines = array(
+		'MyISAM' => __('MyISAM (Fast, Non-Crash Safe)', 'flowview'),
+		'Aria'   => __('Aria (Fast, Crash Safe)', 'flowview'),
+		'InnoDB' => __('InnoDB (Slow, High Concurrency)', 'flowview'),
+	);
+
+	$supported_engines = array_rekey(
+		flowview_db_fetch_assoc("SELECT ENGINE
+			FROM information_schema.ENGINES
+			WHERE ENGINE IN ('MyISAM', 'Aria', 'InnoDB')
+			AND SUPPORT IN ('YES','DEFAULT')"),
+		'ENGINE', 'ENGINE'
+	);
+
+	if (!isset($supported_engines['Aria'])) {
+		unset($engines['Aria']);
+		$default_engine = 'MyISAM';
+	} else {
+		unset($engines['MyISAM']);
+		$default_engine = 'Aria';
+	}
+
+	$myengine = read_config_option('flowview_engine');
+
+	if (empty($myengine) || !isset($supported_engines[$myengine])) {
+		$myengine = $default_engine;
+		set_config_option('flowview_engine', $default_engine);
+	}
+
+	return $myengine;
+}
