@@ -886,6 +886,11 @@ function flowview_display_filter() {
 						<input type='checkbox' id='flows' name='flows' <?php print (get_request_var('flows') == 'true' ? 'checked':'');?>>
 						<label for='flows'><?php print __('Flows', 'flowview');?></label>
 					</td>
+					<td>
+						<span>
+							<input type='button' id='export' value='<?php print __esc('Export', 'flowview');?>' title='<?php print __esc('Export Raw Data', 'flowview');?>'>
+						</span>
+					</td>
 				</tr>
 			</table>
 		</form>
@@ -1007,6 +1012,10 @@ function flowview_display_filter() {
 			applyFilter(false);
 		});
 
+		$('#export').off('click').on('click', function() {
+			exportData();
+		});
+
 		$('#clear').off('click').on('click', function() {
 			clearFilter();
 		});
@@ -1116,6 +1125,14 @@ function flowview_display_filter() {
 				var strURL  = 'flowview.php?query=-1&header=false';
 				loadPageNoHeader(strURL);
 			});
+		}
+
+		function exportData() {
+			var strURL  = 'flowview.php?action=export';
+			strURL += '&query='+$('#query').val();
+			document.location = strURL;
+			Pace.stop();
+//			applyFilter();
 		}
 
 		if ($('#query').val() == -1) {

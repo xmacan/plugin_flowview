@@ -74,6 +74,7 @@
 * feature#163: Restructure the DNS Cache page to include: ASNs, People, Routes, etc. per the Internet Routing Registry format RSP
 * feature#164: Only update the Routes databases if they have changed as recommened at radb.net
 * feature#180: Allow Report Raw Data to be Downloaded
+* feature#181: Allow Raw Report Data to be Exported from FlowView Page
 
 --- 3.3 ---
 

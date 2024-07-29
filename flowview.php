@@ -65,6 +65,10 @@ switch(get_request_var('action')) {
 		flowview_request_vars();
 
 		break;
+	case 'export':
+		flowview_export_data();
+
+		break;
 	case 'chartdata':
 		flowview_request_vars();
 		flowview_get_chartdata();
@@ -101,6 +105,26 @@ switch(get_request_var('action')) {
 }
 
 exit;
+
+function flowview_export_data() {
+	flowview_request_vars();
+	$data  = load_data_for_filter();
+
+	if (cacti_sizeof($data['data'])) {
+        $columns = array_keys($data['data'][0]);
+
+		header('Content-type: application/csv');
+		header('Content-Disposition: attachment; filename=flowview_data.csv');
+
+		print implode(', ', $columns) . PHP_EOL;
+
+		foreach($data['data'] as $row) {
+			print implode(', ', array_values($row)) . PHP_EOL;
+		}
+	} else {
+		raise_message('no_export_data', __('Unable to find Raw Data for to Export', 'flowview'), MESSAGE_LEVEL_ERROR);
+	}
+}
 
 function save_filter_as() {
 	if (isset_request_var('query') && get_filter_request_var('query') > 0) {
