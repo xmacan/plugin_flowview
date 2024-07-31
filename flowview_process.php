@@ -114,12 +114,12 @@ if (cacti_sizeof($schedules)) {
 
 		$notification = array();
 
-		if ($report['email'] != '') {
-			$notification['email']['to_email'] = $report['email'];
+		if ($s['email'] != '') {
+			$notification['email']['to_email'] = $s['email'];
 		}
 
-		if ($report['notification_list'] > 0) {
-			$notification['notification_list']['id'] = $report['notification_list'];
+		if ($s['notification_list'] > 0) {
+			$notification['notification_list']['id'] = $s['notification_list'];
 		}
 
 		reports_queue($name, 1, $source, $source_id, $command, $notification);
