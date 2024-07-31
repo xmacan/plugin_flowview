@@ -1791,7 +1791,11 @@ function plugin_flowview_run_schedule($id, $report_id) {
     $headers['User-Agent'] = 'Cacti-FlowView-v' . $version;
 	$headers['X-Priority'] = '1';
 
-	reports_log_and_notify($report_id, $start_time, 'html', 'flowview', $id, $subject, $data['data'], $body, $body_html, $body_text, array(), $headers);
+	if (cacti_sizeof($data['data'])) {
+		reports_log_and_notify($report_id, $start_time, 'html', 'flowview', $id, $subject, $data['data'], $body, $body_html, $body_text, array(), $headers);
+	} else {
+		cacti_log(sprintf('WARNING: Running of Flowview Schedule %s Returned not Data.  Please Check your Flowview Schedule', $report_id), false, 'FLOWVIEW');
+	}
 }
 
 function reports_log_and_notify($id, $start_time, $report_type, $source, $source_id, $subject, &$raw_data, &$oput_raw, &$oput_html, &$oput_text, $attachments = array(), $headers = false) {
