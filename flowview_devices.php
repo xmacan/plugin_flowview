@@ -390,7 +390,7 @@ function edit_devices() {
 		}
 	} else {
 		if (!isset_request_var('ex_addr')) {
-			$ex_addr = db_fetch_cell_prepared('SELECT ex_addr
+			$ex_addr = flowview_db_fetch_cell_prepared('SELECT ex_addr
 				FROM plugin_flowview_device_templates
 				WHERE device_id = ?
 				LIMIT 1', array($device['id']));
@@ -399,7 +399,7 @@ function edit_devices() {
 		}
 
 		if (!isset_request_var('template')) {
-			$template_id = db_fetch_cell_prepared('SELECT template_id
+			$template_id = flowview_db_fetch_cell_prepared('SELECT template_id
 				FROM plugin_flowview_device_templates
 				WHERE device_id = ?
 				AND ex_addr = ?
