@@ -102,7 +102,7 @@ unregister_process('flowview', 'upgrade', 1);
 exit(0);
 
 function flowview_upgrade($current, $old) {
-	global $flowviewdb_default, $info;
+	global $config, $flowviewdb_default, $info;
 
 	if ($current != $old) {
 		api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php', true);
@@ -523,7 +523,11 @@ function flowview_upgrade($current, $old) {
 			}
 
 			if ($t['ENGINE'] != $raw_engine) {
-				$alter .= " ENGINE=$raw_engine";
+				if ($raw_engine == 'Aria') {
+					$alter .= " ENGINE=$raw_engine ROW_FORMAT=page";
+				} else {
+					$alter .= " ENGINE=$raw_engine ROW_FORMAT=Dynamic";
+				}
 			}
 
 			if ($alter != '') {
