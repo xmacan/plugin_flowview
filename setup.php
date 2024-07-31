@@ -339,6 +339,8 @@ function flowview_config_settings() {
 
 	include_once($config['base_path'] . '/lib/reports.php');
 
+	flowview_connect();
+
 	if (cacti_sizeof($flowview_sighup_settings)) {
 		foreach($flowview_sighup_settings as $setting) {
 			$$setting = read_config_option($setting, true);
