@@ -334,6 +334,11 @@ function flowview_upgrade($current, $old) {
 				ADD COLUMN supported tinyint unsigned NOT NULL default "0" AFTER template_id');
 		}
 
+		if (!flowview_db_column_exists('plugin_flowview_device_streams', 'version')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_device_streams
+				ADD COLUMN version varchar(5) NOT NULL default "" AFTER name');
+		}
+
 		if (!flowview_db_column_exists('plugin_flowview_devices', 'last_updated')) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN last_updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP');
 		}
