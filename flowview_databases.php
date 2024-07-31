@@ -736,7 +736,12 @@ function view_db_table($tab, &$tabs) {
 
 			if ($i == 0) {
 				$default_column    = $c;
-				$default_direction = $display_text[$c]['sort'];
+
+				if (isset($display_text[$c]['sort'])) {
+					$default_direction = $display_text[$c]['sort'];
+				} else {
+					$default_direction = 'ASC';
+				}
 			}
 
 			if (isset($display_text[$c])) {
