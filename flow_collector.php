@@ -33,6 +33,9 @@ ini_set('output_buffering', 'Off');
 ini_set('max_runtime', '-1');
 ini_set('memory_limit', '-1');
 
+set_time_limit(0);
+ob_implicit_flush();
+
 chdir(__DIR__ . '/../../');
 include('./include/cli_check.php');
 include_once($config['base_path'] . '/lib/poller.php');
@@ -48,6 +51,7 @@ flowview_connect();
 include_once($config['base_path'] . '/plugins/flowview/arrays.php');
 
 $debug     = false;
+$force     = false;
 $reload    = true;
 $taskname  = '';
 
@@ -55,6 +59,7 @@ $shortopts = 'VvHh';
 $longopts = array(
 	'listener-id::',
 	'debug',
+	'force',
 	'version',
 	'help',
 );
@@ -74,6 +79,10 @@ foreach($options as $arg => $value) {
 			break;
 		case 'debug':
 			$debug = true;
+
+			break;
+		case 'force':
+			$force = true;
 
 			break;
 		case 'version':
@@ -673,7 +682,8 @@ if (cacti_sizeof($listener)) {
 	 */
 	$taskname = 'child_' . $listener['id'];
 
-	if (!register_process_start('flowview', $taskname, $config['poller_id'], 315360000)) {
+	if (!$force && !register_process_start('flowview', $taskname, $config['poller_id'], 315360000)) {
+		debug("FATAL: Process already running.  Shutting down");
 		exit(0);
 	}
 
@@ -699,25 +709,74 @@ if (cacti_sizeof($listener)) {
 		}
 
 		$protocol = strtolower($listener['protocol']);
+
+		/**
+		 * This was for legacy stream_socket_server() which is lacking quite
+		 * a bit of functionality.  So, we will use the native socket
+		 * calls for now.
+		 */
 		if ($listener['allowfrom'] != '0' && $listener['allowfrom'] != '') {
 			$url = "$protocol://{$listener['allowfrom']}:{$listener['port']}";
 		} else {
 			$url = "$protocol://0.0.0.0:{$listener['port']}";
 		}
 
-		$socket = stream_socket_server($url, $errno, $errstr, STREAM_SERVER_BIND);
+		if ($protocol == 'udp') {
+			$socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+		} else {
+			$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		}
 
-		if (!$socket) {
+		if (is_resource($socket) || $socket !== false) {
+			socket_bind($socket, '0.0.0.0', $listener['port']);
+
+			if ($protocol == 'tcp') {
+				socket_listen($socket, 1024);
+			}
+
+			$sndbuf = socket_get_option($socket, SOL_SOCKET, SO_SNDBUF);
+			$rcvbuf = socket_get_option($socket, SOL_SOCKET, SO_RCVBUF);
+
+			debug(sprintf("The Send buffer is:    %s KBytes\n", $sndbuf/1024));
+			debug(sprintf("The Receive buffer is: %s KBytesm\n", $rcvbuf/1024));
+		} else {
 			cacti_log("FATAL: Flowview Listener unable to open port! Error: $errstr ($errno)", false, 'FLOWVIEW');
-			unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+
+			if (!$force) {
+				unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+			}
 
 			exit(1);
 		}
 
 		while (true) {
-			$p = stream_socket_recvfrom($socket, 1500, 0, $peer);
+			$p = '';
+
+			if ($protocol == 'tcp') {
+				$connection = socket_accept($socket);
+
+				if (!$connection) {
+					usleep(100);
+					continue;
+				}
+			}
+
+			$status = socket_recvfrom($socket, $p, 8192, 0, $peer, $listener['port']);
+
+			if ($peer === null || $status === false) {
+				sleep(1);
+				continue;
+			}
+
+			debug('-----------------------------------------------');
+			debug("The buffer is " . strlen($p) . ", The peer is " . $peer);
 
 			$ex_addr = get_peer_address($peer);
+
+			if (!is_valid_peer($ex_addr, $listener['allowfrom'])) {
+				cacti_log("WARNING: Flowview Received a packet from an unregisterd peer $ex_addr", false, 'FLOWVIEW');
+				continue;
+			}
 
 			if (!isset($tmpl_refreshed[$ex_addr])) {
 				$tmpl_refreshed[$ex_addr] = false;
@@ -760,7 +819,7 @@ if (cacti_sizeof($listener)) {
 
 				$start = microtime(true);
 			} else {
-				fclose($socket);
+				socket_close($socket);
 
 				break;
 			}
@@ -864,6 +923,39 @@ function get_peer_address($peer) {
 	} else {
 		return $peer;
 	}
+}
+
+function is_valid_peer($peer, $range) {
+	if (strpos($range, ',') !== false) {
+		$ip_addresses = explode(',', $range);
+		$ip_addresses = array_map('trim', $ip_addresses);
+
+		foreach($ip_addresses as $ip) {
+			if ($peer == $ip) {
+				return true;
+			}
+		}
+
+		return false;
+	} elseif ($range == 0) {
+		return true;
+	} elseif ($peer == $range) {
+		return true;
+	} else {
+		if (strpos($range, '/' ) === false) {
+			$range .= '/32';
+		}
+
+		list($range, $netmask) = explode('/', $range, 2);
+
+		$range_decimal    = ip2long($range);
+		$ip_decimal       = ip2long($peer);
+		$wildcard_decimal = pow(2, (32 - $netmask)) - 1;
+		$netmask_decimal  = ~ $wildcard_decimal;
+		return (($ip_decimal & $netmask_decimal) == ($range_decimal & $netmask_decimal));
+	}
+
+	return false;
 }
 
 function database_check_connect() {
@@ -1817,7 +1909,7 @@ function check_set(&$data, $index, $quote = false) {
  * @return (void)
  */
 function sig_handler($signo) {
-	global $taskname, $config, $reload, $flowview_sighup_settings;
+	global $taskname, $force, $config, $reload, $flowview_sighup_settings;
 
 	switch ($signo) {
 		case SIGHUP:
@@ -1834,7 +1926,9 @@ function sig_handler($signo) {
 		case SIGINT:
 			cacti_log("WARNING: Flowview Listener $taskname is shutting down by signal!", false, 'FLOWVIEW');
 
-			unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+			if (!$force) {
+				unregister_process('flowview', $taskname, $config['poller_id'], getmypid());
+			}
 
 			exit(1);
 			break;
