@@ -828,6 +828,14 @@ function show_devices () {
 				$status = 1;
 			}
 
+			if ($row['versions'] == '') {
+				$row['versions'] = __('None', 'flowview');
+			}
+
+			if ($row['last_updated'] == '') {
+				$row['last_updated'] = __('No Connections', 'flowview');
+			}
+
 			form_alternate_row('line' . $row['id'], true);
 			form_selectable_cell('<a class="linkEditMain" href="flowview_devices.php?action=edit&id=' . $row['id'] . '">' . $row['name'] . '</a>', $row['id']);
 			form_selectable_cell(__('Cacti', 'flowview'), $row['id']);
