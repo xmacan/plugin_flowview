@@ -1,6 +1,6 @@
 # Changelog
 
---- 4.5 ---
+--- 4.6 ---
 
 * issue#66: Cacti flowview collector errors
 * issue#71: Flowview no data were displayed
@@ -73,6 +73,7 @@
 * feature#160: Use whois providers such as radb.net to find origin AS when Arin does not provide it
 * feature#163: Restructure the DNS Cache page to include: ASNs, People, Routes, etc. per the Internet Routing Registry format RSP
 * feature#164: Only update the Routes databases if they have changed as recommened at radb.net
+* feature#179: Provide Link in Cactis Graph View to Flowview
 * feature#180: Allow Report Raw Data to be Downloaded
 * feature#181: Allow Raw Report Data to be Exported from FlowView Page
 

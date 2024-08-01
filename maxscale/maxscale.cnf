@@ -105,6 +105,7 @@ router=readwritesplit
 servers=server1,server2
 user=maxmon
 password=maxmon
+master_accept_reads=true
 
 
 ######################################################################################

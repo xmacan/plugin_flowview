@@ -341,7 +341,7 @@ function edit_filter() {
 			}
 		}
 
-		$('#statistics, #printed, #device_id').change(function() {
+		$('#statistics, #printed, #device_id, #ex_addr').change(function() {
 			applyFilter();
 		});
 
@@ -630,24 +630,31 @@ function flowview_display_filter() {
 						</select>
 					</td>
 					<td>
-						<?php print __('Exclude', 'flowview');?>
+						<?php print __('Stream', 'flowview');?>
 					</td>
 					<td>
-						<select id='exclude' name='exclude'>
-							<option value='0'<?php print (get_request_var('exclude') == 0 ? ' selected':'');?>><?php print __('None', 'flowview');?></option>
-							<option value='1'<?php print (get_request_var('exclude') == 1 ? ' selected':'');?>><?php print __('Top Sample', 'flowview');?></option>
+						<select id='ex_addr' name='ex_addr'>
+							<option value='-1'><?php print __('Select a Stream Host', 'flowview');?></option>
+							<option value='0'<?php print (get_request_var('ex_addr') == 0 ? ' selected':'');?>><?php print __('All', 'flowview');?></option>
 							<?php
-							$samples = array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+							if (get_request_var('device_id') > 0) {
+								$sql_where = 'WHERE device_id = ' . get_filter_request_var('device_id');
+							} else {
+								$sql_where = '';
+							}
 
-							foreach($samples as $s) {
-								print "<option value='$s'" . (get_request_var('exclude') == $s ? ' selected':'') . ">" . __('Top %d Samples', $s, 'flowview') . '</option>';
+							$streams = flowview_db_fetch_assoc("SELECT ex_addr AS id, CONCAT(name, ' (', ex_addr, ')') AS name
+								FROM plugin_flowview_device_streams
+								$sql_where
+								ORDER BY name ASC");
+
+							if (cacti_sizeof($streams)) {
+								foreach($streams as $s) {
+									print "<option value='" . $s['id'] . "'" . (get_request_var('ex_addr') == $s['id'] ? ' selected':'') . '>' . html_escape($s['name']) . '</option>';
+								}
 							}
 							?>
 						</select>
-					</td>
-					<td class='nowrap' title='<?php print __esc('Show only Domains on Charts Below');?>'>
-						<input type='checkbox' id='domains' name='domains' <?php print (get_request_var('domains') == 'true' ? 'checked':'');?>>
-						<label for='domains'><?php print __('Domains/Hostnames Only', 'flowview');?></label>
 					</td>
 					<td>
 						<span>
@@ -772,6 +779,22 @@ function flowview_display_filter() {
 						</select>
 					</td>
 					<td>
+						<?php print __('Exclude', 'flowview');?>
+					</td>
+					<td>
+						<select id='exclude' name='exclude'>
+							<option value='0'<?php print (get_request_var('exclude') == 0 ? ' selected':'');?>><?php print __('None', 'flowview');?></option>
+							<option value='1'<?php print (get_request_var('exclude') == 1 ? ' selected':'');?>><?php print __('Top Sample', 'flowview');?></option>
+							<?php
+							$samples = array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+
+							foreach($samples as $s) {
+								print "<option value='$s'" . (get_request_var('exclude') == $s ? ' selected':'') . ">" . __('Top %d Samples', $s, 'flowview') . '</option>';
+							}
+							?>
+						</select>
+					</td>
+					<td>
 						<?php print __('Octets', 'flowview');?>
 					</td>
 					<td>
@@ -784,6 +807,10 @@ function flowview_display_filter() {
 							}
 							?>
 						</select>
+					</td>
+					<td class='nowrap' title='<?php print __esc('Show only Domains on Charts Below');?>'>
+						<input type='checkbox' id='domains' name='domains' <?php print (get_request_var('domains') == 'true' ? 'checked':'');?>>
+						<label for='domains'><?php print __('Domains/Hostnames Only', 'flowview');?></label>
 					</td>
 				</tr>
 			</table>
@@ -1004,7 +1031,7 @@ function flowview_display_filter() {
 			changeQuery(true);
 		});
 
-		$('#domains, #exclude, #graph_type, #graph_height, #device_id').off('change').on('change', function() {
+		$('#domains, #exclude, #graph_type, #graph_height, #device_id, #ex_addr').off('change').on('change', function() {
 			applyFilter(false);
 		});
 
@@ -1348,6 +1375,7 @@ function flowview_display_filter() {
 			'&query='        + $('#query').val()  +
 			'&report='       + $('#report').val() +
 			'&device_id='    + $('#device_id').val() +
+			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
@@ -1412,6 +1440,7 @@ function flowview_display_filter() {
 			'&query='        + $('#query').val()  +
 			'&report='       + $('#report').val() +
 			'&device_id='    + $('#device_id').val() +
+			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
@@ -1477,6 +1506,7 @@ function flowview_display_filter() {
 			'&query='        + $('#query').val()  +
 			'&report='       + $('#report').val() +
 			'&device_id='    + $('#device_id').val() +
+			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
@@ -1572,6 +1602,7 @@ function flowview_display_filter() {
 			'&timespan='     + $('#predefined_timespan').val() +
 			'&report='       + $('#report').val() +
 			'&device_id='    + $('#device_id').val() +
+			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
@@ -1629,6 +1660,7 @@ function flowview_display_filter() {
 			'?action=query'         +
 			'&domains='             + $('#domains').is(':checked') +
 			'&device_id='           + $('#device_id').val() +
+			'&ex_addr='             + $('#ex_addr').val() +
 			'&query='               + $('#query').val() +
 			'&predefined_timespan=' + $('#predefined_timespan').val() +
 			'&date1='               + $('#date1').val() +
@@ -1658,6 +1690,7 @@ function flowview_display_filter() {
 			'&predefined_timespan=' + $('#predefined_timespan').val() +
 			'&report='              + report +
 			'&device_id='           + device_id +
+			'&ex_addr='             + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='           + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
 			'&sortvalue='           + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='         + $('#cutofflines').val() +
@@ -1999,7 +2032,17 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
 	$time      = time();
 	$data      = array();
 
-	if ($id > 0) {
+	/* override for graph drilldowns */
+	if (isset_request_var('timespan') && get_nfilter_request_var('timespan') == 'session') {
+		if (isset($_SESSION['sess_current_date1'])) {
+			$start = strtotime($_SESSION['sess_current_date1']);
+            $end   = strtotime($_SESSION['sess_current_date2']);
+			set_request_var('date1', date('Y-m-d H:i', $start));
+			set_request_var('date2', date('Y-m-d H:i', $end));
+		}
+	}
+
+	if ($id > 0 && !isset_request_var('timespan')) {
 		$session = false;
 
 		if ($start == false || $end == false) {
@@ -2014,7 +2057,7 @@ function load_data_for_filter($id = 0, $start = false, $end = false) {
 			$start = strtotime($span['current_value_date1']);
 			$end   = strtotime($span['current_value_date2']);
 		}
-	} elseif (isset_request_var('query') && get_request_var('query') > 0) {
+	} elseif (isset_request_var('query') && get_request_var('query') > 0 && $start == false) {
 		$id = get_request_var('query');
 
 		if (!isset_request_var('date1') || get_request_var('date1') == '') {
@@ -2602,6 +2645,15 @@ function run_flow_query($session, $query_id, $start, $end) {
 		$sql_where = get_numeric_filter($sql_where, $sql_params, $data['device_id'], 'listener_id');
 	}
 
+	/* ex_addr override */
+	if (isset_request_var('ex_addr') && get_nfilter_request_var('ex_addr') != 0) {
+		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
+		$sql_params[] = get_request_var('ex_addr');
+	} elseif (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '') {
+		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
+		$sql_params[] = $data['ex_addr'];
+	}
+
 	/* report override */
 	if (isset_request_var('report')) {
 		$report  = get_nfilter_request_var('report');
@@ -2626,12 +2678,6 @@ function run_flow_query($session, $query_id, $start, $end) {
 	/* Non-Overrides - These variables can not be overridden       */
 	/* in the user interface.                                      */
 	/*-------------------------------------------------------------*/
-
-	/* ex_addr filter */
-	if (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '') {
-		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
-		$sql_params[] = $data['ex_addr'];
-	}
 
 	/* template id filter */
 	if (isset($data['template_id']) && $data['template_id'] >= 0) {

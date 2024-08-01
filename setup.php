@@ -23,17 +23,27 @@
 */
 
 function plugin_flowview_install() {
+	// Setup core hooks for just about every plugin
 	api_plugin_register_hook('flowview', 'config_arrays',          'flowview_config_arrays',          'setup.php');
 	api_plugin_register_hook('flowview', 'draw_navigation_text',   'flowview_draw_navigation_text',   'setup.php');
 	api_plugin_register_hook('flowview', 'config_settings',        'flowview_config_settings',        'setup.php');
 	api_plugin_register_hook('flowview', 'poller_bottom',          'flowview_poller_bottom',          'setup.php');
 	api_plugin_register_hook('flowview', 'top_header_tabs',        'flowview_show_tab',               'setup.php');
 	api_plugin_register_hook('flowview', 'top_graph_header_tabs',  'flowview_show_tab',               'setup.php');
+
+	// Allow the injection of CSS and other components
 	api_plugin_register_hook('flowview', 'page_head',              'flowview_page_head',              'setup.php');
+
+	// Allow the flow-caputre service to be restart after a key change in settings
 	api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php');
 
-	api_plugin_register_realm('flowview', 'flowview.php', __('Plugin -> Flow Viewer', 'flowview'), 1);
-	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_databases.php', __('Plugin -> Flow Admin', 'flowview'), 1);
+	// Setup buttons on Graph Pages
+	api_plugin_register_hook('flowview', 'graph_buttons',            'flowview_graph_button', 'setup.php');
+	api_plugin_register_hook('flowview', 'graph_buttons_thumbnails', 'flowview_graph_button', 'setup.php');
+
+	// Setup permissions to Flowview Components
+	api_plugin_register_realm('flowview', 'flowview.php', __('NetFlow User', 'flowview'), 1);
+	api_plugin_register_realm('flowview', 'flowview_devices.php,flowview_schedules.php,flowview_filters.php,flowview_databases.php', __('NetFlow Admin', 'flowview'), 1);
 
 	flowview_determine_config();
 
@@ -404,6 +414,13 @@ function flowview_config_settings() {
 		$default_engine = 'Aria';
 	}
 
+	$queries = array_rekey(
+		flowview_db_fetch_assoc('SELECT id, name
+			FROM plugin_flowview_queries
+			ORDER BY name'),
+		'id', 'name'
+	);
+
 	$temp = array(
 		'flowview_header' => array(
 			'friendly_name' => __('Name Resolution', 'flowview'),
@@ -461,6 +478,18 @@ function flowview_config_settings() {
 			'placeholder' => __('Enter binary path', 'flowview'),
 			'max_length' => 30,
 			'size' => 30
+		),
+		'flowview_dd_header' => array(
+			'friendly_name' => __('Graph Drilldown Settings', 'flowview'),
+			'method' => 'spacer',
+			'collapsible' => 'true'
+		),
+		'flowview_default_filter' => array(
+			'friendly_name' => __('Default Search Filter for Graph Drilldowns', 'monitor'),
+			'method' => 'drop_array',
+			'default' => '',
+			'description' => __('Choose an existing Flowview Search Filter to use for Graph Drilldowns.', 'monitor'),
+			'array' => $queries
 		),
 		'flowview_data_header' => array(
 			'friendly_name' => __('Data Retention and Report Generation', 'flowview'),
@@ -570,6 +599,7 @@ function flowview_config_settings() {
 		),
 		'flowview_maxscale_header' => array(
 			'friendly_name' => __('MaxScale Sharding', 'flowview'),
+			'description' => __('This is only required if your Cacti System\'s Flowview Database connection is not already using a MaxScale enabled Read-Write Split port.', 'flowview'),
 			'method' => 'spacer',
 			'collapsible' => 'true'
 		),
@@ -1017,3 +1047,217 @@ function flowview_drop_table($tables) {
 		}
 	}
 }
+
+function flowview_graph_button($data) {
+	global $config, $timespan, $graph_timeshifts;
+
+	static $flow_hosts = array();
+	static $flow_hosts_map = array();
+	static $flowview_default_filter;
+
+	$flowview_default_filter = read_config_option('flowview_default_filter');
+
+	flowview_connect();
+
+	if (get_current_page() != 'graph_view.php') {
+		return false;
+	}
+
+	/* set the default filter if the admin had not */
+	if (empty($flowview_default_filter)) {
+		/* no default filter defined */
+		$flowview_default_filter = flowview_db_fetch_cell('SELECT id FROM plugin_flowview_queries LIMIT 1');
+
+		if ($flowview_default_filter > 0) {
+			set_config_option('flowview_default_filter', $flowview_default_filter);
+		} else {
+			return false;
+		}
+	}
+
+	/* from the local graph id, get the host id */
+	$local_graph_id = $data[1]['local_graph_id'];
+
+	$host_id = db_fetch_cell_prepared('SELECT host_id
+		FROM graph_local
+		WHERE id = ?',
+		array($local_graph_id));
+
+	/* get all the IP addresses and hostname for various streams */
+	if (!cacti_sizeof($flow_hosts)) {
+		$flow_hosts = flowview_db_fetch_assoc('SELECT fvs.device_id AS id, fvs.ex_addr, fvq.ex_addr AS qex_addr, SUBSTRING_INDEX(fvs.name, ".", 1) AS name
+			FROM plugin_flowview_device_streams AS fvs
+			LEFT JOIN plugin_flowview_queries AS fvq
+			ON fvs.device_id = fvq.device_id
+			ORDER BY qex_addr DESC');
+	}
+
+	$sql_where1   = '';
+	$sql_where2   = '';
+	$sql_params   = array();
+
+	/**
+	 * Find an elegant way to match the queries stream clients
+	 * with the Cacti hosts by first getting the list of
+	 * all the possible combinations for hostname and ip.
+	 *
+	 * If there are not streams working, just ignore this
+	 * and return.
+	 */
+	if (cacti_sizeof($flow_hosts)) {
+		$i = 0;
+		$sql_params1 = array();
+		$sql_params2 = array();
+
+		foreach($flow_hosts as $id => $host) {
+			if ($i == 0) {
+				$sql_params1[] = $local_graph_id;
+			}
+
+			$sql_where1 .= " OR (hostname = ? OR hostname = ? OR hostname LIKE ?)";
+
+			$sql_params1[] = $host['ex_addr'];
+			$sql_params1[] = $host['name'];
+			$sql_params1[] = $host['name'] . '.%';
+
+			if ($i == 0) {
+				$sql_params2[] = $local_graph_id;
+			}
+
+			$sql_where2 .= " OR (description = ? OR description = ? OR description LIKE ?)";
+
+			$sql_params2[] = $host['ex_addr'];
+			$sql_params2[] = $host['name'];
+			$sql_params2[] = $host['name'] . '.%';
+
+			$i++;
+		}
+
+		$sql_params = array_merge($sql_params1, $sql_params2);
+	} else {
+		return false;
+	}
+
+	/**
+	 * Now we will attempt to find a query with a valid stream
+	 * or ex_addr in the database and set that.  First we get
+	 * a list of all host id's and either the hostname or the
+	 * description as the ex_addr.
+	 *
+	 * We will then try to align on the first matche between
+	 * the Cacti host and the ex_addr of the stream.
+	 */
+	$host_data = array_rekey(
+		db_fetch_assoc_prepared("SELECT h.id, h.hostname AS ex_addr
+			FROM graph_local AS gl
+			INNER JOIN host AS h
+			ON h.id = gl.host_id
+			WHERE gl.id = ?
+			$sql_where1
+			UNION
+			SELECT h.id, h.description AS ex_addr
+			FROM graph_local AS gl
+			INNER JOIN host AS h
+			ON h.id = gl.host_id
+            WHERE gl.id = ?
+			$sql_where2",
+			$sql_params),
+		'ex_addr', 'id'
+	);
+
+	/**
+	 * If the $host_data array is not empty, then we have
+	 * at least one host that matches the ex_addr information
+	 * from a filter.  So, let's look for it.
+	 */
+	if (cacti_sizeof($host_data)) {
+		$query_data = false;
+
+		/* if the setting is not already cached, search */
+		if (!isset($flow_hosts_map[$host_id])) {
+			foreach($host_data as $ex_addr => $hd_host_id) {
+				/* trim the domains from the ex_addr */
+				if (!is_ipaddress($ex_addr)) {
+					$ex_addr = explode('.', $ex_addr)[0];
+				}
+
+				foreach($flow_hosts as $host) {
+					if ($host['ex_addr'] == $ex_addr) {
+						$flow_hosts_map[$host_id] = flowview_db_fetch_row_prepared('SELECT *
+							FROM plugin_flowview_queries
+							WHERE device_id = ?
+							LIMIT 1',
+							array($host['id']));
+
+						$flow_hosts_map[$host_id]['ex_addr'] = $ex_addr;
+
+						$query_data = $flow_hosts_map[$host_id];
+
+						break;
+					}
+				}
+			}
+		} else {
+			$query_data = $flow_hosts_map[$host_id];
+		}
+
+		if ($query_data === false) {
+			return false;
+		}
+
+		$url = $config['url_path'] . "plugins/flowview/flowview.php?action=view&query=$flowview_default_filter&timespan=session&ex_addr={$query_data['ex_addr']}";
+
+		/* initialize settings from the database if they are not set already */
+		if (cacti_sizeof($query_data)) {
+			$columns = array(
+				'device_id',
+				'includeif',
+				'sortfield',
+				'cutofflines',
+				'cutoffoctets',
+				'printed',
+				'statistics',
+				'resolve',
+				'graph_type',
+				'graph_height',
+				'panel_table',
+				'panel_bytes',
+				'panel_packets',
+				'panel_flows'
+			);
+
+			foreach($columns as $c) {
+				if (strpos($c, 'panel') !== false) {
+					$rv  = str_replace('panel_', '', $c);
+
+					if ($query_data[$c] == 'on') {
+						$url .= "&$rv=true";
+					} else {
+						$url .= "&$rv=false";
+					}
+				} elseif ($c == 'resolve') {
+					if ($query_data[$c] == 'on') {
+						$url .= "&domains=true";
+					} else {
+						$url .= "&domains=false";
+					}
+				} elseif ($c == 'printed' && $query_data[$c] > 0) {
+					$url .= "&report=p{$query_data[$c]}";
+				} elseif ($c == 'statistics' && $query_data[$c] > 0) {
+					$url .= "&report=s{$query_data[$c]}";
+				} else {
+					$url .= "&$c={$query_data[$c]}";
+				}
+			}
+
+			$url .= "&predefined_timespan=0";
+		}
+
+		cacti_log("The URL is this:" . $url);
+
+		if (api_user_realm_auth('flowview.php') && !empty($host_id)) {
+			print '<a class="iconLink flowview" href="' .  html_escape($url) . '" title="' . __esc('View NetFlow Traffic In range', 'flowview') . '"><i class="deviceRecovering fas fa-water"></i></a><br>';
+		}
+	}
+}
+

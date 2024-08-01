@@ -403,20 +403,30 @@ function flowview_request_vars() {
 			WHERE id = ?',
 			array(get_request_var('query')));
 
-		$columns = array('graph_type', 'graph_height', 'panel_table', 'panel_bytes', 'panel_packets', 'panel_flows');
+		$columns = array(
+			'graph_type',
+			'graph_height',
+			'panel_table',
+			'panel_bytes',
+			'panel_packets',
+			'panel_flows'
+		);
 
 		if (cacti_sizeof($listener)) {
 			foreach($columns as $c) {
 				if (strpos($c, 'panel')) {
 					$rv  = str_replace('panel_', '', $c);
-					$rv .= 's';
 
-					if (!isset_request_var("{$rv}s")) {
-						set_request_var($c, $listener[$c] == 'on' ? 'true':'false');
+					if (!isset_request_var($rv)) {
+						set_request_var($rv, $listener[$c] == 'on' ? 'true':'false');
 					}
 				} elseif (!isset_request_var($c)) {
 					set_request_var($c, $listener[$c]);
 				}
+			}
+
+			if (isset_request_var('graph_link')) {
+				set_request_var('predefined_timespan', '0');
 			}
 		}
 	}
