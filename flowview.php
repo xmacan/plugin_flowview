@@ -474,6 +474,11 @@ function flowview_request_vars() {
 			'options' => array('options' => 'sanitize_search_string'),
 			'default' => ''
 		),
+		'ex_addr' => array(
+			'filter' => FILTER_CALLBACK,
+			'options' => array('options' => 'sanitize_search_string'),
+			'default' => '0'
+		),
 		'domains' => array(
 			'filter' => FILTER_VALIDATE_REGEXP,
 			'options' => array('options' => array('regexp' => '(true|false)')),

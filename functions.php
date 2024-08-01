@@ -2646,10 +2646,10 @@ function run_flow_query($session, $query_id, $start, $end) {
 	}
 
 	/* ex_addr override */
-	if (isset_request_var('ex_addr') && get_nfilter_request_var('ex_addr') != 0) {
+	if (isset_request_var('ex_addr') && get_nfilter_request_var('ex_addr') != '0' && get_nfilter_request_var('ex_addr') != '-1') {
 		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
 		$sql_params[] = get_request_var('ex_addr');
-	} elseif (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '') {
+	} elseif (isset($data['ex_addr']) && $data['ex_addr'] != '-1' && $data['ex_addr'] != '' && $data['ex_addr'] != '0') {
 		$sql_where .= ($sql_where != '' ? ' AND ':'') . 'ex_addr = ?';
 		$sql_params[] = $data['ex_addr'];
 	}
