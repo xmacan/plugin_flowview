@@ -150,6 +150,10 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN protocol char(3) NOT NULL default "UDP" AFTER port');
 		}
 
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'enabled')) {
+			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN enabled char(2) NOT NULL default "on" AFTER name');
+		}
+
 		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
 			cacti_log("Adding savedquery column to plugin_flowview_schedules table.", true, 'FLOWVIEW');
 

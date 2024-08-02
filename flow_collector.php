@@ -725,6 +725,7 @@ if (cacti_sizeof($listener)) {
 			$socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 		} else {
 			$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+			socket_set_nonblock($socket);
 		}
 
 		if (is_resource($socket) || $socket !== false) {

@@ -32,7 +32,9 @@ flowview_connect();
 include_once($config['base_path'] . '/plugins/flowview/arrays.php');
 
 $flow_actions = array(
-	1 => __('Delete', 'flowview')
+	1 => __('Delete', 'flowview'),
+	2 => __('Enable', 'flowview'),
+	3 => __('Disable', 'flowview')
 );
 
 set_default_action();
@@ -78,6 +80,13 @@ $device_edit = array(
 		'array' => array('UDP' => __('UDP Protocol', 'flowview'), 'TCP' => __('TCP Protocol', 'flowview')),
 		'default' => 'UDP'
 	),
+	'enabled' => array(
+		'method' => 'checkbox',
+		'friendly_name' => __('Enabled', 'flowview'),
+		'description' => __('If checked, the Listener service will be started and will wait on incoming data.', 'flowview'),
+		'value' => '|arg1:enabled|',
+		'default' => ''
+	),
 	'id' => array(
 		'method' => 'hidden_zero',
 		'value' => '|arg1:id|'
@@ -94,12 +103,12 @@ switch (get_request_var('action')) {
 
 		break;
 	case 'save':
-		save_devices ();
+		save_device();
 
 		break;
 	case 'edit':
 		top_header();
-		edit_devices();
+		edit_device();
 		bottom_footer();
 
 		break;
@@ -118,7 +127,7 @@ function export_template() {
 	$device_id   = get_filter_request_var('id');
 	$ex_addr     = get_nfilter_request_var('ex_addr');
 
-	$data = db_fetch_cell_prepared('SELECT column_spec
+	$data = flowview_db_fetch_cell_prepared('SELECT column_spec
 		FROM plugin_flowview_device_templates
 		WHERE device_id = ?
 		AND template_id = ?
@@ -167,7 +176,21 @@ function actions_devices () {
 					flowview_db_execute_prepared('DELETE FROM plugin_flowview_devices
 						WHERE id = ?', array($item));
 				}
+			} elseif (get_nfilter_request_var('drp_action') == '2') {
+				foreach ($selected_items as $item) {
+					flowview_db_execute_prepared('UPDATE plugin_flowview_devices
+						SET enabled = "on"
+						WHERE id = ?', array($item));
+				}
+			} elseif (get_nfilter_request_var('drp_action') == '3') {
+				foreach ($selected_items as $item) {
+					flowview_db_execute_prepared('UPDATE plugin_flowview_devices
+						SET enabled = ""
+						WHERE id = ?', array($item));
+				}
 			}
+
+			restart_services();
 		}
 
 		header('Location: flowview_devices.php?header=false');
@@ -201,14 +224,28 @@ function actions_devices () {
 	if (get_nfilter_request_var('drp_action') == '1') { /* Delete */
 		print "<tr>
 			<td colspan='2' class='textArea'>
-				<p>" . __('Click \'Continue\' to delete the following Net-Flow Listeners.  After which, you will need to restart your Flow-Capture Service.', 'flowview') . "</p>
-				<p><ul>$device_list</ul></p>
+				<p>" . __('Click \'Continue\' to Delete the following NetFlow Listeners.  After which, Cacti will attempt to restart your Flow-Capture Service.', 'flowview') . "</p>
+				<div><ul class='itemlist'>$device_list</ul></div>
 			</td>
-		</tr>\n";
+		</tr>";
+	} elseif (get_nfilter_request_var('drp_action') == '2') { /* Enable */
+		print "<tr>
+			<td colspan='2' class='textArea'>
+				<p>" . __('Click \'Continue\' to Enable the following NetFlow Listeners.  After which, Cacti will attempt to restart your Flow-Capture Service.', 'flowview') . "</p>
+				<div><ul class='itemlist'>$device_list</ul></div>
+			</td>
+		</tr>";
+	} elseif (get_nfilter_request_var('drp_action') == '3') { /* Delete */
+		print "<tr>
+			<td colspan='2' class='textArea'>
+				<p>" . __('Click \'Continue\' to Delete the following NetFlow Listeners.  After which, Cacti will attempt to restart your Flow-Capture Service.', 'flowview') . "</p>
+				<div><ul class='itemlist'>$device_list</ul></div>
+			</td>
+		</tr>";
 	}
 
 	if (!isset($device_array)) {
-		print "<tr><td class='even'><span class='textError'>" . __('You must select at least one device.', 'flowview') . "</span></td></tr>\n";
+		print "<tr><td class='even'><span class='textError'>" . __('You must select at least one Listener.', 'flowview') . "</span></td></tr>\n";
 		$save_html = '';
 	} else {
 		$save_html = "<input type='submit' value='" . __esc('Continue', 'flowview') . "'>";
@@ -231,7 +268,7 @@ function actions_devices () {
 	bottom_footer();
 }
 
-function save_devices () {
+function save_device() {
 	/* ================= input validation ================= */
 	get_filter_request_var('id');
 	/* ==================================================== */
@@ -247,6 +284,7 @@ function save_devices () {
 	$save['allowfrom']   = get_nfilter_request_var('allowfrom');
 	$save['port']        = get_nfilter_request_var('port');
 	$save['protocol']    = get_nfilter_request_var('protocol');
+	$save['enabled']     = isset_request_var('enabled') ? 'on':'';
 
 	$id = flowview_sql_save($save, 'plugin_flowview_devices', 'id', true);
 
@@ -259,13 +297,7 @@ function save_devices () {
 		exit;
 	} else {
 		if ($pid > 0) {
-			if (!defined('SIGHUP')) {
-				define('SIGHUP', 1);
-			}
-
-			posix_kill($pid, SIGHUP);
-
-			sleep(3);
+			restart_services();
 
 			raise_message('flow_save', __('Save Successful.  The Flowview Listener has been saved, and the service restarted.', 'flowview'), MESSAGE_LEVEL_INFO);
 		} else {
@@ -277,7 +309,24 @@ function save_devices () {
 	exit;
 }
 
-function edit_devices() {
+function restart_services() {
+	$pid = db_fetch_cell('SELECT pid
+		FROM processes
+		WHERE tasktype="flowview"
+		AND taskname="master"');
+
+	if ($pid > 0) {
+		if (!defined('SIGHUP')) {
+			define('SIGHUP', 1);
+		}
+
+		posix_kill($pid, SIGHUP);
+
+		sleep(3);
+	}
+}
+
+function edit_device() {
 	global $device_edit, $flow_fieldids;
 
 	/* ================= input validation ================= */
@@ -287,7 +336,10 @@ function edit_devices() {
 	$device = array();
 
 	if (!isempty_request_var('id')) {
-		$device       = flowview_db_fetch_row('SELECT * FROM plugin_flowview_devices WHERE id=' . get_request_var('id'), false);
+		$device = flowview_db_fetch_row('SELECT *
+			FROM plugin_flowview_devices
+			WHERE id=' . get_request_var('id'), false);
+
 		$header_label = __esc('Listener [edit: %s]', $device['name'], 'flowview');
 
 		display_tabs(get_request_var('id'));
@@ -371,10 +423,21 @@ function edit_devices() {
 						$row['templates'] = 0;
 					}
 
+					$enabled = flowview_db_fetch_cell_prepared('SELECT enabled
+						FROM plugin_flowview_devices
+						WHERE id = ?',
+						array($device['id']));
+
+					if ($enabled == 'on') {
+						$disabled = false;
+					} else {
+						$disabled = true;
+					}
+
 					form_alternate_row('line' . $i, true);
 					form_selectable_cell($row['name'], $i);
 					form_selectable_cell($row['ex_addr'], $i);
-					form_selectable_cell(get_colored_device_status('', $status), $i);
+					form_selectable_cell(get_colored_device_status($disabled, $status), $i);
 					form_selectable_cell($row['version'], $i, '', 'right');
 					form_selectable_cell($row['templates'], $i, '', 'right');
 					form_selectable_cell($row['last_updated'], $i, '', 'right');
@@ -836,14 +899,28 @@ function show_devices () {
 				$row['last_updated'] = __('No Connections', 'flowview');
 			}
 
+			if ($row['enabled'] == '') {
+				$disabled        = true;
+				$row['versions'] = __('N/A', 'flowview');
+				$row['streams']  = __('N/A', 'flowview');
+				$row['observed'] = __('N/A', 'flowview');
+			} else {
+				$disabled = false;
+				$row['observed'] = isset($parts[$column]) ? $parts[$column]:'-';
+			}
+
+			if ($row['allowfrom'] == 0) {
+				$row['allowfrom'] = __('All', 'flowview');
+			}
+
 			form_alternate_row('line' . $row['id'], true);
 			form_selectable_cell('<a class="linkEditMain" href="flowview_devices.php?action=edit&id=' . $row['id'] . '">' . $row['name'] . '</a>', $row['id']);
 			form_selectable_cell(__('Cacti', 'flowview'), $row['id']);
 			form_selectable_cell($row['allowfrom'], $row['id'], '', 'right');
 			form_selectable_cell($row['port'], $row['id'], '', 'right');
 			form_selectable_cell($row['protocol'], $row['id'], '', 'right');
-			form_selectable_cell(get_colored_device_status('', $status), $row['id'], '', 'right');
-			form_selectable_cell(isset($parts[$column]) ? $parts[$column]:'-', $row['id'], '', 'right');
+			form_selectable_cell(get_colored_device_status($disabled, $status), $row['id'], '', 'right');
+			form_selectable_cell($row['observed'], $row['id'], '', 'right');
 			form_selectable_cell($row['streams'], $row['id'], '', 'right');
 			form_selectable_cell($row['versions'], $row['id'], '', 'right');
 			form_selectable_cell($row['last_updated'], $row['id'], '', 'right');

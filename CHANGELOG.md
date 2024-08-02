@@ -1,6 +1,6 @@
 # Changelog
 
---- 4.6 ---
+--- 4.7 ---
 
 * issue#66: Cacti flowview collector errors
 * issue#71: Flowview no data were displayed
@@ -76,6 +76,7 @@
 * feature#179: Provide Link in Cactis Graph View to Flowview
 * feature#180: Allow Report Raw Data to be Downloaded
 * feature#181: Allow Raw Report Data to be Exported from FlowView Page
+* feature#191: Make it possible to disable a Listener Service
 
 --- 3.3 ---
 

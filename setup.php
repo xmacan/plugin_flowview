@@ -829,6 +829,7 @@ function flowview_setup_table() {
 	flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_devices` (
 		id int(11) unsigned NOT NULL AUTO_INCREMENT,
 		name varchar(64) NOT NULL,
+		enabled char(2) NOT NULL default 'on',
 		cmethod int(11) unsigned NOT NULL default '0',
 		allowfrom varchar(32) NOT NULL default '0',
 		port int(11) unsigned NOT NULL,
@@ -1256,7 +1257,7 @@ function flowview_graph_button($data) {
 		cacti_log("The URL is this:" . $url);
 
 		if (api_user_realm_auth('flowview.php') && !empty($host_id)) {
-			print '<a class="iconLink flowview" href="' .  html_escape($url) . '" title="' . __esc('View NetFlow Traffic In range', 'flowview') . '"><i class="deviceRecovering fas fa-water"></i></a><br>';
+			print '<a class="iconLink flowview" href="' .  html_escape($url) . '" title="' . __esc('View NetFlow Traffic In Range', 'flowview') . '"><i class="deviceRecovering fas fa-water"></i></a><br>';
 		}
 	}
 }
