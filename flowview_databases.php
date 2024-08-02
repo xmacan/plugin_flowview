@@ -149,9 +149,9 @@ function flowview_print_details(&$cols, &$details) {
 				}
 
 				if (isset($cols[$column])) {
-					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . $cols[$column]['display'] . ':</td>';
+					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . html_escape($cols[$column]['display']) . ':</td>';
 				} else {
-					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . ucfirst(str_replace('_', ' ', $column)) . ':</td>';
+					print '<td style="width:18%;font-weight:bold;vertical-align:text-top">' . html_escape(ucfirst(str_replace('_', ' ', $column))) . ':</td>';
 				}
 
 				if ($column == 'remarks' ||
@@ -159,16 +159,16 @@ function flowview_print_details(&$cols, &$details) {
 					$column == 'export' ||
 					$column == 'mp_import' ||
 					$column == 'mp_export') {
-					print '<td style="width:82%">' . str_replace("\n", '<br>', html_escape($value)) . '</td>';
+					print '<td style="width:82%">' . html_escape(str_replace("\n", '<br>', $value)) . '</td>';
 				} else {
-					print '<td style="width:82%;white-space:pre-wrap">' . str_replace("\n", ', ', html_escape($value)) . '</td>';
+					print '<td style="width:82%;white-space:pre-wrap">' . html_escape(str_replace("\n", ', ', $value)) . '</td>';
 				}
 
 				print '</tr>';
 			}
 		}
 	} else {
-		print "<tr><td><em>No Details Found</em></td></tr>";
+		print '<tr><td><em>' . __('No Details Found', 'flowview') . '</em></td></tr>';
 	}
 
 	return array('mnt_by_present' => $mnt_by_present, 'mnt_by' => $mnt_by, 'mnt_by_source' => $mnt_by_source);
