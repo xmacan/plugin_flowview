@@ -3775,10 +3775,16 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 
 	$table_md5 = md5($map_query);
 
+	/**
+	 * Make sure you make the requests per user. The caching
+	 * will still work at the md5sum_table level to isolate
+	 * individual requests.
+	 */
 	$request_id = flowview_db_fetch_cell_prepared('SELECT id
 		FROM parallel_database_query
-		WHERE md5sum = ?',
-		array($query_md5));
+		WHERE md5sum = ?
+		AND user_id = ?',
+		array($query_md5, $user_id));
 
 	$time_to_live = read_config_option('flowview_parallel_time_to_live');
 
@@ -3878,6 +3884,25 @@ function parallel_database_query_request($tables, $stru_inner, $stru_outer) {
 }
 
 /**
+ * parallel_database_query_is_running - Checks to see if an existing parallel
+ * database query is currently running and return a true of false.  This prevents
+ * multiple simultaneouls run requests from polluting the output.
+ */
+function parallel_database_query_is_running($request_id) {
+	$status = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
+		FROM parallel_database_query
+		WHERE id = ?
+		AND status != ?',
+		array($request_id, 'complete'));
+
+	if ($status != 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
  * parallel_database_query_run - Runs a parallel query by calling the flowview_running.php
  * in background.  If the data is already cached, then the number of pending request
  * will be zero and the flowview_runner.php will not be called and the results will
@@ -3895,21 +3920,27 @@ function parallel_database_query_run($requests) {
 	$php      = read_config_option('path_php_binary');
 	$redirect = '';
 
-	foreach($requests as $query_id) {
+	foreach($requests as $request_id) {
 		$pending = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
 			FROM parallel_database_query
 			WHERE id = ?
 			AND status = ?',
-			array($query_id, 'pending'));
+			array($request_id, 'pending'));
 
 		if ($pending > 0) {
-			db_debug('Launching FlowView Database Query Process ' . $query_id);
+			/* prime the table to prevent multiple runs */
+			flowview_db_execute_prepared('UPDATE parallel_database_query
+				SET status = ?
+				WHERE id = ?',
+				array('scheduled', $request_id));
 
-			cacti_log('NOTE: Launching FlowView Database Query Process ' . $query_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
+			db_debug('Launching FlowView Database Query Process ' . $request_id);
 
-			exec_background($php, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$query_id" . ($debug ? ' --debug':''), $redirect);
+			cacti_log('NOTE: Launching FlowView Database Query Process ' . $request_id, false, 'BOOST', POLLER_VERBOSITY_MEDIUM);
+
+			exec_background($php, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$request_id" . ($debug ? ' --debug':''), $redirect);
 		} else {
-			db_debug('Not Luanching FlowView Database Query Process ' . $query_id . ' as it has already completed or is running.');
+			db_debug('Not Luanching FlowView Database Query Process ' . $request_id . ' as it has already completed or is running.');
 		}
 	}
 
@@ -3936,8 +3967,8 @@ function parallel_database_query_run($requests) {
 	if ($total_time >= $max_time) {
 		raise_message_javascript('parallel_query_timeout', __('The Parallel Query Timed Out.  Please contact your administrator', 'flowview'), MESSAGE_LEVEL_ERROR);
 
-		foreach($requests as $query_id) {
-			parallel_database_query_cleanup($query_id);
+		foreach($requests as $request_id) {
+			parallel_database_query_cleanup($request_id);
 		}
 
 		exit;
@@ -3947,7 +3978,7 @@ function parallel_database_query_run($requests) {
 		$results = json_decode(flowview_db_fetch_cell_prepared('SELECT results
 			FROM parallel_database_query
 			WHERE id = ?',
-			array($query_id)), true);
+			array($request_id)), true);
 	} else {
 		$reduce_query = flowview_db_fetch_cell_prepared('SELECT reduce_query
 			FROM parallel_database_query
@@ -4031,8 +4062,8 @@ function parallel_database_query_run($requests) {
 		}
 	}
 
-	foreach($requests as $query_id) {
-		parallel_database_query_cleanup($query_id);
+	foreach($requests as $request_id) {
+		parallel_database_query_cleanup($request_id);
 	}
 
 	return $results;
@@ -4198,8 +4229,58 @@ function parallel_database_query_cleanup($request_id, $remove = false) {
 	}
 }
 
+function parallel_database_query_cancel($query_id) {
+	$processes = db_fetch_assoc_prepared('SELECT *
+		FROM processes
+		WHERE tasktype = ?
+		AND taskname LIKE ?
+		OR taskname LIKE ?',
+		array('flowview', 'db_query_' . $query_id, 'db_shard_' . $query_id));
+
+	if (cacti_sizeof($processes)) {
+		foreach($processes as $p) {
+			cacti_log("WARNING: Killing FlowView Query Process with Task Name:{$p['taskname']} and PID:{$p['pid']}", false, 'FLOWVIEW');
+
+			posix_kill($p['pid'], SIGKILL);
+
+			db_execute_prepared('DELETE FROM processes WHERE id = ?', array($p['id']));
+		}
+	}
+
+	/* remove data for query */
+	flowview_db_execute_prepared("DROP TABLE IF EXISTS parallel_database_query_map_$query_id");
+	flowview_db_execute_prepared("DELETE FROM parallel_database_query_shard
+		WHERE query_id = ?",
+		array($query_id));
+}
+
 function parallel_database_parent_runner($query_id) {
 	db_debug("Query $query_id started");
+
+	/**
+	 * If the query has already started, lets wait for
+	 * it to complete first.
+	 */
+	$status = flowview_db_fetch_cell_prepared('SELECT status
+		FROM parallel_database_query
+		WHERE id = ?',
+		array($query_id));
+
+	$max_runtime = read_config_option('flowview_parallel_runlimit');
+
+	if ($status != 'scheduled') {
+		$start = time();
+
+		while (parallel_database_query_is_running($query_id)) {
+			sleep(1);
+			$nowtime = time();
+
+			if ($nowtime - $start > $max_runtime) {
+				parallel_database_query_cancel($query_id);
+				break;
+			}
+		}
+	}
 
 	/**
 	 * first get the number of threads from the database settings table
@@ -4278,7 +4359,7 @@ function parallel_database_parent_runner($query_id) {
 		$total    = $query['total_shards'];
 		$table    = $query['map_table'];
 
-		while(true) {
+		while (true) {
 			$running = flowview_db_fetch_cell_prepared('SELECT COUNT(*)
                 FROM parallel_database_query_shard
 				WHERE query_id = ?

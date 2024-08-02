@@ -41,6 +41,7 @@ flowview_connect();
 $max_run_duration = read_config_option('flowview_query_max_runtime');
 
 if (empty($max_run_duration)) {
+	set_config_option('flowview_query_max_runtime', 60);
 	$max_run_duration = 60;
 }
 
