@@ -96,22 +96,26 @@ function flowview_get_item_details() {
 	html_end_box();
 
 	if ($response['mnt_by_present'] == true) {
-		$sql_params   = array();
-		$sql_params[] = $response['mnt_by'];
-		$sql_params[] = $response['mnt_by_source'];
+		$maintainers = preg_split('/[\s]+/', trim($response['mnt_by']));
 
-		$details = flowview_db_fetch_row_prepared("SELECT *
-			FROM plugin_flowview_irr_mntner
-			WHERE mntner = ?
-			AND source = ?
-			LIMIT 1", $sql_params);
+		foreach($maintainers as $m) {
+			$sql_params   = array();
+			$sql_params[] = $m;
+			$sql_params[] = $response['mnt_by_source'];
 
-		if (cacti_sizeof($details)) {
-			html_start_box(__('Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
+			$details = flowview_db_fetch_row_prepared("SELECT *
+				FROM plugin_flowview_irr_mntner
+				WHERE mntner = ?
+				AND source = ?
+				LIMIT 1", $sql_params);
 
-			flowview_print_details($cols, $details);
+			if (cacti_sizeof($details)) {
+				html_start_box(__('Authorized Agent Details', 'flowview'), '100%', '', '3', 'center', '');
 
-			html_end_box();
+				flowview_print_details($cols, $details);
+
+				html_end_box();
+			}
 		}
 	}
 
