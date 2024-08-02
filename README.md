@@ -86,20 +86,18 @@ https://mariadb.com/resources/blog/mariadb-maxscale-2-1-and-ssl-certificates/
 ## Required:
 
 Before you start, with this version of Flowview, you have to ensure that you are
-at MariaDB 10.0.12+.  Cacti has been shown to support MariaDB upto 14.x. MySQL
-5.6+ is required, and it has been reported that Cacti work with MySQL 8.x, but
-this MySQL release was a major paradigm shift for Oracle.  So, if you go there,
-be prepared for some extra love/hate in your relationship, but many of the
-changes are very welcome.
+at MariaDB 10.5 or above.  Cacti has been shown to support MariaDB upto 11.4.x. 
+MySQL 8.0+ is required. Unfortunatly, MySQL does not support Aria Tables and will
+therfore have lower performance than MariaDB for scanning data.
 
 Then, Install flowview just like any other plugin, just copy it into the plugin
-directory, and Use Console -> Plugin Management to Install and Enable.
+directory, and Use Console > Plugin Management to Install and Enable.
 
 This version of the flowview plugin no longer requires flowtools or
 OpenFlashCharts.  In fact the entire import and reporting process is handled
 through php and uses JavaScript based charting already available in Cacti.
 
-Note that additionally, you must install the linux utility `netstat` if it is
+Note that additionally, you must install the Linux utility `ss` if it is
 not already installed.  Netstat will help Cacti determine if the `flow-capture`
 service in question is actually running.
 
@@ -108,7 +106,7 @@ Console > Configuration > Settings > Flowview.  There is a flowview section ther
 that you can customize.
 
 Next you have to setup your Cacti server as a Flowview sink from your various
-sources.  Then, from Flowview -> Listeners, you must add the various listeners
+sources.  Then, from Flowview > Listeners, you must add the various listeners
 for all your flow-capture sources.  It's critical that you specify the correct
 port, and if there is to be any filtering, having a value other than 0 for the
 allowed devices.
@@ -117,6 +115,13 @@ You must then setup the init.d or systemd service to receive captured data and
 transfer into the Cacti database.  Check the README.md in the service folder to
 describe this process.  Any time you add a new listener, you must restart this
 service.
+
+## System Tuning
+
+You may be required to increase some system defaults such a max connections
+and UDP buffering to achieve high performance.  See your operating systems
+documentation on the use of the sysctl to increase somaxconn and your 
+max udp buffer space.  You can store your changes in /etc/sysctl.d/cacti.conf. 
 
 ## Automatic Flow Version Detection:
 
