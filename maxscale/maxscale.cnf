@@ -18,14 +18,19 @@ threads=auto
 # Set the address of the server to the network address of a MariaDB server.#
 ############################################################################
 
-[server1]
+[myserver2]
 type=server
-address=192.168.1.YYY
+address=192.168.1.10
 port=3306
 
-[server2]
+[myserver1]
 type=server
-address=192.168.1.XXX
+address=192.168.1.11
+port=3306
+
+[myserver3]
+type=server
+address=192.168.1.12
 port=3306
 
 ##################################################################################
@@ -49,7 +54,7 @@ port=3306
 [MariaDB-Monitor]
 type=monitor
 module=mariadbmon
-servers=server1,server2
+servers=myserver2,myserver1,myserver3
 user=maxmon
 password=maxmon
 monitor_interval=2s
@@ -82,31 +87,26 @@ replication_password=replicate
 # https://mariadb.com/kb/en/mariadb-maxscale-2308-authentication-modules/#required-grants #
 ###########################################################################################
 
-##################################################################
-# ReadConnRoute documentation:                                   #
-# https://mariadb.com/kb/en/mariadb-maxscale-2308-readconnroute/ #
-##################################################################
-
-[Read-Only-Service]
-type=service
-router=readconnroute
-servers=server1,server2
-user=maxmon
-password=maxmon
-
 ###################################################################
 # ReadWriteSplit documentation:                                   #
 # https://mariadb.com/kb/en/mariadb-maxscale-2308-readwritesplit/ #
 ###################################################################
 
-[Read-Write-Service]
+[Cacti-Service]
 type=service
 router=readwritesplit
-servers=server1,server2
+servers=myserver2,myserver1,myserver3
+user=maxmon
+password=maxmon
+max_slave_connections=0
+
+[FlowView-ScaleOut-Service]
+type=service
+router=readwritesplit
+servers=myserver2,myserver1,myserver3
 user=maxmon
 password=maxmon
 master_accept_reads=true
-
 
 ######################################################################################
 # Uncomment these to enable transparent transaction replay on node failure:          #
@@ -121,17 +121,17 @@ master_accept_reads=true
 # These listeners represent the ports the services will listen on. #
 ####################################################################
 
-[Read-Only-Listener]
-type      = listener
-service   = Read-Only-Service
-protocol  = mariadbprotocol
-port      = 3307
-ssl       = false
-
-[Read-Write-Listener]
+[Cacti-Listener]
 type     = listener
-service  = Read-Write-Service
+service  = Cacti-Service
 protocol = mariadbprotocol
-port     = 3308
+port     = 3307
 ssl      = false
+
+[FlowView-ScaleOut-Listener]
+type      = listener
+service   = FlowView-ScaleOut-Service
+protocol  = mariadbprotocol
+port      = 3308
+ssl       = false
 
