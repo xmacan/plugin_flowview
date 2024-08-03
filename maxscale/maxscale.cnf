@@ -18,14 +18,14 @@ threads=auto
 # Set the address of the server to the network address of a MariaDB server.#
 ############################################################################
 
-[myserver2]
-type=server
-address=192.168.1.10
-port=3306
-
 [myserver1]
 type=server
 address=192.168.1.11
+port=3306
+
+[myserver2]
+type=server
+address=192.168.1.10
 port=3306
 
 [myserver3]
@@ -54,7 +54,7 @@ port=3306
 [MariaDB-Monitor]
 type=monitor
 module=mariadbmon
-servers=myserver2,myserver1,myserver3
+servers=myserver1,myserver2,myserver3
 user=maxmon
 password=maxmon
 monitor_interval=2s
@@ -92,18 +92,33 @@ replication_password=replicate
 # https://mariadb.com/kb/en/mariadb-maxscale-2308-readwritesplit/ #
 ###################################################################
 
+###################################################################
+# It's important that the Cacti-Service include the parameter     #
+# max_slave_connections=0 as Cacti operates so quickly on some    #
+# tables that using a slave ever for a read can not occur         #
+###################################################################
+
 [Cacti-Service]
 type=service
 router=readwritesplit
-servers=myserver2,myserver1,myserver3
+servers=myserver1,myserver2,myserver3
 user=maxmon
 password=maxmon
 max_slave_connections=0
 
+###################################################################
+# For the FlowView Service, we want to round robin to all servers #
+# in this example, I'm using servers 1, 2, and 3, which are the   #
+# same servers as the Cacti server.  However, in a large scale    #
+# production deployment, you would want to have separate hardware # 
+# if you are using the same physical hardware as the Cacti server #
+# you would want to set the master_accept_reads=false             #
+###################################################################
+
 [FlowView-ScaleOut-Service]
 type=service
 router=readwritesplit
-servers=myserver2,myserver1,myserver3
+servers=myserver1,myserver2,myserver3
 user=maxmon
 password=maxmon
 master_accept_reads=true
@@ -118,7 +133,6 @@ master_accept_reads=true
 ####################################################################
 # Listener definitions for the services                            #
 #                                                                  #
-# These listeners represent the ports the services will listen on. #
 ####################################################################
 
 [Cacti-Listener]
