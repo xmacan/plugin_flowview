@@ -24,6 +24,12 @@
 
 $raw_engine = get_set_default_fast_engine();
 
+if ($raw_engine == 'Aria') {
+	$row_format = 'ROW_FORMAT=Page';
+} else {
+	$row_format = 'ROW_FORMAT=Dynamic';
+}
+
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route` (
 	`route` varchar(40) NOT NULL DEFAULT '',
 	`source` varchar(20) NOT NULL DEFAULT '',
@@ -59,6 +65,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route` (
 	KEY `source` (`source`),
 	KEY `origin` (`origin`))
 	ENGINE=$raw_engine
+	$row_format
 	COMMENT='Holds the basic whois database from RADB'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_block` (
@@ -80,7 +87,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_block` (
 	PRIMARY KEY (`as_block`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_aut_num` (
@@ -120,7 +127,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_aut_num` (
 	PRIMARY KEY (`aut_num`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inetnum` (
@@ -154,7 +161,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inetnum` (
 	KEY `inetnum` (`inetnum`))
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_mntner` (
@@ -180,7 +187,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_mntner` (
 	PRIMARY KEY (`mntner`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_organisation` (
@@ -210,7 +217,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_organisatio
 	PRIMARY KEY (`organisation`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_person` (
@@ -233,7 +240,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_person` (
 	PRIMARY KEY (`person`,`source`,`nic_hdl`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_role` (
@@ -261,7 +268,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_role` (
 	PRIMARY KEY (`role`,`source`,`address`,`nic_hdl`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_domain` (
@@ -289,7 +296,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_domain` (
 	PRIMARY KEY (`domain`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_set` (
@@ -315,7 +322,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_as_set` (
 	PRIMARY KEY (`as_set`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_irt` (
@@ -344,7 +351,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_irt` (
 	PRIMARY KEY (`irt`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route_set` (
@@ -368,7 +375,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_route_set` 
 	PRIMARY KEY (`route_set`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_filter_set` (
@@ -391,7 +398,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_filter_set`
 	PRIMARY KEY (`filter_set`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_peering_set` (
@@ -414,7 +421,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_peering_set
 	PRIMARY KEY (`peering_set`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inet_rtr` (
@@ -443,7 +450,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inet_rtr` (
 	PRIMARY KEY (`inet_rtr`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_rtr_set` (
@@ -467,7 +474,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_rtr_set` (
 	PRIMARY KEY (`rtr_set`,`source`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from variout internet registries'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poetic_form` (
@@ -482,7 +489,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poetic_form
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`poetic_form`,`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from ripe'");
 
 flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poem` (
@@ -501,6 +508,6 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_poem` (
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`poem`,`source`))
 	ENGINE=$raw_engine
-	ROW_FORMAT=Dynamic
+	$row_format
 	COMMENT='Contains information from ripe'");
 
