@@ -414,12 +414,16 @@ function flowview_config_settings() {
 		$default_engine = 'Aria';
 	}
 
-	$queries = array_rekey(
-		flowview_db_fetch_assoc('SELECT id, name
-			FROM plugin_flowview_queries
-			ORDER BY name'),
-		'id', 'name'
-	);
+	if (flowview_db_table_exists('plugin_flowview_queries')) {
+		$queries = array_rekey(
+			flowview_db_fetch_assoc('SELECT id, name
+				FROM plugin_flowview_queries
+				ORDER BY name'),
+			'id', 'name'
+		);
+	} else {
+		$queries = array();
+	}
 
 	$temp = array(
 		'flowview_header' => array(
