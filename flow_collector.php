@@ -1456,7 +1456,7 @@ function get_sql_prefix($flowtime) {
 }
 
 function process_fv10($p, $ex_addr) {
-	global $templates, $tlengths, $allfields, $pacmap;
+	global $listener_id, $templates, $tlengths, $allfields, $pacmap;
 
 	flowview_connect();
 
