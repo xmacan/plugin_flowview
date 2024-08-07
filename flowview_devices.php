@@ -77,7 +77,7 @@ $device_edit = array(
 		'friendly_name' => __('Protocol', 'flowview'),
 		'description' => __('The IP Protocol to use for this listener.', 'flowview'),
 		'value' => '|arg1:protocol|',
-		'array' => array('UDP' => __('UDP Protocol', 'flowview'), 'TCP' => __('TCP Protocol', 'flowview')),
+		'array' => array('UDP' => __('UDP Protocol', 'flowview')), //'TCP' => __('TCP Protocol', 'flowview')),
 		'default' => 'UDP'
 	),
 	'enabled' => array(
