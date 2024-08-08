@@ -1090,7 +1090,8 @@ function flowview_graph_button($data) {
 
 	/* get all the IP addresses and hostname for various streams */
 	if (!cacti_sizeof($flow_hosts)) {
-		$flow_hosts = flowview_db_fetch_assoc('SELECT fvs.device_id AS id, fvs.ex_addr, fvq.ex_addr AS qex_addr, SUBSTRING_INDEX(fvs.name, ".", 1) AS name
+		$flow_hosts = flowview_db_fetch_assoc('SELECT fvs.device_id AS id, fvs.ex_addr,
+			fvq.ex_addr AS qex_addr, SUBSTRING_INDEX(fvs.name, ".", 1) AS name
 			FROM plugin_flowview_device_streams AS fvs
 			LEFT JOIN plugin_flowview_queries AS fvq
 			ON fvs.device_id = fvq.device_id
@@ -1117,9 +1118,11 @@ function flowview_graph_button($data) {
 		foreach($flow_hosts as $id => $host) {
 			if ($i == 0) {
 				$sql_params1[] = $local_graph_id;
+				$sql_where1 .= " AND ((hostname = ? OR hostname = ? OR hostname LIKE ?)";
+			} else {
+				$sql_where1 .= " OR (hostname = ? OR hostname = ? OR hostname LIKE ?)";
 			}
 
-			$sql_where1 .= " OR (hostname = ? OR hostname = ? OR hostname LIKE ?)";
 
 			$sql_params1[] = $host['ex_addr'];
 			$sql_params1[] = $host['name'];
@@ -1127,9 +1130,11 @@ function flowview_graph_button($data) {
 
 			if ($i == 0) {
 				$sql_params2[] = $local_graph_id;
+				$sql_where2 .= " AND ((description = ? OR description = ? OR description LIKE ?)";
+			} else {
+				$sql_where2 .= " OR (description = ? OR description = ? OR description LIKE ?)";
 			}
 
-			$sql_where2 .= " OR (description = ? OR description = ? OR description LIKE ?)";
 
 			$sql_params2[] = $host['ex_addr'];
 			$sql_params2[] = $host['name'];
@@ -1137,6 +1142,9 @@ function flowview_graph_button($data) {
 
 			$i++;
 		}
+
+		$sql_where1 .= ')';
+		$sql_where2 .= ')';
 
 		$sql_params = array_merge($sql_params1, $sql_params2);
 	} else {
@@ -1258,7 +1266,7 @@ function flowview_graph_button($data) {
 			$url .= "&predefined_timespan=0";
 		}
 
-		cacti_log("The URL is this:" . $url);
+		//cacti_log("The URL is this:" . $url);
 
 		if (api_user_realm_auth('flowview.php') && !empty($host_id)) {
 			print '<a class="iconLink flowview" href="' .  html_escape($url) . '" title="' . __esc('View NetFlow Traffic In Range', 'flowview') . '"><i class="deviceRecovering fas fa-water"></i></a><br>';
