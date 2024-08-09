@@ -158,7 +158,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_irr_inetnum` (
 	`present` tinyint(3) unsigned not null default '1',
 	`last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`inetnum`,`source`),
-	KEY `inetnum` (`inetnum`))
+	KEY `inetnum` (`inetnum`),
 	KEY `source` (`source`))
 	ENGINE=$raw_engine
 	$row_format
