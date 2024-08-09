@@ -89,6 +89,8 @@ function flowview_get_item_details() {
 
 	$mnt_by_present = false;
 
+	print "<div style='height:350px;overflow-y:scroll'>";
+
 	html_start_box(__('Internet Route Registry Details', 'flowview'), '100%', '', '3', 'center', '');
 
 	$response = flowview_print_details($cols, $details);
@@ -118,6 +120,8 @@ function flowview_get_item_details() {
 			}
 		}
 	}
+
+	print "</div>";
 
 	ob_get_flush();
 }
@@ -195,7 +199,7 @@ function view_databases() {
 	if (get_request_var('tab') == 'dns_cache') {
 		view_dns_cache();
 	} elseif (get_request_var('tab') == 'route') {
-		view_routes();
+		view_routes(get_request_var('tab'));
 	} else {
 		view_db_table(get_request_var('tab'), $db_tabs);
 	}
@@ -967,8 +971,8 @@ function view_db_table($tab, &$tabs) {
 
 						ui.tooltip.css('width', '800px');
 						ui.tooltip.css('max-width', '800px');
-						ui.tooltip.css('height', '400px');
-						ui.tooltip.css('max-height', '400px');
+						ui.tooltip.css('height', '350px');
+						ui.tooltip.css('max-height', '350px');
 						ui.tooltip.css('overflow-y', 'scroll');
 					},
 					close: function(event, ui) {
@@ -1460,7 +1464,7 @@ function view_dns_cache() {
 	form_end();
 }
 
-function view_routes() {
+function view_routes($tab) {
 	global $actions, $item_rows;
 
 	/* ================= input validation and session storage ================= */
@@ -1581,6 +1585,9 @@ function view_routes() {
 			</form>
 			<script type='text/javascript'>
 
+			var tab='<?php print $tab;?>';
+			var myTimer;
+
 			function applyFilter() {
 				strURL  = 'flowview_databases.php?header=false';
 				strURL += '&tab=route';
@@ -1602,6 +1609,55 @@ function view_routes() {
 				loadPageNoHeader(strURL);
 			}
 
+			function initializeTips() {
+				// Servers need tooltips
+				$('table[id^="flowview_databases_"]').tooltip({
+					items: 'tr.selectable',
+					open: function(event, ui) {
+						if (typeof(event.originalEvent) == 'undefined') {
+							return false;
+						}
+
+						var id = $(ui.tooltip).attr('id');
+
+						$('div.ui-tooltip').not('#'+ id).remove();
+
+						$('#'+id).tooltip();
+
+						ui.tooltip.position({
+							my: 'left+20 top',
+							at: 'right+15 center',
+							of: event
+						});
+
+						ui.tooltip.css('width', '800px');
+						ui.tooltip.css('max-width', '800px');
+						ui.tooltip.css('height', '350px');
+						ui.tooltip.css('max-height', '350px');
+						ui.tooltip.css('overflow-y', 'scroll');
+					},
+					close: function(event, ui) {
+						ui.tooltip.hover(
+							function () {
+								$(this).stop(true).fadeTo(400, 1);
+							},
+							function() {
+								$(this).fadeOut('400', function() {
+								$(this).remove();
+							});
+						});
+					},
+					position: {my: "left:15 top", at: "right center", of:self},
+					content: function(callback) {
+						var id = $(this).attr('id');
+
+						$.get('flowview_databases.php?action=database_details&tab='+tab+'&id='+id, function(data) {
+							callback(data);
+						});
+					}
+				});
+			}
+
 			$(function() {
 				$('#refresh').click(function() {
 					applyFilter();
@@ -1619,6 +1675,8 @@ function view_routes() {
 					event.preventDefault();
 					applyFilter();
 				});
+
+				initializeTips();
 			});
 
 			</script>
@@ -1725,19 +1783,25 @@ function view_routes() {
 
 	html_header_sort($display_text, get_request_var('sort_column'), get_request_var('sort_direction'), false, 'flowview_databases.php?tab=route');
 
-	$i = 0;
 	if (cacti_sizeof($dns_cache)) {
 		foreach ($dns_cache as $l) {
-			form_alternate_row('line' . $i, false);
-			form_selectable_cell(filter_value($l['route'], get_request_var('filter')), $i);
-			form_selectable_cell(filter_value($l['origin'], get_request_var('filter')), $i);
-			form_selectable_cell(filter_value($l['descr'], get_request_var('filter')), $i);
-			form_selectable_cell(filter_value($l['source'], get_request_var('filter')), $i);
-			form_selectable_cell(filter_value($l['mnt_by'], get_request_var('filter')), $i);
-			form_selectable_cell($l['last_modified'], $i, '', 'right');
-			form_end_row();
+			$id = array();
+			$rowid = array_keys($l);
+			foreach($rowid as $col) {
+				$id[$col] = $l[$col];
+			}
 
-			$i++;
+			$rid = base64_encode(json_encode($id));
+
+			form_alternate_row('line_' . $rid, false);
+
+			form_selectable_cell(filter_value($l['route'], get_request_var('filter')), $rid);
+			form_selectable_cell(filter_value($l['origin'], get_request_var('filter')), $rid);
+			form_selectable_cell(filter_value($l['descr'], get_request_var('filter')), $rid);
+			form_selectable_cell(filter_value($l['source'], get_request_var('filter')), $rid);
+			form_selectable_cell(filter_value($l['mnt_by'], get_request_var('filter')), $rid);
+			form_selectable_cell($l['last_modified'], $rid, '', 'right');
+			form_end_row();
 		}
 	} else {
 		print "<tr class='tableRow'><td colspan='" . (cacti_sizeof($display_text)+1) . "'><em>" . __('No Matching Routes Found', 'flowview') . "</em></td></tr>\n";
