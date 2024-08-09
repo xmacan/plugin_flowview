@@ -6435,6 +6435,7 @@ function create_raw_partition($table) {
 
 	$data['primary']   = 'sequence';
 	$data['keys'][]    = array('name' => 'listener_id', 'columns' => 'listener_id');
+	$data['keys'][]    = array('name' => 'template_id', 'columns' => 'template_id');
 	$data['keys'][]    = array('name' => 'ex_addr', 'columns' => 'ex_addr');
 	$data['keys'][]    = array('name' => 'start_time', 'columns' => 'start_time');
 	$data['keys'][]    = array('name' => 'end_time', 'columns' => 'end_time');
