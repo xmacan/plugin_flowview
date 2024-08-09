@@ -1377,7 +1377,6 @@ function flowview_display_filter() {
 			'&device_id='    + $('#device_id').val() +
 			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
 			'&exclude='      + $('#exclude').val() +
@@ -1442,7 +1441,6 @@ function flowview_display_filter() {
 			'&device_id='    + $('#device_id').val() +
 			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
 			'&exclude='      + $('#exclude').val() +
@@ -1508,7 +1506,6 @@ function flowview_display_filter() {
 			'&device_id='    + $('#device_id').val() +
 			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val()  +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
 			'&exclude='      + $('#exclude').val() +
@@ -1604,7 +1601,6 @@ function flowview_display_filter() {
 			'&device_id='    + $('#device_id').val() +
 			'&ex_addr='      + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='    + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-			'&sortvalue='    + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='  + $('#cutofflines').val() +
 			'&cutoffoctets=' + $('#cutoffoctets').val() +
 			'&table='        + $('#table').is(':checked') +
@@ -1692,7 +1688,6 @@ function flowview_display_filter() {
 			'&device_id='           + device_id +
 			'&ex_addr='             + ($('#ex_addr').val() != null ? $('#ex_addr').val():'') +
 			'&sortfield='           + ($('#sortfield').val() != null ? $('#sortfield').val():'') +
-			'&sortvalue='           + ($('#sortfield').val() != null ? $('#sortfield option:selected').html():'Bytes') +
 			'&cutofflines='         + $('#cutofflines').val() +
 			'&cutoffoctets='        + $('#cutoffoctets').val() +
 			'&exclude='             + $('#exclude').val() +
@@ -2755,15 +2750,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 			$request_type = 'statistics';
 
 			if ($data['statistics'] == 99) {
-				$sortvalue = __('N/A', 'flowview');
-			} elseif (isset($stat_columns_array[$data['statistics']][$data['sortfield']])) {
-				$sortvalue = $stat_columns_array[$data['statistics']][$data['sortfield']];
-			}
-
-			if ($data['statistics'] == 99) {
 				$data['sortfield'] = '-1';
-			} elseif (!isset($sortvalue) || ($sortvalue != get_request_var('sortname'))) {
-				$data['sortfield'] = 'bytes';
 			} elseif (!isset($stat_columns_array[$data['statistics']][$data['sortfield']])) {
 				$data['sortfield'] = 'bytes';
 			}
@@ -3061,14 +3048,6 @@ function run_flow_query($session, $query_id, $start, $end) {
 			}
 		} elseif ($data['printed'] > 0) {
 			$request_type = 'printed';
-
-			if (isset($print_columns_array[$data['printed']][$data['sortfield']])) {
-				$sortvalue = $print_columns_array[$data['printed']][$data['sortfield']];
-			}
-
-			if (!isset($sortvalue) || ($sortvalue != get_request_var('sortname'))) {
-				$data['sortfield'] = 'bytes';
-			}
 
 			/**
 			 * For printed reports, we have to be careful as they return several million rows.  So, to
@@ -3980,7 +3959,7 @@ function parallel_database_query_run($requests) {
 			break;
 		}
 
-		usleep(50000);
+		usleep(5000);
 
 		$total_time = time() - $start;
 	}

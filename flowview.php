@@ -438,11 +438,6 @@ function flowview_request_vars() {
 			'options' => array('options' => 'sanitize_search_string'),
 			'default' => 'bytes'
 		),
-		'sortvalue' => array(
-			'filter' => FILTER_CALLBACK,
-			'options' => array('options' => 'sanitize_search_string'),
-			'default' => 0
-		),
 		'report' => array(
 			'filter' => FILTER_CALLBACK,
 			'options' => array('options' => 'sanitize_search_string'),
