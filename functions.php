@@ -2746,7 +2746,9 @@ function run_flow_query($session, $query_id, $start, $end) {
 	/* parallel (the new default), or as a single union query      */
 	/*-------------------------------------------------------------*/
 
-	$sql = '';
+	$sql       = '';
+	$sql_outer = '';
+	$sql_inner = '';
 
 	if (cacti_sizeof($data)) {
 		if ($data['statistics'] > 0) {
@@ -3166,6 +3168,25 @@ function run_flow_query($session, $query_id, $start, $end) {
 				$sql_order = 'ORDER BY ' . $data['sortfield'] .
 					(preg_match('/^(bytes|packets|flows)$/i', $data['sortfield']) ? ' DESC':' ASC');
 			}
+		} else {
+			cacti_log(sprintf('WARNING: The Flowview Query %s [%s] does not include either a Statistical or Printed Report.', $data['name'], $data['id']), false, 'FLOWVIEW');
+			return false;
+		}
+
+		if ($sql_outer == '' || $sql_inner == '') {
+			if ($data['statistics'] > 0) {
+				$message = __('The Statistical Report %s is not known.  Please open a bug on GitHub', $data['statistics'], 'flowview');
+			} elseif($data['printed'] > 0) {
+				$message = __('The Printed Report %s is not known.  Please open a bug on GitHub', $data['printed'], 'flowview');
+			} else {
+				$message = __('No valid report was selected.  Please open a bug on GitHub', 'flowview');
+			}
+
+			raise_message('bad_report', $message, MESSAGE_LEVEL_ERROR);
+
+			cacti_log(sprintf('WARNING: The Flowview Query %s [%s] contains an invalid Statistical or Printed Report.', $data['name'], $data['id']), false, 'FLOWVIEW');
+
+			return false;
 		}
 
 		/* clean up sql formatting */
