@@ -193,9 +193,17 @@ function flowview_upgrade($current, $old) {
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
 		} else {
-			cacti_log("Updating template_id column to plugin_flowview_queries table to signed.", true, 'FLOWVIEW');
+			$col_type = flowview_db_fetch_cell('SELECT COLUMN_TYPE
+				FROM information_schema.COLUMNS
+				WHERE TABLE_NAME = "plugin_flowview_queries"
+				AND COLUMN_NAME = "template_id"
+				LIMIT 1');
 
-			flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
+			if (strpos($col_type, 'unsigned') !== false) {
+				cacti_log("Updating template_id column to plugin_flowview_queries table to signed.", true, 'FLOWVIEW');
+
+				flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
+			}
 		}
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr', false)) {
