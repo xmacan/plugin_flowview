@@ -433,6 +433,10 @@ function flowview_request_vars() {
 
     /* ================= input validation and session storage ================= */
     $filters = array(
+		'device_id' => array(
+			'filter' => FILTER_VALIDATE_INT,
+			'default' => '0'
+		),
 		'sortfield' => array(
 			'filter' => FILTER_CALLBACK,
 			'options' => array('options' => 'sanitize_search_string'),
