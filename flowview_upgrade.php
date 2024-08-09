@@ -102,7 +102,7 @@ unregister_process('flowview', 'upgrade', 1);
 exit(0);
 
 function flowview_upgrade($current, $old) {
-	global $config, $flowviewdb_default, $info;
+	global $config, $info;
 
 	if ($current != $old) {
 		api_plugin_register_hook('flowview', 'global_settings_update', 'flowview_global_settings_update', 'setup.php', true);

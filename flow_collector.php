@@ -650,7 +650,7 @@ $listener  = flowview_db_fetch_row_prepared('SELECT *
 	WHERE id = ?',
 	array($listener_id));
 
-flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_streams` (
+flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_streams` (
 	device_id int(11) unsigned NOT NULL default '0',
 	ex_addr varchar(46) NOT NULL default '',
 	name varchar(64) NOT NULL default '',
@@ -663,7 +663,7 @@ flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`p
 
 flowview_db_execute('DELETE FROM plugin_flowview_device_streams WHERE ex_addr LIKE "%:%"');
 
-flowview_db_execute("CREATE TABLE IF NOT EXISTS `" . $flowviewdb_default . "`.`plugin_flowview_device_templates` (
+flowview_db_execute("CREATE TABLE IF NOT EXISTS `plugin_flowview_device_templates` (
 	device_id int(11) unsigned NOT NULL default '0',
 	ex_addr varchar(46) NOT NULL default '',
 	template_id int(11) unsigned NOT NULL default '0',
@@ -693,7 +693,7 @@ if (cacti_sizeof($listener)) {
 	$refresh_seconds     = 300;
 	$tmpl_refreshed      = array(); // We update the templates every $refresh_seconds per peer
 
-	flowview_db_execute_prepared("UPDATE `" . $flowviewdb_default . "`.`plugin_flowview_devices`
+	flowview_db_execute_prepared("UPDATE `plugin_flowview_devices`
 		SET last_updated = NOW()
 		WHERE id = ?",
 		array($listener['id']));
@@ -827,7 +827,7 @@ if (cacti_sizeof($listener)) {
 
 			if (!$tmpl_refreshed[$ex_addr] && isset($templates[$ex_addr]) && cacti_sizeof($templates[$ex_addr])) {
 				foreach($templates[$ex_addr] AS $template_id => $t) {
-					flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_templates`
+					flowview_db_execute_prepared("INSERT INTO `plugin_flowview_device_templates`
 						(device_id, ex_addr, template_id, column_spec) VALUES (?, ?, ?, ?)
 						ON DUPLICATE KEY UPDATE column_spec=VALUES(column_spec), last_updated=NOW()",
 						array($listener['id'], $ex_addr, $template_id, json_encode($t)));
@@ -842,7 +842,7 @@ if (cacti_sizeof($listener)) {
 exit(0);
 
 function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed, &$templates, $refresh_seconds) {
-	global $config, $flowviewdb_default;
+	global $config;
 
 	static $stream_refreshed; // We update the heartbeat every $refresh_seconds per peer
 	static $sstart;           // Array of ex_addr start times
@@ -886,7 +886,7 @@ function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed,
 			$name = sprintf('Stream [%s]', $ex_addr);
 		}
 
-		flowview_db_execute_prepared("INSERT INTO `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+		flowview_db_execute_prepared("INSERT INTO `plugin_flowview_device_streams`
 			(device_id, ex_addr, name, version, last_updated) VALUES (?, ?, IF(name = '', ?, name), ?, ?)
 			ON DUPLICATE KEY UPDATE
 				version = VALUES(version),
@@ -894,13 +894,13 @@ function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed,
 				last_updated = VALUES(last_updated)",
 			array($listener_id, $ex_addr, $name, $db_version, $update_time));
 
-		flowview_db_execute_prepared("DELETE FROM `" . $flowviewdb_default . "`.`plugin_flowview_device_streams`
+		flowview_db_execute_prepared("DELETE FROM `plugin_flowview_device_streams`
 			WHERE device_id = ? AND last_updated < FROM_UNIXTIME(UNIX_TIMESTAMP()-86400)",
 			array($listener_id));
 
 		heartbeat_process('flowview', 'child_' . $listener_id, $config['poller_id']);
 
-		flowview_db_execute_prepared("UPDATE `" . $flowviewdb_default . "`.`plugin_flowview_devices`
+		flowview_db_execute_prepared("UPDATE `plugin_flowview_devices`
 			SET last_updated = NOW()
 			WHERE id = ?",
 			array($listener_id));
