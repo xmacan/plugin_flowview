@@ -1689,6 +1689,9 @@ function process_fv10($p, $ex_addr) {
 function flowview_template_supported($template, $tid) {
 	global $required_fields_v4, $required_fields_v6;
 
+	static $logged_ipv4_errors = false;
+	static $logged_ipv6_errors = false;
+
 	$fieldspec = array('field_id', 'name', 'pack', 'unpack');
 	$columns   = array();
 
@@ -1698,15 +1701,21 @@ function flowview_template_supported($template, $tid) {
 
 	if (isset($columns['12'])) {
 		foreach($required_fields_v4 as $columnName => $field_id) {
-			if (!isset($columns[$field_id])) {
+			if (!isset($columns[$field_id]) && !$logged_ipv4_errors) {
 				cacti_log('Column with field id ' . $field_id . ' does not exist for ipv4 flow template.');
+
+				$logged_ipv4_errors = true;
+
 				return false;
 			}
 		}
 	} elseif (isset($columns['28'])) {
 		foreach($required_fields_v6 as $columnName => $field_id) {
-			if (!isset($columns[$field_id])) {
+			if (!isset($columns[$field_id]) && !$logged_ipv6_errors) {
 				cacti_log('Column with field id ' . $field_id . ' does not exist for ipv6 flow template.');
+
+				$logged_ipv6_errors = true;
+
 				return false;
 			}
 		}
