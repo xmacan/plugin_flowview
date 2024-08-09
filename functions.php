@@ -6382,7 +6382,7 @@ function create_raw_partition($table) {
 	$data['columns'][] = array('name' => 'listener_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
 
 	// Template information for v9 and IPFIX
-	$data['columns'][] = array('name' => 'template_id', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false);
+	$data['columns'][] = array('name' => 'template_id', 'type' => 'int(11)', 'unsigned' => false, 'NULL' => false);
 
 	// Engine Information
 	$data['columns'][] = array('name' => 'engine_type', 'type' => 'int(11)', 'unsigned' => true, 'NULL' => false, 'default' => '0');
