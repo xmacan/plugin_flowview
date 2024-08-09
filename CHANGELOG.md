@@ -77,6 +77,7 @@
 * feature#180: Allow Report Raw Data to be Downloaded
 * feature#181: Allow Raw Report Data to be Exported from FlowView Page
 * feature#191: Make it possible to disable a Listener Service
+* feature#192: Allow an Administrator to observe the backlog on their Flowview Ports to know of overload
 
 --- 3.3 ---
 

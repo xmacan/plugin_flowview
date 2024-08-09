@@ -506,7 +506,7 @@ function edit_device() {
 			WHERE dt.device_id = ?
 			$sql_where", $sql_params);
 
-		$addrs = flowview_db_fetch_assoc_prepared('SELECT DISTINCT ex_addr
+		$addrs = db_fetch_assoc_prepared('SELECT DISTINCT ex_addr
 			FROM plugin_flowview_device_templates
 			WHERE device_id = ?',
 			array($device['id']));
@@ -841,8 +841,12 @@ function show_devices () {
 		),
 		'nosort1' => array(
 			'display' => __('Observed Listen', 'flowview'),
-			'sort' => 'ASC',
 			'tip'   => __('The port security actually observed on the listeners port.', 'flowview'),
+			'align' => 'right'
+		),
+		'nosort2' => array(
+			'display' => __('Backlog', 'flowview'),
+			'tip'   => __('The Size of the UDP backlog in bytes.', 'flowview'),
 			'align' => 'right'
 		),
 		'streams' => array(
@@ -851,7 +855,7 @@ function show_devices () {
 			'tip'   => __('The number of inbound connections from various sources.', 'flowview'),
 			'align' => 'right'
 		),
-		'nosort2' => array(
+		'nosort3' => array(
 			'display' => __('Stream Versions', 'flowview'),
 			'sort' => 'ASC',
 			'tip'   => __('The Traffic Flow versions being observed.', 'flowview'),
@@ -872,12 +876,15 @@ function show_devices () {
 			if ($os == 'freebsd') {
 				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
 				$column = 3;
+				$scolumn = -1;
 			} else {
 				$status = shell_exec("ss -lntu | grep ':" . $row['port'] . " '");
 				$column = 4;
+				$scolumn = 2;
 				if (empty($status)) {
 					$status = shell_exec("netstat -an | grep ':" . $row['port'] . " '");
 					$column = 3;
+					$scolumn = 1;
 				}
 			}
 
@@ -909,6 +916,16 @@ function show_devices () {
 				$row['observed'] = isset($parts[$column]) ? $parts[$column]:'-';
 			}
 
+			if ($scolumn > 0) {
+				if (!$disabled) {
+					$row['backlog'] = isset($parts[$scolumn]) ? $parts[$scolumn]:'-';
+				} else {
+					$row['backlog'] = __('N/A', 'flowview');
+				}
+			} else {
+				$row['backlog'] = __('N/A', 'flowview');
+			}
+
 			if ($row['allowfrom'] == 0) {
 				$row['allowfrom'] = __('All', 'flowview');
 			}
@@ -921,6 +938,7 @@ function show_devices () {
 			form_selectable_cell($row['protocol'], $row['id'], '', 'right');
 			form_selectable_cell(get_colored_device_status($disabled, $status), $row['id'], '', 'right');
 			form_selectable_cell($row['observed'], $row['id'], '', 'right');
+			form_selectable_cell($row['backlog'], $row['id'], '', 'right');
 			form_selectable_cell($row['streams'], $row['id'], '', 'right');
 			form_selectable_cell($row['versions'], $row['id'], '', 'right');
 			form_selectable_cell($row['last_updated'], $row['id'], '', 'right');
