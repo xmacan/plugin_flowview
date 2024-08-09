@@ -2798,10 +2798,10 @@ function run_flow_query($session, $query_id, $start, $end) {
 						array('name' => 'p4608ToInfin', 'min' => 4680, 'max' => -1,   'title' => __esc('> %d Bytes', 4680, 'flowview'))
 					);
 
-					$sql_query = $sql_inner = '';
+					$sql_outer = $sql_inner = '';
 
 					foreach($sql_array as $el) {
-						$sql_query .= ($sql_query != '' ? ', ':'SELECT ') . 'SUM(' . $el['name'] . ') AS ' . $el['name'];
+						$sql_outer .= ($sql_outer != '' ? ', ':'SELECT ') . 'SUM(' . $el['name'] . ') AS ' . $el['name'];
 						$sql_inner .= ($sql_inner != '' ? ', ':'SELECT ') .
 							'SUM(CASE WHEN bytes_ppacket BETWEEN ' .
 							$el['min'] . ' AND ' . $el['max'] . ' THEN bytes_ppacket ELSE 0 END) AS ' . $el['name'];
@@ -2813,7 +2813,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 2:
-					$sql_query = 'SELECT src_rdomain,
+					$sql_outer = 'SELECT src_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_rdomain,
@@ -2824,7 +2824,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 3:
-					$sql_query = 'SELECT dst_rdomain,
+					$sql_outer = 'SELECT dst_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_rdomain,
@@ -2835,7 +2835,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 4:
-					$sql_query = 'SELECT src_rdomain, dst_rdomain,
+					$sql_outer = 'SELECT src_rdomain, dst_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_rdomain, dst_rdomain,
@@ -2846,7 +2846,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 5:
-					$sql_query = 'SELECT dst_port, protocol,
+					$sql_outer = 'SELECT dst_port, protocol,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_port, protocol,
@@ -2857,7 +2857,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 6:
-					$sql_query = 'SELECT src_port, protocol,
+					$sql_outer = 'SELECT src_port, protocol,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_port, protocol,
@@ -2868,7 +2868,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 7:
-					$sql_query = 'SELECT src_port, dst_port, protocol,
+					$sql_outer = 'SELECT src_port, dst_port, protocol,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_port, dst_port, protocol,
@@ -2879,7 +2879,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 8:
-					$sql_query = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, dst_domain, dst_rdomain,
+					$sql_outer = 'SELECT INET6_NTOA(dst_addr) AS dst_addr, dst_domain, dst_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_addr, dst_domain, dst_rdomain,
@@ -2890,7 +2890,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 9:
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_domain, src_rdomain,
+					$sql_outer = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_domain, src_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_addr, src_domain, src_rdomain,
@@ -2901,7 +2901,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 10:
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
+					$sql_outer = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
 					$sql_inner = 'SELECT src_addr, dst_addr,
@@ -2912,7 +2912,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 11:
-					$sql_query  = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_domain, src_rdomain,
+					$sql_outer  = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_domain, src_rdomain,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner1 = 'SELECT src_addr, src_domain AS src_domain, src_rdomain AS src_rdomain,
@@ -2927,7 +2927,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 12:
-					$sql_query = 'SELECT protocol,
+					$sql_outer = 'SELECT protocol,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT protocol,
@@ -2938,7 +2938,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 17:
-					$sql_query = 'SELECT src_if,
+					$sql_outer = 'SELECT src_if,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_if,
@@ -2949,7 +2949,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 18:
-					$sql_query = 'SELECT dst_if,
+					$sql_outer = 'SELECT dst_if,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_if,
@@ -2960,7 +2960,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 23:
-					$sql_query = 'SELECT src_if, dst_if,
+					$sql_outer = 'SELECT src_if, dst_if,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_if, dst_if,
@@ -2971,7 +2971,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 19:
-					$sql_query = 'SELECT src_as,
+					$sql_outer = 'SELECT src_as,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_as,
@@ -2982,7 +2982,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 20:
-					$sql_query = 'SELECT dst_as,
+					$sql_outer = 'SELECT dst_as,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_as,
@@ -2993,7 +2993,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 21:
-					$sql_query = 'SELECT src_as, dst_as,
+					$sql_outer = 'SELECT src_as, dst_as,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_as, dst_as,
@@ -3004,7 +3004,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 22:
-					$sql_query = 'SELECT tos,
+					$sql_outer = 'SELECT tos,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT tos,
@@ -3015,7 +3015,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 24:
-					$sql_query = 'SELECT src_prefix,
+					$sql_outer = 'SELECT src_prefix,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_prefix,
@@ -3026,7 +3026,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 25:
-					$sql_query = 'SELECT dst_prefix,
+					$sql_outer = 'SELECT dst_prefix,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT dst_prefix,
@@ -3037,7 +3037,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case 26:
-					$sql_query = 'SELECT src_prefix, dst_prefix,
+					$sql_outer = 'SELECT src_prefix, dst_prefix,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets';
 
 					$sql_inner = 'SELECT src_prefix, dst_prefix,
@@ -3084,7 +3084,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 			 */
 			switch($data['printed']) {
 				case '1':
-					$sql_query = 'SELECT src_if, INET6_NTOA(src_addr) AS src_addr, dst_if, INET6_NTOA(dst_addr) AS dst_addr,
+					$sql_outer = 'SELECT src_if, INET6_NTOA(src_addr) AS src_addr, dst_if, INET6_NTOA(dst_addr) AS dst_addr,
 						protocol, src_port, dst_port, tos, flags,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
@@ -3100,7 +3100,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case '4':
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
+					$sql_outer = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
 						protocol, src_as, dst_as,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
@@ -3113,7 +3113,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case '5':
-					$sql_query = 'SELECT start_time, end_time,
+					$sql_outer = 'SELECT start_time, end_time,
 						src_if, INET6_NTOA(src_addr) AS src_addr, src_port,
 						dst_if, INET6_NTOA(dst_addr) AS dst_addr, dst_port,
 						protocol, flags,
@@ -3135,7 +3135,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case '6':
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
+					$sql_outer = 'SELECT INET6_NTOA(src_addr) AS src_addr, INET6_NTOA(dst_addr) AS dst_addr,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
 					$sql_inner = 'SELECT src_addr, dst_addr,
@@ -3146,7 +3146,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 					break;
 				case '7':
-					$sql_query = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_port,
+					$sql_outer = 'SELECT INET6_NTOA(src_addr) AS src_addr, src_port,
 						protocol, INET6_NTOA(dst_addr) AS dst_addr, dst_port,
 						SUM(flows) AS flows, SUM(bytes) AS bytes, SUM(packets) AS packets, src_domain, dst_domain';
 
@@ -3170,13 +3170,13 @@ function run_flow_query($session, $query_id, $start, $end) {
 
 		/* clean up sql formatting */
 		if (isset($sql_inner)) {
-			$sql_query          = str_replace(array("\n", "\t"), array(' ', ''), $sql_query);
+			$sql_outer          = str_replace(array("\n", "\t"), array(' ', ''), $sql_outer);
 			$sql_inner          = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner);
 
 			$sql_groupby        = str_replace(array("\n", "\t"), array(' ', ''), $sql_groupby);
 			$sql_inner_groupby  = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner_groupby);
 		} else {
-			$sql_query          = str_replace(array("\n", "\t"), array(' ', ''), $sql_query);
+			$sql_outer          = str_replace(array("\n", "\t"), array(' ', ''), $sql_outer);
 			$sql_inner1         = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner1);
 			$sql_inner2         = str_replace(array("\n", "\t"), array(' ', ''), $sql_inner2);
 
@@ -3226,7 +3226,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 					}
 				}
 
-				$sql = "$sql_query FROM ($sql) AS rs $sql_groupby $sql_having $sql_order $sql_limit";
+				$sql = "$sql_outer FROM ($sql) AS rs $sql_groupby $sql_having $sql_order $sql_limit";
 
 				$start   = microtime(true);
 				$threads = 1;
@@ -3272,7 +3272,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 					);
 
 					$stru_outer = array(
-						'sql_query'   => $sql_query,
+						'sql_query'   => $sql_outer,
 						'sql_where'   => '',
 						'sql_groupby' => $sql_groupby,
 						'sql_having'  => $sql_having,
@@ -3311,7 +3311,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 					}
 
 					$stru_outer = array(
-						'sql_query'        => $sql_query,
+						'sql_query'        => $sql_outer,
 						'sql_where'        => '',
 						'sql_having'       => $sql_having,
 						'sql_groupby'      => $sql_groupby,
@@ -3725,7 +3725,7 @@ function flowview_convert_yeardayhour_to_date($range, $year, $day, $hour = 0) {
  * much of the other attributes are intact and have the same meanings as above.
  *
  * $stru_outer = array(
- *   'sql_query'        => $sql_query,
+ *   'sql_query'        => $sql_outer,
  *   'sql_where'        => '',
  *   'sql_having'       => $sql_having,
  *   'sql_groupby'      => $sql_groupby,
@@ -4056,7 +4056,7 @@ function parallel_database_query_run($requests) {
 
 			//cacti_log(json_encode($results));
 
-			flowview_db_execute("DROP TEMPORARY TABLE $temp_table");
+			flowview_db_execute("DROP TEMPORARY TABLE IF EXISTS $temp_table");
 		} else {
 			$results = array();
 		}
