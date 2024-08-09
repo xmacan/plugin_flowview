@@ -498,11 +498,11 @@ function flowview_upgrade($current, $old) {
 				$alter = 'CONVERT TO CHARACTER SET latin1';
 			}
 
-			if (flowview_db_column_exists($t['TABLE_NAME'], 'keycol'), false) {
+			if (flowview_db_column_exists($t['TABLE_NAME'], 'keycol', false)) {
 				$alter .= ($alter != '' ? ', ':'') . 'DROP KEY keycol';
 			}
 
-			if (!flowview_db_column_exists($t['TABLE_NAME'], 'template_id'), false) {
+			if (!flowview_db_column_exists($t['TABLE_NAME'], 'template_id', false)) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD COLUMN template_id int(11) unsigned NOT NULL default "0" AFTER listener_id';
 			}
 
