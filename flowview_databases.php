@@ -163,9 +163,9 @@ function flowview_print_details(&$cols, &$details) {
 					$column == 'export' ||
 					$column == 'mp_import' ||
 					$column == 'mp_export') {
-					print '<td style="width:82%">' . html_escape(str_replace("\n", '<br>', $value)) . '</td>';
+					print '<td style="width:82%">' . str_replace("\n", '<br>', html_escape($value)) . '</td>';
 				} else {
-					print '<td style="width:82%;white-space:pre-wrap">' . html_escape(str_replace("\n", ', ', $value)) . '</td>';
+					print '<td style="width:82%;white-space:pre-wrap">' . str_replace("\n", ', ', html_escape($value)) . '</td>';
 				}
 
 				print '</tr>';
