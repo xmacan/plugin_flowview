@@ -126,7 +126,7 @@ function flowview_upgrade($current, $old) {
 			FROM plugin_flowview_schedules
 			WHERE title=""');
 
-		if (!flowview_db_column_exists('plugin_flowview_devices', 'cmethod')) {
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'cmethod', false)) {
 			cacti_log("Adding column cmethod to plugin_flowview_devices table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN cmethod int unsigned default "0" AFTER name');
@@ -134,7 +134,7 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('UPDATE plugin_flowview_devices SET cmethod=1');
 		}
 
-		if (flowview_db_column_exists('plugin_flowview_devices', 'nesting')) {
+		if (flowview_db_column_exists('plugin_flowview_devices', 'nesting', false)) {
 			cacti_log("Removing nesting columns from plugin_flowview_devices table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices
@@ -146,27 +146,27 @@ function flowview_upgrade($current, $old) {
 			);
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_devices', 'protocol')) {
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'protocol', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN protocol char(3) NOT NULL default "UDP" AFTER port');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_devices', 'enabled')) {
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'enabled', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN enabled char(2) NOT NULL default "on" AFTER name');
 		}
 
-		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery')) {
+		if (flowview_db_column_exists('plugin_flowview_schedules', 'savedquery', false)) {
 			cacti_log("Adding savedquery column to plugin_flowview_schedules table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_schedules CHANGE COLUMN savedquery query_id INT unsigned NOT NULL default "0"');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_schedules', 'format_file')) {
+		if (!flowview_db_column_exists('plugin_flowview_schedules', 'format_file', false)) {
 			cacti_log("Adding format_file column to plugin_flowview_schedules table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_schedules ADD COLUMN format_file VARCHAR(128) DEFAULT "" AFTER email');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_schedules', 'timeout')) {
+		if (!flowview_db_column_exists('plugin_flowview_schedules', 'timeout', false)) {
 			cacti_log("Adding timeout and notification_list columns to plugin_flowview_schedules table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_schedules
@@ -182,13 +182,13 @@ function flowview_upgrade($current, $old) {
 		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN protocols varchar(32) default ""');
 		flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN sortfield varchar(15) default "bytes"');
 
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id')) {
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'device_id', false)) {
 			cacti_log("Adding device_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN device_id int(11) unsigned NOT NULL default "0" AFTER name');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'template_id')) {
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'template_id', false)) {
 			cacti_log("Adding template_id column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
@@ -198,7 +198,7 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries MODIFY COLUMN template_id int(10) NOT NULL default "-1" AFTER device_id');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr')) {
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr', false)) {
 			cacti_log("Adding ex_addr column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_queries ADD COLUMN ex_addr varchar(46) NOT NULL default "" AFTER template_id');
@@ -224,8 +224,8 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds ARIN Records Downloaded for Caching'");
 
-		if (!db_column_exists('sent_by', 'reports_log')) {
-			db_execute('DROP TABLE IF EXISTS report_log');
+		if (!db_column_exists('sent_by', 'reports_log', false)) {
+			db_execute('DROP TABLE IF EXISTS reports_log');
 		}
 
 		db_execute("CREATE TABLE IF NOT EXISTS `reports_log` (
@@ -250,7 +250,7 @@ function flowview_upgrade($current, $old) {
 			ENGINE=InnoDB
 			COMMENT='Holds All Cacti Report Output'");
 
-		db_execute("CREATE TABLE `reports_queued` (
+		db_execute("CREATE TABLE IF NOT EXISTS `reports_queued` (
 			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(64) NOT NULL DEFAULT '',
 			`source` varchar(20) NOT NULL DEFAULT '',
@@ -271,12 +271,12 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Scheduled Reports'");
 
-		if (db_column_exists('reports_queued', 'requeste_type')) {
+		if (db_column_exists('reports_queued', 'requeste_type', false)) {
 			db_execute('ALTER TABLE reports_queued
 				CHANGE COLUMN requeste_type request_type int(10) unsigned NOT NULL DEFAULT 0');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
+		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type', false)) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');
 
 			flowview_db_execute("ALTER TABLE plugin_flowview_queries
@@ -288,7 +288,7 @@ function flowview_upgrade($current, $old) {
 				ADD COLUMN panel_flows char(2) NOT NULL default 'on' AFTER panel_packets");
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id')) {
+		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'id', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache
 				ADD COLUMN id int(11) unsigned AUTO_INCREMENT FIRST,
 				DROP PRIMARY KEY,
@@ -297,7 +297,7 @@ function flowview_upgrade($current, $old) {
 				ADD COLUMN source VARCHAR(40) NOT NULL default "" AFTER host');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'arin_verified')) {
+		if (!flowview_db_column_exists('plugin_flowview_dnscache', 'arin_verified', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_dnscache
 				ADD COLUMN arin_verified tinyint(3) unsigned DEFAULT 0 AFTER source,
 				ADD COLUMN arin_id int(11) unsigned DEFAULT 0 AFTER arin_verified,
@@ -341,21 +341,21 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC,
 			COMMENT='Plugin Flowview - List of Stream Templates coming into each of the listeners'");
 
-		if (!flowview_db_column_exists('plugin_flowview_device_templates', 'supported')) {
+		if (!flowview_db_column_exists('plugin_flowview_device_templates', 'supported', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_device_templates
 				ADD COLUMN supported tinyint unsigned NOT NULL default "0" AFTER template_id');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_device_streams', 'version')) {
+		if (!flowview_db_column_exists('plugin_flowview_device_streams', 'version', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_device_streams
 				ADD COLUMN version varchar(5) NOT NULL default "" AFTER name');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_devices', 'last_updated')) {
+		if (!flowview_db_column_exists('plugin_flowview_devices', 'last_updated', false)) {
 			flowview_db_execute('ALTER TABLE plugin_flowview_devices ADD COLUMN last_updated TIMESTAMP NOT NULL default CURRENT_TIMESTAMP');
 		}
 
-		if (flowview_db_column_exists('plugin_flowview_device_streams', 'ext_addr')) {
+		if (flowview_db_column_exists('plugin_flowview_device_streams', 'ext_addr', false)) {
 			flowview_db_execute('TRUNCATE plugin_flowview_device_streams');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_device_streams
@@ -364,7 +364,7 @@ function flowview_upgrade($current, $old) {
 				ADD PRIMARY KEY (device_id, ex_addr)');
 		}
 
-		if (flowview_db_column_exists('plugin_flowview_device_templates', 'ext_addr')) {
+		if (flowview_db_column_exists('plugin_flowview_device_templates', 'ext_addr', false)) {
 			flowview_db_execute('TRUNCATE plugin_flowview_device_templates');
 
 			flowview_db_execute('ALTER TABLE plugin_flowview_device_templates
@@ -403,7 +403,7 @@ function flowview_upgrade($current, $old) {
 			`shard_id` int(10) unsigned NOT NULL DEFAULT 0,
 			`full_scan` tinyint(3) unsigned DEFAULT 1,
 			`status` varchar(10) NOT NULL DEFAULT 'pending',
-			`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
+			`map_table` varchar(64) NOT NULL DEFAULT '',
 			`map_partition` varchar(20) NOT NULL DEFAULT '',
 			`map_query` blob NOT NULL DEFAULT '',
 			`map_params` blob NOT NULL DEFAULT '',
@@ -414,23 +414,23 @@ function flowview_upgrade($current, $old) {
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Parallel Query Shard Requests'");
 
-		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
+		if (!flowview_db_column_exists('parallel_database_query', 'map_range', false)) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN map_range VARCHAR(128) NOT NULL default '' AFTER map_query,
 				ADD COLUMN map_range_params VARCHAR(128) NOT NULL default '' AFTER map_range");
 		}
 
-		if (flowview_db_column_exists('parallel_database_query', 'map_range')) {
+		if (!flowview_db_column_exists('parallel_database_query', 'md5sum_tables', false)) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN md5sum_tables VARCHAR(32) NOT NULL default '' AFTER md5sum");
 		}
 
-		if (flowview_db_column_exists('parallel_database_query', 'cached_shards')) {
+		if (!flowview_db_column_exists('parallel_database_query', 'cached_shards', false)) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN cached_shards int(10) unsigned NOT NULL DEFAULT 0 AFTER total_shards");
 		}
 
-		if (!flowview_db_column_exists('parallel_database_query', 'map_create')) {
+		if (!flowview_db_column_exists('parallel_database_query', 'map_create', false)) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query`
 				ADD COLUMN map_create blob NOT NULL DEFAULT '' AFTER map_table");
 		} else {
@@ -438,14 +438,14 @@ function flowview_upgrade($current, $old) {
 				MODIFY COLUMN map_create blob NOT NULL DEFAULT ''");
 		}
 
-		if (flowview_db_column_exists('parallel_database_query_shard', 'full_scan')) {
+		if (!flowview_db_column_exists('parallel_database_query_shard', 'full_scan', false)) {
 			flowview_db_execute("ALTER TABLE `parallel_database_query_shard`
 				ADD COLUMN full_scan tinyint(3) unsigned NOT NULL DEFAULT 1 AFTER shard_id");
 		}
 
 		flowview_db_execute("CREATE TABLE IF NOT EXISTS `parallel_database_query_shard_cache` (
 			`md5sum` varchar(32) NOT NULL DEFAULT '',
-			`map_table` varchar(64) unsigned NOT NULL DEFAULT '',
+			`map_table` varchar(64) NOT NULL DEFAULT '',
 			`map_partition` varchar(20) NOT NULL DEFAULT '',
 			`min_date` timestamp(6) NOT NULL default '0000-00-00',
 			`max_date` timestamp(6) NOT NULL default '0000-00-00',
@@ -469,13 +469,13 @@ function flowview_upgrade($current, $old) {
 			flowview_db_execute('DROP TABLE IF EXISTS plugin_flowivew_routes');
 		}
 
-		if (!flowview_db_column_exists('plugin_flowview_irr_route', 'country')) {
+		if (!flowview_db_column_exists('plugin_flowview_irr_route', 'country', false)) {
 			flowview_db_execute('DROP TABLE IF EXISTS plugin_flowview_irr_route');
 		}
 
 		include_once($config['base_path'] . '/plugins/flowview/irr_tables.php');
 
-		if (!flowview_db_column_exists('plugin_flowview_arin_information', 'origin_as')) {
+		if (flowview_db_column_exists('plugin_flowview_arin_information', 'origin_as', false)) {
 			flowview_db_execute("ALTER TABLE plugin_flowview_arin_information CHANGE COLUMN origin_as origin varchar(20) NOT NULL DEFAULT ''");
 		}
 
@@ -498,11 +498,11 @@ function flowview_upgrade($current, $old) {
 				$alter = 'CONVERT TO CHARACTER SET latin1';
 			}
 
-			if (flowview_db_column_exists($t['TABLE_NAME'], 'keycol')) {
+			if (flowview_db_column_exists($t['TABLE_NAME'], 'keycol'), false) {
 				$alter .= ($alter != '' ? ', ':'') . 'DROP KEY keycol';
 			}
 
-			if (!flowview_db_column_exists($t['TABLE_NAME'], 'template_id')) {
+			if (!flowview_db_column_exists($t['TABLE_NAME'], 'template_id'), false) {
 				$alter .= ($alter != '' ? ', ':'') . 'ADD COLUMN template_id int(11) unsigned NOT NULL default "0" AFTER listener_id';
 			}
 
