@@ -261,7 +261,7 @@ function flowview_upgrade($current, $old) {
 			`run_command` varchar(512) NOT NULL DEFAULT '',
 			`run_timeout` int(10) NOT NULL DEFAULT '60',
 			`notification` blob NOT NULL DEFAULT '',
-			`requeste_type` int(10) unsigned NOT NULL DEFAULT 0,
+			`request_type` int(10) unsigned NOT NULL DEFAULT 0,
 			`requested_by` varchar(20) NOT NULL DEFAULT '',
 			`requested_id` int(11) NOT NULL DEFAULT -1,
 			PRIMARY KEY (`id`),
@@ -270,6 +270,11 @@ function flowview_upgrade($current, $old) {
 			ENGINE=InnoDB
 			ROW_FORMAT=DYNAMIC
 			COMMENT='Holds Scheduled Reports'");
+
+		if (db_column_exists('reports_queued', 'requeste_type')) {
+			db_execute('ALTER TABLE reports_queued
+				CHANGE COLUMN requeste_type request_type int(10) unsigned NOT NULL DEFAULT 0');
+		}
 
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'graph_type')) {
 			cacti_log("Adding charting columns to the plugin_flowview_queries table.", true, 'FLOWVIEW');

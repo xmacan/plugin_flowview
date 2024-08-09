@@ -1021,7 +1021,7 @@ function flowview_setup_table() {
 		`run_command` varchar(512) NOT NULL DEFAULT '',
 		`run_timeout` int(10) NOT NULL DEFAULT '60',
 		`notification` blob NOT NULL DEFAULT '',
-		`requeste_type` int(10) unsigned NOT NULL DEFAULT 0,
+		`request_type` int(10) unsigned NOT NULL DEFAULT 0,
 		`requested_by` varchar(20) NOT NULL DEFAULT '',
 		`requested_id` int(11) NOT NULL DEFAULT -1,
 		PRIMARY KEY (`id`),
