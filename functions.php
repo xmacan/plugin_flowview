@@ -22,7 +22,7 @@
  +-------------------------------------------------------------------------+
 */
 
-function display_tabs($id) {
+function display_flowview_tabs($id) {
 	global $config;
 
 	$streams = listener_has_templates($id);
@@ -58,7 +58,7 @@ function display_tabs($id) {
 	print "</ul></nav></div>";
 }
 
-function display_db_tabs() {
+function display_flowview_db_tabs() {
 	global $db_tabs, $config;
 
 	$base_url = 'flowview_databases.php';

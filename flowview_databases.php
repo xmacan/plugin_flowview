@@ -194,7 +194,7 @@ function view_databases() {
 
 	$_SESSION['sess_fv_db_tab'] = get_request_var('tab');
 
-	display_db_tabs($db_tabs);
+	display_flowview_db_tabs($db_tabs);
 
 	if (get_request_var('tab') == 'dns_cache') {
 		view_dns_cache();

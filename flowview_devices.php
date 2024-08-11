@@ -342,7 +342,7 @@ function edit_device() {
 
 		$header_label = __esc('Listener [edit: %s]', $device['name'], 'flowview');
 
-		display_tabs(get_request_var('id'));
+		display_flowview_tabs(get_request_var('id'));
 	} else {
 		$header_label = __('Listener [new]', 'flowview');
 	}
