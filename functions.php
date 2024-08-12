@@ -227,6 +227,8 @@ function edit_filter() {
 		} else {
 			$filter_edit['sortfield']['array'] = $stat_columns_array[10];
 		}
+	} else {
+		$filter_edit['sortfield']['array'] = $stat_columns_array[10];
 	}
 
 	if (isset_request_var('return')) {
@@ -2596,7 +2598,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 	/* date range override */
 	if (isset_request_var('includeif') && get_request_var('includeif') > 0) {
 		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end, get_request_var('includeif'));
-	} elseif ($data['includeif'] > 0) {
+	} elseif (isset($data['includeif']) && $data['includeif'] > 0) {
 		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end, $data['includeif']);
 	} else {
 		$sql_range = get_date_filter($sql_range, $sql_range_params, $start, $end);
@@ -2625,7 +2627,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 	/* octets override */
 	if (isset_request_var('cutoffoctets') && get_filter_request_var('cutoffoctets') > 0) {
 		$sql_having = 'HAVING bytes > ' . get_filter_request_var('cutoffoctets');
-	} elseif ($data['cutoffoctets'] > 0) {
+	} elseif (isset($data['cutoffoctets']) && $data['cutoffoctets'] > 0) {
 		$sql_having = 'HAVING bytes < ' . $data['cutoffoctets'];
 	} else {
 		$sql_having = '';

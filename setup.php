@@ -1010,7 +1010,7 @@ function flowview_setup_table() {
 		ENGINE=InnoDB
 		COMMENT='Holds All Cacti Report Output'");
 
-	db_execute("CREATE TABLE `reports_queued` (
+	db_execute("CREATE TABLE IF NOT EXISTS `reports_queued` (
 		`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 		`name` varchar(64) NOT NULL DEFAULT '',
 		`source` varchar(20) NOT NULL DEFAULT '',
