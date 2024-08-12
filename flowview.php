@@ -30,8 +30,6 @@ include_once($config['base_path'] . '/plugins/flowview/setup.php');
 include_once($config['base_path'] . '/plugins/flowview/functions.php');
 include_once($config['base_path'] . '/lib/time.php');
 
-flowview_connect();
-
 set_default_action();
 
 ini_set('max_execution_time', 240);
