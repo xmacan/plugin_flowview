@@ -3179,7 +3179,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 			return false;
 		}
 
-		if ($sql_outer == '' || $sql_inner == '') {
+		if ($sql_outer == '' || ($sql_inner == '' && $sql_inner1 == '')) {
 			if ($data['statistics'] > 0) {
 				$message = __('The Statistical Report %s is not known.  Please open a bug on GitHub', $data['statistics'], 'flowview');
 			} elseif($data['printed'] > 0) {
