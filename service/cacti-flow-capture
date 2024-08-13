@@ -10,6 +10,7 @@
 # How to use:
 #    Place this file in /usr/local/etc/rc.d/
 #    Add cacti_flow_collector_enable="YES" to /etc/rc.conf
+#    Add cacti_flow_collector_user="cacti" to /etc/rc.conf
 #    Add cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd" to /etc/rc.conf
 
 # Freebsd rc library
@@ -27,12 +28,20 @@ cacti_flow_collector_prestop() {
 	pkill -f "flow_collector.php --listener-id"
 }
 
+start_precmd="${name}_prestart"
+
+cacti_flow_collector_prestart() {
+	install -d -o ${cacti_flow_collector_user} -g www /var/run/${program_name}
+	install -o ${cacti_flow_collector_user} -g www /dev/null /var/log/${program_name}.log 
+}
+
+
 # RC.config vars
 load_rc_config $name      # Loading rc config vars
 : ${cacti_flow_collector_enable="NO"}  # Default: Do not enable Cacti flow collector
 
 rcvar=cacti_flow_collector_enable                   # Enables the rc.conf YES/NO flag
-pidfile="/var/run/${program_name}.pid" # File that allows the system to keep track of cacti_flow_collector status
+pidfile="/var/run/${program_name}/${program_name}.pid" # File that allows the system to keep track of cacti_flow_collector status
 
 # Command Setup
 exec_path="/usr/local/bin/php" # Path to the php exec

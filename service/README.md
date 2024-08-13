@@ -60,8 +60,9 @@ To verify that the service is actually running as expected.
 
 * First, copy the cacti-flow-capture file into /usr/local/etc/rc.d
 
-* Then, edit /etc/rc.conf and add these lines:
+* Then, edit /etc/rc.conf and add these lines, maybe change 'cacti' to correct user:
     cacti_flow_collector_enable="YES"
+    cacti_flow_collector_user="cacti"
     cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd"
 
 * Lastly, run:
