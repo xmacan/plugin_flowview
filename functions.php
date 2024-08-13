@@ -409,12 +409,12 @@ function save_filter_form() {
 			get_request_var('sortfield'),
 			get_request_var('cutofflines'),
 			get_request_var('cutoffoctets'),
-			get_request_var('graph_type'),
+			get_nfilter_request_var('graph_type'),
 			get_request_var('graph_height'),
-			get_request_var('table') == 'true' ? 'on':'',
-			get_request_var('bytes') == 'true' ? 'on':'',
-			get_request_var('packets') == 'true' ? 'on':'',
-			get_request_var('flows') == 'true' ? 'on':'',
+			get_nfilter_request_var('table') == 'true' ? 'on':'',
+			get_nfilter_request_var('bytes') == 'true' ? 'on':'',
+			get_nfilter_request_var('packets') == 'true' ? 'on':'',
+			get_nfilter_request_var('flows') == 'true' ? 'on':'',
 			get_request_var('query')
 		)
 	);
