@@ -201,6 +201,13 @@ function edit_filter() {
 		$report['rtype'] = get_filter_request_var('rtype');
 	}
 
+	/**
+	 * remove the option to 'Select a XX' from the printed
+	 * or statistical reports.
+	 */
+	unset($filter_edit['printed']['array'][0]);
+	unset($filter_edit['statistics']['array'][0]);
+
 	form_start($page, 'chk');
 
 	html_start_box($header_label, '100%', '', '3', 'center', '');
@@ -263,12 +270,30 @@ function edit_filter() {
 	}
 
 	function applyFilter() {
+		if ($('#statistics').val() == null && $('#printed').val() == null) {
+			if ($('#rtype').val() == 0) {
+				if ($('#statistics').val() == null) {
+					$('#statistics').val($('#statistics option:first').val());
+					if ($('#statistics').selectmenu('widget')) {
+						$('#statistics').selectmenu('refresh');
+					}
+				}
+			} else {
+				if ($('#printed').val() == null) {
+					$('#printed').val($('#printed option:first').val());
+					if ($('#printed').selectmenu('widget')) {
+						$('#printed').selectmenu('refresh');
+					}
+				}
+			}
+		}
+
 		strURL = returnPage +
 			'?header=false' +
 			'&action=sort_filter' +
 			'&rtype=' + $('#rtype').val() +
-			'&statistics=' + $('#statistics').val() +
-			'&printed=' + $('#printed').val();
+			'&statistics=' + ($('#statistics').val() !== null ? $('#statistics').val():0) +
+			'&printed=' + ($('#printed').val() !== null ? $('#printed').val():0);
 
 		$.get(strURL, function(data) {
 			$('#sortfield').html(data).selectmenu('refresh');
