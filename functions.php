@@ -431,7 +431,7 @@ function save_filter_form() {
 			get_request_var('device_id'),
 			$statistical,
 			$printed,
-			get_request_var('sortfield'),
+			get_nfilter_request_var('sortfield'),
 			get_request_var('cutofflines'),
 			get_request_var('cutoffoctets'),
 			get_nfilter_request_var('graph_type'),
