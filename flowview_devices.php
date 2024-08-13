@@ -874,7 +874,7 @@ function show_devices () {
 	if (cacti_sizeof($result)) {
 		foreach ($result as $row) {
 			if ($os == 'freebsd') {
-				$status = shell_exec("/usr/bin/sockstat -4 -l | /usr/bin/grep ':" . $row['port'] . " '");
+				$status = shell_exec("netstat -an | grep ':" . $row['port'] . " '");
 				$column = 3;
 				$scolumn = -1;
 			} else {
