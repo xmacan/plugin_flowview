@@ -62,6 +62,7 @@ To verify that the service is actually running as expected.
 
 * Then, edit /etc/rc.conf and add these lines:
     cacti_flow_collector_enable="YES"
+    cacti_flow_collector_user="cacti"
     cacti_flow_collector_args="/usr/local/share/cacti/plugins/flowview/service/flow-capture-freebsd"
 
 * Lastly, run:
