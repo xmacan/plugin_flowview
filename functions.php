@@ -497,10 +497,10 @@ function save_filter() {
 
 	$save['graph_type']      = get_nfilter_request_var('graph_type');
 	$save['graph_height']    = get_nfilter_request_var('graph_height');
-	$save['panel_table']     = isset_request_var('table') ? 'on':'';
-	$save['panel_bytes']     = isset_request_var('bytes') ? 'on':'';
-	$save['panel_packets']   = isset_request_var('packets') ? 'on':'';
-	$save['panel_flows']     = isset_request_var('flows') ? 'on':'';
+	$save['panel_table']     = isset_request_var('panel_table') ? 'on':'';
+	$save['panel_bytes']     = isset_request_var('panel_bytes') ? 'on':'';
+	$save['panel_packets']   = isset_request_var('panel_packets') ? 'on':'';
+	$save['panel_flows']     = isset_request_var('panel_flows') ? 'on':'';
 
 	$id = flowview_sql_save($save, 'plugin_flowview_queries', 'id', true);
 
