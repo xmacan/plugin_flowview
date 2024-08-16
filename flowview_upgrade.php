@@ -206,6 +206,19 @@ function flowview_upgrade($current, $old) {
 			}
 		}
 
+		/* check the lastsent default and fix it if required */
+		$col_default = flowview_db_fetch_cell('SELECT COLUMN_DEFAULT
+			FROM information_schema.COLUMNS
+			WHERE TABLE_NAME = "plugin_flowview_schedules"
+			AND COLUMN_NAME = "lastsent"
+			LIMIT 1');
+
+		if ($col_default == '' || stripos($col_default, 'null') !== false) {
+			cacti_log("Updating lastsent column to plugin_flowview_schedules table to have a default.", true, 'FLOWVIEW');
+
+			flowview_db_execute('ALTER TABLE plugin_flowview_schedules MODIFY COLUMN lastsent bigint UNSIGNED NOT NULL default "0"');
+		}
+
 		if (!flowview_db_column_exists('plugin_flowview_queries', 'ex_addr', false)) {
 			cacti_log("Adding ex_addr column to plugin_flowview_queries table.", true, 'FLOWVIEW');
 
@@ -544,9 +557,9 @@ function flowview_upgrade($current, $old) {
 
 			if ($t['ENGINE'] != $raw_engine) {
 				if ($raw_engine == 'Aria') {
-					$alter .= ", ENGINE=$raw_engine ROW_FORMAT=page";
+					$alter .= ($alter != '' ? ',':'') . " ENGINE=$raw_engine ROW_FORMAT=page";
 				} else {
-					$alter .= ", ENGINE=$raw_engine ROW_FORMAT=Dynamic";
+					$alter .= ($alter != '' ? ',':'') . " ENGINE=$raw_engine ROW_FORMAT=Dynamic";
 				}
 			}
 
