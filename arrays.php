@@ -730,7 +730,7 @@ $filter_edit = array(
 		'description' => __('Should the Table Panel be displayed by default.', 'flowview'),
 		'method' => 'checkbox',
 		'value' => '|arg1:panel_table|',
-		'default' => 'on'
+		'default' => ''
 	),
 	'panel_bytes' => array(
 		'friendly_name' => __('Bytes Panel', 'flowview'),

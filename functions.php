@@ -245,6 +245,7 @@ function edit_filter() {
 		);
 	}
 
+
 	draw_edit_form(
 		array(
 			'config' => array('no_form_tag' => true),
@@ -501,6 +502,10 @@ function save_filter() {
 	$save['panel_bytes']     = isset_request_var('panel_bytes') ? 'on':'';
 	$save['panel_packets']   = isset_request_var('panel_packets') ? 'on':'';
 	$save['panel_flows']     = isset_request_var('panel_flows') ? 'on':'';
+
+	if ($save['panel_table'] == '' && $save['panel_bytes'] == '' && $save['panel_packets'] == '' && $save['panel_flows'] == '') {
+		$save['panel_table'] = 'on';
+	}
 
 	$id = flowview_sql_save($save, 'plugin_flowview_queries', 'id', true);
 
