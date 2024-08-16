@@ -190,6 +190,10 @@ switch (get_request_var('action')) {
 		download_log_data();
 
 		break;
+	case 'viewreport':
+		view_log_data();
+
+		break;
 	case 'edit':
 		top_header();
 		edit_schedule();
@@ -342,6 +346,30 @@ function actions_schedules() {
 	form_end();
 
 	bottom_footer();
+}
+
+function view_log_data() {
+	$id   = get_filter_request_var('id');
+	$type = get_nfilter_request_var('type');
+
+	$log_data = db_fetch_row_prepared('SELECT * FROM reports_log WHERE id = ?', array($id));
+
+	if (cacti_sizeof($log_data)) {
+		$data    = json_decode($log_data['report_raw_data'], true);
+		$columns = array_keys($data[0]);
+
+		if ($type == 'raw') {
+	        print $log_data['report_raw_output'];
+		} else {
+	        print $log_data['report_html_output'];
+		}
+	} else {
+		raise_message('no_report_data', __('Unable to find Report Raw Data for Report ID %s', $id, 'flowview'), MESSAGE_LEVEL_ERROR);
+
+		header('Location: flowview_schedules?action=edit&tab=logs&id=' . $id);
+	}
+
+	exit;
 }
 
 function download_log_data() {
@@ -662,11 +690,13 @@ function edit_log($header_label, $report) {
 	$i=0;
 	if (cacti_sizeof($result)) {
 		foreach ($result as $row) {
+			$rawUrl = '&nbsp;&nbsp;<a id="' . $row['id'] . '" href="#" data-type="raw" class="reportClick">' . __(' [View Report Raw]', 'flowview') . '</a>';
+			$cssUrl = '&nbsp;&nbsp;<a id="' . $row['id'] . '" href="#" data-type="css" class="reportClick">' . __(' [View Report with CSS]', 'flowview') . '</a>';
+
 			form_alternate_row('line' . $row['id'], true);
-			//form_selectable_cell('<a class="linkEditMain" href="' . html_escape('flowview_schedules.php?action=edit&tab=logs&id=' . $row['id']) . '">' . html_escape($row['name']) . '</a>', $row['id']);
 			form_selectable_cell($row['name'], $row['id']);
 			form_selectable_cell($row['source_id'], $row['id']);
-			form_selectable_cell($row['report_output_type'], $row['id']);
+			form_selectable_cell(strtoupper($row['report_output_type']) . $rawUrl . $cssUrl, $row['id']);
 			form_selectable_cell($row['sent_by'] == 0 ? __('Scheduled', 'flowview'):__('Manual Send', 'flowview'), $row['id']);
 			form_selectable_cell($row['send_time'], $row['id'], '', 'right');
 			form_selectable_cell(__esc('%s Seconds', number_format_i18n($row['run_time'], 2), 'flowview'), $row['id'], '', 'right');
@@ -683,6 +713,7 @@ function edit_log($header_label, $report) {
 	}
 
 	?>
+	<div id='reportDiv'></div>
 	<script type='text/javascript'>
 	var log_id='<?php print get_request_var('id');?>';
 
@@ -695,6 +726,17 @@ function edit_log($header_label, $report) {
 		$('.downloader').on('click', function(event) {
 			event.preventDefault();
 			exportLog();
+		});
+
+		$('.reportClick').on('click', function(event) {
+			event.preventDefault();
+
+			var reportID = $(this).attr('id');
+			var type = $(this).attr('data-type');
+
+			$.get('flowview_schedules.php?action=viewreport&id='+reportID+'&type='+type, function(data) {
+				$('#reportDiv').html(data);
+			});
 		});
 	});
 	</script>
