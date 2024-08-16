@@ -38,7 +38,7 @@ function display_flowview_tabs($id) {
 	if (!isset_request_var('tab')) {
 		$current_tab = 'general';
 	} else {
-		$current_tab = get_request_var('tab');
+		$current_tab = get_nfilter_request_var('tab');
 	}
 
 	/* draw the tabs */
@@ -67,7 +67,7 @@ function display_flowview_db_tabs() {
 	if (!isset_request_var('tab')) {
 		$current_tab = 'general';
 	} else {
-		$current_tab = get_request_var('tab');
+		$current_tab = get_nfilter_request_var('tab');
 	}
 
 	/* draw the tabs */
