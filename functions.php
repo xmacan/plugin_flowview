@@ -6723,7 +6723,7 @@ function reports_queue($name, $request_type, $source, $source_id, $command, $not
 	$save['requested_by']   = $requested_by;
 	$save['requested_id']   = $requested_id;
 
-	$id = sql_save($save, 'reports_queued');
+	$id = flowview_sql_save($save, 'reports_queued');
 
 	if ($id > 0) {
 		if ($requested_id > 0) {
