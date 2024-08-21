@@ -71,16 +71,13 @@ If found that the best way to setup a replica was to use mariabackup using the
 options that they called out in the documentation.  It really simplifies the
 setup.
 
-MariaDB Replication Setup:
+* MariaDB Replication Setup:
 https://mariadb.com/kb/en/setting-up-a-replica-with-mariabackup/
-
-MariaDB Backup and Restore for Replication Setup:
+* MariaDB Backup and Restore for Replication Setup:
 https://mariadb.com/kb/en/full-backup-and-restore-with-mariabackup/
-
-MaxScale Setup:
+* MaxScale Setup:
 https://mariadb.com/kb/en/maxscale-24-02tutorials/
-
-MariaDB SSL Setup: (No longer required as of MariaDB 11.3)
+* MariaDB SSL Setup: (No longer required as of MariaDB 11.3)
 https://mariadb.com/resources/blog/mariadb-maxscale-2-1-and-ssl-certificates/
 
 ## Required:
