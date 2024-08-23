@@ -30,6 +30,13 @@ to generate Email based reports of the data.
 * Starting with the 4.x version, sharding results will be cache to increase
   subsequent queries by various users under various conditions.
 
+
+# Watch our video on YouTube!
+
+[![Video ](http://img.youtube.com/vi/Kic-nY-RThA/0.jpg)](https://youtu.be/Kic-nY-RThA "Flowview Video")
+
+
+
 # Installation
 
 To install the plugin, simply copy the plugin_flowview directory to Cacti's plugins
