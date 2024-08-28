@@ -33,9 +33,9 @@ $tables = flowview_db_fetch_assoc('SHOW TABLES');
 
 if (cacti_sizeof($tables)) {
 	foreach($tables as $t) {
-		if (strpos($t['Tables_in_cacti'], 'plugin_flowview_raw') !== false) {
-			print "Altering Table " . $t['Tables_in_cacti'] . PHP_EOL;
-			flowview_db_execute("ALTER TABLE " . $t['Tables_in_cacti'] . "
+		if (strpos($t['Tables_in_' . $flowviewdb_default], 'plugin_flowview_raw') !== false) {
+			print "Altering Table " . $t['Tables_in_' . $flowviewdb_default] . PHP_EOL;
+			flowview_db_execute("ALTER TABLE " . $t['Tables_in_' . $flowviewdb_default] . "
 				MODIFY COLUMN src_domain VARCHAR(256) NOT NULL DEFAULT '',
 				MODIFY COLUMN src_rdomain VARCHAR(40) NOT NULL DEFAULT '',
 				MODIFY COLUMN src_rport VARCHAR(20) NOT NULL DEFAULT '',
