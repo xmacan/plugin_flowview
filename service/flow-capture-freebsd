@@ -74,14 +74,23 @@ function get_cacti_base() {
 	$cacti_bases = array(
 		'/var/www/html/cacti',
 		'/usr/local/share/cacti',
-		'/usr/share/cacti/'
+		'/usr/share/cacti',
+		'/var/www/html',
+		'/opt/cacti'
 	);
 
+	/* Lets check for the poller in the standard locations */
 	foreach($cacti_bases as $cacti_base) {
-		if (file_exists($cacti_base) || is_dir($cacti_base)) {
+		if ((file_exists($cacti_base) || is_dir($cacti_base)) && file_exists("$cacti_base/poller.php")) {
 			return $cacti_base;
 		}
 	} 
+
+	/* Lets check if our flowview service directory is in the cacti directory */
+	$dir = implode('/', array_slice(explode('/', dirname(__FILE__)), 0, -3));
+	if (file_exists("$dir/poller.php")) {
+		return $dir;
+	}
 
 	return false;
 }
