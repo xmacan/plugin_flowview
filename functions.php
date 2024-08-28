@@ -5950,6 +5950,7 @@ function flowview_update_database($source, $irr_file = false) {
 	$prev_irr_column = '';
 	$name_remove_ct  = 1;
 	$sections_done   = 0;
+	$record_num = array();
 
 	while (!feof($file) !== false) {
 		$line = fgets($file);
