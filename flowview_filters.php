@@ -35,7 +35,7 @@ flowview_connect();
 set_default_action();
 
 $sched_actions = array(
-	2 => __('Send Now', 'flowview'),
+/*	2 => __('Send Now', 'flowview'), */
 	1 => __('Delete', 'flowview'),
 	3 => __('Disable', 'flowview'),
 	4 => __('Enable', 'flowview')
@@ -93,10 +93,10 @@ function actions_filters() {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {
 					flowview_db_execute("UPDATE plugin_flowview_queries SET enabled='on' WHERE id = " . $selected_items[$i]);
 				}
-			} elseif (get_nfilter_request_var('drp_action') == '2') {
+/*			} elseif (get_nfilter_request_var('drp_action') == '2') {
 				for ($i=0; $i<cacti_count($selected_items); $i++) {
 					plugin_flowview_run_schedule($selected_items[$i]);
-				}
+				} */
 			}
 		}
 
