@@ -115,7 +115,8 @@ function get_cacti_base() {
 		'/var/www/html/cacti',
 		'/usr/local/share/cacti',
 		'/usr/share/cacti',
-		'/var/www/html/'
+		'/var/www/html',
+		'/opt/cacti'
 	);
 
 	/* Lets check for the poller in the standard locations */
