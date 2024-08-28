@@ -1951,7 +1951,7 @@ function reports_log_and_notify($id, $start_time, $report_type, $source, $source
 								$bcc_emails = $list['bcc_emails'];
 								$reply_to   = isset($list['reply_to'])  ? $list['reply_to']:'';
 
-								mailer($from, $to_email, $cc_email, $bcc_email, $reply_to, $subject, $oput_html, $oput_text, $attachments, $headers);
+								mailer($from, $to_email, $cc_emails, $bcc_emails, $reply_to, $subject, $oput_html, $oput_text, $attachments, $headers);
 							} else {
 								cacti_log(sprintf("WARNING: Email Report '%s' not sent!  Unable to locate notification list '%s'", $report['name'], $id), false, 'REPORTS');
 							}
