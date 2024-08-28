@@ -135,7 +135,7 @@ function get_cacti_base() {
 }
 
 function start($systemd = true) {
-	global $config, $cacti_base, $reload, $webuser;;
+	global $config, $cacti_base, $webuser;;
 
 	if (!register_process_start('flowview', 'master', $config['poller_id'], 315360000)) {
 		exit(0);
@@ -178,7 +178,7 @@ function start($systemd = true) {
 }
 
 function check_processes() {
-	global $config, $cacti_base;
+	global $cacti_base;
 
 	print 'NOTE: Checking for new or gone listeners' . PHP_EOL;
 
@@ -220,7 +220,7 @@ function check_processes() {
 }
 
 function stop() {
-	global $config, $cacti_base;
+	global $config;
 
 	print 'NOTE: Stopping Flow Collection' . PHP_EOL;
 
