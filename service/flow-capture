@@ -187,32 +187,34 @@ function check_processes() {
 	$devices    = flowview_db_fetch_assoc('SELECT * FROM plugin_flowview_devices');
 	$php_binary = read_config_option('path_php_binary');
 
-	foreach($devices as $device) {
-		$start = false;
+	if (!empty($devices)) {
+		foreach($devices as $device) {
+			$start = false;
 
-		$registered = db_fetch_cell_prepared('SELECT pid 
-			FROM processes 
-			WHERE tasktype = "flowview" 
-			AND taskname = ?',
-			array('child_' . $device['id']));
+			$registered = db_fetch_cell_prepared('SELECT pid 
+				FROM processes 
+				WHERE tasktype = "flowview" 
+				AND taskname = ?',
+				array('child_' . $device['id']));
 
-		if ($registered > 0) {
-			/* if true, the process is running */
-			if (!posix_kill($registered, 0)) {
+			if ($registered > 0) {
+				/* if true, the process is running */
+				if (!posix_kill($registered, 0)) {
+					$start = true;
+				}
+			} else {
 				$start = true;
 			}
-		} else {
-			$start = true;
-		}
 
-		if ($start) {
-			cacti_log(sprintf("Detecting a new or crashed flow collector with name '%s' with the id:%s.  Relaunching!", $device['name'], $device['id']), false, 'FLOWVIEW');
+			if ($start) {
+				cacti_log(sprintf("Detecting a new or crashed flow collector with name '%s' with the id:%s.  Relaunching!", $device['name'], $device['id']), false, 'FLOWVIEW');
 
-			$php_binary = read_config_option('path_php_binary');
+				$php_binary = read_config_option('path_php_binary');
 
-			print "NOTE: Launching crashed or new cacti-flow-capture as '" . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id'] . "'" . PHP_EOL;
+				print "NOTE: Launching crashed or new cacti-flow-capture as '" . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id'] . "'" . PHP_EOL;
 
-			exec_background($php_binary, ' -q ' . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id']);
+				exec_background($php_binary, ' -q ' . $cacti_base . '/plugins/flowview/flow_collector.php --listener-id=' . $device['id']);
+			}
 		}
 	}
 }
