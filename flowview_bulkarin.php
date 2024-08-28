@@ -98,7 +98,7 @@ if (read_config_option('flowview_use_arin') == 'on') {
 }
 
 $time      = time();
-$addressed = array();
+$addresses = array();
 $cidrs     = array();
 
 $whois_provider = read_config_option('flowview_whois_provider');
@@ -162,8 +162,8 @@ if ($ips) {
 		WHERE arin_verified = 0');
 }
 
-if (cacti_sizeof($ips)) {
-	foreach($ips as $p) {
+if (cacti_sizeof($addresses)) {
+	foreach($addresses as $p) {
 		$arin_id  = 0;
 		$arin_ver = 0;
 
