@@ -1,5 +1,8 @@
 # Changelog
 
+--- develop ---
+* issue#216: Reports don't trigger when flowview is in a separate database
+
 --- 4.8 ---
 
 * issue#66: Cacti flowview collector errors
