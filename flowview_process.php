@@ -94,13 +94,23 @@ if (date('z', $last) != date('z', time())) {
 	$maint = true;
 }
 
+$queued_reports = array_rekey(
+	db_fetch_assoc('SELECT rq.source_id
+ 		FROM reports_queued AS rq
+   		WHERE rq.source = "flowview"'),
+	'source_id', 'source_id'
+);
+
+if (cacti_sizeof($queued_reports)) {
+	$sql_where = ' AND fs.id NOT IN (' . implode(', ', $queued_reports) . ')';
+} else {
+	$sql_where = '';
+}
+
 $schedules = flowview_db_fetch_assoc("SELECT fs.*
 	FROM plugin_flowview_schedules AS fs
-	LEFT JOIN reports_queued AS rq
-	ON rq.source = 'flowview'
-	AND rq.source_id = fs.id
 	WHERE enabled = 'on'
-	AND rq.source_id IS NULL
+	$sql_where
 	AND ($t - sendinterval > lastsent)");
 
 $php = read_config_option('path_php_binary');
