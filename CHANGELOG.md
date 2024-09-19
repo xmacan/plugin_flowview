@@ -1,7 +1,9 @@
 # Changelog
 
 --- develop ---
+
 * issue#216: Reports don't trigger when flowview is in a separate database
+* issue#217: Update flow-capture script for Debian/Ubuntu
 
 --- 4.8 ---
 

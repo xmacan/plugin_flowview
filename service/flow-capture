@@ -113,6 +113,7 @@ if (function_exists('pcntl_signal')) {
 function get_cacti_base() {
 	$cacti_bases = array(
 		'/var/www/html/cacti',
+		'/usr/local/share/cacti/site',
 		'/usr/local/share/cacti',
 		'/usr/share/cacti',
 		'/var/www/html',
