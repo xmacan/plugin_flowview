@@ -115,18 +115,6 @@ function plugin_flowview_check_upgrade($force = false) {
 
 		exec_background($php_binary, $config['base_path'] . '/plugins/flowview/flowview_upgrade.php');
 
-		db_execute_prepared("UPDATE plugin_config SET
-			version = ?, name = ?, author = ?, webpage = ?
-			WHERE directory = ?",
-			array(
-				$info['version'],
-				$info['longname'],
-				$info['author'],
-				$info['homepage'],
-				$info['name']
-			)
-		);
-
 		raise_message('flowview_upgrade', __('Please be advised the Flowview plugins Tables are being upgraded in the background.  This may take some time. Check the Cacti log for more information'), MESSAGE_LEVEL_INFO);
 	}
 }

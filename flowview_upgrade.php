@@ -110,17 +110,21 @@ function flowview_upgrade($current, $old) {
 		api_plugin_register_hook('flowview', 'graph_buttons',            'flowview_graph_button', 'setup.php', true);
 		api_plugin_register_hook('flowview', 'graph_buttons_thumbnails', 'flowview_graph_button', 'setup.php', true);
 
-		db_execute_prepared("UPDATE plugin_config SET
-			version = ?, name = ?, author = ?, webpage = ?
-			WHERE directory = ?",
-			array(
-				$info['version'],
-				$info['longname'],
-				$info['author'],
-				$info['homepage'],
-				$info['name']
-			)
-		);
+		if (function_exists('api_plugin_upgrade_register')) {
+			api_plugin_upgrade_register('flowview');
+		} else {
+			db_execute_prepared("UPDATE plugin_config SET
+				version = ?, name = ?, author = ?, webpage = ?
+				WHERE directory = ?",
+				array(
+					$info['version'],
+					$info['longname'],
+					$info['author'],
+					$info['homepage'],
+					$info['name']
+				)
+			);
+		}
 
 		$bad_titles = flowview_db_fetch_cell('SELECT COUNT(*)
 			FROM plugin_flowview_schedules
