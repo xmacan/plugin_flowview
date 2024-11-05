@@ -4,6 +4,7 @@
 
 * issue#216: Reports don't trigger when flowview is in a separate database
 * issue#217: Update flow-capture script for Debian/Ubuntu
+* issue: Unable to install when there is no config.php or config_local.php
 
 --- 4.8 ---
 

@@ -51,8 +51,7 @@ function plugin_flowview_install() {
 		include(FLOWVIEW_CONFIG);
 	} else {
 		raise_message('flowview_info', __('Please rename either your config.php.dist or config_local.php.dist files in the flowview directory, and change setup your database before installing.', 'flowview'), MESSAGE_LEVEL_ERROR);
-		header('Location:' . $config['url_path'] . 'plugins.php?header=false');
-		exit;
+		return false;
 	}
 
 	flowview_setup_table();
@@ -669,12 +668,17 @@ function flowview_determine_config() {
 function flowview_connect($maxscale = false) {
 	global $config, $flowview_cnn, $flowviewdb_default, $local_db_cnn_id, $remote_db_cnn_id, $database_hostname;
 
+	// Assume that you are connecting locally first
+	$flowview_use_cacti_db = true;
+
 	$cnn_id = false;
 
 	flowview_determine_config();
 
 	// Handle remote flowview processing
-	include(FLOWVIEW_CONFIG);
+	if (defined('FLOWVIEW_CONFIG')) {
+		include(FLOWVIEW_CONFIG);
+	}
 
 	include_once(dirname(__FILE__) . '/functions.php');
 	include_once(dirname(__FILE__) . '/database.php');
