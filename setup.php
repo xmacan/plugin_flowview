@@ -79,7 +79,9 @@ function plugin_flowview_check_config() {
 		return false;
 	}
 
-	plugin_flowview_check_upgrade();
+	if (api_plugin_installed('flowview')) {
+		plugin_flowview_check_upgrade();
+	}
 
 	return true;
 }
