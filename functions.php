@@ -6027,7 +6027,11 @@ function flowview_update_database($source, $irr_file = false) {
 					}
 				}
 
-				$records[$section][$record_num[$section]] = $record[$section];
+				if (isset($record[$section])) {
+					$records[$section][$record_num[$section]] = $record[$section];
+				} else {
+					$records[$section][$record_num[$section]] = '';
+				}
 
 				$records[$section][$record_num[$section]][$db_column] = $col_value;
 				$records[$section][$record_num[$section]]['present']  = 1;
