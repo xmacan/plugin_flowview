@@ -812,6 +812,8 @@ if (cacti_sizeof($listener)) {
 					process_fv10($p, $ex_addr);
 
 					$previous_version = 10;
+				} else {
+					$previous_version = -1;
 				}
 
 				$end = microtime(true);
