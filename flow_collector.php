@@ -878,6 +878,14 @@ function update_stream_stats($listener_id, $ex_addr, $version, &$tmpl_refreshed,
 			$db_version = 'IPFIX';
 		}
 
+		if (!isset($db_version)) {
+			if ((is_string($version) && strlen($version) > 0) || is_numeric($version)) {
+				$db_version = substr($version, 0, 5);
+			} else {
+				$db_version = 'N/A';
+			}
+		}
+
 		$update_time = date('Y-m-d H:i:s');
 
 		$name = gethostbyaddr($ex_addr);
