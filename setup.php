@@ -381,6 +381,38 @@ function flowview_config_settings() {
 		$settings['poller'] = $nsettings;
 	}
 
+	$settings['mail'] += array(
+		'settings_proxy_header' => array(
+			'friendly_name' => __('Internet Proxy Settings'),
+			'collapsible'   => 'true',
+			'method'        => 'spacer',
+		),
+		'settings_proxy_server' => array(
+			'friendly_name' => __('Internet Proxy Address'),
+			'description'   => __('For either core Cacti Services or Plugins that require internet access, enter the proxy server and port here in the following format IP:PORT.  For example 192.168.1.1:8080.'),
+			'method'        => 'textbox',
+			'default'       => '',
+			'max_length'    => '30',
+			'size'          => '30'
+		),
+		'settings_proxy_user' => array(
+			'friendly_name' => __('Internet Proxy User'),
+			'description'   => __('If your Internet Proxy requires a username, enter it here.'),
+			'method'        => 'textbox',
+			'default'       => '',
+			'max_length'    => '30',
+			'size'          => '10'
+		),
+		'settings_proxy_password' => array(
+			'friendly_name' => __('Internet Proxy Password'),
+			'description'   => __('If your Internet Proxy requires a password, enter it here.'),
+			'method'        => 'textbox_password',
+			'default'       => '',
+			'max_length'    => '30',
+			'size'          => '10'
+		),
+	);
+
 	$engines = array(
 		'MyISAM' => __('MyISAM (Fast, Non-Crash Safe)', 'flowview'),
 		'Aria'   => __('Aria (Fast, Crash Safe)', 'flowview'),

@@ -6197,12 +6197,25 @@ function flowview_get_owner_from_arin($host) {
 		return false;
 	}
 
+	$proxy          = read_config_option('settings_proxy_server');
+	$proxy_user     = read_config_option('settings_proxy_user');
+	$proxy_password = read_config_option('settings_proxy_password');
+
 	curl_setopt($ch, CURLOPT_URL, 'https://whois.arin.net/rest/ip/' . $host);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 40);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 400);
+
+	if ($proxy != '') {
+		curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+		if ($proxy_user != '') {
+			curl_setopt($ch, CURLOPT_PROXYUSERPWD, "$proxy_user:$proxy_password");
+		}
+	}
 
 	$response = curl_exec($ch);
 
