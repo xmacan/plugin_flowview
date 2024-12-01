@@ -719,7 +719,7 @@ $filter_edit = array(
 	),
 	'graph_height' => array(
 		'friendly_name' => __('Graph Height', 'flowview'),
-		'description' => __('The Graph Hight to use by default.', 'flowview'),
+		'description' => __('The Graph Height to use by default.', 'flowview'),
 		'method' => 'drop_array',
 		'value' => '|arg1:graph_height|',
 		'default' => 'bar',

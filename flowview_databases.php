@@ -142,7 +142,7 @@ function flowview_print_details(&$cols, &$details) {
 				$mnt_by_source = $value;
 			}
 
-			/* get rid of some nagging hypens */
+			/* get rid of some nagging hyphens */
 			$value = str_replace("------------------------------------------\n", '', $value);
 
 			if ($value != '' && $value != '0000-00-00 00:00:00' && $column != 'present') {
@@ -645,7 +645,7 @@ function get_all_columns() {
 			'order'   => 'ASC'
 		),
 		'encryption' => array(
-			'display' => __esc('Encyption', 'flowview'),
+			'display' => __esc('Encryption', 'flowview'),
 			'align'   => 'left',
 			'order'   => 'ASC'
 		),
@@ -812,7 +812,7 @@ function view_db_table($tab, &$tabs) {
 	$sql_order  = get_order_string();
 	$sql_limit  = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	/* sort naturally if the orgin is in the sort */
+	/* sort naturally if the origin is in the sort */
 	$natural_columns = array(
 		'origin',
 		'route',
@@ -1142,7 +1142,7 @@ function form_actions() {
 		if (get_nfilter_request_var('drp_action') == '1') { /* delete */
 			print "<tr>
 				<td class='textArea'>
-					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entriy.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($dns_array), 'flowview') . "</p>
+					<p>" . __n('Click \'Continue\' to delete the following DNS Cache Entry.', 'Click \'Continue\' to delete all following DNS Cache Entries.', cacti_sizeof($dns_array), 'flowview') . "</p>
 					<div class='itemlist'><ul>$dns_list</ul></div>
 				</td>
 			</tr>\n";
@@ -1717,7 +1717,7 @@ function view_routes($tab) {
 
 	$sql_order = get_order_string();
 
-	/* sort naturally if the orgin is in the sort */
+	/* sort naturally if the origin is in the sort */
 	if (strpos($sql_order, '`origin` ') !== false) {
 		$sql_order = str_replace('`origin` ', 'NATURAL_SORT_KEY(`origin`) ', $sql_order);
 	}
@@ -1759,7 +1759,7 @@ function view_routes($tab) {
 			'display' => __('Route Description', 'flowview'),
 			'align'   => 'left',
 			'sort'    => 'ASC',
-			'tip'     => __('The Descrption logged by the Route Maintainer.', 'flowview')
+			'tip'     => __('The Description logged by the Route Maintainer.', 'flowview')
 		),
 		'source' => array(
 			'display' => __('Source', 'flowview'),

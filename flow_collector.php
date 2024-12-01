@@ -775,7 +775,7 @@ if (cacti_sizeof($listener)) {
 			$ex_addr = get_peer_address($peer);
 
 			if (!is_valid_peer($ex_addr, $listener['allowfrom'])) {
-				cacti_log("WARNING: Flowview Received a packet from an unregisterd peer $ex_addr", false, 'FLOWVIEW');
+				cacti_log("WARNING: Flowview Received a packet from an unregistered peer $ex_addr", false, 'FLOWVIEW');
 				continue;
 			}
 

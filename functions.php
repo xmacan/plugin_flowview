@@ -3083,7 +3083,7 @@ function run_flow_query($session, $query_id, $start, $end) {
 			/**
 			 * For printed reports, we have to be careful as they return several million rows.  So, to
 			 * to work around this, we will only return the top X matching to reduce the load on the
-			 * main database and to reduce the call time.  We will limit to the first 100 which accomodates
+			 * main database and to reduce the call time.  We will limit to the first 100 which accommodates
 			 * the top and lower clip levels.
 			 *
 			 * Also, since the sort becomes relevant we have to change the table md5sum to include the sort
@@ -3939,7 +3939,7 @@ function parallel_database_query_is_running($request_id) {
  * will be zero and the flowview_runner.php will not be called and the results will
  * be pulled from the parallel_database_query tabbles 'results' column.
  *
- * @param  array   An array of requests to execut the parallel database.  In the case
+ * @param  array   An array of requests to execute the parallel database.  In the case
  *                 where it takes multiple requests to form a proper UNION of data
  *                 there will be more than one request.
  *
@@ -3971,7 +3971,7 @@ function parallel_database_query_run($requests) {
 
 			exec_background($php, $config['base_path'] . "/plugins/flowview/flowview_runner.php --query-id=$request_id" . ($debug ? ' --debug':''), $redirect);
 		} else {
-			db_debug('Not Luanching FlowView Database Query Process ' . $request_id . ' as it has already completed or is running.');
+			db_debug('Not Launching FlowView Database Query Process ' . $request_id . ' as it has already completed or is running.');
 		}
 	}
 
