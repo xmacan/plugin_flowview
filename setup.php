@@ -1285,6 +1285,9 @@ function flowview_graph_button($data) {
 				} elseif ($c == 'statistics' && $query_data[$c] > 0) {
 					$url .= "&report=s{$query_data[$c]}";
 				} else {
+					if (!isset($query_data[$c])) {
+						return false;
+					}
 					$url .= "&$c={$query_data[$c]}";
 				}
 			}
