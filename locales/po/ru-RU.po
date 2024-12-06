@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2024-07-14 20:09-0400\nPO-Revision-Date: 2024-12-01 02:16+0000\nLast-Translator: Anton Zhuravlev <baka109g@gmail.com>\nLanguage-Team: Russian <http://translate.cacti.net/projects/cacti/flowview/ru/>\nLanguage: ru-RU\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 4.8.1\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2024-07-14 20:09-0400\nPO-Revision-Date: 2024-12-06 19:24+0000\nLast-Translator: Anton Zhuravlev <baka109g@gmail.com>\nLanguage-Team: Russian <http://translate.cacti.net/projects/cacti/flowview/ru/>\nLanguage: ru-RU\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 4.8.1\n"
 
 #: arrays.php:26 arrays.php:60 functions.php:619
 msgid "Select a Report"
@@ -1827,7 +1827,7 @@ msgstr "Выбор даты окончания срока действия"
 
 #: functions.php:757
 msgid "Shift Time Backward"
-msgstr "Сдвинуть время назад"
+msgstr "Переключить время назад"
 
 #: functions.php:760
 msgid "Define Shifting Interval"
@@ -1835,7 +1835,7 @@ msgstr "Определить интервал переключения"
 
 #: functions.php:773
 msgid "Shift Time Forward"
-msgstr "Сдвинуть время вперед"
+msgstr "Время сдвига вперед"
 
 #: functions.php:780
 msgid "Graph"
@@ -2025,7 +2025,7 @@ msgstr "Префикс Дест Префикс"
 
 #: functions.php:2956
 msgid "Type of Service"
-msgstr "Тип услуги"
+msgstr "Тип сервиса"
 
 #: functions.php:2975
 msgid "Bytes/Packet"
@@ -2469,7 +2469,7 @@ msgstr "Как долго FlowView должен хранить результа�
 #: setup.php:515 setup.php:516
 #, php-format
 msgid "%d Hours"
-msgstr "%d Часа(ов)"
+msgstr "%d Часов"
 
 #: setup.php:517
 #, php-format
@@ -2479,7 +2479,7 @@ msgstr "%d День"
 #: setup.php:518
 #, php-format
 msgid "%d Days"
-msgstr "%d Дня(ей)"
+msgstr "%d Дней"
 
 #: setup.php:523
 msgid "MaxScale Sharding"
