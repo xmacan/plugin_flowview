@@ -6711,90 +6711,94 @@ function get_tables_range($begin, $end = null) {
 	return $tables;
 }
 
-function reports_queue($name, $request_type, $source, $source_id, $command, $notification) {
-	if (isset($_SESSION['sess_user_id'])) {
-		$requested_id = $_SESSION['sess_user_id'];
-		$requested_by = db_fetch_cell_prepared('SELECT username
-			FROM user_auth
-			WHERE id = ?',
-			array($requested_id));
+if (!function_exists('reports_queue')) {
+	function reports_queue($name, $request_type, $source, $source_id, $command, $notification) {
+		if (isset($_SESSION['sess_user_id'])) {
+			$requested_id = $_SESSION['sess_user_id'];
+			$requested_by = db_fetch_cell_prepared('SELECT username
+				FROM user_auth
+				WHERE id = ?',
+				array($requested_id));
 
-		if ($requested_by == '') {
-			$requested_by = 'unknown';
-		}
-	} else {
-		$requested_id = -1;
-		$requested_by = 'system';
-	}
-
-	$save = array();
-
-	$save['id']             = 0;
-	$save['name']           = $name;
-	$save['request_type']   = $request_type;
-	$save['source']         = $source;
-	$save['source_id']      = $source_id;
-	$save['status']         = 'pending';
-	$save['run_command']    = $command;
-	$save['scheduled_time'] = date('Y-m-d H:i:s');
-	$save['notification']   = json_encode($notification);
-	$save['requested_by']   = $requested_by;
-	$save['requested_id']   = $requested_id;
-
-	$id = sql_save($save, 'reports_queued');
-
-	if ($id > 0) {
-		if ($requested_id > 0) {
-			raise_message('report_scheduled', __esc("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_INFO);
+			if ($requested_by == '') {
+				$requested_by = 'unknown';
+			}
 		} else {
-			cacti_log(sprintf("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id), false, 'REPORTS');
+			$requested_id = -1;
+			$requested_by = 'system';
 		}
-	} else {
-		if ($requested_id > 0) {
-			raise_message('report_not_scheduled', __("The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_ERROR);
+
+		$save = array();
+
+		$save['id']             = 0;
+		$save['name']           = $name;
+		$save['request_type']   = $request_type;
+		$save['source']         = $source;
+		$save['source_id']      = $source_id;
+		$save['status']         = 'pending';
+		$save['run_command']    = $command;
+		$save['scheduled_time'] = date('Y-m-d H:i:s');
+		$save['notification']   = json_encode($notification);
+		$save['requested_by']   = $requested_by;
+		$save['requested_id']   = $requested_id;
+
+		$id = sql_save($save, 'reports_queued');
+
+		if ($id > 0) {
+			if ($requested_id > 0) {
+				raise_message('report_scheduled', __esc("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_INFO);
+			} else {
+				cacti_log(sprintf("The Report '%s' from source %s with id %s is scheduled to run!", $name, $source, $source_id), false, 'REPORTS');
+			}
 		} else {
-			cacti_log(sprintf("FATAL: The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id), false, 'REPORTS');
+			if ($requested_id > 0) {
+				raise_message('report_not_scheduled', __("The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id, 'flowview'), MESSAGE_LEVEL_ERROR);
+			} else {
+				cacti_log(sprintf("FATAL: The Report '%s' from source %s with id %s was not scheduled to run due to an error!", $name, $source, $source_id), false, 'REPORTS');
+			}
 		}
 	}
 }
 
-function reports_run($id) {
-	global $config;
+if (!function_exists('reports_run')) {
+	function reports_run($id) {
+		global $config;
 
-	include_once($config['base_path'] . '/lib/poller.php');
+		include_once($config['base_path'] . '/lib/poller.php');
 
-	$report = db_fetch_row_prepared('SELECT *
-		FROM reports_queued
-		WHERE id = ?',
-		array($id));
-
-	if (cacti_sizeof($report)) {
-		db_execute_prepared('UPDATE reports_queued
-			SET status = ?, start_time = ?
+		$report = db_fetch_row_prepared('SELECT *
+			FROM reports_queued
 			WHERE id = ?',
-			array('running', date('Y-m-d H:i:s'), $id));
-	} else {
-		return false;
+			array($id));
+
+		if (cacti_sizeof($report)) {
+			db_execute_prepared('UPDATE reports_queued
+				SET status = ?, start_time = ?
+				WHERE id = ?',
+				array('running', date('Y-m-d H:i:s'), $id));
+		} else {
+			return false;
+		}
+
+		$start = microtime(true);
+
+		$return_code = 0;
+		$output      = array();
+		$command     = $report['run_command'] . " --report-id=$id";
+		$timeout     = $report['run_timeout'];
+
+		cacti_log("The report:$id has command was:$command");
+
+		$last_line = exec_with_timeout($command, $output, $return_code, $timeout);
+
+		$end  = microtime(true);
+
+		$stats = sprintf("FLOWVIEW REPORT STATS: Time:0.2f Report:'%s' Source:%s SourceID:%s", $end-$start, $report['name'], $report['source'], $report['source_id']);
+
+		cacti_log($stats, false, 'SYSTEM');
+
+		db_execute_prepared('DELETE FROM reports_queued WHERE id = ?', array($id));
 	}
-
-	$start = microtime(true);
-
-	$return_code = 0;
-	$output      = array();
-	$command     = $report['run_command'] . " --report-id=$id";
-	$timeout     = $report['run_timeout'];
-
-	cacti_log("The report:$id has command was:$command");
-
-	$last_line = exec_with_timeout($command, $output, $return_code, $timeout);
-
-	$end  = microtime(true);
-
-	$stats = sprintf("FLOWVIEW REPORT STATS: Time:0.2f Report:'%s' Source:%s SourceID:%s", $end-$start, $report['name'], $report['source'], $report['source_id']);
-
-	cacti_log($stats, false, 'SYSTEM');
-
-	db_execute_prepared('DELETE FROM reports_queued WHERE id = ?', array($id));
 }
 
 function get_set_default_fast_engine() {
