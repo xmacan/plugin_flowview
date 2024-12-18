@@ -732,7 +732,7 @@ function get_database_sort_type() {
 
 		if ($mysql_info['database'] == 'MySQL') {
 			$sort_type = 'normal';
-		} elseif (version_compare($mysql_info['version'], '10.7', '<'))
+		} elseif (version_compare($mysql_info['version'], '10.7', '<')) {
 			$sort_type = 'normal';
 		} else {
 			$sort_type = 'natural';
