@@ -24,6 +24,7 @@
 
 chdir('../../');
 include('./include/auth.php');
+include('./lib/utilities.php');
 include_once('./plugins/flowview/functions.php');
 include_once('./plugins/flowview/database.php');
 
@@ -721,6 +722,25 @@ function get_all_columns() {
 	return $display_text;
 }
 
+function get_database_sort_type() {
+	global $config;
+
+	static $sort_type = false;
+
+	if ($sort_type == false) {
+		$mysql_info = utilities_get_mysql_info($config['poller_id']);
+
+		if ($mysql_info['database'] == 'MySQL') {
+			$sort_type = 'normal';
+		} elseif (version_compare($mysql_info['version'], '10.7', '<'))
+			$sort_type = 'normal';
+		} else {
+			$sort_type = 'natural';
+		}
+	}
+
+	return $sort_type;
+}
 
 function view_db_table($tab, &$tabs) {
 	global $item_rows;
@@ -821,9 +841,13 @@ function view_db_table($tab, &$tabs) {
 		'as_net'
 	);
 
+	$sort_type = get_database_sort_type();
+
 	foreach($natural_columns as $c) {
 		if (strpos($sql_order, "`$c` ") !== false) {
-			$sql_order = str_replace("`$c` ", "NATURAL_SORT_KEY(`$c`) ", $sql_order);
+			if ($sort_type == 'natural') {
+				$sql_order = str_replace("`$c` ", "NATURAL_SORT_KEY(`$c`) ", $sql_order);
+			}
 		}
 	}
 
@@ -1366,8 +1390,12 @@ function view_dns_cache() {
 	$sql_order = get_order_string();
 
 	/* sort naturally if the IP is in the sort */
+	$sort_type = get_database_sort_type();
+
 	if (strpos($sql_order, 'ip ') !== false) {
-		$sql_order = str_replace('ip ', 'NATURAL_SORT_KEY(ip) ', $sql_order);
+		if ($sort_type == 'natural') {
+			$sql_order = str_replace('ip ', 'NATURAL_SORT_KEY(ip) ', $sql_order);
+		}
 	}
 
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
@@ -1718,13 +1746,19 @@ function view_routes($tab) {
 	$sql_order = get_order_string();
 
 	/* sort naturally if the origin is in the sort */
+	$sort_type = get_database_sort_type();
+
 	if (strpos($sql_order, '`origin` ') !== false) {
-		$sql_order = str_replace('`origin` ', 'NATURAL_SORT_KEY(`origin`) ', $sql_order);
+		if ($sort_type == 'natural') {
+			$sql_order = str_replace('`origin` ', 'NATURAL_SORT_KEY(`origin`) ', $sql_order);
+		}
 	}
 
 	/* sort naturally if the route is in the sort */
 	if (strpos($sql_order, '`route` ') !== false) {
-		$sql_order = str_replace('route ', 'NATURAL_SORT_KEY(`route`) ', $sql_order);
+		if ($sort_type == 'natural') {
+			$sql_order = str_replace('route ', 'NATURAL_SORT_KEY(`route`) ', $sql_order);
+		}
 	}
 
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
