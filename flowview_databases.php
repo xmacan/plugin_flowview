@@ -24,7 +24,7 @@
 
 chdir('../../');
 include('./include/auth.php');
-include('./lib/utilities.php');
+include('./lib/utility.php');
 include_once('./plugins/flowview/functions.php');
 include_once('./plugins/flowview/database.php');
 
