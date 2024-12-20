@@ -6,8 +6,9 @@
 * issue#217: Update flow-capture script for Debian/Ubuntu
 * issue#218: Changes in one or more IRR Database Causing Errors in FlowView
 * issue#220: Cant dowload the external DB
-* issue#223: Version requested for ORDER BY NATURAL_SORT_KEY(key) 
+* issue#223: Version requested for ORDER BY NATURAL_SORT_KEY(key)
 * issue: Unable to install when there is no config.php or config_local.php
+* feature: Support for Cacti 1.3
 
 --- 4.8 ---
 
@@ -68,7 +69,7 @@
 * feature#124: Support Treemap Charts instead of Bar
 * feature#125: Perform Schema Upgrades in the Background
 * feature#126: Cache ARIN Responses for reference
-* feature#127: Show stream FlowView versions being ingested 
+* feature#127: Show stream FlowView versions being ingested
 * feature#128: Flowview attempts to import all streams even those that are reporting other information that is not supported by flowview
 * feature#143: Support tcp listener
 * feature#144: Allow mapping of a local subnet to a named private domain for home users
