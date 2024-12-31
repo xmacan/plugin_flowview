@@ -354,7 +354,7 @@ function flowview_config_settings() {
 		$nsettings = array();
 
 		foreach($settings['poller'] as $setting => $data) {
-			if ($setting != 'reports_timeout') {
+			if ($setting != 'reports_timeout' && $setting != 'scheduler_timeout') {
 				$nsettings[$setting] = $data;
 			} else {
 				$processes = array();
