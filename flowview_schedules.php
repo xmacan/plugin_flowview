@@ -55,8 +55,8 @@ $formats = reports_get_format_files();
 
 $query_array = array_rekey(
 	flowview_db_fetch_assoc('SELECT id, name
-	FROM plugin_flowview_queries
-	ORDER BY name'),
+		FROM plugin_flowview_queries
+		ORDER BY name'),
 	'id', 'name' );
 
 if (db_table_exists('plugin_notification_lists')) {
