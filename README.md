@@ -18,7 +18,7 @@ to generate Email based reports of the data.
   multiple concurrent inserts, but once that table ages out, it will be
   converted to the ARIA engine by default.
 * Starting with the 4.x version, the DNS cache will be manageable.  Therefore,
-  if you have intermittant DNS resolution issues, you will be able to view 
+  if you have intermittent DNS resolution issues, you will be able to view 
   and manage those entries in the cache.
 * Starting with the 4.x version, you will be able to define a custom unregistered
   domain for local network IP addresses.  This is intended for home users who
@@ -91,8 +91,8 @@ https://mariadb.com/resources/blog/mariadb-maxscale-2-1-and-ssl-certificates/
 
 Before you start, with this version of Flowview, you have to ensure that you are
 at MariaDB 10.5 or above.  Cacti has been shown to support MariaDB upto 11.4.x. 
-MySQL 8.0+ is required. Unfortunatly, MySQL does not support Aria Tables and will
-therfore have lower performance than MariaDB for scanning data.
+MySQL 8.0+ is required. Unfortunately, MySQL does not support Aria Tables and will
+therefore have lower performance than MariaDB for scanning data.
 
 Then, Install flowview just like any other plugin, just copy it into the plugin
 directory, and Use Console > Plugin Management to Install and Enable.
