@@ -193,16 +193,18 @@ function view_databases() {
 		}
 	}
 
-	$_SESSION['sess_fv_db_tab'] = get_request_var('tab');
+	$current_tab = get_nfilter_request_var('tab');
+
+	$_SESSION['sess_fv_db_tab'] = $current_tab;
 
 	display_flowview_db_tabs($db_tabs);
 
-	if (get_request_var('tab') == 'dns_cache') {
+	if ($current_tab == 'dns_cache') {
 		view_dns_cache();
-	} elseif (get_request_var('tab') == 'route') {
-		view_routes(get_request_var('tab'));
+	} elseif ($current_tab == 'route') {
+		view_routes($current_tab);
 	} else {
-		view_db_table(get_request_var('tab'), $db_tabs);
+		view_db_table($current_tab, $db_tabs);
 	}
 }
 
