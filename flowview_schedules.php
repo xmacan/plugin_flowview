@@ -57,7 +57,8 @@ $query_array = array_rekey(
 	flowview_db_fetch_assoc('SELECT id, name
 		FROM plugin_flowview_queries
 		ORDER BY name'),
-	'id', 'name' );
+	'id', 'name'
+);
 
 if (db_table_exists('plugin_notification_lists')) {
 	$notification_lists = array_rekey(
@@ -480,7 +481,7 @@ function edit_schedule() {
 		$report = flowview_db_fetch_row_prepared('SELECT pfs.*, pfq.name
 			FROM plugin_flowview_schedules AS pfs
 			LEFT JOIN plugin_flowview_queries AS pfq
-			ON (pfs.query_id=pfq.id)
+			ON pfs.query_id = pfq.id
 			WHERE pfs.id = ?',
 			array(get_request_var('id')));
 
@@ -917,27 +918,26 @@ function show_schedules() {
 	$sql_order = get_order_string();
 	$sql_limit = ' LIMIT ' . ($rows*(get_request_var('page')-1)) . ',' . $rows;
 
-	$sql = "SELECT pfs.*, pfq.name, rl.sends
+	$results = flowview_db_fetch_assoc("SELECT pfs.*, pfq.name
 		FROM plugin_flowview_schedules AS pfs
 		LEFT JOIN plugin_flowview_queries AS pfq
-		ON (pfs.query_id=pfq.id)
-		LEFT JOIN (
-			SELECT source_id, COUNT(*) AS sends
-			FROM reports_log
-			WHERE source = 'flowview'
-			GROUP BY source_id
-		) AS rl
-		ON rl.source_id = pfs.id
+		ON pfs.query_id = pfq.id
 		$sql_where
 		$sql_order
-		$sql_limit";
+		$sql_limit");
 
-	$result = flowview_db_fetch_assoc($sql);
+	$sends = array_rekey(
+		db_fetch_assoc('SELECT source_id, COUNT(*) AS sends
+			FROM reports_log
+			WHERE source = "flowview"
+			GROUP BY source_id'),
+		'source_id', 'sends'
+	);
 
 	$total_rows = flowview_db_fetch_cell("SELECT COUNT(*)
 		FROM plugin_flowview_schedules AS pfs
 		LEFT JOIN plugin_flowview_queries AS pfq
-		ON (pfs.query_id=pfq.id)
+		ON pfs.query_id = pfq.id
 		$sql_where");
 
 	$display_array = array(
@@ -988,25 +988,33 @@ function show_schedules() {
 	html_header_sort_checkbox($display_array, get_request_var('sort_column'), get_request_var('sort_direction'), false);
 
 	$i=0;
-	if (cacti_sizeof($result)) {
-		foreach ($result as $row) {
+	if (cacti_sizeof($results)) {
+		foreach ($results as $row) {
 			form_alternate_row('line' . $row['id'], true);
+
 			form_selectable_cell('<a class="linkEditMain" href="' . html_escape('flowview_schedules.php?tab=general&action=edit&id=' . $row['id']) . '">' . html_escape($row['title']) . '</a>', $row['id']);
 			form_selectable_cell($row['name'], $row['id']);
 			form_selectable_cell($sendinterval_arr[$row['sendinterval']], $row['id']);
 			form_selectable_cell($row['start'], $row['id']);
 			form_selectable_cell(date('Y-m-d H:i:00', $row['lastsent']+$row['sendinterval']), $row['id']);
 			form_selectable_cell($row['email'], $row['id']);
-			form_selectable_cell(number_format_i18n($row['sends'], 0), $row['id'], '', 'right');
+
+			if (isset($sends[$row['id']])) {
+				form_selectable_cell(number_format_i18n($sends[$row['id']], 0), $row['id'], '', 'right');
+			} else {
+				form_selectable_cell('-', $row['id'], '', 'right');
+			}
+
 			form_selectable_cell(($row['enabled'] == 'on' ? "<span class='deviceUp'><b>" . __('Yes', 'flowview') . "</b></span>":"<span class='deviceDown'><b>" . __('No', 'flowview') . "</b></span>"), $row['id'], '', 'right');
 			form_checkbox_cell($row['name'], $row['id']);
+
 			form_end_row();
 		}
 	}
 
 	html_end_box(false);
 
-	if (cacti_sizeof($result)) {
+	if (cacti_sizeof($results)) {
 		print $nav;
 	}
 

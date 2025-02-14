@@ -7,6 +7,7 @@
 * issue#218: Changes in one or more IRR Database Causing Errors in FlowView
 * issue#220: Cant dowload the external DB
 * issue#223: Version requested for ORDER BY NATURAL_SORT_KEY(key)
+* issue#229: Access to the wrong database for report_log and reports_queued
 * issue: Unable to install when there is no config.php or config_local.php
 * feature: Support for Cacti 1.3
 
