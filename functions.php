@@ -6038,29 +6038,55 @@ function flowview_insert_irr_sections(&$records, &$prefixes, &$supported_section
 		if (isset($records[$section])) {
 			$db_section   = str_replace('-', '_', $section);
 			$db_table     = "plugin_flowview_irr_$db_section";
-			$sql_prefix   = "REPLACE INTO $db_table {$prefixes[$section]} VALUES ";
+			$sql_prefix   = "INSERT INTO $db_table {$prefixes[$section]} VALUES ";
+			$sql_suffix   = flowview_get_upsert_suffix($db_table);
 			$section_rows = $records[$section];
 
 			$section_chunks = array_chunk($section_rows, 100);
 
 			foreach($section_chunks as $section_chunk) {
-				$sql_params  = array();
-				$sql_replace = $sql_prefix;
+				$sql_params = array();
+				$sql_insert = $sql_prefix;
 
 				foreach($section_chunk as $index => $row) {
-					$columns      = cacti_sizeof($row);
-					$sql_replace .= ($index > 0 ? ', ':'') . ' (' . trim(str_repeat('?, ', $columns), ', ') . ')';
+					$columns     = cacti_sizeof($row);
+					$sql_insert .= ($index > 0 ? ', ':'') . ' (' . trim(str_repeat('?, ', $columns), ', ') . ')';
 
 					foreach($row as $column) {
 						$sql_params[] = $column;
 					}
 				}
 
-				flowview_db_execute_prepared($sql_replace, $sql_params);
+				flowview_db_execute_prepared($sql_insert . $sql_suffix, $sql_params);
 			}
-
 		}
 	}
+}
+
+function flowview_get_upsert_suffix($db_table) {
+	static $suffixes = [];
+
+	if (isset($suffixes[$db_table])) {
+		return $suffixes[$db_table];
+	}
+
+	$suffix = '';
+
+	$columns = flowview_db_fetch_assoc("SELECT COLUMN_NAME
+		FROM `information_schema`.`columns`
+		WHERE TABLE_NAME = '$db_table' AND COLUMN_KEY != 'PRI'");
+
+	if (cacti_sizeof($columns)) {
+		foreach($columns as $col) {
+			$col = $col['COLUMN_NAME'];
+
+			$suffix .= ($suffix == '' ? ' ON DUPLICATE KEY UPDATE ':', ') . " `$col` = VALUES(`$col`)";
+		}
+	}
+
+	$suffixes[$db_table] = $suffix;
+
+	return $suffix;
 }
 
 function flowview_check_for_private_network($host) {
