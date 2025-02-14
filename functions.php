@@ -5667,32 +5667,32 @@ function flowview_check_databases($import_only = false, $force = false) {
 
 	$directory = sys_get_temp_dir();
 
-        if (function_exists('curl_init')) {
-                $ch = curl_init();
-        } else {
-                cacti_log('ERROR: Unable to query Databases ensure php-curl is installed', true, 'FLOWVIEW');
+	if (function_exists('curl_init')) {
+		$ch = curl_init();
+	} else {
+		cacti_log('ERROR: Unable to query Databases ensure php-curl is installed', true, 'FLOWVIEW');
 
-                return false;
-        }
+		return false;
+	}
 
-        $proxy          = read_config_option('settings_proxy_server');
-        $proxy_user     = read_config_option('settings_proxy_user');
-        $proxy_password = read_config_option('settings_proxy_password');
+	$proxy          = read_config_option('settings_proxy_server');
+	$proxy_user     = read_config_option('settings_proxy_user');
+	$proxy_password = read_config_option('settings_proxy_password');
 
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 40);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 400);
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 40);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 400);
 
-        if ($proxy != '') {
-                curl_setopt($ch, CURLOPT_PROXY, $proxy);
+	if ($proxy != '') {
+		curl_setopt($ch, CURLOPT_PROXY, $proxy);
 
-                if ($proxy_user != '') {
-                        curl_setopt($ch, CURLOPT_PROXYUSERPWD, "$proxy_user:$proxy_password");
-                }
-        }
+		if ($proxy_user != '') {
+			curl_setopt($ch, CURLOPT_PROXYUSERPWD, "$proxy_user:$proxy_password");
+		}
+	}
 
 	foreach($databases as $source => $details) {
 		$ftp_base  = $details['ftp'];
@@ -5704,31 +5704,31 @@ function flowview_check_databases($import_only = false, $force = false) {
 		$last_serial = read_config_option("flowview_{$source}_serial");
 
 		$url = $ftp_base.'/'.$details['serial'];
-        	curl_setopt($ch, CURLOPT_URL, $url );
-	        $response = curl_exec($ch);
 
-        	$curl_errno = curl_errno($ch);
-        	$curl_error = curl_error($ch);
+		curl_setopt($ch, CURLOPT_URL, $url );
+		$response = curl_exec($ch);
 
-        	if ($curl_errno > 0) {
+		$curl_errno = curl_errno($ch);
+		$curl_error = curl_error($ch);
+
+		if ($curl_errno > 0) {
 			$error_string = curl_strerror($curl_errno);
 			cacti_log("ERROR: Unable to Download Databases $source, Error: $error_string", true, 'FLOWVIEW');
-                	continue;
-        	} elseif ($response != '') {
+			continue;
+		} elseif ($response != '') {
 			$curr_serial = trim($response);
-        	} else {
-			cacti_log("ERROR: Databases $source, Empty Serial", true, 'FLOWVIEW');
-                	continue;
-        	}
-
-
-		if ($force) {
-			cacti_log("IRR UPDATE: Forced Run, IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
 		} else {
-			cacti_log("IRR UPDATE: IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_MEDIUM);
+			cacti_log("ERROR: Databases $source, Empty Serial", true, 'FLOWVIEW');
+			continue;
 		}
 
-		if ($force || $import_only !== false || ($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '') {
+		if ($force) {
+			cacti_log("IRR UPDATE: Forced Run, IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_LOW);
+		} else {
+			cacti_log("IRR UPDATE: IRR Source:$source, Current Serial:$curr_serial, Last Serial:$last_serial", true, 'FLOWVIEW', POLLER_VERBOSITY_LOW);
+		}
+
+		if (($force || $import_only !== false) || (($last_serial == '' || $curr_serial != $last_serial) && $curr_serial != '')) {
 			if (!is_array($details['files'])) {
 				$details['files'] = array($details['files']);
 			}
