@@ -9,6 +9,7 @@
 * issue#223: Version requested for ORDER BY NATURAL_SORT_KEY(key)
 * issue#229: Access to the wrong database for report_log and reports_queued
 * issue: Unable to install when there is no config.php or config_local.php
+* issue: When vendor does not follow the IPFIX specification, use the vendors length value
 * feature: Support for Cacti 1.3
 
 --- 4.8 ---

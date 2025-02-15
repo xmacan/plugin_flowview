@@ -1180,6 +1180,14 @@ function get_unpack_syntax(&$field, $version) {
 				$set = true;
 
 				$field['unpack'] = 'N';
+			} elseif ($length == 2) {
+				$set = true;
+
+				$field['unpack'] = 'n';
+			} elseif ($length == 1) {
+				$set = true;
+
+				$field['unpack'] = 'C';
 			}
 
 			break;
