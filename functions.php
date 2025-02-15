@@ -6080,7 +6080,11 @@ function flowview_get_upsert_suffix($db_table) {
 		foreach($columns as $col) {
 			$col = $col['COLUMN_NAME'];
 
-			$suffix .= ($suffix == '' ? ' ON DUPLICATE KEY UPDATE ':', ') . " `$col` = VALUES(`$col`)";
+			if ($col != 'present') {
+				$suffix .= ($suffix == '' ? ' ON DUPLICATE KEY UPDATE ':', ') . " `$col` = VALUES(`$col`)";
+			} else {
+				$suffix .= ($suffix == '' ? ' ON DUPLICATE KEY UPDATE ':', ') . " `$col` = 1";
+			}
 		}
 	}
 
